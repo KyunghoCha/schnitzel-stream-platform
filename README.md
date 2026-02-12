@@ -506,7 +506,7 @@ Apache License 2.0 (`LICENSE`)
 ---
 
 <p align="center">
-  Made by <b>Kyungho Cha</b>
+  Made with ❤️ by <b>Kyungho Cha</b>
   <br>
   Copyright (c) 2026. All rights reserved.
 </p>
