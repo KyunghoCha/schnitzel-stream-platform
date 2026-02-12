@@ -18,7 +18,7 @@ jobs:
           - windows-latest
           - macos-latest
         python-version:
-          - "3.10"
+          # Baseline support. Add newer versions after dependency validation.
           - "3.11"
 
     steps:
@@ -42,12 +42,7 @@ jobs:
         run: pytest -q
 
       - name: Run test hygiene gate
-        run: |
-          python scripts/test_hygiene.py \
-            --strict \
-            --max-duplicate-groups 0 \
-            --max-no-assert 0 \
-            --max-trivial-assert-true 0
+        run: python scripts/test_hygiene.py --strict --max-duplicate-groups 0 --max-no-assert 0 --max-trivial-assert-true 0
 
   required-gate:
     name: required-gate

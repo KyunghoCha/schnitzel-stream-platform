@@ -1,11 +1,13 @@
 # schnitzel-stream-platform
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
 ![Status](https://img.shields.io/badge/Status-Beta-yellow)
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue)
 
 > Extensible real-time video event pipeline
 > 확장 가능한 실시간 비디오 이벤트 파이프라인
+
+Python baseline: **3.11** (하위/상위 버전은 의존성 검증 후 단계적으로 확장)
 
 ---
 
