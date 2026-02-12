@@ -22,10 +22,13 @@ This folder is the single source of truth for AI pipeline documentation.
   13. `ops/ai/performance_optimization.md`
   14. `ops/ai/accuracy_validation.md`
   15. `ops/multi_camera_run.md`
-  16. `future/future_roadmap.md` (Detailed roadmap)
-  17. `progress/roadmap.md` / `progress/progress_log.md`
+  16. `roadmap/strategic_roadmap.md` (Target architecture and long-term strategy)
+  17. `roadmap/execution_roadmap.md` (Execution roadmap and remaining work)
+  18. `roadmap/future_backlog.md` (Future ideas/backlog)
+  19. `progress/progress_log.md`
 - `contracts/protocol.md`: Event schema and API contract
-- `progress/roadmap.md`: Status and remaining work
+- `roadmap/execution_roadmap.md`: Status and remaining work
+- `roadmap/strategic_roadmap.md`: North star, target architecture, and phase DoD
 - `specs/pipeline_spec.md`: CLI/config behavior
 - `design/pipeline_design.md`: Pipeline architecture
 - `design/multimodal_pipeline_design.md`: Multimodal (video + sensor) architecture and phased rollout
@@ -52,6 +55,7 @@ This folder is the single source of truth for AI pipeline documentation.
 - `specs/`: runtime/behavior specifications
 - `design/`: architecture/design docs
 - `ops/`: operations, deployment, troubleshooting
+- `roadmap/`: strategic/execution roadmap and future backlog
 - `progress/`: current status and validation logs
 - `implementation/`: design/spec notes by topic (reference)
 
@@ -89,10 +93,13 @@ This folder is the single source of truth for AI pipeline documentation.
   13. `ops/ai/performance_optimization.md`
   14. `ops/ai/accuracy_validation.md`
   15. `ops/multi_camera_run.md`
-  16. `future/future_roadmap.md` (상세 로드맵)
-  17. `progress/roadmap.md` / `progress/progress_log.md`
+  16. `roadmap/strategic_roadmap.md` (목표 아키텍처/전략)
+  17. `roadmap/execution_roadmap.md` (실행 로드맵/잔여 작업)
+  18. `roadmap/future_backlog.md` (미래 아이디어/백로그)
+  19. `progress/progress_log.md`
 - `contracts/protocol.md`: 이벤트 스키마 및 API 계약
-- `progress/roadmap.md`: 진행 현황과 남은 작업
+- `roadmap/execution_roadmap.md`: 진행 현황과 남은 작업
+- `roadmap/strategic_roadmap.md`: 북극성, 목표 아키텍처, 단계별 DoD
 - `specs/pipeline_spec.md`: CLI/설정 동작
 - `design/pipeline_design.md`: 파이프라인 아키텍처
 - `design/multimodal_pipeline_design.md`: 멀티모달(영상+센서) 아키텍처 및 단계별 확장 계획
@@ -119,6 +126,7 @@ This folder is the single source of truth for AI pipeline documentation.
 - `specs/`: 실행/동작 스펙
 - `design/`: 설계 문서
 - `ops/`: 운영/배포/트러블슈팅
+- `roadmap/`: 전략/실행 로드맵 및 미래 백로그
 - `progress/`: 진행 현황/검증 로그
 - `implementation/`: 주제별 설계/명세 노트(참고용)
 

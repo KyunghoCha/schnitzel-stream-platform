@@ -9,7 +9,7 @@
 
 ## Status
 
-Implemented as of 2026-02-09. Remaining gaps are tracked in `docs/progress/roadmap.md`.
+Implemented as of 2026-02-09. Remaining gaps are tracked in `docs/roadmap/execution_roadmap.md`.
 
 ## Code Mapping
 
@@ -24,7 +24,7 @@ Implemented as of 2026-02-09. Remaining gaps are tracked in `docs/progress/roadm
 
 ## 상태
 
-2026-02-09 기준 구현 완료. 남은 항목은 `docs/progress/roadmap.md`에서 추적.
+2026-02-09 기준 구현 완료. 남은 항목은 `docs/roadmap/execution_roadmap.md`에서 추적.
 
 ## 코드 매핑
 

@@ -409,11 +409,12 @@ python -m ai.pipeline \
 | 문서 | 설명 |
 | :--- | :--- |
 | [docs/index.md](docs/index.md) | 문서 인덱스 |
-| [docs/progress/roadmap.md](docs/progress/roadmap.md) | 진행 로드맵 |
+| [docs/roadmap/strategic_roadmap.md](docs/roadmap/strategic_roadmap.md) | 전략 로드맵 (목표 아키텍처) |
+| [docs/roadmap/execution_roadmap.md](docs/roadmap/execution_roadmap.md) | 진행 로드맵 |
 | [docs/specs/pipeline_spec.md](docs/specs/pipeline_spec.md) | 파이프라인 명세 |
 | [docs/specs/model_interface.md](docs/specs/model_interface.md) | 모델 인터페이스 계약 |
 | [docs/ops/ops_runbook.md](docs/ops/ops_runbook.md) | 운영 가이드 |
-| [docs/future/future_roadmap.md](docs/future/future_roadmap.md) | 로드맵 (다중 카메라, 자율학습) |
+| [docs/roadmap/future_backlog.md](docs/roadmap/future_backlog.md) | 미래 백로그 (다중 카메라, 자율학습) |
 
 ### Contracts & Policy | 계약 및 운영 정책
 
@@ -424,7 +425,7 @@ python -m ai.pipeline \
 | [docs/contracts/protocol.md](docs/contracts/protocol.md) | 이벤트 스키마 및 전송 계약 |
 | [docs/specs/model_interface.md](docs/specs/model_interface.md) | 모델 어댑터 입출력 계약 |
 | [docs/specs/model_class_taxonomy.md](docs/specs/model_class_taxonomy.md) | 클래스 분류/정책 기준 |
-| [docs/progress/roadmap.md](docs/progress/roadmap.md) | 결정 필요 항목 및 진행 현황 |
+| [docs/roadmap/execution_roadmap.md](docs/roadmap/execution_roadmap.md) | 결정 필요 항목 및 진행 현황 |
 
 ---
 

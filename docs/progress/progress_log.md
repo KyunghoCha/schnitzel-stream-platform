@@ -149,7 +149,7 @@ Last Updated: 2026-02-10
   - `--video` now forces file source and fails fast on missing file path
   - `--video` + `--source-type rtsp` is rejected at startup
 - **Cross-platform Script Migration (2026-02-07)**: All legacy bash scripts migrated to Python (`scripts/*.py`).
-- **Future Roadmap Added (2026-02-07)**: Detailed roadmap for Multi-camera, Self-learning, and Performance Optimization added to `docs/future/future_roadmap.md`.
+- **Future Roadmap Added (2026-02-07)**: Detailed roadmap for Multi-camera, Self-learning, and Performance Optimization added to `docs/roadmap/future_backlog.md`.
 - **Final Polishing & Audit (2026-02-07)**: Full markdown linting cleared, link integrity verified, and Windows environment script `setup_env.ps1` added.
 
 ### Current State Summary
@@ -247,7 +247,7 @@ Last Updated: 2026-02-10
 
 - **엔진 기능 강화**: 파일 소스 무한 루프(`--loop`) 기능 추가 및 코어 FPS 제어(Throttling) 구현으로 로컬 테스트 및 데모 안정성 확보.
 - **한글 인코딩 복구**: 주요 명세서 및 운영 문서의 깨진 한글 텍스트 전수 복구 및 무결성 검증 완료.
-- **멀티모달 AI 로드맵**: 초음파/IoT 센서 데이터를 결합한 상황 인지 능력 확장 설계를 `future_roadmap.md`에 반영.
+- **멀티모달 AI 로드맵**: 초음파/IoT 센서 데이터를 결합한 상황 인지 능력 확장 설계를 `future_backlog.md`에 반영.
 
 ### 완료된 테스트
 
@@ -322,7 +322,7 @@ Last Updated: 2026-02-10
   - `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q` -> 154 passed (2026-02-10 최신)
   - `python scripts/regression_check.py` -> regression_ok
 - **크로스 플랫폼 스크립트 마이그레이션 (2026-02-07)**: 모든 bash 스크립트를 Python으로 전환하여 윈도우/리눅스 호환성 확보.
-- **미래 로드맵 추가 (2026-02-07)**: 다중 카메라 오케스트레이션 및 자율 학습 설계를 담은 상세 로드맵(`docs/future/future_roadmap.md`) 추가.
+- **미래 로드맵 추가 (2026-02-07)**: 다중 카메라 오케스트레이션 및 자율 학습 설계를 담은 상세 로드맵(`docs/roadmap/future_backlog.md`) 추가.
 - **최종 폴리싱 및 감사 (2026-02-07)**: 전수 마크다운 린트 교정, 링크 무결성 검증, 윈도우용 `setup_env.ps1` 추가.
 
 ### 현재 상태 요약
