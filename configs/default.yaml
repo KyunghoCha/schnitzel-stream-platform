@@ -1,0 +1,93 @@
+app:
+  site_id: "S001"
+  timezone: "Asia/Seoul"
+  env: "dev"   # dev | prod
+
+logging:
+  level: "INFO"
+  format: "plain"   # plain | json
+  file: null
+
+metrics:
+  enabled: true
+  interval_sec: 10
+  fps_window_sec: 5
+
+heartbeat:
+  enabled: true
+  interval_sec: 15
+
+dedup:
+  enabled: false
+  cooldown_sec: 10
+  prune_interval: 100
+
+rtsp:
+  timeout_sec: 5
+  base_delay_sec: 0.5
+  max_delay_sec: 10
+  max_attempts: 0   # 0이면 무한 재시도
+  jitter_ratio: 0.2
+  transport: "tcp"  # tcp | udp (기본값: tcp - 영상 깨짐 방지)
+
+stream_standard:
+  protocol: "RTSP"
+  codec: "H264"
+  width: 1280
+  height: 720
+  fps: 15
+
+ingest:
+  fps_limit: 10
+
+sensor:
+  # Sensor lane (P1): collect sensor packets via adapter and attach nearest packet to each vision event.
+  enabled: false
+  type: null
+  adapter: null
+  # Optional multi-sensor adapters (list). Can also be overridden by AI_SENSOR_ADAPTERS.
+  # adapters: []
+  topic: null
+  queue_size: 256
+  time_window_ms: 300
+  emit_events: false
+  emit_fused_events: false
+
+rules:
+  # 문서의 zone inside rule_point 정의를 config로 박아두면 나중에 룰 바꾸기 쉬움
+  rule_point_by_event_type:
+    ZONE_INTRUSION: "bottom_center"
+    FIRE_DETECTED: "bbox_center"
+    SMOKE_DETECTED: "bbox_center"
+
+model:
+  # Runtime default is real mode.
+  # mock mode is allowed only when explicitly enabled for tests/verification.
+  mode: "real"   # real | mock
+  # Template adapter path.
+  # This adapter fails fast until implemented to prevent accidental fake events.
+  # Set to a concrete adapter (YOLO/ONNX/custom implementation) before deployment.
+  adapter: "ai.vision.adapters.custom_adapter:CustomModelAdapter"
+
+zones:
+  # 1) 정적 파일을 쓸지 2) backend에서 가져올지 선택
+  source: "api"   # api | file | none
+  # file_path: "configs/zones.yaml"
+  api:
+    base_url: "http://backend:8080"
+    get_path_template: "/api/sites/{site_id}/cameras/{camera_id}/zones"
+    timeout_sec: 3
+    cache_ttl_sec: 30
+    error_backoff_sec: 5
+    max_failures: 3
+
+events:
+  post_url: "http://backend:8080/api/events"
+  timeout_sec: 3
+  # Optional output plugin (module:ClassName), similar to model adapter loading.
+  # null keeps built-in emitter routing (jsonl > dry-run > backend).
+  emitter_adapter: null
+  retry:
+    max_attempts: 5
+    backoff_sec: 1.0
+  snapshot: {}

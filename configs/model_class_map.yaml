@@ -1,0 +1,18 @@
+class_map:
+  # Draft mapping (update after policy lock and finalized model label ids)
+  - class_id: 0
+    event_type: ZONE_INTRUSION
+    object_type: PERSON
+    severity: LOW
+  - class_id: 1
+    event_type: PPE_VIOLATION
+    object_type: PERSON
+    severity: MEDIUM
+  - class_id: 2
+    event_type: POSTURE_ALERT
+    object_type: PERSON
+    severity: MEDIUM
+  - class_id: 3
+    event_type: HAZARD_ALERT
+    object_type: UNKNOWN
+    severity: MEDIUM

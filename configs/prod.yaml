@@ -1,0 +1,9 @@
+# Production profile (override defaults)
+logging:
+  level: "INFO"
+metrics:
+  enabled: true
+heartbeat:
+  enabled: true
+zones:
+  source: "api"

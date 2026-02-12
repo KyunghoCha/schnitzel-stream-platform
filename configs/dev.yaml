@@ -1,0 +1,9 @@
+# Development profile (override defaults)
+logging:
+  level: "DEBUG"
+metrics:
+  enabled: true
+heartbeat:
+  enabled: true
+zones:
+  source: "api"

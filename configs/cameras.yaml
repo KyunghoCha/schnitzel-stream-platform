@@ -1,0 +1,32 @@
+# Frame source inventory (camera-like inputs only: rtsp/file/webcam/plugin).
+# IoT/ROS2 sensor lane is configured separately via `sensor.*` in configs/default.yaml.
+cameras:
+  - id: cam01
+    name: gate
+    enabled: true
+    source:
+      type: rtsp
+      url: "rtsp://127.0.0.1:8554/stream1"
+
+  - id: cam02
+    name: yard
+    enabled: true
+    source:
+      type: rtsp
+      url: "rtsp://127.0.0.1:8554/stream2"
+
+  - id: cam03
+    name: record
+    enabled: true
+    source:
+      type: file
+      # 운영 RTSP 의존성을 줄이기 위한 기본 테스트/데모 입력.
+      # 실운영에서는 camera별 실제 source(url/path)로 교체해 사용한다.
+      path: "tests/play/2048246-hd_1920_1080_24fps.mp4"
+
+  - id: cam_webcam
+    name: "My Desk Webcam"
+    enabled: true
+    source:
+      type: webcam
+      index: 0
