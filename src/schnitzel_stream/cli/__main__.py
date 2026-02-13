@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 """
-Phase 0 CLI entrypoint.
+CLI entrypoint (SSOT).
 
 Intent:
 - `python -m schnitzel_stream` is the new stable entrypoint for the repo.
-- Phase 0 runs a single "job" described by a minimal graph spec file.
+- v1 graph spec runs a single "job" (legacy runtime indirection).
+- v2 graph spec runs the in-proc node graph runtime (DAG only).
 - The default graph spec path is resolved from the repo root, not CWD, to keep
   behavior stable across edge devices, Docker, and subprocess tests.
 """
@@ -33,7 +34,7 @@ def _default_graph_path() -> Path:
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="schnitzel_stream",
-        description="Universal stream processing platform (Phase 0: legacy job runner).",
+        description="Universal stream processing platform (SSOT entrypoint).",
         epilog="Alias: `schnitzel_stream validate ...` is equivalent to `--validate-only`.",
     )
     parser.add_argument(
