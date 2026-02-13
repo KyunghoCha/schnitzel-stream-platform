@@ -25,6 +25,11 @@ export PYTHONPATH=src
 
 The main AI pipeline. Reads frames from file/RTSP/webcam/plugin source, runs AI inference, and emits events.
 
+Note:
+- `python -m schnitzel_stream` supports both v1 (legacy job graph) and v2 (node graph).
+- This section focuses on the v1 legacy pipeline flags. Typical v2 runs use `--graph`, `--validate-only`, `--max-events`, and `--report-json`.
+- v2 examples: `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`.
+
 ### CLI Options
 
 | Option | Type | Default | Description |
@@ -528,6 +533,11 @@ export PYTHONPATH=src
 -----------------------------------------
 
 메인 AI 파이프라인. 파일/RTSP/웹캠/플러그인 소스에서 프레임을 읽고 AI 추론 후 이벤트를 전송.
+
+참고:
+- `python -m schnitzel_stream`는 v1(레거시 job 그래프)과 v2(node graph)를 모두 지원합니다.
+- 이 섹션은 v1 레거시 파이프라인 옵션 중심입니다. v2 실행은 보통 `--graph`, `--validate-only`, `--max-events`, `--report-json`만 사용합니다.
+- v2 예시: `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`.
 
 ### CLI 옵션
 

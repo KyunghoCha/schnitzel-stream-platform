@@ -5,6 +5,10 @@
 Pipeline Spec
 =============
 
+Note:
+- This document specifies the **legacy CCTV/video pipeline** behavior (executed via the v1 job graph).
+- It is not the v2 node-graph runtime spec. For platform docs, start at `docs/index.md`.
+
 ## Entrypoint
 
 - Entrypoint module: `schnitzel_stream` (package)
@@ -178,6 +182,10 @@ Pipeline Spec
 
 파이프라인 명세
 ==============
+
+참고:
+- 이 문서는 **레거시 CCTV/영상 파이프라인** 동작 명세입니다(v1 job 그래프로 실행).
+- v2 node-graph 런타임 명세가 아닙니다. 플랫폼 문서는 `docs/index.md`부터 확인하세요.
 
 ## 엔트리포인트
 
