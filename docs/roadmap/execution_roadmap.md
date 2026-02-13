@@ -42,9 +42,9 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 1**
+Current position: **Phase 2**
 
-### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (IN PROGRESS ~80–90%)
+### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
 - `P1.1` Draft graph model + strict DAG validator + unit tests. `DONE` (27bb702)
 - `P1.2` Draft node-graph spec v2 loader + unit tests. `DONE` (2822ffa, 87d7a24)
@@ -52,11 +52,11 @@ Current position: **Phase 1**
 - `P1.4` CLI: add `validate` / `--validate-only` to validate v1(job) and v2(node graph). `DONE` (f4322d4)
 - `P1.5` Runtime MVP: execute v2 graph (topological order) for in-proc packets only. `DONE` (7e1a9e7)
 - `P1.6` Type/port/transport-compat validation (static). `DONE` (3fe090a)
-- `P1.7` Restricted cycles policy (Delay/InitialValue only) as a validator extension. `NOW`
+- `P1.7` Restricted cycles policy (Delay/InitialValue only) as a validator extension. `DONE` (53b38a9)
 
-### Phase 2: Durable Delivery Hardening (LATER)
+### Phase 2: Durable Delivery Hardening (IN PROGRESS ~0–10%)
 
-- `P2.1` Durable queue node plugin (`WAL/SQLite`), store-and-forward.
+- `P2.1` Durable queue node plugin (`WAL/SQLite`), store-and-forward. `NOW`
 - `P2.2` Idempotency keys and ack semantics.
 - `P2.3` Soak tests for outage/restart/backlog replay.
 
