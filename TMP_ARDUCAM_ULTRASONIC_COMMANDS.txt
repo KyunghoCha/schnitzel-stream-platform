@@ -40,7 +40,7 @@ export AI_SERIAL_READ_TIMEOUT_SEC=0.2
 export AI_SERIAL_SENSOR_ID=ultrasonic-front-01
 export AI_SENSOR_TIME_WINDOW_MS=5000
 
-PYTHONPATH=src python -m ai.pipeline \
+PYTHONPATH=src python -m schnitzel_stream \
   --source-type webcam \
   --camera-index 0 \
   --visualize \
@@ -55,7 +55,7 @@ tail -f outputs/live_webcam_sensor.jsonl | rg --line-buffered "distance_cm|senso
 export AI_SERIAL_PORT=/dev/ttyUSB0
 
 # webcam index example
-PYTHONPATH=src python -m ai.pipeline --source-type webcam --camera-index 1 --visualize --output-jsonl outputs/live_webcam_sensor.jsonl
+PYTHONPATH=src python -m schnitzel_stream --source-type webcam --camera-index 1 --visualize --output-jsonl outputs/live_webcam_sensor.jsonl
 
 6) If serial open fails (Device or resource busy)
 # who is holding the port
@@ -71,4 +71,4 @@ lsof /dev/ttyACM0 || true
 7) If you only want quick hardware pipeline check (mock model)
 cd ~/Projects/schnitzel-stream-platform
 export AI_MODEL_MODE=mock
-PYTHONPATH=src python -m ai.pipeline --source-type webcam --camera-index 0 --visualize --output-jsonl outputs/live_webcam_sensor.jsonl
+PYTHONPATH=src python -m schnitzel_stream --source-type webcam --camera-index 0 --visualize --output-jsonl outputs/live_webcam_sensor.jsonl

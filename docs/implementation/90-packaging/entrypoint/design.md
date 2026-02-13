@@ -10,7 +10,7 @@ Purpose
 Key Decisions
 -------------
 
-- Entry uses `python -m ai.pipeline` (Dockerfile CMD default).
+- Entry uses `python -m schnitzel_stream` (Dockerfile CMD default).
 - Dry-run is opt-in via CLI `--dry-run`.
 - Allow config via env variables.
 
@@ -43,7 +43,7 @@ Code Mapping
 핵심 결정
 ---------
 
-- `python -m ai.pipeline`로 시작한다(Dockerfile 기본 CMD).
+- `python -m schnitzel_stream`로 시작한다(Dockerfile 기본 CMD).
 - 드라이런은 `--dry-run`을 명시적으로 전달해 사용한다.
 - 환경 변수로 설정을 전달한다.
 

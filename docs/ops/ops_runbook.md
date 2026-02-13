@@ -11,14 +11,14 @@ Runbook for running the AI pipeline in dev/prod and troubleshooting common issue
 1. Build: `docker build -t schnitzel-stream-platform .`
 2. Run with snapshot volume: `docker run --rm -v <host_snapshot_dir>:/data/snapshots schnitzel-stream-platform`
 3. Override config via env (example): `-e AI_LOG_LEVEL=DEBUG`
-4. Note: container default command is `python -m ai.pipeline` (posts to backend when reachable). For dry-run validation, pass `--dry-run` explicitly:
-   `docker run --rm -v <host_snapshot_dir>:/data/snapshots schnitzel-stream-platform python -m ai.pipeline --dry-run`
+4. Note: container default command is `python -m schnitzel_stream` (posts to backend when reachable). For dry-run validation, pass `--dry-run` explicitly:
+   `docker run --rm -v <host_snapshot_dir>:/data/snapshots schnitzel-stream-platform python -m schnitzel_stream --dry-run`
 5. `--network host` is Linux-only. On Docker Desktop (Windows/macOS), use explicit port mapping.
 
 ### Local Run (host)
 
-- Windows (Recommended): `./setup_env.ps1; python -m ai.pipeline --dry-run`
-- Linux/Bash: `PYTHONPATH=src python -m ai.pipeline --dry-run`
+- Windows (Recommended): `./setup_env.ps1; python -m schnitzel_stream --dry-run`
+- Linux/Bash: `PYTHONPATH=src python -m schnitzel_stream --dry-run`
 - Webcam: `... --source-type webcam --camera-index 0 --dry-run`
 
 ### Logs
@@ -101,14 +101,14 @@ AI 파이프라인을 dev/prod에서 실행하고, 자주 발생하는 문제를
 1. 빌드: `docker build -t schnitzel-stream-platform .`
 2. 스냅샷 볼륨 마운트하여 실행: `docker run --rm -v <host_snapshot_dir>:/data/snapshots schnitzel-stream-platform`
 3. 환경 변수로 설정 오버라이드 (예시): `-e AI_LOG_LEVEL=DEBUG`
-4. 참고: 컨테이너 기본 CMD는 `python -m ai.pipeline`(백엔드 전송 경로)입니다. 드라이런 검증은 `--dry-run`을 명시하세요:
-   `docker run --rm -v <host_snapshot_dir>:/data/snapshots schnitzel-stream-platform python -m ai.pipeline --dry-run`
+4. 참고: 컨테이너 기본 CMD는 `python -m schnitzel_stream`(백엔드 전송 경로)입니다. 드라이런 검증은 `--dry-run`을 명시하세요:
+   `docker run --rm -v <host_snapshot_dir>:/data/snapshots schnitzel-stream-platform python -m schnitzel_stream --dry-run`
 5. `--network host`는 Linux 전용입니다. Docker Desktop(Windows/macOS)에서는 포트 매핑을 사용하세요.
 
 ### 로컬 실행 (호스트 OS)
 
-- 윈도우 (권장): `./setup_env.ps1; python -m ai.pipeline --dry-run`
-- 리눅스/Bash: `PYTHONPATH=src python -m ai.pipeline --dry-run`
+- 윈도우 (권장): `./setup_env.ps1; python -m schnitzel_stream --dry-run`
+- 리눅스/Bash: `PYTHONPATH=src python -m schnitzel_stream --dry-run`
 - 웹캠 테스트: `... --source-type webcam --camera-index 0 --dry-run`
 
 ### 로그 (Logs)

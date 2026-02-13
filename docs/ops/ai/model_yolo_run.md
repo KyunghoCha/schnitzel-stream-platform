@@ -105,7 +105,7 @@ AI_MODEL_MODE=real \
 AI_MODEL_ADAPTER=demo.yolo_ppe_adapter:YOLOPPEAdapter \
 YOLO_PPE_MODEL_PATH=models/yolov8_ppe_hansung.pt \
 MODEL_CLASS_MAP_PATH_PPE=configs/demo/model_class_map_ppe.yaml \
-PYTHONPATH=src python -m ai.pipeline --source-type file --dry-run --max-events 3 --visualize
+PYTHONPATH=src python -m schnitzel_stream --source-type file --dry-run --max-events 3 --visualize
 ```
 
 Multi-adapter Demo (Person + PPE)
@@ -120,7 +120,7 @@ ONNX_MODEL_PATH=models/yolov8n.onnx \
 ONNX_PROVIDERS=CPUExecutionProvider \
 YOLO_PPE_MODEL_PATH=models/yolov8_ppe_hansung.pt \
 MODEL_CLASS_MAP_PATH_PPE=configs/demo/model_class_map_ppe.yaml \
-PYTHONPATH=src python -m ai.pipeline --source-type file --dry-run --max-events 3 --visualize
+PYTHONPATH=src python -m schnitzel_stream --source-type file --dry-run --max-events 3 --visualize
 ```
 
 Validation Checklist
@@ -256,7 +256,7 @@ AI_MODEL_MODE=real \
 AI_MODEL_ADAPTER=demo.yolo_ppe_adapter:YOLOPPEAdapter \
 YOLO_PPE_MODEL_PATH=models/yolov8_ppe_hansung.pt \
 MODEL_CLASS_MAP_PATH_PPE=configs/demo/model_class_map_ppe.yaml \
-PYTHONPATH=src:. python -m ai.pipeline --source-type file --dry-run --max-events 3 --visualize
+PYTHONPATH=src:. python -m schnitzel_stream --source-type file --dry-run --max-events 3 --visualize
 ```
 
 멀티 어댑터 데모(사람 + PPE)
@@ -271,7 +271,7 @@ ONNX_MODEL_PATH=models/yolov8n.onnx \
 ONNX_PROVIDERS=CPUExecutionProvider \
 YOLO_PPE_MODEL_PATH=models/yolov8_ppe_hansung.pt \
 MODEL_CLASS_MAP_PATH_PPE=configs/demo/model_class_map_ppe.yaml \
-PYTHONPATH=src:. python -m ai.pipeline --source-type file --dry-run --max-events 3 --visualize
+PYTHONPATH=src:. python -m schnitzel_stream --source-type file --dry-run --max-events 3 --visualize
 ```
 
 검증 체크리스트

@@ -8,8 +8,8 @@ Pipeline Spec
 ## Entrypoint
 
 - Module: `ai.pipeline` (package)
-- Windows (Recommended): `./setup_env.ps1; python -m ai.pipeline`
-- Linux/Manual: `PYTHONPATH=src python -m ai.pipeline`
+- Windows (Recommended): `./setup_env.ps1; python -m schnitzel_stream`
+- Linux/Manual: `PYTHONPATH=src python -m schnitzel_stream`
 
 ## Inputs
 
@@ -141,12 +141,12 @@ Pipeline Spec
 ## Run Examples
 
 1. Default run (posts to backend):
-   - Windows: `./setup_env.ps1; python -m ai.pipeline`
-   - Linux: `PYTHONPATH=src python -m ai.pipeline`
+   - Windows: `./setup_env.ps1; python -m schnitzel_stream`
+   - Linux: `PYTHONPATH=src python -m schnitzel_stream`
 
 2. Dry run (no backend posts):
-   - Windows: `./setup_env.ps1; python -m ai.pipeline --dry-run --max-events 5`
-   - Linux: `PYTHONPATH=src python -m ai.pipeline --dry-run --max-events 5`
+   - Windows: `./setup_env.ps1; python -m schnitzel_stream --dry-run --max-events 5`
+   - Linux: `PYTHONPATH=src python -m schnitzel_stream --dry-run --max-events 5`
 
 ## Notes
 
@@ -176,8 +176,8 @@ Pipeline Spec
 ## 엔트리포인트
 
 - 모듈: `ai.pipeline` (패키지)
-- 윈도우 (권장): `./setup_env.ps1; python -m ai.pipeline`
-- 리눅스/수동: `PYTHONPATH=src python -m ai.pipeline`
+- 윈도우 (권장): `./setup_env.ps1; python -m schnitzel_stream`
+- 리눅스/수동: `PYTHONPATH=src python -m schnitzel_stream`
 
 ## 입력
 
@@ -308,12 +308,12 @@ Pipeline Spec
 ## 실행 예시
 
 1. 기본 실행 (백엔드 전송):
-   - 윈도우: `./setup_env.ps1; python -m ai.pipeline`
-   - 리눅스: `PYTHONPATH=src python -m ai.pipeline`
+   - 윈도우: `./setup_env.ps1; python -m schnitzel_stream`
+   - 리눅스: `PYTHONPATH=src python -m schnitzel_stream`
 
 2. 드라이런 (백엔드 전송 안 함):
-   - 윈도우: `./setup_env.ps1; python -m ai.pipeline --dry-run --max-events 5`
-   - 리눅스: `PYTHONPATH=src python -m ai.pipeline --dry-run --max-events 5`
+   - 윈도우: `./setup_env.ps1; python -m schnitzel_stream --dry-run --max-events 5`
+   - 리눅스: `PYTHONPATH=src python -m schnitzel_stream --dry-run --max-events 5`
 
 ## 참고 사항
 

@@ -20,10 +20,10 @@ Examples (Host)
 
 ```bash
 # Camera 1
-PYTHONPATH=src python -m ai.pipeline --camera-id cam01 --source-type rtsp
+PYTHONPATH=src python -m schnitzel_stream --camera-id cam01 --source-type rtsp
 
 # Camera 2
-PYTHONPATH=src python -m ai.pipeline --camera-id cam02 --source-type rtsp
+PYTHONPATH=src python -m schnitzel_stream --camera-id cam02 --source-type rtsp
 ```
 
 Automation (Host) - Cross-Platform / 크로스 플랫폼
@@ -62,11 +62,11 @@ Examples (Docker)
 ```bash
 # Camera 1
 docker run --rm --network host \
-  schnitzel-stream-platform python -m ai.pipeline --camera-id cam01 --source-type rtsp
+  schnitzel-stream-platform python -m schnitzel_stream --camera-id cam01 --source-type rtsp
 
 # Camera 2
 docker run --rm --network host \
-  schnitzel-stream-platform python -m ai.pipeline --camera-id cam02 --source-type rtsp
+  schnitzel-stream-platform python -m schnitzel_stream --camera-id cam02 --source-type rtsp
 ```
 
 Config Example
@@ -120,10 +120,10 @@ Code Mapping
 
 ```bash
 # Camera 1
-PYTHONPATH=src python -m ai.pipeline --camera-id cam01 --source-type rtsp
+PYTHONPATH=src python -m schnitzel_stream --camera-id cam01 --source-type rtsp
 
 # Camera 2
-PYTHONPATH=src python -m ai.pipeline --camera-id cam02 --source-type rtsp
+PYTHONPATH=src python -m schnitzel_stream --camera-id cam02 --source-type rtsp
 ```
 
 자동화(Host) - 크로스 플랫폼
@@ -159,11 +159,11 @@ python scripts/multi_cam.py start --extra-args "--dry-run"
 ```bash
 # Camera 1
 docker run --rm --network host \
-  schnitzel-stream-platform python -m ai.pipeline --camera-id cam01 --source-type rtsp
+  schnitzel-stream-platform python -m schnitzel_stream --camera-id cam01 --source-type rtsp
 
 # Camera 2
 docker run --rm --network host \
-  schnitzel-stream-platform python -m ai.pipeline --camera-id cam02 --source-type rtsp
+  schnitzel-stream-platform python -m schnitzel_stream --camera-id cam02 --source-type rtsp
 ```
 
 설정 예시

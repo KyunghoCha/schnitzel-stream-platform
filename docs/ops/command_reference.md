@@ -20,7 +20,7 @@ export PYTHONPATH=src
 
 ---
 
-1. Pipeline (`python -m ai.pipeline`)
+1. Pipeline (`python -m schnitzel_stream`)
 --------------------------------------
 
 The main AI pipeline. Reads frames from file/RTSP/webcam/plugin source, runs AI inference, and emits events.
@@ -54,7 +54,7 @@ export AI_MODEL_MODE=mock
 **1) First-time quick test (no backend needed)**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --dry-run `
   --max-events 5
 ```
@@ -64,7 +64,7 @@ Reads `data/samples/*.mp4`, prints 5 events to stdout, exits.
 **2) Save events to file for analysis**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --output-jsonl outputs/events.jsonl `
   --max-events 20
 ```
@@ -72,7 +72,7 @@ python -m ai.pipeline `
 **3) Specific video file**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --video C:\Videos\test.mp4 `
   --dry-run
 ```
@@ -80,7 +80,7 @@ python -m ai.pipeline `
 **4) Specific video file with visualization**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --video C:\Videos\test.mp4 `
   --visualize `
   --dry-run
@@ -91,7 +91,7 @@ Use `Ctrl+C` in terminal to stop.
 **5) Infinite loop playback (demo/benchmark)**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --video C:\Videos\test.mp4 `
   --loop `
   --visualize `
@@ -101,7 +101,7 @@ python -m ai.pipeline `
 **6) Webcam**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --source-type webcam `
   --camera-index 0 `
   --visualize `
@@ -120,7 +120,7 @@ $env:AI_ROS2_SOURCE_TOPIC="/camera/image_raw/compressed"
 $env:AI_EVENTS_EMITTER_ADAPTER="ai.plugins.ros2.event_emitter:Ros2EventEmitter"
 $env:AI_ROS2_EVENT_TOPIC="/ai/events"
 
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --max-events 20
 ```
 
@@ -137,7 +137,7 @@ $env:AI_SENSOR_EMIT_EVENTS="true"
 $env:AI_SENSOR_EMIT_FUSED_EVENTS="true"
 $env:AI_MODEL_MODE="mock"
 
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --output-jsonl outputs/events_sensor.jsonl `
   --max-events 8
 ```
@@ -152,7 +152,7 @@ $env:AI_SENSOR_ADAPTERS = `
 $env:AI_SENSOR_TIME_WINDOW_MS="5000"
 $env:AI_MODEL_MODE="mock"
 
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --dry-run `
   --max-events 20
 ```
@@ -163,7 +163,7 @@ For real-mode runs (especially scenarios 8-10), configure a concrete adapter fir
 `AI_MODEL_ADAPTER=module:ClassName` (default `CustomModelAdapter` is template/fail-fast).
 
 ```powershell
-python -m ai.pipeline --camera-id cam01
+python -m schnitzel_stream --camera-id cam01
 ```
 
 Uses RTSP URL from `configs/cameras.yaml`. Posts to the configured backend.
@@ -171,7 +171,7 @@ Uses RTSP URL from `configs/cameras.yaml`. Posts to the configured backend.
 **9) RTSP with visualization (live monitoring)**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --camera-id cam01 `
   --visualize
 ```
@@ -179,7 +179,7 @@ python -m ai.pipeline `
 **10) Full production run**
 
 ```powershell
-python -m ai.pipeline --camera-id cam01
+python -m schnitzel_stream --camera-id cam01
 ```
 
 No `--dry-run`, no `--max-events` — runs continuously, posts to backend.
@@ -188,8 +188,8 @@ No `--dry-run`, no `--max-events` — runs continuously, posts to backend.
 
 ```powershell
 # --video + --source-type rtsp/plugin is not allowed
-python -m ai.pipeline --video test.mp4 --source-type rtsp    # ERROR
-python -m ai.pipeline --video test.mp4 --source-type plugin  # ERROR
+python -m schnitzel_stream --video test.mp4 --source-type rtsp    # ERROR
+python -m schnitzel_stream --video test.mp4 --source-type plugin  # ERROR
 ```
 
 ---
@@ -217,7 +217,7 @@ python -m ai.pipeline.mock_backend
 **Terminal 2 — run pipeline (posts to mock):**
 
 ```powershell
-python -m ai.pipeline --max-events 5
+python -m schnitzel_stream --max-events 5
 ```
 
 Events appear in Terminal 1 logs.
@@ -499,7 +499,7 @@ export PYTHONPATH=src
 
 ---
 
-1. 파이프라인 (`python -m ai.pipeline`)
+1. 파이프라인 (`python -m schnitzel_stream`)
 -----------------------------------------
 
 메인 AI 파이프라인. 파일/RTSP/웹캠/플러그인 소스에서 프레임을 읽고 AI 추론 후 이벤트를 전송.
@@ -533,7 +533,7 @@ export AI_MODEL_MODE=mock
 **1) 처음 빠르게 테스트 (백엔드 불필요)**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --dry-run `
   --max-events 5
 ```
@@ -543,7 +543,7 @@ python -m ai.pipeline `
 **2) 이벤트를 파일로 저장해서 분석**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --output-jsonl outputs/events.jsonl `
   --max-events 20
 ```
@@ -551,7 +551,7 @@ python -m ai.pipeline `
 **3) 특정 비디오 파일 지정**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --video C:\Videos\test.mp4 `
   --dry-run
 ```
@@ -559,7 +559,7 @@ python -m ai.pipeline `
 **4) 시각화와 함께 특정 비디오 실행**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --video C:\Videos\test.mp4 `
   --visualize `
   --dry-run
@@ -570,7 +570,7 @@ python -m ai.pipeline `
 **5) 무한 루프 재생 (데모/벤치마크)**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --video C:\Videos\test.mp4 `
   --loop `
   --visualize `
@@ -580,7 +580,7 @@ python -m ai.pipeline `
 **6) 웹캠**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --source-type webcam `
   --camera-index 0 `
   --visualize `
@@ -599,7 +599,7 @@ $env:AI_ROS2_SOURCE_TOPIC="/camera/image_raw/compressed"
 $env:AI_EVENTS_EMITTER_ADAPTER="ai.plugins.ros2.event_emitter:Ros2EventEmitter"
 $env:AI_ROS2_EVENT_TOPIC="/ai/events"
 
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --max-events 20
 ```
 
@@ -616,7 +616,7 @@ $env:AI_SENSOR_EMIT_EVENTS="true"
 $env:AI_SENSOR_EMIT_FUSED_EVENTS="true"
 $env:AI_MODEL_MODE="mock"
 
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --output-jsonl outputs/events_sensor.jsonl `
   --max-events 8
 ```
@@ -631,7 +631,7 @@ $env:AI_SENSOR_ADAPTERS = `
 $env:AI_SENSOR_TIME_WINDOW_MS="5000"
 $env:AI_MODEL_MODE="mock"
 
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --dry-run `
   --max-events 20
 ```
@@ -642,7 +642,7 @@ python -m ai.pipeline `
 `AI_MODEL_ADAPTER=module:ClassName` (기본 `CustomModelAdapter`는 템플릿/fail-fast).
 
 ```powershell
-python -m ai.pipeline --camera-id cam01
+python -m schnitzel_stream --camera-id cam01
 ```
 
 `configs/cameras.yaml`의 RTSP URL 사용. 설정된 백엔드로 전송.
@@ -650,7 +650,7 @@ python -m ai.pipeline --camera-id cam01
 **9) RTSP + 시각화 (실시간 모니터링)**
 
 ```powershell
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --camera-id cam01 `
   --visualize
 ```
@@ -658,7 +658,7 @@ python -m ai.pipeline `
 **10) 프로덕션 실행**
 
 ```powershell
-python -m ai.pipeline --camera-id cam01
+python -m schnitzel_stream --camera-id cam01
 ```
 
 `--dry-run` 없이, `--max-events` 없이 — 연속 실행, 백엔드로 전송.
@@ -667,8 +667,8 @@ python -m ai.pipeline --camera-id cam01
 
 ```powershell
 # --video + --source-type rtsp/plugin 조합은 불가
-python -m ai.pipeline --video test.mp4 --source-type rtsp    # 에러!
-python -m ai.pipeline --video test.mp4 --source-type plugin  # 에러!
+python -m schnitzel_stream --video test.mp4 --source-type rtsp    # 에러!
+python -m schnitzel_stream --video test.mp4 --source-type plugin  # 에러!
 ```
 
 ---
@@ -696,7 +696,7 @@ python -m ai.pipeline.mock_backend
 **터미널 2 — 파이프라인 실행 (mock으로 전송):**
 
 ```powershell
-python -m ai.pipeline --max-events 5
+python -m schnitzel_stream --max-events 5
 ```
 
 터미널 1 로그에 이벤트가 표시됨.

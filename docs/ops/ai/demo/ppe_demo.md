@@ -17,7 +17,7 @@ PYTHONPATH=src AI_MODEL_MODE=real \
 AI_MODEL_ADAPTER=demo.yolo_ppe_adapter:YOLOPPEAdapter \
 YOLO_PPE_MODEL_PATH=models/yolov8_ppe_hansung.pt \
 MODEL_CLASS_MAP_PATH_PPE=configs/demo/model_class_map_ppe.yaml \
-python -m ai.pipeline --source-type file --dry-run --max-events 200 --visualize
+python -m schnitzel_stream --source-type file --dry-run --max-events 200 --visualize
 ```
 
 Run (Person + PPE)
@@ -29,7 +29,7 @@ ONNX_MODEL_PATH=models/yolov8n.onnx \
 ONNX_PROVIDERS=CPUExecutionProvider \
 YOLO_PPE_MODEL_PATH=models/yolov8_ppe_hansung.pt \
 MODEL_CLASS_MAP_PATH_PPE=configs/demo/model_class_map_ppe.yaml \
-python -m ai.pipeline --source-type file --dry-run --max-events 200 --visualize
+python -m schnitzel_stream --source-type file --dry-run --max-events 200 --visualize
 ```
 
 Notes
@@ -54,7 +54,7 @@ PYTHONPATH=src AI_MODEL_MODE=real \
 AI_MODEL_ADAPTER=demo.yolo_ppe_adapter:YOLOPPEAdapter \
 YOLO_PPE_MODEL_PATH=models/yolov8_ppe_hansung.pt \
 MODEL_CLASS_MAP_PATH_PPE=configs/demo/model_class_map_ppe.yaml \
-python -m ai.pipeline --source-type file --dry-run --max-events 200 --visualize
+python -m schnitzel_stream --source-type file --dry-run --max-events 200 --visualize
 ```
 
 실행(사람 + PPE)
@@ -66,7 +66,7 @@ ONNX_MODEL_PATH=models/yolov8n.onnx \
 ONNX_PROVIDERS=CPUExecutionProvider \
 YOLO_PPE_MODEL_PATH=models/yolov8_ppe_hansung.pt \
 MODEL_CLASS_MAP_PATH_PPE=configs/demo/model_class_map_ppe.yaml \
-python -m ai.pipeline --source-type file --dry-run --max-events 200 --visualize
+python -m schnitzel_stream --source-type file --dry-run --max-events 200 --visualize
 ```
 
 노트
