@@ -54,11 +54,11 @@ Current position: **Phase 2**
 - `P1.6` Type/port/transport-compat validation (static). `DONE` (3fe090a)
 - `P1.7` Restricted cycles policy (Delay/InitialValue only) as a validator extension. `DONE` (53b38a9)
 
-### Phase 2: Durable Delivery Hardening (IN PROGRESS ~30–40%)
+### Phase 2: Durable Delivery Hardening (IN PROGRESS ~60–75%)
 
 - `P2.1` Durable queue node plugin (`WAL/SQLite`), store-and-forward. `DONE` (fd02823)
-- `P2.2` Idempotency keys and ack semantics. `NOW`
-- `P2.3` Soak tests for outage/restart/backlog replay. `NEXT`
+- `P2.2` Idempotency keys and ack semantics. `DONE` (e885e41)
+- `P2.3` Soak tests for outage/restart/backlog replay. `NOW`
 
 ### Phase 3: Control Plane (LATER)
 
