@@ -67,6 +67,13 @@ python -m schnitzel_stream --graph configs/graphs/legacy_pipeline.yaml --validat
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
 ```
 
+**0b) Durable queue demo (enqueue + drain)**
+
+```powershell
+python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_v2.yaml
+```
+
 **1) First-time quick test (no backend needed)**
 
 ```powershell
@@ -560,6 +567,13 @@ python -m schnitzel_stream --graph configs/graphs/legacy_pipeline.yaml --validat
 
 ```powershell
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
+```
+
+**0b) Durable queue 데모 (enqueue + drain)**
+
+```powershell
+python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_v2.yaml
 ```
 
 **1) 처음 빠르게 테스트 (백엔드 불필요)**

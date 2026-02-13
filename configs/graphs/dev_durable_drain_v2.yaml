@@ -1,0 +1,20 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.durable_sqlite:SqliteQueueSource
+    config:
+      path: outputs/queues/dev_demo.sqlite3
+      limit: 100
+      # Intent: delete-on-emit is a dev shortcut; keep false for at-least-once replay semantics.
+      delete_on_emit: false
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "DRAIN "
+edges:
+  - from: src
+    to: out
+config: {}
+
