@@ -35,6 +35,7 @@ The main AI pipeline. Reads frames from file/RTSP/webcam/plugin source, runs AI 
 | `--source-type` | file\|rtsp\|webcam\|plugin | auto | Override source type |
 | `--camera-index` | int | from camera config or 0 | Webcam device index override |
 | `--validate-only` | flag | off | Validate graph spec and exit without running |
+| `--report-json` | flag | off | Print JSON run report (v2 in-proc runtime only) |
 | `--dry-run` | flag | off | Do not POST to backend (stdout only) |
 | `--output-jsonl` | string | none | Write events to JSONL file |
 | `--max-events` | int | unlimited | Stop after N successful emits |
@@ -499,7 +500,7 @@ python scripts/test_hygiene.py --json-out outputs/test_hygiene_report.json
 1. `configs/default.yaml` + `configs/cameras.yaml` merge (base)
 2. Runtime profile overlay (`configs/dev.yaml` or `configs/prod.yaml`, via `app.env`)
 3. Environment variable overrides (`AI_*`)
-4. CLI/runtime overrides for execution arguments (`--graph`, `--camera-id`, `--video`, `--source-type`, `--camera-index`, `--validate-only`, `--dry-run`, `--output-jsonl`, `--max-events`, `--visualize`, `--loop`)
+4. CLI/runtime overrides for execution arguments (`--graph`, `--camera-id`, `--video`, `--source-type`, `--camera-index`, `--validate-only`, `--report-json`, `--dry-run`, `--output-jsonl`, `--max-events`, `--visualize`, `--loop`)
 
 ---
 
@@ -538,6 +539,7 @@ export PYTHONPATH=src
 | `--source-type` | file\|rtsp\|webcam\|plugin | 자동 | 소스 타입 오버라이드 |
 | `--camera-index` | 정수 | 카메라 설정값 또는 0 | 웹캠 장치 인덱스 오버라이드 |
 | `--validate-only` | 플래그 | off | 그래프 스펙 검증 후 실행 없이 종료 |
+| `--report-json` | 플래그 | off | JSON 실행 리포트 출력 (v2 in-proc 런타임 전용) |
 | `--dry-run` | 플래그 | off | 백엔드 전송 안 함 (stdout만) |
 | `--output-jsonl` | 문자열 | 없음 | 이벤트를 JSONL 파일에 저장 |
 | `--max-events` | 정수 | 무제한 | N번 전송 후 종료 |
@@ -1002,4 +1004,4 @@ python scripts/test_hygiene.py --json-out outputs/test_hygiene_report.json
 1. `configs/default.yaml` + `configs/cameras.yaml` 병합 (기본)
 2. 런타임 프로필 오버레이 (`app.env` 기준 `configs/dev.yaml` 또는 `configs/prod.yaml`)
 3. 환경 변수 오버라이드 (`AI_*`)
-4. 실행 인자 기반 CLI/런타임 오버라이드 (`--graph`, `--camera-id`, `--video`, `--source-type`, `--camera-index`, `--validate-only`, `--dry-run`, `--output-jsonl`, `--max-events`, `--visualize`, `--loop`)
+4. 실행 인자 기반 CLI/런타임 오버라이드 (`--graph`, `--camera-id`, `--video`, `--source-type`, `--camera-index`, `--validate-only`, `--report-json`, `--dry-run`, `--output-jsonl`, `--max-events`, `--visualize`, `--loop`)

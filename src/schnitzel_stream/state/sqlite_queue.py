@@ -148,6 +148,13 @@ class SqliteQueue:
             out.append(QueuedPacket(seq=int(row["seq"]), packet=pkt))
         return out
 
+    def count(self) -> int:
+        cur = self._conn.cursor()
+        row = cur.execute("SELECT COUNT(*) AS n FROM packets").fetchone()
+        if row is None:
+            return 0
+        return int(row["n"])
+
     def delete_up_to(self, *, seq: int) -> int:
         s = int(seq)
         if s <= 0:

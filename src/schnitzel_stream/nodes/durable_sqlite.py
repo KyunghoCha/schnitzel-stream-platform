@@ -37,9 +37,11 @@ class SqliteQueueSink:
         self._queue = SqliteQueue(path.strip())
         self._forward = bool(cfg.get("forward", False))
         self._meta_key = str(cfg.get("meta_key", "durable"))
+        self._enqueued_total = 0
 
     def process(self, packet: StreamPacket) -> Iterable[StreamPacket]:
         seq = self._queue.enqueue(packet)
+        self._enqueued_total += 1
         if not self._forward:
             return []
 
@@ -51,6 +53,12 @@ class SqliteQueueSink:
             "node_id": self._node_id,
         }
         return [replace(packet, meta=meta)]
+
+    def metrics(self) -> dict[str, int]:
+        return {
+            "enqueued_total": int(self._enqueued_total),
+            "queue_depth": int(self._queue.count()),
+        }
 
     def close(self) -> None:
         self._queue.close()
@@ -79,6 +87,7 @@ class SqliteQueueSource:
         self._limit = int(cfg.get("limit", 100))
         self._delete_on_emit = bool(cfg.get("delete_on_emit", False))
         self._meta_key = str(cfg.get("meta_key", "durable"))
+        self._emitted_total = 0
 
     def run(self) -> Iterable[StreamPacket]:
         batch = self._queue.read(limit=self._limit)
@@ -96,11 +105,19 @@ class SqliteQueueSource:
             }
             out.append(replace(row.packet, meta=meta))
 
+        self._emitted_total += len(out)
+
         if self._delete_on_emit:
             # Intent: delete-on-emit is a dev-only shortcut; it is not safe without downstream ack semantics.
             self._queue.delete_up_to(seq=batch[-1].seq)
 
         return out
+
+    def metrics(self) -> dict[str, int]:
+        return {
+            "emitted_total": int(self._emitted_total),
+            "queue_depth": int(self._queue.count()),
+        }
 
     def close(self) -> None:
         self._queue.close()
@@ -127,6 +144,7 @@ class SqliteQueueAckSink:
         self._queue = SqliteQueue(path.strip())
         self._meta_key = str(cfg.get("meta_key", "durable"))
         self._forward = bool(cfg.get("forward", False))
+        self._acked_total = 0
 
     def process(self, packet: StreamPacket) -> Iterable[StreamPacket]:
         meta = dict(packet.meta)
@@ -136,10 +154,17 @@ class SqliteQueueAckSink:
         seq = raw.get("seq")
         if not isinstance(seq, int):
             raise ValueError(f"SqliteQueueAckSink expects packet.meta[{self._meta_key}].seq as int")
-        self._queue.ack(seq=seq)
+        if self._queue.ack(seq=seq):
+            self._acked_total += 1
         if self._forward:
             return [packet]
         return []
+
+    def metrics(self) -> dict[str, int]:
+        return {
+            "acked_total": int(self._acked_total),
+            "queue_depth": int(self._queue.count()),
+        }
 
     def close(self) -> None:
         self._queue.close()

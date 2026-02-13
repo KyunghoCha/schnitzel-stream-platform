@@ -6,11 +6,11 @@ In-process graph execution (Phase 1 MVP).
 Intent:
 - Execute a v2 node/edge graph in a single process for rapid iteration on edge devices.
 - Strict DAG only (no cycles) in Phase 1; restricted cycles are planned in `P1.7`.
-- No transport/durable semantics yet; nodes exchange StreamPackets in-memory only.
+- No transport layer yet; nodes exchange StreamPackets in-memory (side-effects are implemented by node plugins).
 """
 
 from collections import defaultdict, deque
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import inspect
 from typing import Any, Iterable
 
@@ -28,6 +28,7 @@ class GraphExecutionError(RuntimeError):
 @dataclass(frozen=True)
 class ExecutionResult:
     outputs_by_node: dict[str, list[StreamPacket]]
+    metrics: dict[str, int] = field(default_factory=dict)
 
 
 def _topological_order(nodes: list[NodeSpec], edges: list[EdgeSpec]) -> list[str]:
@@ -99,6 +100,8 @@ class InProcGraphRunner:
 
         nodes_by_id: dict[str, NodeSpec] = {n.node_id: n for n in nodes}
         outputs_by_node: dict[str, list[StreamPacket]] = {nid: [] for nid in nodes_by_id}
+        consumed_by_node: dict[str, int] = {nid: 0 for nid in nodes_by_id}
+        produced_by_node: dict[str, int] = {nid: 0 for nid in nodes_by_id}
 
         outgoing: dict[str, list[str]] = defaultdict(list)
         for e in edges:
@@ -131,6 +134,7 @@ class InProcGraphRunner:
                         if not isinstance(pkt, StreamPacket):
                             raise TypeError(f"node output must be StreamPacket: {node_spec.plugin}")
                         outputs_by_node[nid].append(pkt)
+                        produced_by_node[nid] += 1
                         _emit(nid, pkt)
                     continue
 
@@ -140,6 +144,7 @@ class InProcGraphRunner:
 
                 while inbox[nid]:
                     inp = inbox[nid].popleft()
+                    consumed_by_node[nid] += 1
                     produced = process_fn(inp)
                     if produced is None:
                         raise TypeError(f"node process() must return Iterable[StreamPacket]: {node_spec.plugin}")
@@ -147,9 +152,35 @@ class InProcGraphRunner:
                         if not isinstance(pkt, StreamPacket):
                             raise TypeError(f"node output must be StreamPacket: {node_spec.plugin}")
                         outputs_by_node[nid].append(pkt)
+                        produced_by_node[nid] += 1
                         _emit(nid, pkt)
 
-            return ExecutionResult(outputs_by_node=outputs_by_node)
+            metrics: dict[str, int] = {
+                "packets.consumed_total": sum(consumed_by_node.values()),
+                "packets.produced_total": sum(produced_by_node.values()),
+            }
+            for node_id, n in nodes_by_id.items():
+                metrics[f"node.{node_id}.consumed"] = int(consumed_by_node[node_id])
+                metrics[f"node.{node_id}.produced"] = int(produced_by_node[node_id])
+                # Keep kind as a numeric tag until a richer report contract lands.
+                metrics[f"node.{node_id}.is_source"] = 1 if n.kind == "source" else 0
+                metrics[f"node.{node_id}.is_sink"] = 1 if n.kind == "sink" else 0
+
+            for node_id, inst in instances.items():
+                extra_fn = getattr(inst, "metrics", None)
+                if not callable(extra_fn):
+                    continue
+                extra = extra_fn()
+                if not isinstance(extra, dict):
+                    continue
+                for k, v in extra.items():
+                    if not isinstance(k, str) or not k.strip():
+                        continue
+                    if not isinstance(v, int) or isinstance(v, bool):
+                        continue
+                    metrics[f"node.{node_id}.{k.strip()}"] = int(v)
+
+            return ExecutionResult(outputs_by_node=outputs_by_node, metrics=metrics)
         finally:
             # Best-effort cleanup, regardless of partial execution failures.
             for inst in instances.values():

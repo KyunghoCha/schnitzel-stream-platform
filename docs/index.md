@@ -19,7 +19,8 @@ Phase 0 note:
   6. `implementation/90-packaging/support_matrix.md` (Edge support matrix, provisional)
   7. `specs/pipeline_spec.md` (Legacy pipeline behavior, executed via `schnitzel_stream`)
   8. `contracts/stream_packet.md` (Internal node-to-node contract, provisional)
-  9. `contracts/protocol.md` (Event schema / transport contract)
+  9. `contracts/observability.md` (Metrics/health contract, provisional)
+  10. `contracts/protocol.md` (Event schema / transport contract)
 
 ### Legacy AI Pipeline Deep Dive (Optional)
 
@@ -36,6 +37,7 @@ Phase 0 note:
 - Execution plan/status: `roadmap/execution_roadmap.md`
 - Runtime behavior (legacy job): `specs/pipeline_spec.md`
 - Node-to-node contract: `contracts/stream_packet.md`
+- Observability contract: `contracts/observability.md`
 - Event schema: `contracts/protocol.md`
 - Model/Tracker contract: `specs/model_interface.md`
 
@@ -75,7 +77,8 @@ Phase 0 참고:
   6. `implementation/90-packaging/support_matrix.md` (엣지 지원 매트릭스, 잠정)
   7. `specs/pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
   8. `contracts/stream_packet.md` (노드 간 내부 계약, 잠정)
-  9. `contracts/protocol.md` (이벤트 스키마/전송 계약)
+  9. `contracts/observability.md` (메트릭/헬스 계약, 잠정)
+  10. `contracts/protocol.md` (이벤트 스키마/전송 계약)
 
 ### 레거시 AI 파이프라인 상세 (선택)
 
@@ -92,6 +95,7 @@ Phase 0 참고:
 - 실행 계획/상태: `roadmap/execution_roadmap.md`
 - 런타임 동작(레거시 job): `specs/pipeline_spec.md`
 - 노드 간 계약: `contracts/stream_packet.md`
+- 관측 가능성 계약: `contracts/observability.md`
 - 이벤트 스키마: `contracts/protocol.md`
 - 모델/트래커 계약: `specs/model_interface.md`
 

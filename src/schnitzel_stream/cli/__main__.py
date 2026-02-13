@@ -11,7 +11,9 @@ Intent:
 """
 
 import argparse
+import json
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 from schnitzel_stream.graph.spec import load_graph_spec, load_node_graph_spec, peek_graph_version
@@ -43,6 +45,11 @@ def _build_parser() -> argparse.ArgumentParser:
         "--validate-only",
         action="store_true",
         help="validate graph spec and exit without running",
+    )
+    parser.add_argument(
+        "--report-json",
+        action="store_true",
+        help="print a JSON run report (v2 in-proc runtime only)",
     )
 
     # Keep legacy pipeline flags as the Phase 0 compatibility surface.
@@ -111,7 +118,18 @@ def main(argv: list[str] | None = None) -> int:
         runner = InProcGraphRunner(registry=registry)
         result = runner.run(nodes=spec2.nodes, edges=spec2.edges)
         produced = sum(len(v) for v in result.outputs_by_node.values())
-        print(f"v2 graph executed (in-proc): nodes={len(spec2.nodes)} edges={len(spec2.edges)} packets={produced}")
+        if args.report_json:
+            report = {
+                "ts": datetime.now(timezone.utc).isoformat(),
+                "status": "ok",
+                "engine": "inproc",
+                "graph_version": 2,
+                "graph": str(args.graph),
+                "metrics": result.metrics,
+            }
+            print(json.dumps(report, separators=(",", ":"), default=str))
+        else:
+            print(f"v2 graph executed (in-proc): nodes={len(spec2.nodes)} edges={len(spec2.edges)} packets={produced}")
         return 0
 
     raise AssertionError(f"unreachable: unsupported version={version}")
