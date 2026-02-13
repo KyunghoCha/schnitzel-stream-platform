@@ -38,8 +38,9 @@ Legacy CCTV/AI runtime lives under `src/ai/`, but execution is routed through th
 2. `docs/roadmap/migration_plan_phase0.md` (Phase 0 plan)
 3. `docs/design/architecture_2.0.md` (Provisional platform architecture)
 4. `docs/implementation/90-packaging/entrypoint/design.md` (Entrypoint packaging)
-5. `docs/contracts/protocol.md` (Event schema; legacy runtime contract)
-6. `docs/specs/pipeline_spec.md` (Legacy pipeline behavior via `schnitzel_stream`)
+5. `docs/contracts/stream_packet.md` (Node-to-node contract, provisional)
+6. `docs/contracts/protocol.md` (Event schema; legacy runtime contract)
+7. `docs/specs/pipeline_spec.md` (Legacy pipeline behavior via `schnitzel_stream`)
 
 ### Immediate Next Steps (Provisional)
 
@@ -94,8 +95,9 @@ If you are running low on context/token budget, update `PROMPT_CORE.md` with:
 2. `docs/roadmap/migration_plan_phase0.md` (Phase 0 계획)
 3. `docs/design/architecture_2.0.md` (플랫폼 아키텍처, 잠정)
 4. `docs/implementation/90-packaging/entrypoint/design.md` (엔트리포인트/패키징)
-5. `docs/contracts/protocol.md` (이벤트 스키마; 레거시 계약)
-6. `docs/specs/pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
+5. `docs/contracts/stream_packet.md` (노드 간 계약, 잠정)
+6. `docs/contracts/protocol.md` (이벤트 스키마; 레거시 계약)
+7. `docs/specs/pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
 
 ### 즉시 다음 단계 (잠정)
 
@@ -109,4 +111,3 @@ If you are running low on context/token budget, update `PROMPT_CORE.md` with:
 - 완료한 내용(가능하면 commit ref 포함),
 - 남은 작업(리스크/임팩트 순),
 - 남은 질문/다음 의사결정 항목.
-

@@ -244,7 +244,7 @@ DAG 적용 범위:
 
 종료 조건(DoD):
 
-1. `StreamPacket v1` 스키마 확정 (header/payload/meta)
+1. `StreamPacket v1` 스키마 확정 (header/payload/meta) — `docs/contracts/stream_packet.md`
 2. video/sensor 입력 모두 Packet 변환 성공
 3. 기존 이벤트 스키마와 호환 변환기 제공
 

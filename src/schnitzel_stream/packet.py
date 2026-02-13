@@ -14,6 +14,8 @@ def _now_iso_utc() -> str:
 class StreamPacket:
     """Universal data contract for all nodes.
 
+    SSOT: `docs/contracts/stream_packet.md`
+
     v1 (Phase B) is intentionally minimal:
     - `kind` identifies payload semantics (frame/event/sensor/metrics/...).
     - `source_id` identifies the origin stream (camera_id, sensor_id, etc).
@@ -45,4 +47,3 @@ class StreamPacket:
             payload=payload,
             meta=dict(meta or {}),
         )
-
