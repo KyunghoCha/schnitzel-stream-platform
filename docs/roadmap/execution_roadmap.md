@@ -44,13 +44,13 @@ Status legend:
 
 Current position: **Phase 1**
 
-### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (IN PROGRESS ~30–40%)
+### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (IN PROGRESS ~50–60%)
 
 - `P1.1` Draft graph model + strict DAG validator + unit tests. `DONE` (27bb702)
 - `P1.2` Draft node-graph spec v2 loader + unit tests. `DONE` (2822ffa, 87d7a24)
 - `P1.3` Centralize plugin allowlist checks in `PluginPolicy`. `DONE` (4d95fd5)
-- `P1.4` CLI: add `validate` / `--validate-only` to validate v1(job) and v2(node graph). `NOW`
-- `P1.5` Runtime MVP: execute v2 graph (topological order) for in-proc packets only. `NEXT`
+- `P1.4` CLI: add `validate` / `--validate-only` to validate v1(job) and v2(node graph). `DONE` (f4322d4)
+- `P1.5` Runtime MVP: execute v2 graph (topological order) for in-proc packets only. `NOW`
 - `P1.6` Type/port/transport-compat validation (static). `NEXT`
 - `P1.7` Restricted cycles policy (Delay/InitialValue only) as a validator extension. `LATER`
 
