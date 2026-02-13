@@ -17,6 +17,7 @@
 1. **범용성**: Video, Sensor, Audio, Robot telemetry 등 이기종 스트림을 동일 계약으로 처리
 2. **경량성**: 엣지 단일 노드에서도 동작하는 작은 런타임 풋프린트
 3. **회복탄력성**: 네트워크/백엔드 장애 시에도 데이터 손실 최소화와 자동 복구
+4. **확장성(Scalability)**: 단일 엣지부터 클라우드 분산, P2P Mesh Network까지 동일 런타임 지원
 
 ---
 
@@ -163,6 +164,13 @@ flowchart LR
 2. 처리 노드는 순수 함수형 변환을 우선하고, 상태 공유는 `Blackboard` 경계에서만 허용
 3. 출력 노드는 항상 `Durable Queue`를 경유하고, 외부 장애는 `Retry/Circuit`에서 흡수
 
+**[Provisional] Node Implementation Categories (세분화 계획):**
+1. **IO Node**: Camera, Sensor, Network, File (순수 데이터 이동, Side-effect O)
+2. **Logic Node**: Filter, Map, Resize, Convert (Stateless, 즉시 실행, Side-effect X)
+3. **State Node**: Buffer, Delay, Window, Aggregate (Stateful, 이전 데이터 기억)
+4. **Compute Node**: AI Model, Heavy Math (Async 실행, 별도 스레드/프로세스)
+5. **Control Node**: Switch, Router, Duplicator (데이터 흐름 제어, 분기/병합)
+
 DAG 적용 범위:
 
 1. **실행 단위**: `Graph Runtime` 내부의 전체 노드 그래프
@@ -217,6 +225,7 @@ DAG 적용 범위:
 - 도메인 중립 `StreamPacket` 도입
 - 기존 이벤트 스키마와 양방향 변환 계층 추가
 - 노드 간 데이터 교환 계약 표준화
+- **[Provisional] 실시간 토폴로지 변경을 위한 데이터 인터페이스 단일화 (Hot-Path Mutation)**
 
 종료 조건(DoD):
 
@@ -229,9 +238,11 @@ DAG 적용 범위:
 핵심 목표:
 
 - YAML/JSON 기반 그래프 DSL
-- 정적 검증기 (cycle/type/port/required-field)
+- 정적 검증기 (cycle/type/port/required-field/transport-compatibility)
+- 노드 간 통신 프로토콜 검증 (SharedMemory vs Network 혼용 차단)
 - 플러그인 로딩과 버전 호환 정책
 - 무중단에 가까운 노드 교체(제한적 hot-reload)
+- **[Provisional] LLM/Policy 기반 동적 그래프 구조 변형(Insert/Remove/Replace) 지원**
 
 종료 조건(DoD):
 
@@ -261,6 +272,17 @@ DAG 적용 범위:
 - 지표 기반 정책 자동 튜닝(FPS, 해상도, 배치 크기)
 - 환경 인지형 미들웨어 선택(저전력/저대역폭 모드)
 - 운영자 override 가능한 제어 루프
+- **[Stretch] Internal Feedback Loop Support (Cyclic Graph)**:
+    - DAG(비순환) 제약을 해제하고 노드 간 내부 순환 연결 지원
+    - `DelayNode` 및 `InitialValue` 설정을 통한 안전한 루프 실행 보장
+    - 제어 이론(PID) 및 자기 학습(Self-Correction) 로직 구현 가능
+- **[Stretch/TBD] LLM-driven Graph Compilation & Self-Coding Node**:
+    - 자연어 의도를 해석하여 그래프 구성 및 노드별 프롬프트(Role) 자동 생성/주입
+    - 미구현 기능에 대해 LLM이 즉석에서 코드(Python) 생성 및 핫로딩 (Synthesized Code Injection)
+    - **[Provisional] Automated Code Hygiene & Refactoring Agent**:
+        - 생성된 코드의 중복성(Redundancy) 분석 및 병합(Merge) 제안
+        - 미사용 임시 노드(Transient Node)에 대한 생명주기 관리 및 GC(Garbage Collection) 수행
+        - 사용자 승인(Human-in-the-Loop) 기반 코드 베이스 병합(Merge Request)
 
 종료 조건(DoD):
 
