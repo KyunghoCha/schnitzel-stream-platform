@@ -64,7 +64,7 @@ Current position: **Phase 3**
 
 - `P3.1` Unified metrics/health contract across transports. `DONE` (e6d14c5)
 - `P3.2` Autonomic tuning hooks (policy-driven throttles). `DONE` (a792677)
-- `P3.3` Optional LLM/controller layer (human-in-the-loop, gated). `LATER`
+- `P3.3` Optional LLM/controller layer (human-in-the-loop, gated). `NOW` (optional)
 
 ## Verification
 
