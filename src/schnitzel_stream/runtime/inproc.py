@@ -15,6 +15,7 @@ import inspect
 from typing import Any, Iterable
 
 from schnitzel_stream.graph.model import EdgeSpec, NodeSpec
+from schnitzel_stream.graph.compat import validate_graph_compat
 from schnitzel_stream.graph.validate import GraphValidationError, validate_graph
 from schnitzel_stream.packet import StreamPacket
 from schnitzel_stream.plugins.registry import PluginRegistry
@@ -94,20 +95,14 @@ class InProcGraphRunner:
 
     def run(self, *, nodes: list[NodeSpec], edges: list[EdgeSpec]) -> ExecutionResult:
         validate_graph(nodes, edges, allow_cycles=False)
+        validate_graph_compat(nodes, edges, transport="inproc", registry=self._registry)
 
         nodes_by_id: dict[str, NodeSpec] = {n.node_id: n for n in nodes}
         outputs_by_node: dict[str, list[StreamPacket]] = {nid: [] for nid in nodes_by_id}
 
-        incoming: dict[str, list[str]] = defaultdict(list)
         outgoing: dict[str, list[str]] = defaultdict(list)
         for e in edges:
-            incoming[e.dst].append(e.src)
             outgoing[e.src].append(e.dst)
-
-        # MVP guardrails: source nodes must not have incoming edges.
-        for n in nodes:
-            if n.kind == "source" and incoming.get(n.node_id):
-                raise GraphExecutionError(f"source node must not have incoming edges: {n.node_id}")
 
         order = _topological_order(nodes, edges)
 

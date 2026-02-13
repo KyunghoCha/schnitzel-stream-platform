@@ -16,6 +16,7 @@ from pathlib import Path
 
 from schnitzel_stream.graph.spec import load_graph_spec, load_node_graph_spec, peek_graph_version
 from schnitzel_stream.graph.validate import validate_graph
+from schnitzel_stream.graph.compat import validate_graph_compat
 from schnitzel_stream.plugins.registry import PluginRegistry
 from schnitzel_stream.plugins.registry import PluginPolicy
 from schnitzel_stream.project import resolve_project_root
@@ -102,12 +103,12 @@ def main(argv: list[str] | None = None) -> int:
         spec2 = load_node_graph_spec(args.graph)
         validate_graph(spec2.nodes, spec2.edges, allow_cycles=False)
         policy = PluginPolicy.from_env()
-        for node in spec2.nodes:
-            policy.ensure_path_allowed(node.plugin)
+        registry = PluginRegistry(policy=policy)
+        validate_graph_compat(spec2.nodes, spec2.edges, transport="inproc", registry=registry)
         if args.validate_only:
             return 0
 
-        runner = InProcGraphRunner(registry=PluginRegistry(policy=policy))
+        runner = InProcGraphRunner(registry=registry)
         result = runner.run(nodes=spec2.nodes, edges=spec2.edges)
         produced = sum(len(v) for v in result.outputs_by_node.values())
         print(f"v2 graph executed (in-proc): nodes={len(spec2.nodes)} edges={len(spec2.edges)} packets={produced}")

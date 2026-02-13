@@ -21,13 +21,17 @@ def test_cli_validate_only_v2_graph_spec_without_version(tmp_path):
         textwrap.dedent(
             """
             nodes:
-              - id: a
-                plugin: schnitzel_stream.packet:StreamPacket
-              - id: b
-                plugin: schnitzel_stream.packet:StreamPacket
+              - id: src
+                kind: source
+                plugin: schnitzel_stream.nodes.dev:StaticSource
+                config:
+                  packets: []
+              - id: sink
+                kind: sink
+                plugin: schnitzel_stream.nodes.dev:Identity
             edges:
-              - from: a
-                to: b
+              - from: src
+                to: sink
             """
         ).lstrip(),
         encoding="utf-8",
@@ -36,4 +40,3 @@ def test_cli_validate_only_v2_graph_spec_without_version(tmp_path):
     cmd = [sys.executable, "-m", "schnitzel_stream", "validate", "--graph", str(p)]
     result = subprocess.run(cmd, cwd=str(root / "src"), check=True)
     assert result.returncode == 0
-

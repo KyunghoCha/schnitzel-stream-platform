@@ -26,6 +26,8 @@ class StaticSource:
       - meta: dict (optional)
     """
 
+    OUTPUT_KINDS = {"*"}
+
     def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
         self._node_id = str(node_id or "source")
         self._config = dict(config or {})
@@ -57,6 +59,9 @@ class StaticSource:
 class Identity:
     """Pass-through node (no-op)."""
 
+    INPUT_KINDS = {"*"}
+    OUTPUT_KINDS = {"*"}
+
     def __init__(self, **_kwargs: Any) -> None:
         # Accept config/context kwargs for forward-compatibility with richer runtimes.
         return
@@ -70,6 +75,8 @@ class Identity:
 
 class PrintSink:
     """Print each packet as one JSON line (dev-only)."""
+
+    INPUT_KINDS = {"*"}
 
     def __init__(self, *, prefix: str | None = None, **_kwargs: Any) -> None:
         self._prefix = str(prefix or "")
@@ -87,6 +94,40 @@ class PrintSink:
         # - `payload` may contain arbitrary Python types during migration.
         # - dev sink should never crash just because payload isn't JSON-serializable.
         print(self._prefix + json.dumps(data, default=str), flush=True)
+        return []
+
+    def close(self) -> None:
+        return
+
+
+class FooSource:
+    """Test-only source that emits a single `kind=foo` packet.
+
+    Intent:
+    - Used by static graph compatibility tests to validate kind mismatches.
+    """
+
+    OUTPUT_KINDS = {"foo"}
+
+    def __init__(self, **_kwargs: Any) -> None:
+        return
+
+    def run(self) -> Iterable[StreamPacket]:
+        yield StreamPacket.new(kind="foo", source_id="dev", payload={})
+
+    def close(self) -> None:
+        return
+
+
+class BarSink:
+    """Test-only sink that accepts `kind=bar` packets only."""
+
+    INPUT_KINDS = {"bar"}
+
+    def __init__(self, **_kwargs: Any) -> None:
+        return
+
+    def process(self, _packet: StreamPacket) -> Iterable[StreamPacket]:
         return []
 
     def close(self) -> None:
