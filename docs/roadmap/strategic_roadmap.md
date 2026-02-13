@@ -204,15 +204,16 @@ DAG 적용 범위:
 | 멀티 센서 | `MultiSensorRuntime` 기반 비동기 수집 및 시간창 근접 매칭 | 구현됨 |
 | RTSP 회복 | 재연결 + 백오프 로직 | 구현됨 |
 | 출력 경로 | backend / jsonl / stdout / custom emitter 선택 | 구현됨 |
-| 내구성 저장 | 로컬 영구 큐(SQLite/WAL) 기반 store-and-forward | 미구현 |
-| 범용 패킷 | `StreamPacket` 통합 계약 | 미구현 |
-| 그래프 실행기 | DAG 기반 노드 실행/정적 검증/핫스왑 | 미구현 |
-| 자율 제어 | 정책 기반 자동 튜닝 컨트롤 루프 | 미구현 |
+| 내구성 저장 | 로컬 영구 큐(SQLite/WAL) 기반 store-and-forward (노드/스토어 MVP) | MVP 구현됨 |
+| 범용 패킷 | `StreamPacket` 계약 문서 + 코어 타입 + v2 런타임 사용 | MVP 구현됨 (레거시 전면 적용은 진행중) |
+| 그래프 실행기 | v2 in-proc DAG 런타임 + 정적 검증(토폴로지/호환성) | MVP 구현됨 (분산/핫스왑은 미구현) |
+| 관측 가능성 | JSON 실행 리포트 + 메트릭 네이밍 계약 | MVP 구현됨 |
+| 자율 제어 | 정책 기반 자동 튜닝 컨트롤 루프 | 부분 구현됨 (throttle hook), control loop는 미구현 |
 
 주의:
 
 - 현재 센서 결합은 “Interpolation 완료”가 아니라 **time-window 내 nearest 매칭**이다.
-- backend 장애 복구는 일부 fallback이 있으나, **완전한 durable delivery 계층**은 아직 없다.
+- backend 장애 복구는 일부 fallback이 있으나, **end-to-end durable delivery 계층**은 아직 발전 중이다(현재는 durable queue 빌딩블록/데모 그래프 중심).
 
 ---
 
