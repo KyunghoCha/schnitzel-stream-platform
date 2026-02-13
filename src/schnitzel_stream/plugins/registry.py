@@ -65,12 +65,12 @@ class PluginRegistry:
     def __init__(self, policy: PluginPolicy | None = None) -> None:
         self._policy = policy or PluginPolicy.from_env()
 
-    def load(self, path: str) -> Any:
-        """Load an object from `module:Name` path with allowlist enforcement.
+    def resolve(self, path: str) -> Any:
+        """Resolve a `module:Name` plugin path to a Python object.
 
-        - If Name is a class: instantiate with no args.
-        - If Name is a function: call it with no args and use return value.
-        - Otherwise: return the object itself.
+        Intent:
+        - Runtime loaders (Phase 1+) may need to control instantiation (pass config/context).
+        - Keep allowlist enforcement centralized regardless of how the target is used.
         """
         if ":" not in path:
             raise ValueError("plugin path must be in form 'module:Name'")
@@ -86,6 +86,16 @@ class PluginRegistry:
         target = getattr(module, name, None)
         if target is None:
             raise ImportError(f"plugin target not found: {path}")
+        return target
+
+    def load(self, path: str) -> Any:
+        """Load an object from `module:Name` path with allowlist enforcement.
+
+        - If Name is a class: instantiate with no args.
+        - If Name is a function: call it with no args and use return value.
+        - Otherwise: return the object itself.
+        """
+        target = self.resolve(path)
 
         if callable(target):
             try:

@@ -29,7 +29,7 @@ The main AI pipeline. Reads frames from file/RTSP/webcam/plugin source, runs AI 
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `--graph` | string | `configs/graphs/legacy_pipeline.yaml` | Graph spec YAML path (v1 job graph by default; v2 graphs are validate-only for now) |
+| `--graph` | string | `configs/graphs/legacy_pipeline.yaml` | Graph spec YAML path (v1 job graph by default; v2 graphs run via in-proc DAG runtime MVP) |
 | `--camera-id` | string | auto (from config) | Camera ID (must exist in `configs/cameras.yaml`) |
 | `--video` | string | `data/samples/*.mp4` | Video file path (forces file source) |
 | `--source-type` | file\|rtsp\|webcam\|plugin | auto | Override source type |
@@ -59,6 +59,12 @@ export AI_MODEL_MODE=mock
 # Equivalent forms
 python -m schnitzel_stream validate --graph configs/graphs/legacy_pipeline.yaml
 python -m schnitzel_stream --graph configs/graphs/legacy_pipeline.yaml --validate-only
+```
+
+**0a) Run v2 in-proc demo graph**
+
+```powershell
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
 ```
 
 **1) First-time quick test (no backend needed)**
@@ -518,7 +524,7 @@ export PYTHONPATH=src
 
 | 옵션 | 타입 | 기본값 | 설명 |
 |------|------|--------|------|
-| `--graph` | 문자열 | `configs/graphs/legacy_pipeline.yaml` | 그래프 스펙 YAML 경로 (기본값은 v1 job 그래프; v2 그래프는 현재 validate-only) |
+| `--graph` | 문자열 | `configs/graphs/legacy_pipeline.yaml` | 그래프 스펙 YAML 경로 (기본값은 v1 job 그래프; v2 그래프는 in-proc DAG 런타임 MVP로 실행) |
 | `--camera-id` | 문자열 | 자동 (설정 기반) | 카메라 ID (`configs/cameras.yaml`에 존재해야 함) |
 | `--video` | 문자열 | `data/samples/*.mp4` | 비디오 파일 경로 (파일 소스 강제) |
 | `--source-type` | file\|rtsp\|webcam\|plugin | 자동 | 소스 타입 오버라이드 |
@@ -548,6 +554,12 @@ export AI_MODEL_MODE=mock
 # 아래 두 방식은 동일
 python -m schnitzel_stream validate --graph configs/graphs/legacy_pipeline.yaml
 python -m schnitzel_stream --graph configs/graphs/legacy_pipeline.yaml --validate-only
+```
+
+**0a) v2 in-proc 데모 그래프 실행**
+
+```powershell
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
 ```
 
 **1) 처음 빠르게 테스트 (백엔드 불필요)**
@@ -974,4 +986,4 @@ python scripts/test_hygiene.py --json-out outputs/test_hygiene_report.json
 1. `configs/default.yaml` + `configs/cameras.yaml` 병합 (기본)
 2. 런타임 프로필 오버레이 (`app.env` 기준 `configs/dev.yaml` 또는 `configs/prod.yaml`)
 3. 환경 변수 오버라이드 (`AI_*`)
-4. 실행 인자 기반 CLI/런타임 오버라이드 (`--camera-id`, `--video`, `--source-type`, `--camera-index`, `--dry-run`, `--output-jsonl`, `--max-events`, `--visualize`, `--loop`)
+4. 실행 인자 기반 CLI/런타임 오버라이드 (`--graph`, `--camera-id`, `--video`, `--source-type`, `--camera-index`, `--validate-only`, `--dry-run`, `--output-jsonl`, `--max-events`, `--visualize`, `--loop`)

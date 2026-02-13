@@ -16,7 +16,7 @@ Pipeline Spec
 
 - **Video**: `data/samples/*.mp4` (default)
 - **CLI Overrides**:
-  - `--graph` (graph spec YAML path; default: `configs/graphs/legacy_pipeline.yaml`; v2 graphs require `--validate-only` until Phase 1 runtime ships)
+  - `--graph` (graph spec YAML path; default: `configs/graphs/legacy_pipeline.yaml`; v2 graphs run via the Phase 1 in-proc DAG runtime MVP)
   - `--video` (mp4 path; forces file source, fails fast if path does not exist)
   - `--camera-id` (string; fails fast if id is not found in `configs/cameras.yaml`)
   - `--source-type` (file|rtsp|webcam|plugin; `--video` + `--source-type rtsp/plugin` is invalid)
@@ -189,7 +189,7 @@ Pipeline Spec
 
 - **비디오**: `data/samples/*.mp4` (기본값)
 - **CLI 오버라이드**:
-  - `--graph` (그래프 스펙 YAML 경로; 기본값: `configs/graphs/legacy_pipeline.yaml`; v2 그래프는 Phase 1 런타임 구현 전까지 `--validate-only`만 지원)
+  - `--graph` (그래프 스펙 YAML 경로; 기본값: `configs/graphs/legacy_pipeline.yaml`; v2 그래프는 Phase 1 in-proc DAG 런타임 MVP로 실행)
   - `--video` (mp4 경로; 파일 소스로 강제하며, 경로가 없으면 즉시 종료)
   - `--camera-id` (문자열; `configs/cameras.yaml`에 없으면 즉시 종료)
   - `--source-type` (file|rtsp|webcam|plugin; `--video`와 `--source-type rtsp/plugin` 조합은 불가)

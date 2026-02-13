@@ -19,6 +19,7 @@ from schnitzel_stream.graph.validate import validate_graph
 from schnitzel_stream.plugins.registry import PluginRegistry
 from schnitzel_stream.plugins.registry import PluginPolicy
 from schnitzel_stream.project import resolve_project_root
+from schnitzel_stream.runtime.inproc import InProcGraphRunner
 
 
 def _default_graph_path() -> Path:
@@ -106,10 +107,11 @@ def main(argv: list[str] | None = None) -> int:
         if args.validate_only:
             return 0
 
-        raise NotImplementedError(
-            "graph spec version 2 runtime is not implemented yet. "
-            "Use --validate-only or use a v1 job graph spec.",
-        )
+        runner = InProcGraphRunner(registry=PluginRegistry(policy=policy))
+        result = runner.run(nodes=spec2.nodes, edges=spec2.edges)
+        produced = sum(len(v) for v in result.outputs_by_node.values())
+        print(f"v2 graph executed (in-proc): nodes={len(spec2.nodes)} edges={len(spec2.edges)} packets={produced}")
+        return 0
 
     raise AssertionError(f"unreachable: unsupported version={version}")
 
