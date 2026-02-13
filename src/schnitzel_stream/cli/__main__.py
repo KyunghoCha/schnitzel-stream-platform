@@ -16,6 +16,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+from schnitzel_stream.control.throttle import FixedBudgetThrottle
 from schnitzel_stream.graph.spec import load_graph_spec, load_node_graph_spec, peek_graph_version
 from schnitzel_stream.graph.validate import validate_graph
 from schnitzel_stream.graph.compat import validate_graph_compat
@@ -116,7 +117,10 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         runner = InProcGraphRunner(registry=registry)
-        result = runner.run(nodes=spec2.nodes, edges=spec2.edges)
+        # Intent: reuse legacy `--max-events` as a generic packet budget for v2 graphs
+        # (counts source-emitted packets, not backend-acked events).
+        throttle = FixedBudgetThrottle(max_source_emits_total=args.max_events) if args.max_events is not None else None
+        result = runner.run(nodes=spec2.nodes, edges=spec2.edges, throttle=throttle)
         produced = sum(len(v) for v in result.outputs_by_node.values())
         if args.report_json:
             report = {

@@ -23,6 +23,7 @@ Baseline keys (runner-provided):
 
 - `packets.consumed_total`
 - `packets.produced_total`
+- `packets.source_emitted_total`
 - `node.<node_id>.consumed`
 - `node.<node_id>.produced`
 
@@ -53,10 +54,10 @@ Extension keys (node-provided, optional):
 
 - `packets.consumed_total`
 - `packets.produced_total`
+- `packets.source_emitted_total`
 - `node.<node_id>.consumed`
 - `node.<node_id>.produced`
 
 확장 키(노드 제공, 선택):
 
 - `node.<node_id>.<metric_name>` (int만 허용; 예: `node.queue.queue_depth`)
-

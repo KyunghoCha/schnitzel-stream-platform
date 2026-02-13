@@ -19,6 +19,7 @@ from schnitzel_stream.graph.compat import validate_graph_compat
 from schnitzel_stream.graph.validate import GraphValidationError, validate_graph
 from schnitzel_stream.packet import StreamPacket
 from schnitzel_stream.plugins.registry import PluginRegistry
+from schnitzel_stream.control.throttle import NoopThrottle, ThrottlePolicy
 
 
 class GraphExecutionError(RuntimeError):
@@ -94,14 +95,23 @@ class InProcGraphRunner:
     def __init__(self, *, registry: PluginRegistry | None = None) -> None:
         self._registry = registry or PluginRegistry()
 
-    def run(self, *, nodes: list[NodeSpec], edges: list[EdgeSpec]) -> ExecutionResult:
+    def run(
+        self,
+        *,
+        nodes: list[NodeSpec],
+        edges: list[EdgeSpec],
+        throttle: ThrottlePolicy | None = None,
+    ) -> ExecutionResult:
         validate_graph(nodes, edges, allow_cycles=False)
         validate_graph_compat(nodes, edges, transport="inproc", registry=self._registry)
+
+        th = throttle or NoopThrottle()
 
         nodes_by_id: dict[str, NodeSpec] = {n.node_id: n for n in nodes}
         outputs_by_node: dict[str, list[StreamPacket]] = {nid: [] for nid in nodes_by_id}
         consumed_by_node: dict[str, int] = {nid: 0 for nid in nodes_by_id}
         produced_by_node: dict[str, int] = {nid: 0 for nid in nodes_by_id}
+        source_emitted_total = 0
 
         outgoing: dict[str, list[str]] = defaultdict(list)
         for e in edges:
@@ -130,11 +140,16 @@ class InProcGraphRunner:
                     produced = run_fn()
                     if produced is None:
                         raise TypeError(f"source node run() must return Iterable[StreamPacket]: {node_spec.plugin}")
+                    if not th.allow_source_emit(node_id=nid, emitted_total=source_emitted_total):
+                        continue
                     for pkt in produced:
+                        if not th.allow_source_emit(node_id=nid, emitted_total=source_emitted_total):
+                            break
                         if not isinstance(pkt, StreamPacket):
                             raise TypeError(f"node output must be StreamPacket: {node_spec.plugin}")
                         outputs_by_node[nid].append(pkt)
                         produced_by_node[nid] += 1
+                        source_emitted_total += 1
                         _emit(nid, pkt)
                     continue
 
@@ -158,6 +173,7 @@ class InProcGraphRunner:
             metrics: dict[str, int] = {
                 "packets.consumed_total": sum(consumed_by_node.values()),
                 "packets.produced_total": sum(produced_by_node.values()),
+                "packets.source_emitted_total": int(source_emitted_total),
             }
             for node_id, n in nodes_by_id.items():
                 metrics[f"node.{node_id}.consumed"] = int(consumed_by_node[node_id])
