@@ -22,7 +22,7 @@ def test_pipeline_jsonl_output(tmp_path):
     cmd = [
         sys.executable,
         "-m",
-        "ai.pipeline",
+        "schnitzel_stream",
         "--output-jsonl",
         str(out_file),
         "--max-events",

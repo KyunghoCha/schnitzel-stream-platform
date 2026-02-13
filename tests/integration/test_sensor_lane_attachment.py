@@ -23,7 +23,7 @@ def test_pipeline_attaches_sensor_payload_when_enabled(tmp_path):
     cmd = [
         sys.executable,
         "-m",
-        "ai.pipeline",
+        "schnitzel_stream",
         "--output-jsonl",
         str(out_file),
         "--max-events",
@@ -64,7 +64,7 @@ def test_pipeline_emits_sensor_and_fused_events_when_enabled(tmp_path):
     cmd = [
         sys.executable,
         "-m",
-        "ai.pipeline",
+        "schnitzel_stream",
         "--output-jsonl",
         str(out_file),
         "--max-events",
