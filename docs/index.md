@@ -13,12 +13,13 @@ Phase 0 note:
 - Suggested reading order:
   1. `roadmap/strategic_roadmap.md` (Vision / target architecture)
   2. `roadmap/migration_plan_phase0.md` (What we are changing now)
-  3. `design/architecture_2.0.md` (Provisional architecture spec)
-  4. `implementation/90-packaging/entrypoint/design.md` (Entrypoint design)
-  5. `implementation/90-packaging/support_matrix.md` (Edge support matrix, provisional)
-  6. `specs/pipeline_spec.md` (Legacy pipeline behavior, executed via `schnitzel_stream`)
-  7. `contracts/stream_packet.md` (Internal node-to-node contract, provisional)
-  8. `contracts/protocol.md` (Event schema / transport contract)
+  3. `roadmap/execution_roadmap.md` (Execution SSOT: plan + status)
+  4. `design/architecture_2.0.md` (Provisional architecture spec)
+  5. `implementation/90-packaging/entrypoint/design.md` (Entrypoint design)
+  6. `implementation/90-packaging/support_matrix.md` (Edge support matrix, provisional)
+  7. `specs/pipeline_spec.md` (Legacy pipeline behavior, executed via `schnitzel_stream`)
+  8. `contracts/stream_packet.md` (Internal node-to-node contract, provisional)
+  9. `contracts/protocol.md` (Event schema / transport contract)
 
 ### Legacy AI Pipeline Deep Dive (Optional)
 
@@ -32,6 +33,7 @@ Phase 0 note:
 ### Single Source Of Truth
 
 - Platform pivot: `roadmap/strategic_roadmap.md`, `roadmap/migration_plan_phase0.md`, `design/architecture_2.0.md`
+- Execution plan/status: `roadmap/execution_roadmap.md`
 - Runtime behavior (legacy job): `specs/pipeline_spec.md`
 - Node-to-node contract: `contracts/stream_packet.md`
 - Event schema: `contracts/protocol.md`
@@ -67,12 +69,13 @@ Phase 0 참고:
 - 읽는 순서(추천):
   1. `roadmap/strategic_roadmap.md` (비전 / 목표 아키텍처)
   2. `roadmap/migration_plan_phase0.md` (지금 바꾸는 내용)
-  3. `design/architecture_2.0.md` (아키텍처 명세, 잠정)
-  4. `implementation/90-packaging/entrypoint/design.md` (엔트리포인트 설계)
-  5. `implementation/90-packaging/support_matrix.md` (엣지 지원 매트릭스, 잠정)
-  6. `specs/pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
-  7. `contracts/stream_packet.md` (노드 간 내부 계약, 잠정)
-  8. `contracts/protocol.md` (이벤트 스키마/전송 계약)
+  3. `roadmap/execution_roadmap.md` (실행 SSOT: 계획 + 상태)
+  4. `design/architecture_2.0.md` (아키텍처 명세, 잠정)
+  5. `implementation/90-packaging/entrypoint/design.md` (엔트리포인트 설계)
+  6. `implementation/90-packaging/support_matrix.md` (엣지 지원 매트릭스, 잠정)
+  7. `specs/pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
+  8. `contracts/stream_packet.md` (노드 간 내부 계약, 잠정)
+  9. `contracts/protocol.md` (이벤트 스키마/전송 계약)
 
 ### 레거시 AI 파이프라인 상세 (선택)
 
@@ -86,6 +89,7 @@ Phase 0 참고:
 ### 단일 기준(SSOT)
 
 - 플랫폼 피벗: `roadmap/strategic_roadmap.md`, `roadmap/migration_plan_phase0.md`, `design/architecture_2.0.md`
+- 실행 계획/상태: `roadmap/execution_roadmap.md`
 - 런타임 동작(레거시 job): `specs/pipeline_spec.md`
 - 노드 간 계약: `contracts/stream_packet.md`
 - 이벤트 스키마: `contracts/protocol.md`

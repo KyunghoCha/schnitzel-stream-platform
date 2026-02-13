@@ -46,8 +46,7 @@ Intent:
 
 ## Mismatches (path)
 
-- `docs/index.md` and `docs/specs/pipeline_spec.md` historically assumed the entrypoint is `ai.pipeline`.
-- `docs/roadmap/execution_roadmap.md` is CCTV-specific; platform pivot execution work is tracked in `docs/roadmap/migration_plan_phase0.md`.
+- None found.
 
 ## Fix Plan
 
@@ -66,4 +65,3 @@ Intent:
 - Packaging strategy for "almost all edges": what is the official support matrix (Windows/macOS/Linux, amd64/arm64, Jetson/GPU)?
 - How do we represent large payloads (frames) in StreamPacket without forcing serialization/copies?
 - Where should long-lived state live (State Node vs external store vs blackboard), and what is the failure model?
-

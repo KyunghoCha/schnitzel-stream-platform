@@ -31,16 +31,18 @@ Legacy CCTV/AI runtime lives under `src/ai/`, but execution is routed through th
 5. **Plugin safety**: default plugin policy must be allowlist-based; dev-only overrides must be explicit.
 6. **"Intent:" comments**: when behavior is deliberately non-obvious (fallbacks, tradeoffs, temporary constraints), add an `Intent:` comment near the code.
 7. **Incremental commits**: keep commits small and coherent (entrypoint/tests/docs together when they must).
+8. **Plan position**: when reporting progress, always include the current step id from `docs/roadmap/execution_roadmap.md`.
 
 ### Key Docs (read first)
 
 1. `docs/roadmap/strategic_roadmap.md` (Vision / target architecture)
 2. `docs/roadmap/migration_plan_phase0.md` (Phase 0 plan)
-3. `docs/design/architecture_2.0.md` (Provisional platform architecture)
-4. `docs/implementation/90-packaging/entrypoint/design.md` (Entrypoint packaging)
-5. `docs/contracts/stream_packet.md` (Node-to-node contract, provisional)
-6. `docs/contracts/protocol.md` (Event schema; legacy runtime contract)
-7. `docs/specs/pipeline_spec.md` (Legacy pipeline behavior via `schnitzel_stream`)
+3. `docs/roadmap/execution_roadmap.md` (Execution SSOT: plan + status)
+4. `docs/design/architecture_2.0.md` (Provisional platform architecture)
+5. `docs/implementation/90-packaging/entrypoint/design.md` (Entrypoint packaging)
+6. `docs/contracts/stream_packet.md` (Node-to-node contract, provisional)
+7. `docs/contracts/protocol.md` (Event schema; legacy runtime contract)
+8. `docs/specs/pipeline_spec.md` (Legacy pipeline behavior via `schnitzel_stream`)
 
 ### Immediate Next Steps (Provisional)
 
@@ -88,16 +90,18 @@ If you are running low on context/token budget, update `PROMPT_CORE.md` with:
 5. **플러그인 안전성**: 기본 정책은 allowlist 기반이어야 하며, dev-only 예외는 env로 명시한다.
 6. **"Intent:" 주석**: 비자명한 동작(폴백/트레이드오프/임시 제약)은 코드 근처에 `Intent:` 주석으로 명확히 남긴다.
 7. **단계적 커밋**: 커밋은 작고 응집력 있게(필요 시 엔트리포인트/테스트/문서를 같은 커밋으로 묶는다).
+8. **계획 위치**: 진행 상황을 말할 때 항상 `docs/roadmap/execution_roadmap.md`의 step id를 포함한다.
 
 ### 우선 읽을 문서
 
 1. `docs/roadmap/strategic_roadmap.md` (비전 / 목표 아키텍처)
 2. `docs/roadmap/migration_plan_phase0.md` (Phase 0 계획)
-3. `docs/design/architecture_2.0.md` (플랫폼 아키텍처, 잠정)
-4. `docs/implementation/90-packaging/entrypoint/design.md` (엔트리포인트/패키징)
-5. `docs/contracts/stream_packet.md` (노드 간 계약, 잠정)
-6. `docs/contracts/protocol.md` (이벤트 스키마; 레거시 계약)
-7. `docs/specs/pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
+3. `docs/roadmap/execution_roadmap.md` (실행 SSOT: 계획 + 상태)
+4. `docs/design/architecture_2.0.md` (플랫폼 아키텍처, 잠정)
+5. `docs/implementation/90-packaging/entrypoint/design.md` (엔트리포인트/패키징)
+6. `docs/contracts/stream_packet.md` (노드 간 계약, 잠정)
+7. `docs/contracts/protocol.md` (이벤트 스키마; 레거시 계약)
+8. `docs/specs/pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
 
 ### 즉시 다음 단계 (잠정)
 

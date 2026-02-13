@@ -17,7 +17,7 @@ Last updated: 2026-02-13
 
 ## Mismatches (path)
 
-- `docs/roadmap/execution_roadmap.md` is still written as an industrial CCTV runtime roadmap; platform pivot execution is tracked in this document for now.
+- None found.
 
 ## Fix Plan
 
