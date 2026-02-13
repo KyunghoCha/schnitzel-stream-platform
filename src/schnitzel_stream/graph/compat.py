@@ -24,7 +24,7 @@ class GraphCompatibilityError(ValueError):
     pass
 
 
-_ALLOWED_NODE_KINDS = ("source", "node", "sink")
+_ALLOWED_NODE_KINDS = ("source", "node", "sink", "delay", "initial")
 _PORT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
 

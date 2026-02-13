@@ -105,6 +105,85 @@ def validate_graph(
 
     # Phase 1 default: strict DAG validation.
     cyc = find_cycle(nodes, edges)
-    if cyc and not allow_cycles:
+    if not cyc:
+        return
+
+    if not allow_cycles:
         raise GraphValidationError(f"graph contains a cycle (strict DAG mode): {' -> '.join(cyc)}")
 
+    # Phase 1.7 draft: allow restricted cycles only if each cycle contains at least one Delay node.
+    _validate_restricted_cycles(nodes, edges, delay_kinds=("delay", "initial"))
+
+
+def _validate_restricted_cycles(
+    nodes: list[NodeSpec],
+    edges: list[EdgeSpec],
+    *,
+    delay_kinds: tuple[str, ...],
+) -> None:
+    node_ids: list[str] = []
+    seen: set[str] = set()
+    kind_by_id: dict[str, str] = {}
+    for n in nodes:
+        nid = _norm_id(n.node_id)
+        if not nid:
+            raise GraphValidationError("node_id must not be empty")
+        if nid in seen:
+            raise GraphValidationError(f"duplicate node_id: {nid}")
+        seen.add(nid)
+        node_ids.append(nid)
+        kind_by_id[nid] = str(getattr(n, "kind", "") or "").strip().lower()
+
+    adj = _build_adj(set(node_ids), edges)
+
+    index = 0
+    stack: list[str] = []
+    on_stack: set[str] = set()
+    indices: dict[str, int] = {}
+    lowlink: dict[str, int] = {}
+    sccs: list[set[str]] = []
+
+    def _strongconnect(v: str) -> None:
+        nonlocal index
+        indices[v] = index
+        lowlink[v] = index
+        index += 1
+        stack.append(v)
+        on_stack.add(v)
+
+        for w in adj.get(v, []):
+            if w not in indices:
+                _strongconnect(w)
+                lowlink[v] = min(lowlink[v], lowlink[w])
+            elif w in on_stack:
+                lowlink[v] = min(lowlink[v], indices[w])
+
+        if lowlink[v] == indices[v]:
+            scc: set[str] = set()
+            while True:
+                w = stack.pop()
+                on_stack.remove(w)
+                scc.add(w)
+                if w == v:
+                    break
+            sccs.append(scc)
+
+    for nid in node_ids:
+        if nid not in indices:
+            _strongconnect(nid)
+
+    def _is_cyclic(scc: set[str]) -> bool:
+        if len(scc) > 1:
+            return True
+        (only,) = tuple(scc)
+        return only in adj.get(only, [])
+
+    for scc in sccs:
+        if not _is_cyclic(scc):
+            continue
+        if any(kind_by_id.get(nid) in delay_kinds for nid in scc):
+            continue
+        raise GraphValidationError(
+            "graph contains a cycle without a Delay node (restricted cycles mode): "
+            + ", ".join(sorted(scc)),
+        )

@@ -53,3 +53,27 @@ def test_find_cycle_detects_simple_cycle():
     with pytest.raises(GraphValidationError, match="cycle"):
         validate_graph(nodes, edges, allow_cycles=False)
 
+
+def test_validate_graph_restricted_cycles_requires_delay_node():
+    nodes = [
+        NodeSpec(node_id="a", plugin="x:NodeA"),
+        NodeSpec(node_id="b", plugin="x:NodeB"),
+    ]
+    edges = [
+        EdgeSpec(src="a", dst="b"),
+        EdgeSpec(src="b", dst="a"),
+    ]
+    with pytest.raises(GraphValidationError, match="without a Delay node"):
+        validate_graph(nodes, edges, allow_cycles=True)
+
+
+def test_validate_graph_restricted_cycles_allows_delay_node():
+    nodes = [
+        NodeSpec(node_id="a", kind="delay", plugin="x:Delay"),
+        NodeSpec(node_id="b", plugin="x:NodeB"),
+    ]
+    edges = [
+        EdgeSpec(src="a", dst="b"),
+        EdgeSpec(src="b", dst="a"),
+    ]
+    validate_graph(nodes, edges, allow_cycles=True)
