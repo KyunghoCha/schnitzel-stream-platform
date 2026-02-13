@@ -16,10 +16,12 @@ Pipeline Spec
 
 - **Video**: `data/samples/*.mp4` (default)
 - **CLI Overrides**:
+  - `--graph` (graph spec YAML path; default: `configs/graphs/legacy_pipeline.yaml`; v2 graphs require `--validate-only` until Phase 1 runtime ships)
   - `--video` (mp4 path; forces file source, fails fast if path does not exist)
   - `--camera-id` (string; fails fast if id is not found in `configs/cameras.yaml`)
   - `--source-type` (file|rtsp|webcam|plugin; `--video` + `--source-type rtsp/plugin` is invalid)
   - `--camera-index` (int; webcam device index override, default uses `cameras.yaml` `source.index` or 0)
+  - `--validate-only` (validate the graph spec and exit without running)
   - `--dry-run` (no backend posts)
   - `--output-jsonl` (write events to file)
   - `--max-events` (limit emitting)
@@ -187,10 +189,12 @@ Pipeline Spec
 
 - **비디오**: `data/samples/*.mp4` (기본값)
 - **CLI 오버라이드**:
+  - `--graph` (그래프 스펙 YAML 경로; 기본값: `configs/graphs/legacy_pipeline.yaml`; v2 그래프는 Phase 1 런타임 구현 전까지 `--validate-only`만 지원)
   - `--video` (mp4 경로; 파일 소스로 강제하며, 경로가 없으면 즉시 종료)
   - `--camera-id` (문자열; `configs/cameras.yaml`에 없으면 즉시 종료)
   - `--source-type` (file|rtsp|webcam|plugin; `--video`와 `--source-type rtsp/plugin` 조합은 불가)
   - `--camera-index` (정수; 웹캠 장치 인덱스 오버라이드, 기본값은 `cameras.yaml` `source.index` 또는 0)
+  - `--validate-only` (그래프 스펙을 검증하고 실행 없이 종료)
   - `--dry-run` (백엔드 전송 안 함)
   - `--output-jsonl` (이벤트를 파일에 기록)
   - `--max-events` (전송 이벤트 수 제한)

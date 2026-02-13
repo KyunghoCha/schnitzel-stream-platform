@@ -8,6 +8,8 @@ from omegaconf import OmegaConf
 
 from schnitzel_stream.graph.model import EdgeSpec, NodeSpec
 
+_SUPPORTED_GRAPH_VERSIONS = (1, 2)
+
 
 @dataclass(frozen=True)
 class GraphSpec:
@@ -52,6 +54,45 @@ def _as_list(value: Any) -> list[Any]:
     if isinstance(value, list):
         return list(value)
     return []
+
+
+def peek_graph_version(path: str | Path) -> int:
+    """Read only the graph version from YAML.
+
+    Intent:
+    - CLI needs to dispatch to v1(job) vs v2(node graph) loaders.
+    - Keep this logic centralized to avoid duplicate parsing behavior.
+    """
+    p = Path(path)
+    if not p.exists():
+        raise FileNotFoundError(f"graph spec not found: {p}")
+
+    data = OmegaConf.load(p)
+    cont = OmegaConf.to_container(data, resolve=True)
+    if not isinstance(cont, dict):
+        raise ValueError(f"graph spec top-level must be a mapping: {p}")
+
+    version_raw = cont.get("version")
+    if version_raw is None:
+        # Intent:
+        # - Keep v1(job) as the backwards-compatible default when the version is absent.
+        # - Allow v2(node graph) specs to omit version if nodes/edges shape is present.
+        has_job = "job" in cont
+        has_nodes = "nodes" in cont
+        has_edges = "edges" in cont
+        if has_job and (has_nodes or has_edges):
+            raise ValueError(f"graph spec is ambiguous (contains job + nodes/edges) without version: {p}")
+        if has_nodes or has_edges:
+            return 2
+        return 1
+
+    try:
+        version = int(version_raw)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"graph spec version must be int: {p}") from exc
+    if version not in _SUPPORTED_GRAPH_VERSIONS:
+        raise ValueError(f"unsupported graph spec version: {version} (supported: {_SUPPORTED_GRAPH_VERSIONS})")
+    return version
 
 
 def load_graph_spec(path: str | Path) -> GraphSpec:
@@ -112,6 +153,8 @@ def load_node_graph_spec(path: str | Path) -> NodeGraphSpec:
             raise ValueError(f"node requires non-empty id (index={idx}): {p}")
         if not isinstance(plugin, str) or not plugin.strip():
             raise ValueError(f"node requires non-empty plugin (index={idx}): {p}")
+        if ":" not in plugin:
+            raise ValueError(f"node plugin must be in form 'module:Name' (index={idx}): {p}")
         if not isinstance(kind, str) or not kind.strip():
             raise ValueError(f"node kind must be string (index={idx}): {p}")
         config = _as_dict(item.get("config"))

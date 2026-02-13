@@ -29,10 +29,12 @@ The main AI pipeline. Reads frames from file/RTSP/webcam/plugin source, runs AI 
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
+| `--graph` | string | `configs/graphs/legacy_pipeline.yaml` | Graph spec YAML path (v1 job graph by default; v2 graphs are validate-only for now) |
 | `--camera-id` | string | auto (from config) | Camera ID (must exist in `configs/cameras.yaml`) |
 | `--video` | string | `data/samples/*.mp4` | Video file path (forces file source) |
 | `--source-type` | file\|rtsp\|webcam\|plugin | auto | Override source type |
 | `--camera-index` | int | from camera config or 0 | Webcam device index override |
+| `--validate-only` | flag | off | Validate graph spec and exit without running |
 | `--dry-run` | flag | off | Do not POST to backend (stdout only) |
 | `--output-jsonl` | string | none | Write events to JSONL file |
 | `--max-events` | int | unlimited | Stop after N successful emits |
@@ -49,6 +51,14 @@ $env:AI_MODEL_MODE="mock"
 
 # Linux / macOS
 export AI_MODEL_MODE=mock
+```
+
+**0) Validate graph spec (no run)**
+
+```powershell
+# Equivalent forms
+python -m schnitzel_stream validate --graph configs/graphs/legacy_pipeline.yaml
+python -m schnitzel_stream --graph configs/graphs/legacy_pipeline.yaml --validate-only
 ```
 
 **1) First-time quick test (no backend needed)**
@@ -475,7 +485,7 @@ python scripts/test_hygiene.py --json-out outputs/test_hygiene_report.json
 1. `configs/default.yaml` + `configs/cameras.yaml` merge (base)
 2. Runtime profile overlay (`configs/dev.yaml` or `configs/prod.yaml`, via `app.env`)
 3. Environment variable overrides (`AI_*`)
-4. CLI/runtime overrides for execution arguments (`--camera-id`, `--video`, `--source-type`, `--camera-index`, `--dry-run`, `--output-jsonl`, `--max-events`, `--visualize`, `--loop`)
+4. CLI/runtime overrides for execution arguments (`--graph`, `--camera-id`, `--video`, `--source-type`, `--camera-index`, `--validate-only`, `--dry-run`, `--output-jsonl`, `--max-events`, `--visualize`, `--loop`)
 
 ---
 
@@ -508,10 +518,12 @@ export PYTHONPATH=src
 
 | 옵션 | 타입 | 기본값 | 설명 |
 |------|------|--------|------|
+| `--graph` | 문자열 | `configs/graphs/legacy_pipeline.yaml` | 그래프 스펙 YAML 경로 (기본값은 v1 job 그래프; v2 그래프는 현재 validate-only) |
 | `--camera-id` | 문자열 | 자동 (설정 기반) | 카메라 ID (`configs/cameras.yaml`에 존재해야 함) |
 | `--video` | 문자열 | `data/samples/*.mp4` | 비디오 파일 경로 (파일 소스 강제) |
 | `--source-type` | file\|rtsp\|webcam\|plugin | 자동 | 소스 타입 오버라이드 |
 | `--camera-index` | 정수 | 카메라 설정값 또는 0 | 웹캠 장치 인덱스 오버라이드 |
+| `--validate-only` | 플래그 | off | 그래프 스펙 검증 후 실행 없이 종료 |
 | `--dry-run` | 플래그 | off | 백엔드 전송 안 함 (stdout만) |
 | `--output-jsonl` | 문자열 | 없음 | 이벤트를 JSONL 파일에 저장 |
 | `--max-events` | 정수 | 무제한 | N번 전송 후 종료 |
@@ -528,6 +540,14 @@ $env:AI_MODEL_MODE="mock"
 
 # Linux / macOS
 export AI_MODEL_MODE=mock
+```
+
+**0) 그래프 스펙만 검증 (실행 안 함)**
+
+```powershell
+# 아래 두 방식은 동일
+python -m schnitzel_stream validate --graph configs/graphs/legacy_pipeline.yaml
+python -m schnitzel_stream --graph configs/graphs/legacy_pipeline.yaml --validate-only
 ```
 
 **1) 처음 빠르게 테스트 (백엔드 불필요)**
