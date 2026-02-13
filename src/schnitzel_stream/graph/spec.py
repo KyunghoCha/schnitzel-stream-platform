@@ -69,6 +69,8 @@ def load_graph_spec(path: str | Path) -> GraphSpec:
         version = int(version_raw)
     except (TypeError, ValueError) as exc:
         raise ValueError(f"graph spec version must be int: {p}") from exc
+    if version != 1:
+        raise ValueError(f"job graph spec version must be 1: {p} (got {version})")
 
     job = cont.get("job")
     if not isinstance(job, str) or not job.strip():
