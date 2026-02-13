@@ -63,8 +63,6 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     spec = load_graph_spec(args.graph)
-    if spec.version != 1:
-        raise ValueError(f"unsupported graph spec version: {spec.version} (supported: 1)")
 
     registry = PluginRegistry()
     job = registry.load(spec.job)
@@ -75,4 +73,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
