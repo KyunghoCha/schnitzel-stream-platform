@@ -1,0 +1,4 @@
+version: 1
+job: schnitzel_stream.jobs.legacy_ai_pipeline:LegacyAIPipelineJob
+config: {}
+
