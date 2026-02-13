@@ -60,10 +60,10 @@ Current position: **Phase 3**
 - `P2.2` Idempotency keys and ack semantics. `DONE` (e885e41)
 - `P2.3` Soak tests for outage/restart/backlog replay. `DONE` (9dabf8d)
 
-### Phase 3: Control Plane (IN PROGRESS ~0–10%)
+### Phase 3: Control Plane (IN PROGRESS ~30–40%)
 
-- `P3.1` Unified metrics/health contract across transports. `NOW`
-- `P3.2` Autonomic tuning hooks (policy-driven throttles). `NEXT`
+- `P3.1` Unified metrics/health contract across transports. `DONE` (e6d14c5)
+- `P3.2` Autonomic tuning hooks (policy-driven throttles). `NOW`
 - `P3.3` Optional LLM/controller layer (human-in-the-loop, gated). `LATER`
 
 ## Verification
