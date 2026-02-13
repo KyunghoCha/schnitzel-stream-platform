@@ -24,7 +24,7 @@
 ## 2) 설계 원칙 (Non-negotiables)
 
 1. **Data Plane / Control Plane 분리**
-2. **플러그인 경계 명확화** (`source`, `transform`, `model`, `policy`, `sink`)
+2. **플러그인 경계 명확화** (기본: `source`, `transform`, `compute(model)`, `policy`, `sink`; 필요 시 `state_backend`/`transport`로 분리)
 3. **정적 검증 우선** (그래프 실행 전 타입/포트/사이클 검증)
 4. **전송 의미론 명시** (`at-least-once + idempotency`를 기본 전략으로)
 5. **관측 가능성 내장** (metrics, logs, health, replayability)
@@ -43,7 +43,7 @@ graph LR
     subgraph Core ["Processing Core (Nodes)"]
         G["Graph Runtime (DAG Executor) 🚧"]
         P["Inference & Transform Nodes"]
-        B[("Blackboard Context")]
+        B[(Blackboard Context 🚧🧩)]
         L["Decision Logic Nodes (Rules / Fusion)"]
     end
 
@@ -56,7 +56,7 @@ graph LR
     end
 
     subgraph Meta ["Meta Engine (Control Plane)"]
-        M0["Extension Registry 🧩"]
+        M0["Plugin Registry 🧩"]
         M1["Graph Validator 🚧"]
         M2["Observability Metrics"]
         M3["Autonomic Controller 🚧"]
@@ -89,70 +89,85 @@ graph LR
 
 ---
 
-## 3.1) 노드 집합 상세 (Input / Processing / Output)
+## 3.1) 노드 집합 상세 (IO / Logic / State / Compute / Control)
 
 아래 다이어그램은 상위 아키텍처를 실제 실행 단위(Node Set)로 풀어낸 것이다.
 
-- 입력(Input): 소스 수집과 표준 패킷화
-- 처리(Processing): 검증, 변환, 모델/정책, 컨텍스트 결합
-- 출력(Output): 내구성 보장 후 목적지 전송
+- **IO**: 소스/싱크 경계 (Side-effect O)
+- **Logic**: 검증/정규화/전처리 등 Stateless 변환
+- **Compute**: 모델 추론 등 고비용 연산 (비동기/가속 고려)
+- **State**: blackboard/queue/delay 등 상태 경계 (메모리/내구성)
+- **Control**: 정책/라우팅 등 데이터 흐름 제어
 
 ```mermaid
 flowchart LR
-    classDef ext fill:#fff8e1,stroke:#b26a00,stroke-width:2px,color:#111
+    classDef io fill:#e8f5e9,stroke:#1b5e20,stroke-width:1px,color:#111
+    classDef logic fill:#e3f2fd,stroke:#0d47a1,stroke-width:1px,color:#111
+    classDef compute fill:#f3e5f5,stroke:#4a148c,stroke-width:1px,color:#111
+    classDef state fill:#fff3e0,stroke:#e65100,stroke-width:1px,color:#111
+    classDef control fill:#ffebee,stroke:#b71c1c,stroke-width:1px,color:#111
 
-    subgraph DAG["Graph Runtime (DAG) 🚧"]
+    subgraph DAG["Graph Runtime (default: strict DAG) 🚧"]
         direction LR
-        subgraph IN["Input Node Set"]
+
+        subgraph IO["IO Nodes (side-effects)"]
             direction TB
-            I1["Video Source Node 🧩</br>(RTSP/Webcam/File)"]
-            I2["Sensor Source Node 🧩</br>(Serial/ROS2/Custom)"]
-            I3["Source Normalizer Node"]
-            I4["Packetizer Node 🚧</br>(StreamPacket v1)"]
-            I1 --> I3
-            I2 --> I3
-            I3 --> I4
+            I1["Video Source 🧩<br/>(RTSP/Webcam/File)"]:::io
+            I2["Sensor Source 🧩<br/>(Serial/ROS2/Custom)"]:::io
+            O4["Backend Sink 🧩"]:::io
+            O5["Storage Sink 🧩"]:::io
+            O6["Robot/Bus Sink 🧩"]:::io
         end
 
-        subgraph PR["Processing Node Set"]
+        subgraph LOGIC["Logic Nodes (stateless)"]
             direction TB
-            P1["Schema Validate Node"]
-            P2["Preprocess Node 🧩"]
-            P3["Model Node 🧩</br>(YOLO/ONNX/Custom)"]
-            P4["Tracking/Fusion Node"]
-            P5["Policy Node 🧩</br>(Rules/Zones/Dedup)"]
-            P6["Event Build Node"]
-            P7["Blackboard Context Node"]
-            P1 --> P2 --> P3 --> P4 --> P5 --> P6
-            P3 <--> P7
-            P4 <--> P7
-            P5 <--> P7
+            N1["Normalize/Map"]:::logic
+            PK["Packetizer 🚧🧩<br/>(StreamPacket v1)"]:::logic
+            V1["Schema Validate"]:::logic
+            P2["Preprocess 🧩"]:::logic
+            EB["Event Build"]:::logic
         end
 
-        subgraph OUT["Output Node Set"]
+        subgraph COMPUTE["Compute Nodes (async/heavy)"]
             direction TB
-            O1["Durable Queue Node 🚧</br>(WAL/SQLite)"]
-            O2["Retry/Circuit Node 🚧"]
-            O3["Sink Router Node"]
-            O4["Backend Sink 🧩"]
-            O5["Storage Sink 🧩"]
-            O6["Robot/Bus Sink 🧩"]
-            O1 --> O2 --> O3
-            O3 --> O4
-            O3 --> O5
-            O3 --> O6
+            P3["Model 🧩<br/>(YOLO/ONNX/Custom)"]:::compute
         end
 
-        IN --> PR --> OUT
+        subgraph STATE["State Nodes (memory/durable)"]
+            direction TB
+            P4["Tracking/Fusion"]:::state
+            B[(Blackboard Context 🚧🧩)]:::state
+            DLY["Delay/Window 🚧"]:::state
+            O1["Durable Queue 🚧🧩<br/>(WAL/SQLite)"]:::state
+            O2["Retry/Circuit 🚧"]:::state
+        end
+
+        subgraph CTRL["Control Nodes (routing/policy)"]
+            direction TB
+            P5["Policy 🧩<br/>(Rules/Zones/Dedup)"]:::control
+            O3["Sink Router"]:::control
+        end
+
+        I1 --> N1
+        I2 --> N1
+        N1 --> PK --> V1 --> P2 --> P3 --> P4 --> P5 --> EB --> O1 --> O2 --> O3
+        O3 --> O4
+        O3 --> O5
+        O3 --> O6
+
+        P3 <--> B
+        P4 <--> B
+        P5 <--> B
+
+        DLY -. enables safe cycles (Phase E) .-> P5
     end
-
-    class I1,I2,P2,P3,P5,O4,O5,O6 ext
 ```
 
 플러그인 표기:
 
 - 노드명에 `🧩`가 붙은 지점이 교체 가능한 확장 경계다.
-- 현재 범위: `source / transform / model / policy / sink`
+- 기본 범위: `source / transform / compute(model) / policy / sink`
+- Provisional: 필요 시 `state_backend`(durable queue/blackboard)나 `transport`도 플러그인 경계로 승격한다.
 
 미구현 표기:
 
@@ -164,7 +179,7 @@ flowchart LR
 2. 처리 노드는 순수 함수형 변환을 우선하고, 상태 공유는 `Blackboard` 경계에서만 허용
 3. 출력 노드는 항상 `Durable Queue`를 경유하고, 외부 장애는 `Retry/Circuit`에서 흡수
 
-**[Provisional] Node Implementation Categories (세분화 계획):**
+**Node Implementation Categories (Legend, provisional):**
 1. **IO Node**: Camera, Sensor, Network, File (순수 데이터 이동, Side-effect O)
 2. **Logic Node**: Filter, Map, Resize, Convert (Stateless, 즉시 실행, Side-effect X)
 3. **State Node**: Buffer, Delay, Window, Aggregate (Stateful, 이전 데이터 기억)
@@ -339,6 +354,6 @@ DAG 적용 범위:
 
 ---
 
-**Last Updated**: 2026-02-12  
+**Last Updated**: 2026-02-13  
 **Project Owner**: Kyungho Cha  
 **Brand**: Schnitzel
