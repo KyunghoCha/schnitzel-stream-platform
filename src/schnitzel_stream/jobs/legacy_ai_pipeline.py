@@ -79,23 +79,6 @@ def _resolve_sample_video() -> str:
     return str(mp4s[0])
 
 
-def _ensure_plugin_allowed(path: str, policy: PluginPolicy) -> None:
-    # module:Name 형태에서 module prefix allowlist 강제.
-    if policy.allow_all:
-        return
-    if ":" not in path:
-        # Validation of the exact form is done elsewhere; here we enforce policy only.
-        return
-    module_path = path.split(":", 1)[0].strip()
-    if not module_path:
-        return
-    if not any(module_path.startswith(prefix) for prefix in policy.allowed_prefixes):
-        raise PermissionError(
-            f"plugin module is not allowed: {module_path}. "
-            "Set ALLOWED_PLUGIN_PREFIXES or ALLOW_ALL_PLUGINS=true for dev-only use.",
-        )
-
-
 def _build_source(
     policy: PluginPolicy,
     source_type: str,
@@ -113,7 +96,7 @@ def _build_source(
             raise RuntimeError(
                 "plugin source requires source.adapter / AI_SOURCE_ADAPTER (module:ClassName)",
             )
-        _ensure_plugin_allowed(adapter_path, policy)
+        policy.ensure_path_allowed(adapter_path)
         return load_frame_source(adapter_path)
 
     if source_type == "webcam":
@@ -165,7 +148,7 @@ def _build_event_builder(policy: PluginPolicy, settings: PipelineSettings, snaps
             )
         # multi-adapter path is comma-separated; enforce allowlist per item.
         for item in [p.strip() for p in adapter_path.split(",") if p.strip()]:
-            _ensure_plugin_allowed(item, policy)
+            policy.ensure_path_allowed(item)
         adapter = load_model_adapter(adapter_path)
         return RealModelEventBuilder(
             settings.site_id,
@@ -208,7 +191,7 @@ def _build_sensor_runtime(
         )
     runtimes: list[SensorRuntime] = []
     for adapter_path in adapter_paths:
-        _ensure_plugin_allowed(adapter_path, policy)
+        policy.ensure_path_allowed(adapter_path)
         source = load_sensor_source(adapter_path)
         runtimes.append(
             SensorRuntime(
@@ -240,7 +223,7 @@ def _build_emitter(
 
     emitter_adapter_path = (getattr(settings.events, "emitter_adapter", None) or "").strip()
     if emitter_adapter_path:
-        _ensure_plugin_allowed(emitter_adapter_path, policy)
+        policy.ensure_path_allowed(emitter_adapter_path)
         return load_event_emitter(emitter_adapter_path)
 
     masked_post_url = mask_url(settings.events.post_url)
@@ -443,4 +426,3 @@ class LegacyAIPipelineJob:
         signal.signal(signal.SIGINT, _on_shutdown)
 
         pipeline.run(max_events=args.max_events)
-

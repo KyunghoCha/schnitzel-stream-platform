@@ -19,6 +19,13 @@ def _is_allowed_module(module_path: str, allowed_prefixes: tuple[str, ...]) -> b
     return any(module_path.startswith(prefix) for prefix in allowed_prefixes)
 
 
+def _module_from_plugin_path(path: str) -> str | None:
+    if ":" not in path:
+        return None
+    module_path = path.split(":", 1)[0].strip()
+    return module_path or None
+
+
 @dataclass(frozen=True)
 class PluginPolicy:
     """Plugin loading policy (prod-safe by default)."""
@@ -34,6 +41,24 @@ class PluginPolicy:
         prefixes = _parse_prefixes(raw) or default_prefixes
         allow_all = os.environ.get("ALLOW_ALL_PLUGINS", "").strip().lower() in ("1", "true", "yes")
         return cls(allowed_prefixes=prefixes, allow_all=allow_all)
+
+    def is_allowed_module(self, module_path: str) -> bool:
+        if self.allow_all:
+            return True
+        return _is_allowed_module(module_path, self.allowed_prefixes)
+
+    def ensure_path_allowed(self, path: str) -> None:
+        """Raise PermissionError if the `module:Name` path violates policy."""
+        module_path = _module_from_plugin_path(path)
+        if not module_path:
+            # Path structure validation happens elsewhere; policy enforces prefix allowlist only.
+            return
+        if self.is_allowed_module(module_path):
+            return
+        raise PermissionError(
+            f"plugin module is not allowed: {module_path}. "
+            "Set ALLOWED_PLUGIN_PREFIXES or ALLOW_ALL_PLUGINS=true for dev-only use.",
+        )
 
 
 class PluginRegistry:
@@ -55,11 +80,7 @@ class PluginRegistry:
         if not module_path or not name:
             raise ValueError("plugin path must not be empty")
 
-        if not self._policy.allow_all and not _is_allowed_module(module_path, self._policy.allowed_prefixes):
-            raise PermissionError(
-                "plugin module is not allowed by policy. "
-                "Set ALLOWED_PLUGIN_PREFIXES or ALLOW_ALL_PLUGINS=true for dev-only use.",
-            )
+        self._policy.ensure_path_allowed(path)
 
         module = importlib.import_module(module_path)
         target = getattr(module, name, None)
@@ -80,4 +101,3 @@ class PluginRegistry:
         if not callable(fn):
             raise TypeError(f"loaded plugin does not provide callable '{attr}()'")
         return fn
-
