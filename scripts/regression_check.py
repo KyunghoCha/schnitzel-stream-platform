@@ -40,7 +40,7 @@ def _run_pipeline(max_events: int) -> None:
     cmd = [
         sys.executable,
         "-m",
-        "ai.pipeline",
+        "schnitzel_stream",
         "--output-jsonl",
         str(TMP_OUT),
         "--max-events",

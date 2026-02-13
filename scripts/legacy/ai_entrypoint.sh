@@ -7,7 +7,7 @@ set -euo pipefail
 # - 인자 전달 시 그대로 실행
 
 if [ "$#" -eq 0 ]; then
-  exec python -m ai.pipeline --dry-run
+  exec python -m schnitzel_stream --dry-run
 else
   exec "$@"
 fi

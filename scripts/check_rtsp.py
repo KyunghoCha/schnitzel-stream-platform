@@ -271,7 +271,7 @@ def run_e2e_test(args: argparse.Namespace) -> int:
         
         # 4. Start pipeline
         pipeline_cmd = [
-            sys.executable, "-m", "ai.pipeline",
+            sys.executable, "-m", "schnitzel_stream",
             "--source-type", "rtsp",
             "--camera-id", "cam01",
         ]
@@ -338,6 +338,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--log-dir", "-l",
+        # Intent: preserve the legacy temp dir name to avoid breaking existing local workflows.
         default=str(Path(tempfile.gettempdir()) / "ai_pipeline_e2e_rtsp_stability"),
         help="Directory for logs",
     )

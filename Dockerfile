@@ -29,4 +29,4 @@ RUN mkdir -p /data/snapshots \
 
 USER appuser
 
-CMD ["python", "-m", "ai.pipeline"]
+CMD ["python", "-m", "schnitzel_stream"]

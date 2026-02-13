@@ -26,6 +26,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 from process_manager import is_process_running, start_process, stop_process
 
 
+# Intent: preserve the legacy temp dir name to avoid breaking existing local workflows.
 DEFAULT_LOG_DIR = str(Path(tempfile.gettempdir()) / "ai_pipeline_multi_cam_run")
 
 
@@ -88,7 +89,7 @@ def cmd_start(args: argparse.Namespace) -> None:
                 pass
         
         cmd = [
-            sys.executable, "-m", "ai.pipeline",
+            sys.executable, "-m", "schnitzel_stream",
             "--camera-id", cam_id,
             *extra_args,
         ]

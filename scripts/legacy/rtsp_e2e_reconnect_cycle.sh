@@ -87,7 +87,7 @@ PYTHONPATH=src \
 AI_EVENTS_POST_URL="$BACKEND_URL" \
 AI_EVENTS_SNAPSHOT_BASE_DIR="/tmp/snapshots" \
 AI_EVENTS_SNAPSHOT_PUBLIC_PREFIX="/tmp/snapshots" \
-python -m ai.pipeline --source-type rtsp --camera-id cam01 --max-events "$MAX_EVENTS" > "$LOG_DIR/pipeline.log" 2>&1 &
+python -m schnitzel_stream --source-type rtsp --camera-id cam01 --max-events "$MAX_EVENTS" > "$LOG_DIR/pipeline.log" 2>&1 &
 PPID_RTSP=$!
 
 wait_for_count 2 20 || true

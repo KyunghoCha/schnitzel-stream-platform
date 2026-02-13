@@ -75,14 +75,14 @@ PYTHONPATH=src \
 AI_EVENTS_POST_URL="$BACKEND_URL" \
 AI_EVENTS_SNAPSHOT_BASE_DIR="/tmp/snapshots" \
 AI_EVENTS_SNAPSHOT_PUBLIC_PREFIX="/tmp/snapshots" \
-python -m ai.pipeline --source-type rtsp --camera-id cam01 --max-events 5 > "$LOG_DIR/cam01.log" 2>&1 &
+python -m schnitzel_stream --source-type rtsp --camera-id cam01 --max-events 5 > "$LOG_DIR/cam01.log" 2>&1 &
 P1=$!
 
 PYTHONPATH=src \
 AI_EVENTS_POST_URL="$BACKEND_URL" \
 AI_EVENTS_SNAPSHOT_BASE_DIR="/tmp/snapshots" \
 AI_EVENTS_SNAPSHOT_PUBLIC_PREFIX="/tmp/snapshots" \
-python -m ai.pipeline --source-type rtsp --camera-id cam02 --max-events 5 > "$LOG_DIR/cam02.log" 2>&1 &
+python -m schnitzel_stream --source-type rtsp --camera-id cam02 --max-events 5 > "$LOG_DIR/cam02.log" 2>&1 &
 P2=$!
 
 wait $P1 $P2

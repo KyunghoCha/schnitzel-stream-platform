@@ -149,7 +149,7 @@ Windows (Recommended):
 $env:AI_MODEL_MODE="mock"
 $env:AI_ZONES_SOURCE="none"
 ./setup_env.ps1
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --dry-run `
   --max-events 20
 ```
@@ -161,7 +161,7 @@ export AI_MODEL_MODE=mock
 export AI_ZONES_SOURCE=none
 export PYTHONPATH=src
 
-python -m ai.pipeline \
+python -m schnitzel_stream \
   --dry-run \
   --max-events 20
 ```
@@ -174,7 +174,7 @@ Windows:
 $env:AI_MODEL_MODE="mock"
 $env:AI_ZONES_SOURCE="none"
 ./setup_env.ps1
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --source-type webcam `
   --camera-index 0 `
   --dry-run `
@@ -188,7 +188,7 @@ export AI_MODEL_MODE=mock
 export AI_ZONES_SOURCE=none
 export PYTHONPATH=src
 
-python -m ai.pipeline \
+python -m schnitzel_stream \
   --source-type webcam \
   --camera-index 0 \
   --dry-run \
@@ -203,7 +203,7 @@ Windows:
 $env:AI_MODEL_MODE="mock"
 $env:AI_ZONES_SOURCE="none"
 ./setup_env.ps1
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --source-type rtsp `
   --camera-id cam01 `
   --dry-run `
@@ -217,7 +217,7 @@ export AI_MODEL_MODE=mock
 export AI_ZONES_SOURCE=none
 export PYTHONPATH=src
 
-python -m ai.pipeline \
+python -m schnitzel_stream \
   --source-type rtsp \
   --camera-id cam01 \
   --dry-run \
@@ -236,7 +236,7 @@ $env:AI_MODEL_MODE="real"
 $env:AI_MODEL_ADAPTER="ai.vision.adapters.yolo_adapter:YOLOAdapter"
 $env:YOLO_MODEL_PATH="models/model.pt"
 ./setup_env.ps1
-python -m ai.pipeline `
+python -m schnitzel_stream `
   --source-type rtsp `
   --camera-id cam01
 ```
@@ -251,7 +251,7 @@ export AI_MODEL_ADAPTER=ai.vision.adapters.yolo_adapter:YOLOAdapter
 export YOLO_MODEL_PATH=models/model.pt
 export PYTHONPATH=src
 
-python -m ai.pipeline \
+python -m schnitzel_stream \
   --source-type rtsp \
   --camera-id cam01
 ```
@@ -364,7 +364,7 @@ export AI_ROS2_EVENT_TOPIC=/ai/events
 # Run
 AI_MODEL_MODE=mock \
 PYTHONPATH=src \
-python -m ai.pipeline \
+python -m schnitzel_stream \
   --max-events 20
 ```
 
@@ -382,7 +382,7 @@ export AI_SENSOR_EMIT_EVENTS=true
 export AI_SENSOR_EMIT_FUSED_EVENTS=true
 
 PYTHONPATH=src \
-python -m ai.pipeline \
+python -m schnitzel_stream \
   --output-jsonl outputs/events_sensor.jsonl \
   --max-events 8
 ```
@@ -397,7 +397,7 @@ ai.plugins.sensors.serial_ultrasonic:SerialUltrasonicSensorSource"
 export AI_SENSOR_TIME_WINDOW_MS=5000
 
 PYTHONPATH=src \
-python -m ai.pipeline \
+python -m schnitzel_stream \
   --dry-run \
   --max-events 20
 ```
@@ -466,7 +466,7 @@ docker run --rm \
   -e AI_MODEL_MODE=real \
   -e AI_MODEL_ADAPTER=ai.vision.adapters.yolo_adapter:YOLOAdapter \
   -e YOLO_MODEL_PATH=/models/model.pt \
-  schnitzel-stream-platform python -m ai.pipeline
+  schnitzel-stream-platform python -m schnitzel_stream
 ```
 
 ---

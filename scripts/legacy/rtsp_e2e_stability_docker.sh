@@ -129,7 +129,7 @@ docker run --rm --name "$CONTAINER_NAME" --network host \
   -e AI_EVENTS_SNAPSHOT_BASE_DIR="/data/snapshots" \
   -e AI_EVENTS_SNAPSHOT_PUBLIC_PREFIX="/data/snapshots" \
   -v /tmp/snapshots:/data/snapshots \
-  "$IMG_NAME" python -m ai.pipeline --source-type rtsp --camera-id cam01 > "$LOG_DIR/pipeline_docker.log" 2>&1 &
+  "$IMG_NAME" python -m schnitzel_stream --source-type rtsp --camera-id cam01 > "$LOG_DIR/pipeline_docker.log" 2>&1 &
 
 wait_for_count 1 30 || true
 COUNT_BEFORE="$(count_events)"

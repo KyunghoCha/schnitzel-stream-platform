@@ -53,7 +53,7 @@ for cam_id in $CAMERA_IDS; do
   fi
 
   PYTHONPATH="$PYTHONPATH" \
-  python -m ai.pipeline --camera-id "$cam_id" $EXTRA_ARGS > "$log_file" 2>&1 &
+  python -m schnitzel_stream --camera-id "$cam_id" $EXTRA_ARGS > "$log_file" 2>&1 &
   pid=$!
   echo "$pid" > "$pid_file"
   echo "started $cam_id pid=$pid log=$log_file"

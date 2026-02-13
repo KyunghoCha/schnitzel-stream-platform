@@ -22,4 +22,4 @@ if ($null -eq $env:VIRTUAL_ENV) {
     Write-Host "[INFO] Active virtual environment: $env:VIRTUAL_ENV" -ForegroundColor Cyan
 }
 
-Write-Host "`nReady to run! Try: python -m ai.pipeline --dry-run" -ForegroundColor Magenta
+Write-Host "`nReady to run! Try: python -m schnitzel_stream --dry-run" -ForegroundColor Magenta
