@@ -42,7 +42,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 2**
+Current position: **Phase 3**
 
 ### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -54,17 +54,17 @@ Current position: **Phase 2**
 - `P1.6` Type/port/transport-compat validation (static). `DONE` (3fe090a)
 - `P1.7` Restricted cycles policy (Delay/InitialValue only) as a validator extension. `DONE` (53b38a9)
 
-### Phase 2: Durable Delivery Hardening (IN PROGRESS ~60–75%)
+### Phase 2: Durable Delivery Hardening (DONE ~100%)
 
 - `P2.1` Durable queue node plugin (`WAL/SQLite`), store-and-forward. `DONE` (fd02823)
 - `P2.2` Idempotency keys and ack semantics. `DONE` (e885e41)
-- `P2.3` Soak tests for outage/restart/backlog replay. `NOW`
+- `P2.3` Soak tests for outage/restart/backlog replay. `DONE` (9dabf8d)
 
-### Phase 3: Control Plane (LATER)
+### Phase 3: Control Plane (IN PROGRESS ~0–10%)
 
-- `P3.1` Unified metrics/health contract across transports.
-- `P3.2` Autonomic tuning hooks (policy-driven throttles).
-- `P3.3` Optional LLM/controller layer (human-in-the-loop, gated).
+- `P3.1` Unified metrics/health contract across transports. `NOW`
+- `P3.2` Autonomic tuning hooks (policy-driven throttles). `NEXT`
+- `P3.3` Optional LLM/controller layer (human-in-the-loop, gated). `LATER`
 
 ## Verification
 
