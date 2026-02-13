@@ -55,6 +55,7 @@ class SqliteQueue:
             CREATE TABLE IF NOT EXISTS packets (
               seq INTEGER PRIMARY KEY AUTOINCREMENT,
               enqueued_at TEXT NOT NULL,
+              idempotency_key TEXT,
               packet_id TEXT NOT NULL,
               ts TEXT NOT NULL,
               kind TEXT NOT NULL,
@@ -64,21 +65,36 @@ class SqliteQueue:
             )
             """
         )
+        cols = [r["name"] for r in cur.execute("PRAGMA table_info(packets)").fetchall()]
+        if "idempotency_key" not in cols:
+            # Backwards-compatible migration from Phase 2 early drafts.
+            cur.execute("ALTER TABLE packets ADD COLUMN idempotency_key TEXT")
+            cur.execute(
+                "UPDATE packets SET idempotency_key = packet_id "
+                "WHERE idempotency_key IS NULL OR idempotency_key = ''"
+            )
         cur.execute("CREATE INDEX IF NOT EXISTS idx_packets_packet_id ON packets(packet_id)")
+        cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_packets_idempotency ON packets(idempotency_key)")
         self._conn.commit()
 
-    def enqueue(self, packet: StreamPacket) -> int:
+    def enqueue(self, packet: StreamPacket, *, idempotency_key: str | None = None) -> int:
+        key_raw = idempotency_key or packet.meta.get("idempotency_key") or packet.packet_id
+        key = str(key_raw).strip()
+        if not key:
+            raise ValueError("idempotency_key must not be empty")
+
         payload_json = json.dumps(packet.payload, default=str, separators=(",", ":"))
         meta_json = json.dumps(packet.meta, default=str, separators=(",", ":"))
         cur = self._conn.cursor()
         cur.execute(
             """
-            INSERT INTO packets (
-              enqueued_at, packet_id, ts, kind, source_id, payload_json, meta_json
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT OR IGNORE INTO packets (
+              enqueued_at, idempotency_key, packet_id, ts, kind, source_id, payload_json, meta_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 _now_iso_utc(),
+                key,
                 packet.packet_id,
                 packet.ts,
                 packet.kind,
@@ -88,10 +104,17 @@ class SqliteQueue:
             ),
         )
         self._conn.commit()
-        seq = cur.lastrowid
-        if seq is None:
-            raise RuntimeError("sqlite enqueue failed: lastrowid is None")
-        return int(seq)
+        if cur.rowcount == 1:
+            seq = cur.lastrowid
+            if seq is None:
+                raise RuntimeError("sqlite enqueue failed: lastrowid is None")
+            return int(seq)
+
+        # Insert was ignored due to idempotency constraint; return existing seq.
+        row = cur.execute("SELECT seq FROM packets WHERE idempotency_key = ?", (key,)).fetchone()
+        if row is None:
+            raise RuntimeError("sqlite enqueue failed: idempotency row not found after conflict")
+        return int(row["seq"])
 
     def read(self, *, limit: int = 100) -> list[QueuedPacket]:
         lim = int(limit)
@@ -134,9 +157,17 @@ class SqliteQueue:
         self._conn.commit()
         return int(cur.rowcount or 0)
 
+    def ack(self, *, seq: int) -> bool:
+        s = int(seq)
+        if s <= 0:
+            return False
+        cur = self._conn.cursor()
+        cur.execute("DELETE FROM packets WHERE seq = ?", (s,))
+        self._conn.commit()
+        return int(cur.rowcount or 0) > 0
+
     def close(self) -> None:
         try:
             self._conn.close()
         finally:
             return
-

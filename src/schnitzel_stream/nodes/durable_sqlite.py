@@ -104,3 +104,42 @@ class SqliteQueueSource:
 
     def close(self) -> None:
         self._queue.close()
+
+
+class SqliteQueueAckSink:
+    """Acknowledge (delete) queued rows after successful downstream processing.
+
+    Config:
+    - path: str (required) : sqlite file path
+    - meta_key: str (default: "durable") : meta key containing {"seq": int}
+    - forward: bool (default: false) : if true, emit the packet after ack
+    """
+
+    INPUT_KINDS = {"*"}
+
+    def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
+        cfg = dict(config or {})
+        path = cfg.get("path")
+        if not isinstance(path, str) or not path.strip():
+            raise ValueError("SqliteQueueAckSink requires config.path (sqlite file path)")
+
+        self._node_id = str(node_id or "queue_ack")
+        self._queue = SqliteQueue(path.strip())
+        self._meta_key = str(cfg.get("meta_key", "durable"))
+        self._forward = bool(cfg.get("forward", False))
+
+    def process(self, packet: StreamPacket) -> Iterable[StreamPacket]:
+        meta = dict(packet.meta)
+        raw = meta.get(self._meta_key, {})
+        if not isinstance(raw, dict):
+            raise ValueError(f"SqliteQueueAckSink expects packet.meta[{self._meta_key}] as a mapping")
+        seq = raw.get("seq")
+        if not isinstance(seq, int):
+            raise ValueError(f"SqliteQueueAckSink expects packet.meta[{self._meta_key}].seq as int")
+        self._queue.ack(seq=seq)
+        if self._forward:
+            return [packet]
+        return []
+
+    def close(self) -> None:
+        self._queue.close()

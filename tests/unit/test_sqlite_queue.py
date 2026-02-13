@@ -9,6 +9,7 @@ def test_sqlite_queue_roundtrip(tmp_path):
     try:
         pkt = StreamPacket.new(kind="demo", source_id="cam01", payload={"x": 1}, meta={"k": "v"})
         seq = q.enqueue(pkt)
+        assert q.enqueue(pkt) == seq  # idempotency_key defaults to packet_id
 
         rows = q.read(limit=10)
         assert len(rows) == 1
@@ -18,9 +19,7 @@ def test_sqlite_queue_roundtrip(tmp_path):
         assert rows[0].packet.payload == {"x": 1}
         assert rows[0].packet.meta == {"k": "v"}
 
-        deleted = q.delete_up_to(seq=seq)
-        assert deleted == 1
+        assert q.ack(seq=seq) is True
         assert q.read(limit=10) == []
     finally:
         q.close()
-

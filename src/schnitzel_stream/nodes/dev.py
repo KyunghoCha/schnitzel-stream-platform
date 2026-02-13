@@ -77,9 +77,11 @@ class PrintSink:
     """Print each packet as one JSON line (dev-only)."""
 
     INPUT_KINDS = {"*"}
+    OUTPUT_KINDS = {"*"}
 
-    def __init__(self, *, prefix: str | None = None, **_kwargs: Any) -> None:
+    def __init__(self, *, prefix: str | None = None, forward: bool | None = None, **_kwargs: Any) -> None:
         self._prefix = str(prefix or "")
+        self._forward = bool(forward or False)
 
     def process(self, packet: StreamPacket) -> Iterable[StreamPacket]:
         data = {
@@ -94,6 +96,8 @@ class PrintSink:
         # - `payload` may contain arbitrary Python types during migration.
         # - dev sink should never crash just because payload isn't JSON-serializable.
         print(self._prefix + json.dumps(data, default=str), flush=True)
+        if self._forward:
+            return [packet]
         return []
 
     def close(self) -> None:

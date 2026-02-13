@@ -19,6 +19,8 @@ Intent:
 - `source_id` (string): origin stream id (camera_id, sensor_id, topic, etc)
 - `payload` (any): actual data
 - `meta` (object): small metadata map (must be JSON-serializable if transported)
+  - Common meta keys (optional, Phase 2 draft):
+    - `idempotency_key` (string): stable key for at-least-once delivery / dedup
 
 ### Invariants / Rules
 
@@ -84,6 +86,8 @@ Sensor packet (payload is sensor adapter output):
 - `source_id` (string): 원본 스트림 식별자 (camera_id, sensor_id, topic 등)
 - `payload` (any): 실제 데이터
 - `meta` (object): 작은 메타데이터 맵 (전송 시 JSON 직렬화 가능해야 함)
+  - 자주 쓰는 meta 키 (선택, Phase 2 초안):
+    - `idempotency_key` (string): at-least-once 전송/중복 제거를 위한 안정 키
 
 ### 불변조건 / 규칙
 
@@ -127,4 +131,3 @@ Sensor packet (payload is sensor adapter output):
   "meta": {}
 }
 ```
-
