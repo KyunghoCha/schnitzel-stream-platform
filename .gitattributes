@@ -1,0 +1,20 @@
+# Line endings policy (cross-platform / edge-first)
+#
+# Intent:
+# - Keep repository blobs canonical as LF to avoid CRLF noise and shell/shebang issues in Linux/Docker.
+# - Developers on Windows should rely on editor settings; Git will enforce the canonical form.
+* text=auto eol=lf
+
+# Common binary types (never normalize)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.mp4 binary
+*.onnx binary
+*.pt binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.pdf binary
+
