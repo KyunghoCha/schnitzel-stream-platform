@@ -8,7 +8,7 @@ Implemented in `src/ai/rules/dedup.py`. Wired in the pipeline.
 Code Mapping
 ------------
 - Dedup logic: `src/ai/rules/dedup.py`
-- Wiring: `src/ai/pipeline/__main__.py`
+- Phase 0 wiring: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
 
 ## 한국어
 상태
@@ -18,4 +18,4 @@ Code Mapping
 코드 매핑
 ---------
 - 중복 억제 로직: `src/ai/rules/dedup.py`
-- 연결: `src/ai/pipeline/__main__.py`
+- Phase 0 연결: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`

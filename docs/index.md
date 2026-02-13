@@ -1,53 +1,39 @@
-# AI Docs Index
+# Schnitzel Stream Docs Index
 
 ## English
 
-This folder is the single source of truth for AI pipeline documentation.
+This folder is the single source of truth for `schnitzel-stream-platform` documentation.
 
-### Start Here
+Phase 0 note:
+- Entrypoint is `python -m schnitzel_stream`.
+- The legacy AI runtime remains under `ai.*` modules and is executed through a Phase 0 job.
+
+### Start Here (Platform Pivot)
 
 - Suggested reading order:
-  1. `specs/pipeline_spec.md`
-  2. `contracts/protocol.md`
-  3. `specs/model_interface.md`
-  4. `specs/model_io_samples.md`
-  5. `specs/model_class_taxonomy.md`
-  6. `design/pipeline_design.md`
-  7. `design/multimodal_pipeline_design.md`
-  8. `ops/ops_runbook.md`
-  9. `ops/ai/model_yolo_run.md`
-  10. `ops/ai/model_training_plan.md`
-  11. `ops/ai/labeling_guide.md`
-  12. `ops/ai/training_report_template.md`
-  13. `ops/ai/performance_optimization.md`
-  14. `ops/ai/accuracy_validation.md`
-  15. `ops/multi_camera_run.md`
-  16. `roadmap/strategic_roadmap.md` (Target architecture and long-term strategy)
-  17. `roadmap/execution_roadmap.md` (Execution roadmap and remaining work)
-  18. `roadmap/future_backlog.md` (Future ideas/backlog)
-  19. `progress/progress_log.md`
-- `contracts/protocol.md`: Event schema and API contract
-- `roadmap/execution_roadmap.md`: Status and remaining work
-- `roadmap/strategic_roadmap.md`: North star, target architecture, and phase DoD
-- `specs/pipeline_spec.md`: CLI/config behavior
-- `design/pipeline_design.md`: Pipeline architecture
-- `design/multimodal_pipeline_design.md`: Multimodal (video + sensor) architecture and phased rollout
-- `specs/model_interface.md`: Model/Tracker output contract (real-first, mock explicit for tests)
-- `specs/model_io_samples.md`: Model adapter I/O samples
-- `specs/model_class_taxonomy.md`: Model class taxonomy (draft)
-- `ops/ai/model_yolo_run.md`: YOLO baseline integration runbook (demo section included)
-- `ops/ai/model_training_plan.md`: Model training plan (data/label/train/eval)
-- `ops/ai/labeling_guide.md`: Labeling rules (draft)
-- `ops/ai/training_report_template.md`: Training report template (draft)
-- `ops/ai/performance_optimization.md`: performance optimization roadmap
-- `ops/ai/accuracy_validation.md`: accuracy validation guide
-- `progress/implementation_checklist.md`: Implementation checklist
+  1. `roadmap/strategic_roadmap.md` (Vision / target architecture)
+  2. `roadmap/migration_plan_phase0.md` (What we are changing now)
+  3. `design/architecture_2.0.md` (Provisional architecture spec)
+  4. `implementation/90-packaging/entrypoint/design.md` (Entrypoint design)
+  5. `implementation/90-packaging/support_matrix.md` (Edge support matrix, provisional)
+  6. `specs/pipeline_spec.md` (Legacy pipeline behavior, executed via `schnitzel_stream`)
+  7. `contracts/protocol.md` (Event schema / transport contract)
+
+### Legacy AI Pipeline Deep Dive (Optional)
+
+- `design/pipeline_design.md`: legacy pipeline architecture
+- `design/multimodal_pipeline_design.md`: legacy multimodal (video + sensor) design and rollout
+- `specs/model_interface.md`: model adapter I/O contract
+- `specs/model_class_taxonomy.md`: class taxonomy (draft)
+- `ops/ops_runbook.md`: operations runbook
+- `ops/multi_camera_run.md`: multi-camera operations
 
 ### Single Source Of Truth
 
+- Platform pivot: `roadmap/strategic_roadmap.md`, `roadmap/migration_plan_phase0.md`, `design/architecture_2.0.md`
+- Runtime behavior (legacy job): `specs/pipeline_spec.md`
 - Event schema: `contracts/protocol.md`
 - Model/Tracker contract: `specs/model_interface.md`
-- Runtime behavior: `specs/pipeline_spec.md`
 
 ### Folders
 
@@ -55,70 +41,51 @@ This folder is the single source of truth for AI pipeline documentation.
 - `specs/`: runtime/behavior specifications
 - `design/`: architecture/design docs
 - `ops/`: operations, deployment, troubleshooting
-- `roadmap/`: strategic/execution roadmap and future backlog
+- `roadmap/`: strategic/execution roadmap and backlog
 - `progress/`: current status and validation logs
 - `implementation/`: design/spec notes by topic (reference)
 
-### Implementation Reading Order
-
-- `implementation/00-overview/` → `implementation/10-rtsp-stability/` → `implementation/20-zones-rules/`
-→ `implementation/25-model-tracking/` → `implementation/30-event-dedup/`
-- `implementation/40-snapshot/` → `implementation/50-backend-integration/` → `implementation/60-observability/`
-→ `implementation/70-config/` → `implementation/80-testing/` → `implementation/90-packaging/`
-
 ### Code Mapping
 
-- Entry: `src/ai/pipeline/__main__.py`
-- Core: `src/ai/pipeline/core.py`
+- Entrypoint: `src/schnitzel_stream/cli/__main__.py`
+- Default graph spec: `configs/graphs/legacy_pipeline.yaml`
+- Phase 0 legacy job: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
+- Legacy pipeline core: `src/ai/pipeline/core.py`
 
 ## 한국어
 
-이 폴더가 AI 파이프라인 문서의 기준입니다.
+이 폴더는 `schnitzel-stream-platform` 문서의 단일 기준(SSOT)입니다.
 
-### 시작 가이드
+Phase 0 참고:
+- 엔트리포인트는 `python -m schnitzel_stream` 입니다.
+- 레거시 AI 런타임은 `ai.*` 모듈로 유지되며, Phase 0 job을 통해 실행됩니다.
+
+### 시작 가이드 (플랫폼 피벗)
 
 - 읽는 순서(추천):
-  1. `specs/pipeline_spec.md`
-  2. `contracts/protocol.md`
-  3. `specs/model_interface.md`
-  4. `specs/model_io_samples.md`
-  5. `specs/model_class_taxonomy.md`
-  6. `design/pipeline_design.md`
-  7. `design/multimodal_pipeline_design.md`
-  8. `ops/ops_runbook.md`
-  9. `ops/ai/model_yolo_run.md`
-  10. `ops/ai/model_training_plan.md`
-  11. `ops/ai/labeling_guide.md`
-  12. `ops/ai/training_report_template.md`
-  13. `ops/ai/performance_optimization.md`
-  14. `ops/ai/accuracy_validation.md`
-  15. `ops/multi_camera_run.md`
-  16. `roadmap/strategic_roadmap.md` (목표 아키텍처/전략)
-  17. `roadmap/execution_roadmap.md` (실행 로드맵/잔여 작업)
-  18. `roadmap/future_backlog.md` (미래 아이디어/백로그)
-  19. `progress/progress_log.md`
-- `contracts/protocol.md`: 이벤트 스키마 및 API 계약
-- `roadmap/execution_roadmap.md`: 진행 현황과 남은 작업
-- `roadmap/strategic_roadmap.md`: 북극성, 목표 아키텍처, 단계별 DoD
-- `specs/pipeline_spec.md`: CLI/설정 동작
-- `design/pipeline_design.md`: 파이프라인 아키텍처
-- `design/multimodal_pipeline_design.md`: 멀티모달(영상+센서) 아키텍처 및 단계별 확장 계획
-- `specs/model_interface.md`: 모델/트래커 출력 계약(모크 기반)
-- `specs/model_io_samples.md`: 모델 어댑터 입출력 샘플
-- `specs/model_class_taxonomy.md`: 모델 클래스 분류(초안)
-- `ops/ai/model_yolo_run.md`: YOLO 기준 연동 런북(데모 포함)
-- `ops/ai/model_training_plan.md`: 모델 학습 계획(데이터/라벨/학습/평가)
-- `ops/ai/labeling_guide.md`: 라벨링 규칙(초안)
-- `ops/ai/training_report_template.md`: 학습 리포트 템플릿(초안)
-- `ops/ai/performance_optimization.md`: 성능/최적화 로드맵
-- `ops/ai/accuracy_validation.md`: 정확도 검증 가이드
-- `progress/implementation_checklist.md`: 구현 체크리스트
+  1. `roadmap/strategic_roadmap.md` (비전 / 목표 아키텍처)
+  2. `roadmap/migration_plan_phase0.md` (지금 바꾸는 내용)
+  3. `design/architecture_2.0.md` (아키텍처 명세, 잠정)
+  4. `implementation/90-packaging/entrypoint/design.md` (엔트리포인트 설계)
+  5. `implementation/90-packaging/support_matrix.md` (엣지 지원 매트릭스, 잠정)
+  6. `specs/pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
+  7. `contracts/protocol.md` (이벤트 스키마/전송 계약)
+
+### 레거시 AI 파이프라인 상세 (선택)
+
+- `design/pipeline_design.md`: 레거시 파이프라인 설계
+- `design/multimodal_pipeline_design.md`: 레거시 멀티모달(영상+센서) 설계/확장 계획
+- `specs/model_interface.md`: 모델 어댑터 I/O 계약
+- `specs/model_class_taxonomy.md`: 클래스 분류(초안)
+- `ops/ops_runbook.md`: 운영 런북
+- `ops/multi_camera_run.md`: 멀티 카메라 운영
 
 ### 단일 기준(SSOT)
 
+- 플랫폼 피벗: `roadmap/strategic_roadmap.md`, `roadmap/migration_plan_phase0.md`, `design/architecture_2.0.md`
+- 런타임 동작(레거시 job): `specs/pipeline_spec.md`
 - 이벤트 스키마: `contracts/protocol.md`
 - 모델/트래커 계약: `specs/model_interface.md`
-- 런타임 동작: `specs/pipeline_spec.md`
 
 ### 폴더 안내
 
@@ -126,18 +93,13 @@ This folder is the single source of truth for AI pipeline documentation.
 - `specs/`: 실행/동작 스펙
 - `design/`: 설계 문서
 - `ops/`: 운영/배포/트러블슈팅
-- `roadmap/`: 전략/실행 로드맵 및 미래 백로그
+- `roadmap/`: 전략/실행 로드맵 및 백로그
 - `progress/`: 진행 현황/검증 로그
-- `implementation/`: 주제별 설계/명세 노트(참고용)
-
-### Implementation 읽는 순서
-
-- `implementation/00-overview/` → `implementation/10-rtsp-stability/` → `implementation/20-zones-rules/`
-→ `implementation/25-model-tracking/` → `implementation/30-event-dedup/`
-- `implementation/40-snapshot/` → `implementation/50-backend-integration/` → `implementation/60-observability/`
-→ `implementation/70-config/` → `implementation/80-testing/` → `implementation/90-packaging/`
+- `implementation/`: 주제별 설계/명세 노트(참고)
 
 ### 코드 매핑
 
-- 엔트리: `src/ai/pipeline/__main__.py`
-- 코어: `src/ai/pipeline/core.py`
+- 엔트리포인트: `src/schnitzel_stream/cli/__main__.py`
+- 기본 그래프 스펙: `configs/graphs/legacy_pipeline.yaml`
+- Phase 0 레거시 job: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
+- 레거시 파이프라인 코어: `src/ai/pipeline/core.py`

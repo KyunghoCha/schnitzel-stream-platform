@@ -13,7 +13,7 @@ API failure fallback to cached zones is covered by integration tests.
 
 - Zone logic: `src/ai/rules/zones.py`
 - Geometry (IoU): `src/ai/vision/geometry.py`
-- Wiring: `src/ai/pipeline/__main__.py`
+- Phase 0 wiring: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
 
 ## 한국어
 
@@ -28,4 +28,4 @@ API 실패 시 캐시 폴백은 통합 테스트로 검증한다.
 
 - zone 로직: `src/ai/rules/zones.py`
 - 기하(IoU): `src/ai/vision/geometry.py`
-- 연결: `src/ai/pipeline/__main__.py`
+- Phase 0 연결: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`

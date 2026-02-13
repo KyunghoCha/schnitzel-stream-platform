@@ -13,7 +13,9 @@ Implemented as of 2026-02-09. Remaining gaps are tracked in `docs/roadmap/execut
 
 ## Code Mapping
 
-- Entry/core: `src/ai/pipeline/__main__.py`, `src/ai/pipeline/core.py`
+- Entrypoint: `src/schnitzel_stream/cli/__main__.py`
+- Phase 0 wiring: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
+- Legacy core: `src/ai/pipeline/core.py`
 
 ## 한국어
 
@@ -28,4 +30,6 @@ Implemented as of 2026-02-09. Remaining gaps are tracked in `docs/roadmap/execut
 
 ## 코드 매핑
 
-- 엔트리/코어: `src/ai/pipeline/__main__.py`, `src/ai/pipeline/core.py`
+- 엔트리포인트: `src/schnitzel_stream/cli/__main__.py`
+- Phase 0 연결: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
+- 레거시 코어: `src/ai/pipeline/core.py`

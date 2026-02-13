@@ -97,7 +97,7 @@ Notes
 Code Mapping
 ------------
 
-- Entrypoint: `src/ai/pipeline/__main__.py`
+- Entrypoint: `src/schnitzel_stream/cli/__main__.py` (Phase 0 runs the legacy job)
 - Config env overrides: `src/ai/config.py`
 
 ## 한국어
@@ -194,5 +194,5 @@ cameras:
 코드 매핑
 ---------
 
-- 엔트리포인트: `src/ai/pipeline/__main__.py`
+- 엔트리포인트: `src/schnitzel_stream/cli/__main__.py` (Phase 0 레거시 job 실행)
 - 설정 env 오버라이드: `src/ai/config.py`

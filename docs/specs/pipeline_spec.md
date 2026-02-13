@@ -7,7 +7,8 @@ Pipeline Spec
 
 ## Entrypoint
 
-- Module: `ai.pipeline` (package)
+- Entrypoint module: `schnitzel_stream` (package)
+- Legacy runtime package: `ai.pipeline` (executed via Phase 0 job indirection)
 - Windows (Recommended): `./setup_env.ps1; python -m schnitzel_stream`
 - Linux/Manual: `PYTHONPATH=src python -m schnitzel_stream`
 
@@ -155,7 +156,9 @@ Pipeline Spec
 
 ## Code Mapping
 
-- Entrypoint/CLI: `src/ai/pipeline/__main__.py`
+- Entrypoint/CLI: `src/schnitzel_stream/cli/__main__.py`
+- Default graph spec: `configs/graphs/legacy_pipeline.yaml`
+- Phase 0 legacy job: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
 - Pipeline core: `src/ai/pipeline/core.py`
 - Async processor: `src/ai/pipeline/processor.py`
 - Event builders: `src/ai/pipeline/events.py`
@@ -175,7 +178,8 @@ Pipeline Spec
 
 ## 엔트리포인트
 
-- 모듈: `ai.pipeline` (패키지)
+- 엔트리포인트 모듈: `schnitzel_stream` (패키지)
+- 레거시 런타임 패키지: `ai.pipeline` (Phase 0 job을 통해 실행)
 - 윈도우 (권장): `./setup_env.ps1; python -m schnitzel_stream`
 - 리눅스/수동: `PYTHONPATH=src python -m schnitzel_stream`
 
@@ -322,7 +326,9 @@ Pipeline Spec
 
 ## 코드 매핑
 
-- 엔트리/CLI: `src/ai/pipeline/__main__.py`
+- 엔트리/CLI: `src/schnitzel_stream/cli/__main__.py`
+- 기본 그래프 스펙: `configs/graphs/legacy_pipeline.yaml`
+- Phase 0 레거시 job: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
 - 파이프라인 코어: `src/ai/pipeline/core.py`
 - 비동기 프로세서: `src/ai/pipeline/processor.py`
 - 이벤트 빌더: `src/ai/pipeline/events.py`

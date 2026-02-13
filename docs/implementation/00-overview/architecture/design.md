@@ -28,7 +28,7 @@ Notes
 Code Mapping
 ------------
 - Pipeline core: `src/ai/pipeline/core.py`
-- Module wiring: `src/ai/pipeline/__main__.py`
+- Phase 0 wiring: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
 
 ## 한국어
 목적
@@ -58,4 +58,4 @@ Code Mapping
 코드 매핑
 ---------
 - 파이프라인 코어: `src/ai/pipeline/core.py`
-- 모듈 연결: `src/ai/pipeline/__main__.py`
+- Phase 0 연결: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`

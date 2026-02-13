@@ -77,7 +77,9 @@ Code Mapping
 - Dedup: `src/ai/rules/dedup.py`
 - Emitters: `src/ai/pipeline/emitters/` (compat shim: `src/ai/pipeline/emitter.py`)
 - Optional runtime plugins (example): `src/ai/plugins/ros2/` (`Ros2ImageSource`, `Ros2EventEmitter`)
-- Pipeline core: `src/ai/pipeline/core.py`, `src/ai/pipeline/__main__.py`
+- Legacy pipeline core: `src/ai/pipeline/core.py`
+- Phase 0 wiring (legacy job): `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
+- Entrypoint: `src/schnitzel_stream/cli/__main__.py`
 
 ## 한국어
 
@@ -156,4 +158,6 @@ FrameSource -> FrameSampler -> EventBuilder -> Dedup -> EventEmitter -> backend 
 - Dedup: `src/ai/rules/dedup.py`
 - 에미터: `src/ai/pipeline/emitters/` (호환 shim: `src/ai/pipeline/emitter.py`)
 - 선택 런타임 플러그인(예시): `src/ai/plugins/ros2/` (`Ros2ImageSource`, `Ros2EventEmitter`)
-- 파이프라인 코어: `src/ai/pipeline/core.py`, `src/ai/pipeline/__main__.py`
+- 레거시 파이프라인 코어: `src/ai/pipeline/core.py`
+- Phase 0 연결(레거시 job): `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
+- 엔트리포인트: `src/schnitzel_stream/cli/__main__.py`
