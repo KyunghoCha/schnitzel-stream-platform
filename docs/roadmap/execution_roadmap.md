@@ -4,7 +4,7 @@ Last updated: 2026-02-14
 
 This document is the **execution SSOT** for the platform pivot.
 
-Current step id: `P4.2.3`
+Current step id: `P4.2.4`
 
 Rule:
 - When reporting progress (in issues/PRs/chat), always reference the **current step id** (example: `P1.4/8`).
@@ -79,7 +79,9 @@ Intent:
 - `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `IN PROGRESS`
   - `P4.2.1` Port critical policy nodes (zones/dedup) into `schnitzel_stream` + tests + demo graph. `DONE` (ba6ea9d, 2ef7481, 1b0aa83, d14abcf)
   - `P4.2.2` v2 event builder (protocol v0.2) node + tests. `DONE` (8860377, 618b20a, 8f558b2)
-  - `P4.2.3` v2 file-video source + sampler nodes + tests. `NOW`
+  - `P4.2.3` v2 file-video source + sampler nodes + tests. `DONE` (a2e34fa, 6d8cd5e, 570409f)
+  - `P4.2.4` v2 mock model/detection node (frame -> detection) + tests. `NOW`
+  - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `NEXT`
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `NEXT`
 - `P4.4` Extract legacy runtime (`src/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `LATER`
 - `P4.5` Remove legacy runtime from main tree after the deprecation window. `LATER`
