@@ -1,6 +1,10 @@
 # Phase 0 Migration Plan (Universal Platform SSOT)
 
-Last updated: 2026-02-13
+Last updated: 2026-02-14
+
+Note:
+- Phase 0 is complete. This document is kept as historical context.
+- Current default graph is v2: `configs/graphs/dev_cctv_e2e_mock_v2.yaml` (see `docs/roadmap/execution_roadmap.md`).
 
 ## Summary
 
@@ -25,7 +29,9 @@ Last updated: 2026-02-13
 2. **New platform package**: introduce `src/schnitzel_stream/` as the universal platform namespace (StreamPacket/Node/PluginPolicy).
 3. **Phase 0 graph spec**: add minimal `GraphSpec` loader (YAML) with explicit versioning.
 4. **Phase 0 legacy job**: implement `LegacyAIPipelineJob` that runs `ai.pipeline` runtime via the new platform entrypoint.
-5. **New CLI**: implement `python -m schnitzel_stream` that loads `configs/graphs/legacy_pipeline.yaml` and dispatches to the job plugin.
+5. **New CLI**: implement `python -m schnitzel_stream` as the stable entrypoint.
+   - Phase 0 default graph was `configs/graphs/legacy_pipeline.yaml` (v1 job graph).
+   - Phase 4 default graph is `configs/graphs/dev_cctv_e2e_mock_v2.yaml` (v2 node graph).
 6. **Test migration**: switch subprocess integration/regression tests from `-m ai.pipeline` to `-m schnitzel_stream`.
 7. **Disable legacy CLI**: keep `src/ai/pipeline/__main__.py` but make it fail-fast with a clear migration message.
 8. **Ops + docs migration**: update Docker CMD, scripts, and docs to reference `python -m schnitzel_stream` instead of `python -m ai.pipeline`.

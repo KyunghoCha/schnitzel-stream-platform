@@ -11,7 +11,8 @@ Key Decisions
 -------------
 
 - Entry uses `python -m schnitzel_stream` (Dockerfile CMD default).
-- Phase 0 entrypoint loads a minimal graph spec: `configs/graphs/legacy_pipeline.yaml`.
+- Current default graph spec (v2): `configs/graphs/dev_cctv_e2e_mock_v2.yaml`.
+- Legacy Phase 0 graph spec (v1 job): `configs/graphs/legacy_pipeline.yaml` (deprecated).
 - Phase 0 graph spec uses a single job plugin path (`module:Name`) and is versioned.
 - Dry-run is opt-in via CLI `--dry-run`.
 - Allow config via env variables.
@@ -35,7 +36,8 @@ Code Mapping
 - Docker CMD: `Dockerfile`
 - Entrypoint: `src/schnitzel_stream/cli/__main__.py`
 - Graph spec loader: `src/schnitzel_stream/graph/spec.py`
-- Default graph spec: `configs/graphs/legacy_pipeline.yaml`
+- Default graph spec (v2): `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
+- Legacy graph spec (v1): `configs/graphs/legacy_pipeline.yaml`
 - Optional script: (Removed in favor of direct python invocation)
 
 ## 한국어
@@ -49,7 +51,8 @@ Code Mapping
 ---------
 
 - `python -m schnitzel_stream`로 시작한다(Dockerfile 기본 CMD).
-- Phase 0 엔트리포인트는 최소 그래프 스펙을 로드한다: `configs/graphs/legacy_pipeline.yaml`.
+- 현재 기본 그래프 스펙(v2): `configs/graphs/dev_cctv_e2e_mock_v2.yaml`.
+- 레거시 Phase 0 그래프 스펙(v1 job): `configs/graphs/legacy_pipeline.yaml` (deprecated).
 - Phase 0 그래프 스펙은 단일 job 플러그인 경로(`module:Name`)를 사용하며, 버전 관리한다.
 - 드라이런은 `--dry-run`을 명시적으로 전달해 사용한다.
 - 환경 변수로 설정을 전달한다.
@@ -73,5 +76,6 @@ Code Mapping
 - Docker CMD: `Dockerfile`
 - 엔트리포인트: `src/schnitzel_stream/cli/__main__.py`
 - 그래프 스펙 로더: `src/schnitzel_stream/graph/spec.py`
-- 기본 그래프 스펙: `configs/graphs/legacy_pipeline.yaml`
+- 기본 그래프 스펙(v2): `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
+- 레거시 그래프 스펙(v1): `configs/graphs/legacy_pipeline.yaml`
 - 선택 스크립트: (직접 Python 실행으로 대체됨)

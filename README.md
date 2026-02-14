@@ -89,7 +89,8 @@ flowchart LR
 
 v1 graphs exist to keep migration reversible while the v2 platform evolves.
 
-- Default v1 graph: `configs/graphs/legacy_pipeline.yaml`
+- Default v2 graph: `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
+- Legacy v1 graph (deprecated): `configs/graphs/legacy_pipeline.yaml`
 - Legacy runtime remains under `src/ai/` and is executed via the v1 job graph.
 
 ---
@@ -115,14 +116,20 @@ export PYTHONPATH=src
 ### 3) Validate (no run)
 
 ```bash
-# default v1 graph
+# default v2 graph
 python -m schnitzel_stream validate
 
-# explicit graph
+# legacy v1 graph
 python -m schnitzel_stream validate --graph configs/graphs/legacy_pipeline.yaml
 ```
 
-### 4) Run v2 In-Proc Demo Graph
+### 4) Run Default v2 Graph (E2E Mock CCTV)
+
+```bash
+python -m schnitzel_stream
+```
+
+### 5) Run v2 In-Proc Demo Graph
 
 ```bash
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
@@ -131,7 +138,7 @@ python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --report-json
 ```
 
-### 5) Durable Queue Demo (SQLite WAL)
+### 6) Durable Queue Demo (SQLite WAL)
 
 ```bash
 # enqueue
@@ -141,7 +148,7 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 ```
 
-### 6) Run Legacy Video Pipeline (Optional)
+### 7) Run Legacy Video Pipeline (Optional)
 
 The legacy pipeline is executed through the v1 job graph and uses the Phase 0 compatibility CLI flags.
 
@@ -151,7 +158,7 @@ For a local smoke run without real model deps/backends:
 # PowerShell
 $env:AI_MODEL_MODE="mock"
 $env:AI_ZONES_SOURCE="none"
-python -m schnitzel_stream --dry-run --max-events 5
+python -m schnitzel_stream --graph configs/graphs/legacy_pipeline.yaml --dry-run --max-events 5
 ```
 
 More details: `docs/ops/command_reference.md`
