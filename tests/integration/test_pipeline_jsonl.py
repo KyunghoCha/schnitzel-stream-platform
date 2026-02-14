@@ -12,6 +12,7 @@ from pathlib import Path
 def test_pipeline_jsonl_output(tmp_path):
     root = Path(__file__).resolve().parents[2]
     out_file = tmp_path / "events_test.jsonl"
+    legacy_graph = root / "configs" / "graphs" / "legacy_pipeline.yaml"
 
     env = os.environ.copy()
     # 통합 테스트는 runtime default(real)와 분리해 mock 모드를 명시적으로 사용한다.
@@ -23,6 +24,8 @@ def test_pipeline_jsonl_output(tmp_path):
         sys.executable,
         "-m",
         "schnitzel_stream",
+        "--graph",
+        str(legacy_graph),
         "--output-jsonl",
         str(out_file),
         "--max-events",

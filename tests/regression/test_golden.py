@@ -11,6 +11,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 GOLDEN = ROOT / "tests" / "regression" / "golden_events.jsonl"
+LEGACY_GRAPH = ROOT / "configs" / "graphs" / "legacy_pipeline.yaml"
 
 
 _COMPARE_KEYS = {"event_type", "object_type", "severity", "track_id", "bbox", "confidence", "zone"}
@@ -41,6 +42,8 @@ def test_golden_regression(tmp_path):
         sys.executable,
         "-m",
         "schnitzel_stream",
+        "--graph",
+        str(LEGACY_GRAPH),
         "--output-jsonl",
         str(out_file),
         "--max-events",

@@ -10,6 +10,7 @@ from pathlib import Path
 def test_pipeline_attaches_sensor_payload_when_enabled(tmp_path):
     root = Path(__file__).resolve().parents[2]
     out_file = tmp_path / "events_sensor.jsonl"
+    legacy_graph = root / "configs" / "graphs" / "legacy_pipeline.yaml"
 
     env = os.environ.copy()
     env["PYTHONPATH"] = "src"
@@ -24,6 +25,8 @@ def test_pipeline_attaches_sensor_payload_when_enabled(tmp_path):
         sys.executable,
         "-m",
         "schnitzel_stream",
+        "--graph",
+        str(legacy_graph),
         "--output-jsonl",
         str(out_file),
         "--max-events",
@@ -49,6 +52,7 @@ def test_pipeline_attaches_sensor_payload_when_enabled(tmp_path):
 def test_pipeline_emits_sensor_and_fused_events_when_enabled(tmp_path):
     root = Path(__file__).resolve().parents[2]
     out_file = tmp_path / "events_sensor_modes.jsonl"
+    legacy_graph = root / "configs" / "graphs" / "legacy_pipeline.yaml"
 
     env = os.environ.copy()
     env["PYTHONPATH"] = "src"
@@ -65,6 +69,8 @@ def test_pipeline_emits_sensor_and_fused_events_when_enabled(tmp_path):
         sys.executable,
         "-m",
         "schnitzel_stream",
+        "--graph",
+        str(legacy_graph),
         "--output-jsonl",
         str(out_file),
         "--max-events",
