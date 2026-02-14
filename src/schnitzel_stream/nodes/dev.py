@@ -79,9 +79,14 @@ class PrintSink:
     INPUT_KINDS = {"*"}
     OUTPUT_KINDS = {"*"}
 
-    def __init__(self, *, prefix: str | None = None, forward: bool | None = None, **_kwargs: Any) -> None:
-        self._prefix = str(prefix or "")
-        self._forward = bool(forward or False)
+    def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None, **_kwargs: Any) -> None:
+        # Intent:
+        # - v2 graph runtime passes node configuration via the `config` mapping only.
+        # - keep PrintSink configurable from YAML graphs (prefix/forward).
+        cfg = dict(config or {})
+        self._node_id = str(node_id or "print_sink")
+        self._prefix = str(cfg.get("prefix", ""))
+        self._forward = bool(cfg.get("forward", False))
 
     def process(self, packet: StreamPacket) -> Iterable[StreamPacket]:
         data = {
