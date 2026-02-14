@@ -1,0 +1,70 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.dev:StaticSource
+    config:
+      packets:
+        - kind: detection
+          source_id: cam01
+          payload:
+            bbox: { x1: 2, y1: 2, x2: 4, y2: 4 }
+            confidence: 0.75
+            event_type: ZONE_INTRUSION
+            object_type: PERSON
+            severity: LOW
+            track_id: 1
+
+        - kind: detection
+          source_id: cam01
+          payload:
+            bbox: { x1: 2, y1: 2, x2: 4, y2: 4 }
+            confidence: 0.75
+            event_type: ZONE_INTRUSION
+            object_type: PERSON
+            severity: LOW
+            track_id: 1
+
+  - id: events
+    kind: node
+    plugin: schnitzel_stream.nodes.event_builder:ProtocolV02EventBuilderNode
+    config:
+      site_id: S001
+
+  - id: zones
+    kind: node
+    plugin: schnitzel_stream.nodes.policy:ZonePolicyNode
+    config:
+      rule_map:
+        ZONE_INTRUSION: bottom_center
+      zones:
+        - zone_id: Z1
+          enabled: true
+          polygon: [[0, 0], [10, 0], [10, 10], [0, 10]]
+
+  - id: dedup
+    kind: node
+    plugin: schnitzel_stream.nodes.policy:DedupPolicyNode
+    config:
+      cooldown_sec: 10.0
+      prune_interval: 1
+
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "EVENT "
+      forward: true
+
+edges:
+  - from: src
+    to: events
+  - from: events
+    to: zones
+  - from: zones
+    to: dedup
+  - from: dedup
+    to: out
+
+config: {}
+
