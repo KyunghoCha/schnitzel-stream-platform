@@ -10,7 +10,7 @@ Last updated: 2026-02-14
 
 - 코드: `src/ai/**`
 - v1(job) 그래프 포맷: `version: 1`
-- 기본 그래프: `configs/graphs/legacy_pipeline.yaml`
+- 레거시 그래프(v1): `configs/graphs/legacy_pipeline.yaml`
 - Phase 0 호환 job: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
 - 플러그인 allowlist에 포함된 `ai.*` 네임스페이스
 
@@ -54,10 +54,11 @@ Baseline 후보(조정 가능):
 ## Deprecation Policy (Timeline)
 
 - 레거시 삭제는 **절대 즉시 삭제하지 않는다**.
-- `P4.3` 머지 시점에 이 문서와 `docs/roadmap/execution_roadmap.md`에:
-  - v1 deprecation 시작일(merge date)
-  - **삭제 예정일(merge date + 90 days 이상)**
-  를 “절대 날짜”로 기록한다.
+- `P4.3` 머지 시점에 이 문서와 `docs/roadmap/execution_roadmap.md`에 “절대 날짜”를 기록한다.
+
+현재 기록:
+- v1 deprecation 시작일: **2026-02-14**
+- `src/ai/**` 제거 가능 최단일: **2026-05-15** (>= 90 days after `P4.3`)
 
 ## Operational Policy (Until Removed)
 
@@ -70,4 +71,3 @@ Baseline 후보(조정 가능):
 - Baseline parity에서 “모델 추론”을 어디까지 포함할지(ONNX/YOLO/Custom)
 - backend event schema의 고정 범위(필수 필드/optional 필드)
 - multi-camera/multi-sensor를 Phase 4에 포함할지, 이후로 미룰지
-
