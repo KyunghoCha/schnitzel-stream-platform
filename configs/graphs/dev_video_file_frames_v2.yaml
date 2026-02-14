@@ -1,0 +1,31 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.video:OpenCvVideoFileSource
+    config:
+      path: data/samples/2048246-hd_1920_1080_24fps.mp4
+      source_id: cam01
+      max_frames: 30
+
+  - id: sample
+    kind: node
+    plugin: schnitzel_stream.nodes.video:EveryNthFrameSamplerNode
+    config:
+      every_n: 10
+
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "FRAME "
+      forward: false
+
+edges:
+  - from: src
+    to: sample
+  - from: sample
+    to: out
+
+config: {}
+
