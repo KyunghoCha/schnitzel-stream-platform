@@ -4,7 +4,7 @@ Last updated: 2026-02-14
 
 This document is the **execution SSOT** for the platform pivot.
 
-Current step id: `P4.1`
+Current step id: `P4.2.1`
 
 Rule:
 - When reporting progress (in issues/PRs/chat), always reference the **current step id** (example: `P1.4/8`).
@@ -75,8 +75,11 @@ Intent:
 - Prefer extraction (separate package/repo) over hard-delete if external users still depend on it.
 - Legacy removal requires a **deprecation window**: do not delete `src/ai/*` earlier than **90 days after** `P4.3` lands.
 
-- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `NOW` (SSOT: `docs/roadmap/legacy_decommission.md`)
-- `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `NEXT`
+- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (SSOT: `docs/roadmap/legacy_decommission.md`)
+- `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `IN PROGRESS`
+  - `P4.2.1` Port critical policy nodes (zones/dedup) into `schnitzel_stream` + tests + demo graph. `NOW`
+  - `P4.2.2` v2 event builder (protocol v0.2) node + tests. `NEXT`
+  - `P4.2.3` v2 file-video source + sampler nodes + tests. `NEXT`
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `NEXT`
 - `P4.4` Extract legacy runtime (`src/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `LATER`
 - `P4.5` Remove legacy runtime from main tree after the deprecation window. `LATER`
