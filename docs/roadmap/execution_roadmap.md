@@ -4,7 +4,7 @@ Last updated: 2026-02-14
 
 This document is the **execution SSOT** for the platform pivot.
 
-Current step id: `P4.4`
+Current step id: `P4.5`
 
 Rule:
 - When reporting progress (in issues/PRs/chat), always reference the **current step id** (example: `P1.4/8`).
@@ -85,8 +85,8 @@ Intent:
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
   - v1 deprecation start: 2026-02-14
   - earliest legacy removal: 2026-05-15
-- `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `NOW`
-- `P4.5` Remove legacy runtime from main tree after the deprecation window. `LATER`
+- `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
+- `P4.5` Remove legacy runtime from main tree after the deprecation window. `NEXT` (not before 2026-05-15)
 
 ## Verification
 
