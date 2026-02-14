@@ -13,6 +13,7 @@ Intent:
 
 import argparse
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -78,6 +79,19 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _maybe_warn_legacy_v1_deprecation() -> None:
+    # Intent: v1(job) graphs run the legacy runtime (`src/ai/**`).
+    # We want this to be explicit so migrations don't silently stall.
+    if os.environ.get("SCHNITZEL_STREAM_SILENCE_LEGACY_WARNING"):
+        return
+    print(
+        "WARNING: running a v1 job graph (legacy runtime under `src/ai/**`). "
+        "Legacy removal is tracked in Phase 4 (see `docs/roadmap/execution_roadmap.md`). "
+        "Set SCHNITZEL_STREAM_SILENCE_LEGACY_WARNING=1 to silence this warning.",
+        file=sys.stderr,
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     # Intent:
     # - Keep backwards-compatible flag-based CLI.
@@ -102,6 +116,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.validate_only:
             return 0
 
+        _maybe_warn_legacy_v1_deprecation()
         registry = PluginRegistry()
         job = registry.load(spec.job)
         run = registry.require_callable(job, "run")
