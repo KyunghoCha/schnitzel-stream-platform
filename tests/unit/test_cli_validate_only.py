@@ -6,12 +6,19 @@ import textwrap
 from pathlib import Path
 
 
-def test_cli_validate_only_v1_default_graph():
+def test_cli_validate_only_default_graph():
     root = Path(__file__).resolve().parents[2]
 
     cmd = [sys.executable, "-m", "schnitzel_stream", "validate"]
     result = subprocess.run(cmd, cwd=str(root / "src"), check=True)
     assert result.returncode == 0
+
+
+def test_cli_default_graph_is_v2():
+    from schnitzel_stream.cli.__main__ import _default_graph_path
+    from schnitzel_stream.graph.spec import peek_graph_version
+
+    assert peek_graph_version(_default_graph_path()) == 2
 
 
 def test_cli_validate_only_v2_graph_spec_without_version(tmp_path):

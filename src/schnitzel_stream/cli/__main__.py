@@ -29,7 +29,10 @@ from schnitzel_stream.runtime.inproc import InProcGraphRunner
 
 
 def _default_graph_path() -> Path:
-    return resolve_project_root() / "configs" / "graphs" / "legacy_pipeline.yaml"
+    # Intent:
+    # - Phase 4 pivots the *default* graph to v2 to start deprecating the v1 legacy job graph.
+    # - Keep this graph dependency-light so `python -m schnitzel_stream` runs on most edges.
+    return resolve_project_root() / "configs" / "graphs" / "dev_cctv_e2e_mock_v2.yaml"
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -42,7 +45,7 @@ def _build_parser() -> argparse.ArgumentParser:
         "--graph",
         type=str,
         default=str(_default_graph_path()),
-        help="path to graph spec YAML (default: repo configs/graphs/legacy_pipeline.yaml)",
+        help="path to graph spec YAML (default: repo configs/graphs/dev_cctv_e2e_mock_v2.yaml)",
     )
     parser.add_argument(
         "--validate-only",
