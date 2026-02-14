@@ -19,7 +19,7 @@ Intent:
   - Minimal graph spec: `src/schnitzel_stream/graph/spec.py` (Phase 0 job indirection)
   - Plugin loading policy: `src/schnitzel_stream/plugins/registry.py` (allowlist by default)
   - Core abstractions (early): `src/schnitzel_stream/packet.py`, `src/schnitzel_stream/node.py`
-- **Legacy runtime (kept for Phase 0)**: `src/ai/`
+- **Legacy runtime (kept for Phase 0)**: `legacy/ai/` (import path remains `ai.*` via `src/ai` shim)
   - The "AI pipeline" remains implemented under `ai.*` modules.
   - Execution is routed via `schnitzel_stream.jobs.legacy_ai_pipeline:LegacyAIPipelineJob`.
 

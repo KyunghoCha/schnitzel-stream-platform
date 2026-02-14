@@ -71,9 +71,9 @@ Current position: **Phase 4** (legacy decommission is now the priority; `P3.3` i
 ### Phase 4: Legacy Decommission (IN PROGRESS)
 
 Intent:
-- Remove `src/ai/*` only after v2 graphs cover the required production behavior.
+- Remove `legacy/ai/*` only after v2 graphs cover the required production behavior.
 - Prefer extraction (separate package/repo) over hard-delete if external users still depend on it.
-- Legacy removal requires a **deprecation window**: do not delete `src/ai/*` earlier than **90 days after** `P4.3` lands.
+- Legacy removal requires a **deprecation window**: do not delete `legacy/ai/*` earlier than **90 days after** `P4.3` lands.
 
 - `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (SSOT: `docs/roadmap/legacy_decommission.md`)
 - `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `DONE` (P4.2.1-P4.2.5)
@@ -85,7 +85,7 @@ Intent:
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
   - v1 deprecation start: 2026-02-14
   - earliest legacy removal: 2026-05-15
-- `P4.4` Extract legacy runtime (`src/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `NOW`
+- `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `NOW`
 - `P4.5` Remove legacy runtime from main tree after the deprecation window. `LATER`
 
 ## Verification

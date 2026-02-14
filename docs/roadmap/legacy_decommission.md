@@ -2,13 +2,13 @@
 
 Last updated: 2026-02-14
 
-목표: `src/ai/**` 레거시 런타임과 v1(job) 그래프 포맷을 **계획적으로 제거**하고, v2(node) 그래프 기반 플랫폼으로 완전히 전환한다.
+목표: `legacy/ai/**` 레거시 런타임(import 경로: `ai.*`)과 v1(job) 그래프 포맷을 **계획적으로 제거**하고, v2(node) 그래프 기반 플랫폼으로 완전히 전환한다.
 
 이 문서는 Phase 4(`P4.*`)의 기준 문서이며, “언제/무엇을 기준으로 레거시를 없애는가”를 정의한다.
 
 ## What Counts As “Legacy”
 
-- 코드: `src/ai/**`
+- 코드: `legacy/ai/**` (+ `src/ai` shim)
 - v1(job) 그래프 포맷: `version: 1`
 - 레거시 그래프(v1): `configs/graphs/legacy_pipeline.yaml`
 - Phase 0 호환 job: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
@@ -58,11 +58,11 @@ Baseline 후보(조정 가능):
 
 현재 기록:
 - v1 deprecation 시작일: **2026-02-14**
-- `src/ai/**` 제거 가능 최단일: **2026-05-15** (>= 90 days after `P4.3`)
+- `legacy/ai/**` 제거 가능 최단일: **2026-05-15** (>= 90 days after `P4.3`)
 
 ## Operational Policy (Until Removed)
 
-- `src/ai/**`는 “기능 추가 금지(Freeze)”가 기본이다.
+- `legacy/ai/**`는 “기능 추가 금지(Freeze)”가 기본이다.
   - 허용: 보안/크래시/데이터 손실 버그 픽스
   - 금지: 신규 기능/새 플러그인 경계 확장/새 설정 키 추가
 

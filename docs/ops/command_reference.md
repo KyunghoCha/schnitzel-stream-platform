@@ -27,7 +27,7 @@ Universal stream platform entrypoint (SSOT).
 
 Defaults:
 - Default graph (v2): `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
-- Legacy graph (v1): `configs/graphs/legacy_pipeline.yaml` (deprecated; runs `src/ai/**`)
+- Legacy graph (v1): `configs/graphs/legacy_pipeline.yaml` (deprecated; runs `legacy/ai/**` via `src/ai` shim)
 
 Note:
 - `python -m schnitzel_stream` supports both v1 (legacy job graph) and v2 (node graph).
@@ -548,7 +548,7 @@ export PYTHONPATH=src
 
 기본값:
 - 기본 그래프(v2): `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
-- 레거시 그래프(v1): `configs/graphs/legacy_pipeline.yaml` (deprecated; `src/ai/**` 실행)
+- 레거시 그래프(v1): `configs/graphs/legacy_pipeline.yaml` (deprecated; `legacy/ai/**` 실행, `src/ai` shim)
 
 참고:
 - `python -m schnitzel_stream`는 v1(레거시 job 그래프)과 v2(node graph)를 모두 지원합니다.

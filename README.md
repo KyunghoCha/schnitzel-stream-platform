@@ -91,7 +91,7 @@ v1 graphs exist to keep migration reversible while the v2 platform evolves.
 
 - Default v2 graph: `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
 - Legacy v1 graph (deprecated): `configs/graphs/legacy_pipeline.yaml`
-- Legacy runtime remains under `src/ai/` and is executed via the v1 job graph.
+- Legacy runtime is quarantined under `legacy/ai/` (import path remains `ai.*` via `src/ai` shim) and is executed via the v1 job graph.
 
 ---
 

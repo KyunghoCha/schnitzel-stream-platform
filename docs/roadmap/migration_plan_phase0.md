@@ -33,7 +33,7 @@ Note:
    - Phase 0 default graph was `configs/graphs/legacy_pipeline.yaml` (v1 job graph).
    - Phase 4 default graph is `configs/graphs/dev_cctv_e2e_mock_v2.yaml` (v2 node graph).
 6. **Test migration**: switch subprocess integration/regression tests from `-m ai.pipeline` to `-m schnitzel_stream`.
-7. **Disable legacy CLI**: keep `src/ai/pipeline/__main__.py` but make it fail-fast with a clear migration message.
+7. **Disable legacy CLI**: keep `legacy/ai/pipeline/__main__.py` but make it fail-fast with a clear migration message.
 8. **Ops + docs migration**: update Docker CMD, scripts, and docs to reference `python -m schnitzel_stream` instead of `python -m ai.pipeline`.
 9. **SSOT documents (this change-set)**: add `docs/design/architecture_2.0.md`, update `docs/index.md` and `docs/specs/pipeline_spec.md` to reflect the new entrypoint and Phase 0 indirection.
 

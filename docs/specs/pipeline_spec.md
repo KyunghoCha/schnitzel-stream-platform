@@ -166,15 +166,15 @@ Note:
 - Entrypoint/CLI: `src/schnitzel_stream/cli/__main__.py`
 - Legacy graph spec (v1): `configs/graphs/legacy_pipeline.yaml`
 - Phase 0 legacy job: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
-- Pipeline core: `src/ai/pipeline/core.py`
-- Async processor: `src/ai/pipeline/processor.py`
-- Event builders: `src/ai/pipeline/events.py`
-- Config loader: `src/ai/pipeline/config.py`, `src/ai/config.py`
-- Sources: `src/ai/pipeline/sources/` (package: `file.py`, `rtsp.py`, `webcam.py`, `threaded.py`)
-- Sensor runtime: `src/ai/pipeline/sensors/` (`protocol.py`, `loader.py`, `runtime.py`, `builder.py`, `fusion.py`)
-- Sampler: `src/ai/pipeline/sampler.py`
-- Visualizer: `src/ai/vision/visualizer.py`
-- Emitters/backend: `src/ai/pipeline/emitters/` (compat shim: `src/ai/pipeline/emitter.py`), `src/ai/clients/backend_api.py`
+- Pipeline core: `legacy/ai/pipeline/core.py`
+- Async processor: `legacy/ai/pipeline/processor.py`
+- Event builders: `legacy/ai/pipeline/events.py`
+- Config loader: `legacy/ai/pipeline/config.py`, `legacy/ai/config.py`
+- Sources: `legacy/ai/pipeline/sources/` (package: `file.py`, `rtsp.py`, `webcam.py`, `threaded.py`)
+- Sensor runtime: `legacy/ai/pipeline/sensors/` (`protocol.py`, `loader.py`, `runtime.py`, `builder.py`, `fusion.py`)
+- Sampler: `legacy/ai/pipeline/sampler.py`
+- Visualizer: `legacy/ai/vision/visualizer.py`
+- Emitters/backend: `legacy/ai/pipeline/emitters/` (compat shim: `legacy/ai/pipeline/emitter.py`), `legacy/ai/clients/backend_api.py`
 
 ---
 
@@ -343,12 +343,12 @@ Note:
 - 엔트리/CLI: `src/schnitzel_stream/cli/__main__.py`
 - 레거시 그래프 스펙(v1): `configs/graphs/legacy_pipeline.yaml`
 - Phase 0 레거시 job: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
-- 파이프라인 코어: `src/ai/pipeline/core.py`
-- 비동기 프로세서: `src/ai/pipeline/processor.py`
-- 이벤트 빌더: `src/ai/pipeline/events.py`
-- 설정 로더: `src/ai/pipeline/config.py`, `src/ai/config.py`
-- 소스: `src/ai/pipeline/sources/` (`file.py`, `rtsp.py`, `webcam.py`, `threaded.py`)
-- 센서 런타임: `src/ai/pipeline/sensors/` (`protocol.py`, `loader.py`, `runtime.py`, `builder.py`, `fusion.py`)
-- 샘플러: `src/ai/pipeline/sampler.py`
-- 시각화: `src/ai/vision/visualizer.py`
-- 에미터/백엔드: `src/ai/pipeline/emitters/` (호환 shim: `src/ai/pipeline/emitter.py`), `src/ai/clients/backend_api.py`
+- 파이프라인 코어: `legacy/ai/pipeline/core.py`
+- 비동기 프로세서: `legacy/ai/pipeline/processor.py`
+- 이벤트 빌더: `legacy/ai/pipeline/events.py`
+- 설정 로더: `legacy/ai/pipeline/config.py`, `legacy/ai/config.py`
+- 소스: `legacy/ai/pipeline/sources/` (`file.py`, `rtsp.py`, `webcam.py`, `threaded.py`)
+- 센서 런타임: `legacy/ai/pipeline/sensors/` (`protocol.py`, `loader.py`, `runtime.py`, `builder.py`, `fusion.py`)
+- 샘플러: `legacy/ai/pipeline/sampler.py`
+- 시각화: `legacy/ai/vision/visualizer.py`
+- 에미터/백엔드: `legacy/ai/pipeline/emitters/` (호환 shim: `legacy/ai/pipeline/emitter.py`), `legacy/ai/clients/backend_api.py`
