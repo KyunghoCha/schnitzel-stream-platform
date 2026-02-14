@@ -1,0 +1,85 @@
+version: 2
+nodes:
+  - id: frames
+    kind: source
+    plugin: schnitzel_stream.nodes.dev:StaticSource
+    config:
+      packets:
+        - kind: frame
+          source_id: cam01
+          ts: "2026-02-14T00:00:00Z"
+          payload: { frame: null, frame_idx: 0 }
+        - kind: frame
+          source_id: cam01
+          ts: "2026-02-14T00:00:01Z"
+          payload: { frame: null, frame_idx: 1 }
+        - kind: frame
+          source_id: cam01
+          ts: "2026-02-14T00:00:02Z"
+          payload: { frame: null, frame_idx: 2 }
+
+  - id: sample
+    kind: node
+    plugin: schnitzel_stream.nodes.video:EveryNthFrameSamplerNode
+    config:
+      every_n: 1
+
+  - id: detect
+    kind: node
+    plugin: schnitzel_stream.nodes.mock_detection:MockDetectorNode
+    config:
+      emit_every_n: 1
+      event_type: ZONE_INTRUSION
+      object_type: PERSON
+      severity: LOW
+      confidence: 0.75
+      track_id: frame_idx
+      bbox: { x1: 2, y1: 2, x2: 4, y2: 4 }
+
+  - id: events
+    kind: node
+    plugin: schnitzel_stream.nodes.event_builder:ProtocolV02EventBuilderNode
+    config:
+      site_id: S001
+
+  - id: zones
+    kind: node
+    plugin: schnitzel_stream.nodes.policy:ZonePolicyNode
+    config:
+      rule_map:
+        ZONE_INTRUSION: bottom_center
+      zones:
+        - zone_id: Z1
+          enabled: true
+          polygon: [[0, 0], [10, 0], [10, 10], [0, 10]]
+
+  - id: dedup
+    kind: node
+    plugin: schnitzel_stream.nodes.policy:DedupPolicyNode
+    config:
+      cooldown_sec: 9999.0
+      prune_interval: 1
+
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "E2E "
+      forward: true
+
+edges:
+  - from: frames
+    to: sample
+  - from: sample
+    to: detect
+  - from: detect
+    to: events
+  - from: events
+    to: zones
+  - from: zones
+    to: dedup
+  - from: dedup
+    to: out
+
+config: {}
+
