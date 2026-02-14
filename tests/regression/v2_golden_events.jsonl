@@ -1,0 +1,3 @@
+{"event_type":"ZONE_INTRUSION","object_type":"PERSON","severity":"LOW","track_id":0,"bbox":{"x1":2,"y1":2,"x2":4,"y2":4},"confidence":0.75,"zone":{"zone_id":"Z1","inside":true}}
+{"event_type":"ZONE_INTRUSION","object_type":"PERSON","severity":"LOW","track_id":1,"bbox":{"x1":2,"y1":2,"x2":4,"y2":4},"confidence":0.75,"zone":{"zone_id":"Z1","inside":true}}
+{"event_type":"ZONE_INTRUSION","object_type":"PERSON","severity":"LOW","track_id":2,"bbox":{"x1":2,"y1":2,"x2":4,"y2":4},"confidence":0.75,"zone":{"zone_id":"Z1","inside":true}}
