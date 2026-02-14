@@ -66,6 +66,18 @@ Current position: **Phase 3**
 - `P3.2` Autonomic tuning hooks (policy-driven throttles). `DONE` (a792677)
 - `P3.3` Optional LLM/controller layer (human-in-the-loop, gated). `NOW` (optional)
 
+### Phase 4: Legacy Decommission (LATER)
+
+Intent:
+- Remove `src/ai/*` only after v2 graphs cover the required production behavior.
+- Prefer extraction (separate package/repo) over hard-delete if external users still depend on it.
+
+- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `LATER`
+- `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `LATER`
+- `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `LATER`
+- `P4.4` Extract legacy runtime (`src/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `LATER`
+- `P4.5` Remove legacy runtime from main tree after the deprecation window. `LATER`
+
 ## Verification
 
 - Executed (local): `python3 -m compileall -q src tests`
