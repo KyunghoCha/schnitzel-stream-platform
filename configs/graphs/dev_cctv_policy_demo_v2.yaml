@@ -1,0 +1,71 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.dev:StaticSource
+    config:
+      packets:
+        - kind: event
+          source_id: cam01
+          payload:
+            event_type: ZONE_INTRUSION
+            camera_id: cam01
+            track_id: 1
+            severity: LOW
+            bbox: { x1: 2, y1: 2, x2: 4, y2: 4 }
+
+        # Same event again: should be dropped by dedup (cooldown window).
+        - kind: event
+          source_id: cam01
+          payload:
+            event_type: ZONE_INTRUSION
+            camera_id: cam01
+            track_id: 1
+            severity: LOW
+            bbox: { x1: 2, y1: 2, x2: 4, y2: 4 }
+
+        # Severity change: should be accepted even within cooldown.
+        - kind: event
+          source_id: cam01
+          payload:
+            event_type: ZONE_INTRUSION
+            camera_id: cam01
+            track_id: 1
+            severity: HIGH
+            bbox: { x1: 2, y1: 2, x2: 4, y2: 4 }
+
+  - id: zones
+    kind: node
+    plugin: schnitzel_stream.nodes.policy:ZonePolicyNode
+    config:
+      rule_map:
+        ZONE_INTRUSION: bottom_center
+      zones:
+        - zone_id: Z1
+          enabled: true
+          polygon: [[0, 0], [10, 0], [10, 10], [0, 10]]
+
+  - id: dedup
+    kind: node
+    plugin: schnitzel_stream.nodes.policy:DedupPolicyNode
+    config:
+      cooldown_sec: 10.0
+      prune_interval: 1
+
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "CCTV "
+      forward: true
+
+edges:
+  - from: src
+    to: zones
+  - from: zones
+    to: dedup
+  - from: dedup
+    to: out
+
+config: {}
+
