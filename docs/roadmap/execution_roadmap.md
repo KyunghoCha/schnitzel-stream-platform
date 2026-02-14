@@ -1,8 +1,10 @@
 # Execution Roadmap (Platform Pivot SSOT)
 
-Last updated: 2026-02-13
+Last updated: 2026-02-14
 
 This document is the **execution SSOT** for the platform pivot.
+
+Current step id: `P4.1`
 
 Rule:
 - When reporting progress (in issues/PRs/chat), always reference the **current step id** (example: `P1.4/8`).
@@ -42,7 +44,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 3**
+Current position: **Phase 4** (legacy decommission is now the priority; `P3.3` is deferred)
 
 ### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -64,17 +66,18 @@ Current position: **Phase 3**
 
 - `P3.1` Unified metrics/health contract across transports. `DONE` (e6d14c5)
 - `P3.2` Autonomic tuning hooks (policy-driven throttles). `DONE` (a792677)
-- `P3.3` Optional LLM/controller layer (human-in-the-loop, gated). `NOW` (optional)
+- `P3.3` Optional LLM/controller layer (human-in-the-loop, gated). `NEXT` (optional)
 
-### Phase 4: Legacy Decommission (LATER)
+### Phase 4: Legacy Decommission (IN PROGRESS)
 
 Intent:
 - Remove `src/ai/*` only after v2 graphs cover the required production behavior.
 - Prefer extraction (separate package/repo) over hard-delete if external users still depend on it.
+- Legacy removal requires a **deprecation window**: do not delete `src/ai/*` earlier than **90 days after** `P4.3` lands.
 
-- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `LATER`
-- `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `LATER`
-- `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `LATER`
+- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `NOW` (SSOT: `docs/roadmap/legacy_decommission.md`)
+- `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `NEXT`
+- `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `NEXT`
 - `P4.4` Extract legacy runtime (`src/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `LATER`
 - `P4.5` Remove legacy runtime from main tree after the deprecation window. `LATER`
 
