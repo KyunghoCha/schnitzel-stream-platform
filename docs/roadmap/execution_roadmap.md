@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P7.1`
+Current step id: `P7.2`
 
 ## English
 
@@ -134,11 +134,11 @@ Intent:
 Intent:
 - Make "what can cross a boundary" explicit (in-proc objects vs durable/IPC/network portability).
 
-- `P7.1` Payload portability policy + validator enforcement. `NOW`
+- `P7.1` Payload portability policy + validator enforcement. `DONE` (18ddb75)
   - DoD:
     - graphs fail validation if a non-portable payload (ex: raw frames) is routed through durable/network lanes
     - durable queue nodes are explicitly documented as JSON-only until a blob/handle strategy exists
-- `P7.2` Blob/handle strategy (`payload_ref`) for large/binary payloads (frames, audio). `LATER`
+- `P7.2` Blob/handle strategy (`payload_ref`) for large/binary payloads (frames, audio). `NOW`
   - DoD:
     - `StreamPacket` supports a portable reference form (file/shm/uri) with clear lifecycle rules
 
@@ -313,11 +313,11 @@ Intent:
 의도(Intent):
 - “어떤 데이터가 경계를 넘을 수 있는가”를 명시합니다(in-proc 객체 vs durable/IPC/network).
 
-- `P7.1` payload 이식성 정책 + validator 강제. `NOW`
+- `P7.1` payload 이식성 정책 + validator 강제. `DONE` (18ddb75)
   - DoD:
     - non-portable payload(예: raw frame)가 durable/network 경로로 라우팅되면 validate에서 실패합니다.
     - durable queue 노드는 blob/handle 전략이 나오기 전까지 JSON-only임을 문서화합니다.
-- `P7.2` 큰/바이너리 payload(프레임/오디오)용 handle 전략(`payload_ref`). `LATER`
+- `P7.2` 큰/바이너리 payload(프레임/오디오)용 handle 전략(`payload_ref`). `NOW`
   - DoD:
     - `StreamPacket`이 file/shm/uri 기반 portable reference를 지원하며, lifecycle 규칙이 명확합니다.
 
