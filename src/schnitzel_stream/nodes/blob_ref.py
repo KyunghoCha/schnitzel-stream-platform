@@ -60,6 +60,8 @@ class BytesToFileRefNode:
 
     INPUT_KINDS = {"bytes"}
     OUTPUT_KINDS = {"bytes_ref"}
+    INPUT_PROFILE = "inproc_any"
+    OUTPUT_PROFILE = "ref_portable"
 
     def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
         cfg = dict(config or {})
@@ -129,6 +131,8 @@ class FileRefToBytesNode:
 
     INPUT_KINDS = {"bytes_ref"}
     OUTPUT_KINDS = {"bytes"}
+    INPUT_PROFILE = "ref_portable"
+    OUTPUT_PROFILE = "inproc_any"
 
     def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
         cfg = dict(config or {})

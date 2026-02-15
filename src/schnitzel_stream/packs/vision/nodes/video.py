@@ -55,6 +55,7 @@ class OpenCvVideoFileSource:
     """
 
     OUTPUT_KINDS = {"frame"}
+    OUTPUT_PROFILE = "inproc_any"
 
     node_id: str
     path: str
@@ -157,6 +158,7 @@ class OpenCvRtspSource:
     """
 
     OUTPUT_KINDS = {"frame"}
+    OUTPUT_PROFILE = "inproc_any"
 
     node_id: str
     url: str
@@ -294,6 +296,7 @@ class OpenCvWebcamSource:
     """
 
     OUTPUT_KINDS = {"frame"}
+    OUTPUT_PROFILE = "inproc_any"
 
     node_id: str
     camera_index: int
@@ -425,6 +428,8 @@ class EveryNthFrameSamplerNode:
 
     INPUT_KINDS = {"frame"}
     OUTPUT_KINDS = {"frame"}
+    INPUT_PROFILE = "inproc_any"
+    OUTPUT_PROFILE = "inproc_any"
 
     node_id: str
     every_n: int

@@ -41,6 +41,8 @@ class HttpJsonSink:
     INPUT_KINDS = {"*"}
     OUTPUT_KINDS = {"*"}
     REQUIRES_PORTABLE_PAYLOAD = True
+    INPUT_PROFILE = "json_portable"
+    OUTPUT_PROFILE = "json_portable"
 
     def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
         cfg = dict(config or {})

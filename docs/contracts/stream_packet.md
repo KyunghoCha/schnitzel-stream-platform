@@ -32,6 +32,10 @@ Intent:
 - Portable payload boundary (P7.1 draft):
   - Durable lanes (example: SQLite queue) are **JSON-only**: `payload` and `meta` must be JSON-serializable.
   - The runtime enforces this at enqueue time; the graph validator also rejects known non-portable kinds (example: `frame`) routed into durable nodes.
+- Payload profile vocabulary (P10.5 draft):
+  - `inproc_any`: process-local payloads are allowed (may be non-portable)
+  - `json_portable`: payload/meta must remain JSON-serializable across boundaries
+  - `ref_portable`: payload carries portable references (example: `bytes_ref`) instead of raw binary bytes
 
 ### Examples
 
@@ -123,6 +127,10 @@ Blob reference packet (portable payload handle; JSON-only):
 - 이식 가능한 payload 경계(P7.1 초안):
   - Durable lane(예: SQLite queue)은 **JSON-only**입니다: `payload`와 `meta`는 JSON 직렬화 가능해야 합니다.
   - 런타임은 enqueue 시점에 이를 강제하며, 그래프 validator도 알려진 non-portable kind(예: `frame`)가 durable 노드로 라우팅되면 실패시킵니다.
+- Payload profile 용어(P10.5 초안):
+  - `inproc_any`: 프로세스 내부 payload 허용(비이식 payload 포함 가능)
+  - `json_portable`: 경계 통과 시 payload/meta가 JSON 직렬화 가능해야 함
+  - `ref_portable`: raw 바이너리 대신 portable 참조(`bytes_ref` 등)로 전달
 
 ### 예시
 

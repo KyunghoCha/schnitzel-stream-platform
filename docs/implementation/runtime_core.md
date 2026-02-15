@@ -25,6 +25,19 @@ Defines the active runtime core for `version: 2` node graphs.
 4. Run source iterators and route packets in-process.
 5. Emit metrics/run report.
 
+## Payload Profiles (P10.5 draft)
+
+- Validator may use plugin-declared profiles:
+  - `INPUT_PROFILE`
+  - `OUTPUT_PROFILE`
+- Supported values:
+  - `inproc_any`
+  - `json_portable`
+  - `ref_portable`
+- Backward compatibility:
+  - plugins that still use `REQUIRES_PORTABLE_PAYLOAD` remain supported
+  - validator bridges legacy flags to profile checks
+
 ## Non-goals (Current)
 
 - distributed scheduler
@@ -55,6 +68,19 @@ Defines the active runtime core for `version: 2` node graphs.
 3. `PluginRegistry`로 플러그인 로딩
 4. source iterator 실행 및 in-proc 패킷 라우팅
 5. 메트릭/실행 리포트 출력
+
+## Payload Profile (P10.5 초안)
+
+- Validator는 플러그인이 선언한 profile 속성을 사용할 수 있다:
+  - `INPUT_PROFILE`
+  - `OUTPUT_PROFILE`
+- 지원 값:
+  - `inproc_any`
+  - `json_portable`
+  - `ref_portable`
+- 하위 호환:
+  - 기존 `REQUIRES_PORTABLE_PAYLOAD` 기반 플러그인은 계속 지원
+  - validator가 레거시 플래그를 profile 검증으로 브리지
 
 ## 현재 비범위
 

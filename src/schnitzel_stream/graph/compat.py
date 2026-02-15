@@ -16,6 +16,7 @@ from collections import defaultdict
 import re
 from typing import Any
 
+from schnitzel_stream.contracts.payload_profile import is_profile_compatible, normalize_profile
 from schnitzel_stream.graph.model import EdgeSpec, NodeSpec
 from schnitzel_stream.plugins.registry import PluginRegistry
 
@@ -53,6 +54,13 @@ def _parse_kinds(raw: Any, *, attr: str, plugin: str) -> set[str] | None:
 
 def _is_wildcard(kinds: set[str] | None) -> bool:
     return kinds is None or "*" in kinds
+
+
+def _parse_profile(raw: Any, *, attr: str, plugin: str) -> str | None:
+    try:
+        return normalize_profile(raw)
+    except ValueError as exc:
+        raise GraphCompatibilityError(f"{plugin} {attr} is invalid: {exc}") from exc
 
 
 def validate_ports(edges: list[EdgeSpec]) -> None:
@@ -115,7 +123,8 @@ def validate_plugin_contracts(
 
     in_kinds: dict[str, set[str] | None] = {}
     out_kinds: dict[str, set[str] | None] = {}
-    requires_portable_input: dict[str, bool] = {}
+    in_profiles: dict[str, str | None] = {}
+    out_profiles: dict[str, str | None] = {}
 
     for n in nodes:
         target = reg.resolve(n.plugin)
@@ -136,16 +145,41 @@ def validate_plugin_contracts(
         declared_out = _parse_kinds(getattr(target, "OUTPUT_KINDS", None), attr="OUTPUT_KINDS", plugin=n.plugin)
         in_kinds[n.node_id] = declared_in
         out_kinds[n.node_id] = declared_out
-        requires_portable_input[n.node_id] = bool(getattr(target, "REQUIRES_PORTABLE_PAYLOAD", False))
+
+        in_profile = _parse_profile(getattr(target, "INPUT_PROFILE", None), attr="INPUT_PROFILE", plugin=n.plugin)
+        out_profile = _parse_profile(getattr(target, "OUTPUT_PROFILE", None), attr="OUTPUT_PROFILE", plugin=n.plugin)
+
+        # Backward-compatible bridge:
+        # - nodes that only expose REQUIRES_PORTABLE_PAYLOAD remain portable-aware.
+        # - frame/bytes producers remain in-proc by default unless they declare a portable profile explicitly.
+        if in_profile is None and bool(getattr(target, "REQUIRES_PORTABLE_PAYLOAD", False)):
+            in_profile = "json_portable"
+        if out_profile is None and bool(getattr(target, "REQUIRES_PORTABLE_PAYLOAD", False)):
+            out_profile = "json_portable"
+        if out_profile is None and not _is_wildcard(declared_out):
+            assert declared_out is not None
+            if not declared_out.isdisjoint(_NON_PORTABLE_KINDS):
+                out_profile = "inproc_any"
+
+        in_profiles[n.node_id] = in_profile
+        out_profiles[n.node_id] = out_profile
 
     for e in edges:
         src_out = out_kinds.get(e.src)
         dst_in = in_kinds.get(e.dst)
+        src_profile = out_profiles.get(e.src)
+        dst_profile = in_profiles.get(e.dst)
 
-        if requires_portable_input.get(e.dst, False):
-            # Best-effort v1 portability check:
-            # - If a node declares it requires portable payloads, reject known non-portable kinds.
-            # - Runtime still enforces JSON serialization for durable lanes.
+        if src_profile is not None and dst_profile is not None:
+            if not is_profile_compatible(src_profile, dst_profile):
+                raise GraphCompatibilityError(
+                    "payload profile mismatch: "
+                    f"{e.src}({src_profile}) -> {e.dst}({dst_profile}) is not compatible"
+                )
+        elif dst_profile in {"json_portable", "ref_portable"}:
+            # Best-effort fallback for old plugins without OUTPUT_PROFILE:
+            # - If destination expects portability, reject known non-portable source kinds.
+            # - Runtime still enforces JSON serialization at durable sink boundaries.
             if not _is_wildcard(src_out):
                 assert src_out is not None
                 if not src_out.isdisjoint(_NON_PORTABLE_KINDS):
