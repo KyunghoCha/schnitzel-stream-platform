@@ -64,6 +64,9 @@ jobs:
       - name: Compile check
         run: python -m compileall -q src tests
 
+      - name: Docs hygiene gate
+        run: python scripts/docs_hygiene.py --strict
+
       - name: Validate representative v2 graphs
         env:
           PYTHONPATH: src

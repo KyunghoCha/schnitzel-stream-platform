@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Docs: docs/implementation/80-testing/regression/spec.md
+# Docs: docs/implementation/testing_quality.md, docs/ops/command_reference.md
 from __future__ import annotations
 
 import argparse

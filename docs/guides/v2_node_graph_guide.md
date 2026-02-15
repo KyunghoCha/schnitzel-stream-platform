@@ -2,9 +2,17 @@
 
 Last updated: 2026-02-16
 
-현재 step id (SSOT): `P3.3` (`docs/roadmap/execution_roadmap.md` 참고)
+## English
 
-이 문서는 개인 학습/레포 이해를 위한 참고 문서이며 한국어로만 작성했습니다.
+This guide explains v2 node graph fundamentals, node catalog, and replacement rules.
+The detailed walkthrough remains in Korean for now, but the normative runtime contract is unchanged:
+- node-to-node contract: `StreamPacket`
+- graph runtime: `version: 2` node graph
+- compatibility checks: `graph.validate` + `graph.compat`
+
+## 한국어
+
+현재 step id (SSOT): `P10.1` (`docs/roadmap/execution_roadmap.md` 참고)
 
 ## 1) v2 노드 그래프가 뭔가
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # scripts/check_rtsp.py
-# Docs: docs/implementation/10-rtsp-stability/README.md
+# Docs: docs/ops/command_reference.md, docs/implementation/testing_quality.md
 """
 RTSP E2E 안정성 테스트 (v2 graph, cross-platform).
 
