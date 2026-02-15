@@ -276,6 +276,145 @@ class OpenCvRtspSource:
 
 
 @dataclass
+class OpenCvWebcamSource:
+    """Read frames from a webcam device and emit `kind=frame` packets.
+
+    Output payload:
+    - frame: np.ndarray (BGR)  (in-proc only; non-portable)
+    - frame_idx: int
+
+    Config:
+    - camera_index: int (default: 0)
+    - source_id: str (default: node_id)
+    - max_frames: int (default: 0 -> no limit)
+    - reconnect: bool (default: true)
+    - reconnect_backoff_sec: float (default: 0.5)
+    - reconnect_backoff_max_sec: float (default: 5.0)
+    - reconnect_max_attempts: int (default: 0 -> unlimited)
+    """
+
+    OUTPUT_KINDS = {"frame"}
+
+    node_id: str
+    camera_index: int
+    source_id: str
+    max_frames: int
+    reconnect: bool
+    reconnect_backoff_sec: float
+    reconnect_backoff_max_sec: float
+    reconnect_max_attempts: int
+
+    def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
+        if cv2 is None:
+            raise ImportError("OpenCvWebcamSource requires opencv-python(-headless)")
+
+        cfg = dict(config or {})
+
+        cam_idx = int(cfg.get("camera_index", 0))
+        if cam_idx < 0:
+            raise ValueError("OpenCvWebcamSource config.camera_index must be >= 0")
+
+        self.node_id = str(node_id or "webcam")
+        self.camera_index = cam_idx
+        self.source_id = str(cfg.get("source_id") or self.node_id)
+
+        max_frames = int(cfg.get("max_frames", 0))
+        if max_frames < 0:
+            raise ValueError("OpenCvWebcamSource config.max_frames must be >= 0")
+        self.max_frames = max_frames
+
+        self.reconnect = bool(cfg.get("reconnect", True))
+        self.reconnect_backoff_sec = float(cfg.get("reconnect_backoff_sec", 0.5))
+        self.reconnect_backoff_max_sec = float(cfg.get("reconnect_backoff_max_sec", 5.0))
+        self.reconnect_max_attempts = int(cfg.get("reconnect_max_attempts", 0))
+
+        self._cap = None
+        self._closed = False
+        self._epoch = 0
+        self._open_capture_or_raise()
+
+    def _open_capture(self) -> Any:
+        assert cv2 is not None  # for type checkers
+        cap = cv2.VideoCapture(int(self.camera_index))
+        if not cap.isOpened():
+            try:
+                cap.release()
+            finally:
+                return None
+        return cap
+
+    def _open_capture_or_raise(self) -> None:
+        if self._closed:
+            return
+
+        attempts = 0
+        backoff = max(0.0, float(self.reconnect_backoff_sec))
+        backoff_max = max(backoff, float(self.reconnect_backoff_max_sec))
+
+        while not self._closed:
+            cap = self._open_capture()
+            if cap is not None:
+                self._cap = cap
+                self._epoch += 1
+                return
+
+            attempts += 1
+            if not self.reconnect:
+                raise RuntimeError(f"failed to open webcam device: index={self.camera_index}")
+            if self.reconnect_max_attempts > 0 and attempts >= self.reconnect_max_attempts:
+                raise RuntimeError(
+                    f"failed to open webcam device after {attempts} attempts: index={self.camera_index}",
+                )
+            if backoff > 0:
+                time.sleep(backoff)
+            backoff = min(backoff_max, backoff * 2.0 if backoff > 0 else 0.0)
+
+    def run(self) -> Iterable[StreamPacket]:
+        if self._closed:
+            return []
+
+        frame_idx = 0
+        while not self._closed:
+            cap = getattr(self, "_cap", None)
+            if cap is None:
+                break
+
+            ok, frame = cap.read()
+            if not ok:
+                if not self.reconnect:
+                    break
+                try:
+                    cap.release()
+                finally:
+                    self._cap = None
+                self._open_capture_or_raise()
+                continue
+
+            ts = datetime.now(timezone.utc).isoformat()
+            meta = {
+                "frame_idx": int(frame_idx),
+                "camera_index": int(self.camera_index),
+                "epoch": int(self._epoch),
+                # Intent: include epoch so reconnect cycles don't reuse frame IDs.
+                "idempotency_key": f"frame:{self.source_id}:{self._epoch}:{frame_idx}",
+            }
+            payload = {"frame": frame, "frame_idx": int(frame_idx)}
+            yield StreamPacket.new(kind="frame", source_id=self.source_id, payload=payload, ts=ts, meta=meta)
+
+            frame_idx += 1
+            if self.max_frames and frame_idx >= self.max_frames:
+                break
+
+    def close(self) -> None:
+        if getattr(self, "_closed", True):
+            return
+        self._closed = True
+        cap = getattr(self, "_cap", None)
+        if cap is not None:
+            cap.release()
+
+
+@dataclass
 class EveryNthFrameSamplerNode:
     """Drop frames except every Nth packet.
 
