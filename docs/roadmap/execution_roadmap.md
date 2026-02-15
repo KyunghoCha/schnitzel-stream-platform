@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P9.2`
+Current step id: `P4.5`
 
 ## English
 
@@ -47,7 +47,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 9** (`P9.2` is NOW; `P4.5` remains gated by the deprecation window; `P3.3` remains optional)
+Current position: **Phase 9 complete** (`P4.5` is GATED until 2026-05-15; `P3.3` remains optional NEXT)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -91,7 +91,7 @@ Intent:
   - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
 - `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
-- `P4.5` Remove legacy runtime from main tree after the deprecation window. `GATED` (>= 90 days after `P4.3`)
+- `P4.5` Remove legacy runtime from main tree after the deprecation window. `GATED` (>= 90 days after `P4.3`; earliest date: 2026-05-15)
 
 #### Phase 5: Platform Generalization (Domain-Neutral) (DONE)
 
@@ -152,14 +152,14 @@ Intent:
 - `P8.3` HTTP sink plugin (idempotency + retry policy) + tests + demo graph. `DONE` (2d7442c, 83baaad)
 - `P8.4` JSONL/file sink plugin + tests. `DONE` (983be3f, c9f831e)
 
-#### Phase 9: Cross-Platform Packaging + Release Discipline (NOW)
+#### Phase 9: Cross-Platform Packaging + Release Discipline (DONE)
 
 - `P9.1` Finalize support matrix and packaging lanes (Docker + no-Docker). `DONE` (36a588c, 166b95e)
   - DoD:
     - documented target list (OS/arch) and lane policy
     - CI verifies at least one "no-Docker" lane (`pip` + venv) end-to-end
     - optional: multi-arch Docker build lane
-- `P9.2` Edge ops conventions (paths, service mode, logs) hardened. `NOW`
+- `P9.2` Edge ops conventions (paths, service mode, logs) hardened. `DONE` (880be80)
 
 #### Research Track (Not On Critical Path)
 
@@ -180,7 +180,7 @@ Intent:
 - What is the Phase 1 runtime execution model?
   - push vs pull, batching/windowing, and backpressure semantics
 - What is the minimal port/type system to prevent invalid graphs without overfitting to CCTV?
-- What are the OS-specific service-mode and default path conventions for long-running edge deployments?
+- What is the cutover communication plan and validation checklist for `P4.5` legacy removal after 2026-05-15?
 
 ---
 
@@ -226,7 +226,7 @@ Intent:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-현재 위치: **Phase 9** (`P9.2`가 NOW이며, `P4.5`는 deprecation window로 GATED 상태, `P3.3`는 optional)
+현재 위치: **Phase 9 완료** (`P4.5`는 2026-05-15까지 GATED, `P3.3`는 optional NEXT)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -270,7 +270,7 @@ Intent:
   - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
 - `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
-- `P4.5` Remove legacy runtime from main tree after the deprecation window. `GATED` (>= 90 days after `P4.3`)
+- `P4.5` Remove legacy runtime from main tree after the deprecation window. `GATED` (>= 90 days after `P4.3`; earliest date: 2026-05-15)
 
 #### Phase 5: 플랫폼 범용화(도메인 중립) (DONE)
 
@@ -331,14 +331,14 @@ Intent:
 - `P8.3` HTTP sink 플러그인(idempotency + retry 정책) + 테스트 + 데모 그래프. `DONE` (2d7442c, 83baaad)
 - `P8.4` JSONL/file sink 플러그인 + 테스트. `DONE` (983be3f, c9f831e)
 
-#### Phase 9: 크로스플랫폼 패키징 + 릴리즈 규율 (NOW)
+#### Phase 9: 크로스플랫폼 패키징 + 릴리즈 규율 (DONE)
 
 - `P9.1` 지원 매트릭스/패키징 레인(Docker + no-Docker) 확정. `DONE` (36a588c, 166b95e)
   - DoD:
     - 타겟(OS/arch)과 레인 정책이 문서화되어야 함
     - CI가 최소 1개의 no-Docker 레인(pip+venv)을 E2E로 검증
     - 옵션: multi-arch Docker 빌드 레인
-- `P9.2` 엣지 운영 규약(경로/서비스 모드/로그) 강화. `NOW`
+- `P9.2` 엣지 운영 규약(경로/서비스 모드/로그) 강화. `DONE` (880be80)
 
 #### 연구 트랙(크리티컬 패스 아님)
 
@@ -359,4 +359,4 @@ Intent:
 - Phase 1 런타임 실행 모델은 무엇인가?
   - push vs pull, 배치/윈도우, 백프레셔 의미론
 - CCTV에 과적합하지 않으면서도 invalid graph를 막는 최소 port/type 시스템은 무엇인가?
-- 장기 실행 엣지 배포에서 OS별 서비스 모드 및 기본 경로 규약을 어떻게 표준화할 것인가?
+- 2026-05-15 이후 `P4.5` 레거시 제거를 위한 커뮤니케이션 계획과 검증 체크리스트를 어떻게 고정할 것인가?
