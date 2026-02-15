@@ -1,57 +1,56 @@
-# Support Matrix (Edge-First, PROVISIONAL)
+# Support Matrix (Edge-First)
 
-Last updated: 2026-02-13
+Last updated: 2026-02-15
 
 ## English
 
 ### Summary
 
-- **SSOT docs used**: `docs/roadmap/strategic_roadmap.md`, `docs/design/architecture_2.0.md`, `docs/implementation/90-packaging/entrypoint/design.md`, `PROMPT_CORE.md`.
-- **Scope**: Define a pragmatic support matrix and packaging strategy for "runs on almost all edges" goals.
-- **Non-scope**: GPU/accelerator-specific builds (Jetson/CUDA/DirectML) are not standardized in Phase 0.
+- **SSOT docs used**: `docs/roadmap/execution_roadmap.md`, `docs/design/architecture_2.0.md`, `docs/contracts/stream_packet.md`.
+- **Scope**: Finalize the Phase 9.1 support matrix and packaging lane policy.
+- **Policy**: Docker is recommended for Linux production ops, but **not required** for platform correctness.
 
-### Risks (P0–P3)
+### Target Matrix
 
-- **P0**: A single packaging method will not cover all edge environments (Docker unavailable, restricted OS images, no compiler toolchain).
-- **P1**: OpenCV and video decode dependencies vary by OS/arch; binary wheels may not exist for niche targets.
-- **P2**: Windows service/daemonization semantics differ from Linux systemd; operational parity requires extra work.
-- **P3**: Shipping "one binary" builds can mask dynamic dependency issues and complicate debugging.
+| Tier | OS | Arch | Lane | Status | Notes |
+|---|---|---|---|---|---|
+| T1 | Linux | amd64 | no-Docker (`pip` + venv) | Supported | CI validated |
+| T1 | Linux | amd64 | Docker | Supported | `Dockerfile` path maintained |
+| T1 | Linux | arm64 | no-Docker (`pip` + venv) | Supported | Runtime target; device-level validation by deployment |
+| T1 | Windows | amd64 | no-Docker (`pip` + venv) | Supported | CI validated |
+| T1 | macOS | amd64/arm64 | no-Docker (`pip` + venv) | Supported | CI validated |
+| T2 | Linux (Raspberry Pi class) | arm64 | no-Docker (`pip` + venv) | Best effort | Plugin/runtime dependency differences may apply |
+| T2 | Linux (Jetson class) | arm64 | custom accelerator lane | Best effort | CUDA/TensorRT stack is deployment-owned |
 
-### Mismatches (path)
+### Packaging Lanes (Finalized for P9.1)
 
-- None found. (This document establishes the current support intent; implementation will be incremental.)
+1. **Lane A (Canonical)**: no-Docker source run (`python -m schnitzel_stream` with venv + `PYTHONPATH=src`).
+2. **Lane B (Ops Convenience)**: Docker image run for Linux operations.
+3. **Lane C (Deployment-specific)**: accelerator-specific/custom plugin stacks (out of core SSOT).
 
-### Fix Plan
+### CI Contract
 
-1. **Baseline runtime** (Phase 0):
-   - Python **3.11** (CI baseline).
-   - Entrypoint: `python -m schnitzel_stream`.
-2. **Primary distribution (Linux edges)**:
-   - Use Docker images (multi-arch): `linux/amd64`, `linux/arm64`.
-   - Build via `docker buildx` in CI when ready.
-3. **Developer distribution (Windows/macOS/Linux)**:
-   - Run from source with `PYTHONPATH=src` and a venv.
-   - Keep dependencies minimal; keep heavy runtimes as optional requirements files.
-4. **Optional "single artifact" distribution (select targets)**:
-   - Evaluate PyInstaller/Nuitka only after Phase 1 runtime boundaries are clearer.
-   - Treat as convenience builds, not the primary ops path.
-5. **Operational contracts**:
-   - Repo-root relative configs: `configs/*`.
-   - Writable paths must be explicit (snapshots/logs/outputs) and documented per target.
+- Mandatory CI matrix: `ubuntu-latest`, `windows-latest`, `macos-latest` on Python 3.11.
+- Mandatory no-Docker smoke lane on Ubuntu:
+  - install deps via `pip`
+  - `python3 -m compileall -q src tests`
+  - validate representative v2 graphs
+  - run one dependency-light v2 graph end-to-end
+
+### Practical Guidance
+
+- Build portable graphs around JSON payload lanes for cross-boundary transport.
+- Keep OpenCV/model/GPU dependencies behind plugin boundaries.
+- Treat platform core compatibility separately from deployment plugin compatibility.
 
 ### Verification
 
-- Executed: N/A (doc-only change).
-- Not executed: N/A.
+- This document is enforced by `.github/workflows/ci.yml` (test matrix + no-Docker smoke lane).
 
-### Open Questions
+### Open Questions (deferred to P9.2)
 
-- What is the official target list?
-  - OS: Linux, Windows, macOS
-  - Arch: amd64, arm64
-  - Edge class: Raspberry Pi / industrial PC / Jetson
-- Do we require Docker on all production edges, or do we need a "no-Docker" packaging lane?
-- How should we handle GPU acceleration portability (CUDA vs OpenVINO vs DirectML)?
+- Service-mode conventions by OS (systemd/Windows Service/launchd).
+- Standard logging/storage path defaults for long-running edge ops.
 
 ---
 
@@ -59,49 +58,48 @@ Last updated: 2026-02-13
 
 ### 요약
 
-- **참조 SSOT 문서**: `docs/roadmap/strategic_roadmap.md`, `docs/design/architecture_2.0.md`, `docs/implementation/90-packaging/entrypoint/design.md`, `PROMPT_CORE.md`.
-- **범위**: “거의 모든 엣지에서 실행” 목표를 위한 현실적인 지원 매트릭스와 패키징 전략을 정의합니다.
-- **비범위**: GPU/가속기별 빌드(Jetson/CUDA/DirectML)는 Phase 0에서 표준화하지 않습니다.
+- **참조 SSOT 문서**: `docs/roadmap/execution_roadmap.md`, `docs/design/architecture_2.0.md`, `docs/contracts/stream_packet.md`.
+- **범위**: Phase 9.1 지원 매트릭스와 패키징 레인 정책 확정.
+- **정책**: Linux 운영에서 Docker를 권장하지만, 플랫폼 정합성의 필수 조건은 아님.
 
-### 리스크 (P0–P3)
+### 타겟 매트릭스
 
-- **P0**: 단일 패키징 방식으로 모든 엣지 환경을 커버할 수 없습니다(Docker 불가, 제한된 OS 이미지, 컴파일러 툴체인 부재 등).
-- **P1**: OpenCV/비디오 디코드 의존성은 OS/arch에 따라 달라지며, 일부 타겟은 바이너리 휠이 없을 수 있습니다.
-- **P2**: Windows 서비스/데몬 의미론은 Linux(systemd)와 달라 운영 동등성을 위해 추가 작업이 필요합니다.
-- **P3**: “단일 바이너리” 배포는 동적 의존성 문제를 가릴 수 있고, 디버깅을 어렵게 만들 수 있습니다.
+| Tier | OS | Arch | 레인 | 상태 | 비고 |
+|---|---|---|---|---|---|
+| T1 | Linux | amd64 | no-Docker (`pip` + venv) | Supported | CI 검증 |
+| T1 | Linux | amd64 | Docker | Supported | `Dockerfile` 경로 유지 |
+| T1 | Linux | arm64 | no-Docker (`pip` + venv) | Supported | 런타임 타겟, 장비 실검증은 배포 책임 |
+| T1 | Windows | amd64 | no-Docker (`pip` + venv) | Supported | CI 검증 |
+| T1 | macOS | amd64/arm64 | no-Docker (`pip` + venv) | Supported | CI 검증 |
+| T2 | Linux (Raspberry Pi 계열) | arm64 | no-Docker (`pip` + venv) | Best effort | 플러그인/런타임 의존성 차이 가능 |
+| T2 | Linux (Jetson 계열) | arm64 | 가속기 전용 커스텀 레인 | Best effort | CUDA/TensorRT 스택은 배포 책임 |
 
-### 불일치(경로)
+### 패키징 레인 (P9.1 확정)
 
-- 발견된 불일치 없음. (이 문서는 지원 의도(intent)를 정의하며, 구현은 점진적으로 진행합니다.)
+1. **Lane A (정본)**: no-Docker 소스 실행 (venv + `PYTHONPATH=src` + `python -m schnitzel_stream`).
+2. **Lane B (운영 편의)**: Linux 운영용 Docker 이미지 실행.
+3. **Lane C (배포 전용)**: 가속기/커스텀 플러그인 스택 (코어 SSOT 범위 밖).
 
-### 실행 계획
+### CI 계약
 
-1. **기본 런타임** (Phase 0):
-   - Python **3.11** (CI 기준).
-   - 엔트리포인트: `python -m schnitzel_stream`.
-2. **주 배포 경로(리눅스 엣지)**:
-   - Docker 이미지(multi-arch): `linux/amd64`, `linux/arm64`.
-   - 준비되면 CI에서 `docker buildx`로 빌드.
-3. **개발자 배포(Windows/macOS/Linux)**:
-   - 소스 실행 + venv + `PYTHONPATH=src`.
-   - 의존성은 최소화하고, 무거운 런타임은 옵션 requirements로 분리.
-4. **선택적 단일 아티팩트 배포(일부 타겟)**:
-   - Phase 1 런타임 경계가 더 명확해진 뒤 PyInstaller/Nuitka를 평가.
-   - 운영 기본 경로가 아닌 convenience build로 취급.
-5. **운영 계약(contracts)**:
-   - repo-root 상대 config: `configs/*`.
-   - writable 경로(스냅샷/로그/출력)는 타겟별로 명시하고 문서화.
+- 필수 CI 매트릭스: Python 3.11 + `ubuntu-latest`/`windows-latest`/`macos-latest`.
+- 필수 Ubuntu no-Docker 스모크 레인:
+  - `pip`로 의존성 설치
+  - `python3 -m compileall -q src tests`
+  - 대표 v2 그래프 validate
+  - 의존성 가벼운 v2 그래프 1개 E2E 실행
+
+### 실무 가이드
+
+- 경계 간 전송이 필요한 그래프는 JSON payload 레인 중심으로 설계.
+- OpenCV/모델/GPU 의존성은 플러그인 경계 뒤로 격리.
+- 플랫폼 코어 호환성과 배포 플러그인 호환성을 분리해 판단.
 
 ### 검증
 
-- 실행됨: 해당 없음(문서 변경).
-- 실행 안 함: 해당 없음.
+- 이 문서는 `.github/workflows/ci.yml`(테스트 매트릭스 + no-Docker 스모크 레인)로 강제됩니다.
 
-### 미해결 질문
+### 미해결 질문 (P9.2로 이관)
 
-- 공식 타겟 리스트는?
-  - OS: Linux, Windows, macOS
-  - Arch: amd64, arm64
-  - Edge class: Raspberry Pi / industrial PC / Jetson
-- 프로덕션 엣지에서 Docker를 필수로 할 것인가, 아니면 “no-Docker” 패키징 레인이 필요한가?
-- GPU 가속 이식성(CUDA vs OpenVINO vs DirectML)을 어떻게 다룰 것인가?
+- OS별 서비스 모드 규약(systemd/Windows Service/launchd).
+- 장기 실행 엣지 운영의 표준 로그/저장 경로 기본값.

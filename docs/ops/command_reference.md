@@ -552,6 +552,21 @@ python scripts/test_hygiene.py --json-out outputs/test_hygiene_report.json
 
 ---
 
+10. Packaging Smoke (No-Docker Lane)
+------------------------------------
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate  # Windows PowerShell: .\\.venv\\Scripts\\Activate.ps1
+pip install -r requirements.txt -r requirements-dev.txt
+export PYTHONPATH=src
+python -m compileall -q src tests
+python -m schnitzel_stream validate --graph configs/graphs/dev_inproc_demo_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --max-events 5
+```
+
+---
+
 ## 한국어
 
 명령어 레퍼런스
@@ -1101,3 +1116,18 @@ python scripts/test_hygiene.py --json-out outputs/test_hygiene_report.json
 2. 런타임 프로필 오버레이 (`app.env` 기준 `configs/dev.yaml` 또는 `configs/prod.yaml`)
 3. 환경 변수 오버라이드 (`AI_*`)
 4. 실행 인자 기반 CLI/런타임 오버라이드 (`--graph`, `--camera-id`, `--video`, `--source-type`, `--camera-index`, `--validate-only`, `--report-json`, `--dry-run`, `--output-jsonl`, `--max-events`, `--visualize`, `--loop`)
+
+---
+
+10. 패키징 스모크 (No-Docker 레인)
+-----------------------------------
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate  # Windows PowerShell: .\\.venv\\Scripts\\Activate.ps1
+pip install -r requirements.txt -r requirements-dev.txt
+export PYTHONPATH=src
+python -m compileall -q src tests
+python -m schnitzel_stream validate --graph configs/graphs/dev_inproc_demo_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --max-events 5
+```
