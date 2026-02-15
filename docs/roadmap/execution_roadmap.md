@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P8.4`
+Current step id: `P9.1`
 
 ## English
 
@@ -47,7 +47,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 8** (`P8.4` is NOW; `P4.5` remains gated by the deprecation window; `P3.3` remains optional)
+Current position: **Phase 9** (`P9.1` is NOW; `P4.5` remains gated by the deprecation window; `P3.3` remains optional)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -142,7 +142,7 @@ Intent:
   - DoD:
     - `StreamPacket` supports a portable reference form (file/shm/uri) with clear lifecycle rules
 
-#### Phase 8: IO Plugin Packs (RTSP/Webcam/HTTP/etc) (NOW)
+#### Phase 8: IO Plugin Packs (RTSP/Webcam/HTTP/etc) (DONE)
 
 Intent:
 - Treat RTSP and "backend" as replaceable adapters. Platform ships with minimal batteries; deployments can bring their own.
@@ -150,11 +150,11 @@ Intent:
 - `P8.1` RTSP source plugin (reconnect/backoff) + tests + demo graph. `DONE` (8cf52e8, 471ff6c)
 - `P8.2` Webcam source plugin + tests + demo graph. `DONE` (3d9e889, 9886e63)
 - `P8.3` HTTP sink plugin (idempotency + retry policy) + tests + demo graph. `DONE` (2d7442c, 83baaad)
-- `P8.4` JSONL/file sink plugin + tests. `NOW`
+- `P8.4` JSONL/file sink plugin + tests. `DONE` (983be3f, c9f831e)
 
-#### Phase 9: Cross-Platform Packaging + Release Discipline (NEXT)
+#### Phase 9: Cross-Platform Packaging + Release Discipline (NOW)
 
-- `P9.1` Finalize support matrix and packaging lanes (Docker + no-Docker). `NEXT`
+- `P9.1` Finalize support matrix and packaging lanes (Docker + no-Docker). `NOW`
   - DoD:
     - documented target list (OS/arch) and lane policy
     - CI verifies at least one "no-Docker" lane (`pip` + venv) end-to-end
@@ -226,7 +226,7 @@ Intent:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-현재 위치: **Phase 8** (`P8.4`가 NOW이며, `P4.5`는 deprecation window로 GATED 상태, `P3.3`는 optional)
+현재 위치: **Phase 9** (`P9.1`이 NOW이며, `P4.5`는 deprecation window로 GATED 상태, `P3.3`는 optional)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -321,7 +321,7 @@ Intent:
   - DoD:
     - `StreamPacket`이 file/shm/uri 기반 portable reference를 지원하며, lifecycle 규칙이 명확합니다.
 
-#### Phase 8: IO 플러그인 팩(RTSP/Webcam/HTTP 등) (NOW)
+#### Phase 8: IO 플러그인 팩(RTSP/Webcam/HTTP 등) (DONE)
 
 의도(Intent):
 - RTSP와 “backend”는 교체 가능한 어댑터입니다. 플랫폼은 최소 배터리를 제공하고, 배포 환경은 필요한 어댑터를 가져옵니다.
@@ -329,11 +329,11 @@ Intent:
 - `P8.1` RTSP source 플러그인(reconnect/backoff) + 테스트 + 데모 그래프. `DONE` (8cf52e8, 471ff6c)
 - `P8.2` Webcam source 플러그인 + 테스트 + 데모 그래프. `DONE` (3d9e889, 9886e63)
 - `P8.3` HTTP sink 플러그인(idempotency + retry 정책) + 테스트 + 데모 그래프. `DONE` (2d7442c, 83baaad)
-- `P8.4` JSONL/file sink 플러그인 + 테스트. `NOW`
+- `P8.4` JSONL/file sink 플러그인 + 테스트. `DONE` (983be3f, c9f831e)
 
-#### Phase 9: 크로스플랫폼 패키징 + 릴리즈 규율 (NEXT)
+#### Phase 9: 크로스플랫폼 패키징 + 릴리즈 규율 (NOW)
 
-- `P9.1` 지원 매트릭스/패키징 레인(Docker + no-Docker) 확정. `NEXT`
+- `P9.1` 지원 매트릭스/패키징 레인(Docker + no-Docker) 확정. `NOW`
   - DoD:
     - 타겟(OS/arch)과 레인 정책이 문서화되어야 함
     - CI가 최소 1개의 no-Docker 레인(pip+venv)을 E2E로 검증
