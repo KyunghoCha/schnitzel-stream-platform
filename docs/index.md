@@ -1,6 +1,6 @@
 # Schnitzel Stream Docs Index
 
-Last updated: 2026-02-15
+Last updated: 2026-02-16
 
 ## English
 
@@ -16,11 +16,14 @@ Runtime baseline:
 1. `docs/roadmap/execution_roadmap.md`
 2. `docs/roadmap/strategic_roadmap.md`
 3. `docs/roadmap/future_backlog.md`
-4. `docs/contracts/stream_packet.md`
-5. `docs/contracts/observability.md`
-6. `docs/design/architecture_2.0.md`
-7. `docs/reference/doc_code_mapping.md`
-8. `docs/ops/command_reference.md`
+4. `docs/reference/document_inventory.md`
+5. `docs/reference/doc_code_mapping.md`
+6. `docs/progress/README.md`
+7. `docs/progress/current_status.md`
+8. `docs/contracts/stream_packet.md`
+9. `docs/contracts/observability.md`
+10. `docs/design/architecture_2.0.md`
+11. `docs/ops/command_reference.md`
 
 ## Active Folders
 
@@ -64,11 +67,14 @@ Runtime baseline:
 1. `docs/roadmap/execution_roadmap.md`
 2. `docs/roadmap/strategic_roadmap.md`
 3. `docs/roadmap/future_backlog.md`
-4. `docs/contracts/stream_packet.md`
-5. `docs/contracts/observability.md`
-6. `docs/design/architecture_2.0.md`
-7. `docs/reference/doc_code_mapping.md`
-8. `docs/ops/command_reference.md`
+4. `docs/reference/document_inventory.md`
+5. `docs/reference/doc_code_mapping.md`
+6. `docs/progress/README.md`
+7. `docs/progress/current_status.md`
+8. `docs/contracts/stream_packet.md`
+9. `docs/contracts/observability.md`
+10. `docs/design/architecture_2.0.md`
+11. `docs/ops/command_reference.md`
 
 ## 활성 폴더
 

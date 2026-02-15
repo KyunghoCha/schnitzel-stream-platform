@@ -1,6 +1,6 @@
 # Documentation Inventory
 
-Last updated: 2026-02-15
+Last updated: 2026-02-16
 
 ## English
 
@@ -31,15 +31,20 @@ Last updated: 2026-02-15
   - `docs/implementation/operations_release.md`
   - `docs/implementation/testing_quality.md`
 - Reference:
+  - `docs/index.md`
   - `docs/reference/doc_code_mapping.md`
   - `docs/reference/document_inventory.md`
+- Progress:
+  - `docs/progress/README.md`
+  - `docs/progress/current_status.md`
 - Usage:
   - `docs/ops/command_reference.md`
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/packs/vision/README.md`
   - `docs/packs/vision/event_protocol_v0.2.md`
+  - `docs/packs/vision/model_class_taxonomy.md`
+  - `docs/packs/vision/model_io_samples.md`
   - `docs/packs/vision/model_interface.md`
-  - `docs/progress/current_status.md`
 
 ## Historical Documentation Set
 
@@ -77,15 +82,20 @@ Last updated: 2026-02-15
   - `docs/implementation/operations_release.md`
   - `docs/implementation/testing_quality.md`
 - 레퍼런스:
+  - `docs/index.md`
   - `docs/reference/doc_code_mapping.md`
   - `docs/reference/document_inventory.md`
+- 진행:
+  - `docs/progress/README.md`
+  - `docs/progress/current_status.md`
 - 사용:
   - `docs/ops/command_reference.md`
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/packs/vision/README.md`
   - `docs/packs/vision/event_protocol_v0.2.md`
+  - `docs/packs/vision/model_class_taxonomy.md`
+  - `docs/packs/vision/model_io_samples.md`
   - `docs/packs/vision/model_interface.md`
-  - `docs/progress/current_status.md`
 
 ## 역사 문서 세트
 
