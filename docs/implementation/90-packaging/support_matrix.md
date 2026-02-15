@@ -47,7 +47,7 @@ Last updated: 2026-02-15
 
 - This document is enforced by `.github/workflows/ci.yml` (test matrix + no-Docker smoke lane).
 
-### Open Questions (deferred to P9.2)
+### Open Questions (Future Backlog)
 
 - Service-mode conventions by OS (systemd/Windows Service/launchd).
 - Standard logging/storage path defaults for long-running edge ops.
@@ -99,7 +99,7 @@ Last updated: 2026-02-15
 
 - 이 문서는 `.github/workflows/ci.yml`(테스트 매트릭스 + no-Docker 스모크 레인)로 강제됩니다.
 
-### 미해결 질문 (P9.2로 이관)
+### 미해결 질문 (Future Backlog)
 
 - OS별 서비스 모드 규약(systemd/Windows Service/launchd).
 - 장기 실행 엣지 운영의 표준 로그/저장 경로 기본값.

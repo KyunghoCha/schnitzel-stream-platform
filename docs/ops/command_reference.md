@@ -567,6 +567,84 @@ python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --max-
 
 ---
 
+11. 엣지 서비스 모드 (P9.2)
+---------------------------
+
+### Linux (`systemd`) 최소 유닛 예시
+
+```ini
+[Unit]
+Description=Schnitzel Stream Platform
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/schnitzel-stream-platform
+EnvironmentFile=/etc/schnitzel-stream/schnitzel-stream.env
+ExecStart=/opt/schnitzel-stream-platform/.venv/bin/python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### Windows (작업 스케줄러, 부팅 시 시작)
+
+```powershell
+schtasks /Create /TN "SchnitzelStream" /SC ONSTART /RL LIMITED `
+  /TR "powershell -NoProfile -ExecutionPolicy Bypass -File C:\schnitzel-stream-platform\run.ps1" /F
+```
+
+### macOS (`launchd`) 최소 plist 핵심 키
+
+- `ProgramArguments`: python 경로 + `-m schnitzel_stream --graph ...`
+- `WorkingDirectory`: 배포 루트
+- `RunAtLoad`: `true`
+- `KeepAlive`: `true`
+- `StandardOutPath` / `StandardErrorPath`: 명시적 로그 파일 경로
+
+---
+
+11. Edge Service Mode (P9.2)
+----------------------------
+
+### Linux (`systemd`) minimal unit
+
+```ini
+[Unit]
+Description=Schnitzel Stream Platform
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/schnitzel-stream-platform
+EnvironmentFile=/etc/schnitzel-stream/schnitzel-stream.env
+ExecStart=/opt/schnitzel-stream-platform/.venv/bin/python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### Windows (Task Scheduler, startup task)
+
+```powershell
+schtasks /Create /TN "SchnitzelStream" /SC ONSTART /RL LIMITED `
+  /TR "powershell -NoProfile -ExecutionPolicy Bypass -File C:\schnitzel-stream-platform\run.ps1" /F
+```
+
+### macOS (`launchd`) minimal plist key points
+
+- `ProgramArguments`: python path + `-m schnitzel_stream --graph ...`
+- `WorkingDirectory`: deployment root
+- `RunAtLoad`: `true`
+- `KeepAlive`: `true`
+- `StandardOutPath` / `StandardErrorPath`: explicit log files
+
+---
+
 ## 한국어
 
 명령어 레퍼런스

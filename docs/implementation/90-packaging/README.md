@@ -19,6 +19,7 @@ Code Mapping
 - Default command: `python -m schnitzel_stream`
 - Docker image: `Dockerfile`
 - Support matrix SSOT: `docs/implementation/90-packaging/support_matrix.md`
+- Edge ops conventions: `docs/implementation/90-packaging/ops/spec.md`, `docs/implementation/90-packaging/ops/design.md`
 - CI enforcement: `.github/workflows/ci.yml`
 
 Lane A: no-Docker (Canonical)
@@ -64,6 +65,7 @@ Notes
 - 기본 실행: `python -m schnitzel_stream`
 - Docker 이미지: `Dockerfile`
 - 지원 매트릭스 SSOT: `docs/implementation/90-packaging/support_matrix.md`
+- 엣지 운영 규약: `docs/implementation/90-packaging/ops/spec.md`, `docs/implementation/90-packaging/ops/design.md`
 - CI 강제 지점: `.github/workflows/ci.yml`
 
 Lane A: no-Docker (정본)
