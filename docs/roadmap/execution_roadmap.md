@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P6.2`
+Current step id: `P7.1`
 
 ## English
 
@@ -124,7 +124,7 @@ Intent:
     - Sources can be infinite iterators without starving downstream nodes.
     - Downstream processing happens as packets flow (bounded queues).
     - Deterministic stop conditions exist (`--max-packets` / time budget / throttle policy).
-- `P6.2` Backpressure + queue policy: bounded inbox, drop/slowdown semantics, and metrics. `NOW`
+- `P6.2` Backpressure + queue policy: bounded inbox, drop/slowdown semantics, and metrics. `DONE` (8e1b5db)
   - DoD:
     - configurable per-node inbox limits
     - metrics reflect drops/backpressure events
@@ -134,7 +134,7 @@ Intent:
 Intent:
 - Make "what can cross a boundary" explicit (in-proc objects vs durable/IPC/network portability).
 
-- `P7.1` Payload portability policy + validator enforcement. `NEXT`
+- `P7.1` Payload portability policy + validator enforcement. `NOW`
   - DoD:
     - graphs fail validation if a non-portable payload (ex: raw frames) is routed through durable/network lanes
     - durable queue nodes are explicitly documented as JSON-only until a blob/handle strategy exists
@@ -303,7 +303,7 @@ Intent:
     - 소스가 무한 iterator여도 다운스트림이 굶지 않습니다(starvation 없음).
     - 패킷이 흐르면서 처리됩니다(바운디드 큐).
     - 결정적 stop 조건(`--max-packets` / 시간 예산 / throttle policy)이 존재합니다.
-- `P6.2` 백프레셔 + 큐 정책: bounded inbox, drop/slowdown 의미론, 메트릭. `NOW`
+- `P6.2` 백프레셔 + 큐 정책: bounded inbox, drop/slowdown 의미론, 메트릭. `DONE` (8e1b5db)
   - DoD:
     - 노드별 inbox limit 설정 가능
     - drop/backpressure 이벤트가 메트릭으로 남음
@@ -313,7 +313,7 @@ Intent:
 의도(Intent):
 - “어떤 데이터가 경계를 넘을 수 있는가”를 명시합니다(in-proc 객체 vs durable/IPC/network).
 
-- `P7.1` payload 이식성 정책 + validator 강제. `NEXT`
+- `P7.1` payload 이식성 정책 + validator 강제. `NOW`
   - DoD:
     - non-portable payload(예: raw frame)가 durable/network 경로로 라우팅되면 validate에서 실패합니다.
     - durable queue 노드는 blob/handle 전략이 나오기 전까지 JSON-only임을 문서화합니다.
