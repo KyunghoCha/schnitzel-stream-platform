@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P4.5`
+Current step id: `P3.3`
 
 ## English
 
@@ -47,14 +47,14 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 9 complete** (`P4.5` is GATED by default until 2026-05-15; owner override path exists; `P3.3` remains optional NEXT)
+Current position: **Phase 9 + P4.5 complete** (`P3.3` remains optional NEXT)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
 - `P1.1` Draft graph model + strict DAG validator + unit tests. `DONE` (27bb702)
 - `P1.2` Draft node-graph spec v2 loader + unit tests. `DONE` (2822ffa, 87d7a24)
 - `P1.3` Centralize plugin allowlist checks in `PluginPolicy`. `DONE` (4d95fd5)
-- `P1.4` CLI: add `validate` / `--validate-only` to validate v1(job) and v2(node graph). `DONE` (f4322d4)
+- `P1.4` CLI: add `validate` / `--validate-only` for graph validation (v2 node graph baseline). `DONE` (f4322d4)
 - `P1.5` Runtime MVP: execute v2 graph (topological order) for in-proc packets only. `DONE` (7e1a9e7)
 - `P1.6` Type/port/transport-compat validation (static). `DONE` (3fe090a)
 - `P1.7` Restricted cycles policy (Delay/InitialValue only) as a validator extension. `DONE` (53b38a9)
@@ -75,7 +75,7 @@ Intent:
 - `P3.2` Autonomic tuning hooks (policy-driven throttles). `DONE` (a792677)
 - `P3.3` Optional LLM/controller layer (human-in-the-loop, gated). `NEXT` (optional)
 
-#### Phase 4: Legacy Decommission (IN PROGRESS)
+#### Phase 4: Legacy Decommission (DONE)
 
 Intent:
 - Remove `legacy/ai/*` only after v2 graphs cover the required production behavior.
@@ -92,7 +92,7 @@ Intent:
   - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
 - `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
-- `P4.5` Remove legacy runtime from main tree after deprecation window or approved owner override. `GATED` (default: >= 90 days after `P4.3`; earliest date: 2026-05-15)
+- `P4.5` Remove legacy runtime from main tree after deprecation window or approved owner override. `DONE` (owner override executed; legacy runtime removed on `main`)
 
 #### Phase 5: Platform Generalization (Domain-Neutral) (DONE)
 
@@ -181,7 +181,7 @@ Intent:
 - What is the Phase 1 runtime execution model?
   - push vs pull, batching/windowing, and backpressure semantics
 - What is the minimal port/type system to prevent invalid graphs without overfitting to CCTV?
-- What is the cutover communication plan and validation checklist for `P4.5` legacy removal after 2026-05-15?
+- What is the communication plan for external users that still reference historical `ai.*` docs/examples?
 
 ---
 
@@ -227,14 +227,14 @@ Intent:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-현재 위치: **Phase 9 완료** (`P4.5`는 기본적으로 2026-05-15까지 GATED이며 owner override 경로가 존재, `P3.3`는 optional NEXT)
+현재 위치: **Phase 9 + P4.5 완료** (`P3.3`는 optional NEXT)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
 - `P1.1` Draft graph model + strict DAG validator + unit tests. `DONE` (27bb702)
 - `P1.2` Draft node-graph spec v2 loader + unit tests. `DONE` (2822ffa, 87d7a24)
 - `P1.3` Centralize plugin allowlist checks in `PluginPolicy`. `DONE` (4d95fd5)
-- `P1.4` CLI: add `validate` / `--validate-only` to validate v1(job) and v2(node graph). `DONE` (f4322d4)
+- `P1.4` CLI: add `validate` / `--validate-only` for graph validation (v2 node graph baseline). `DONE` (f4322d4)
 - `P1.5` Runtime MVP: execute v2 graph (topological order) for in-proc packets only. `DONE` (7e1a9e7)
 - `P1.6` Type/port/transport-compat validation (static). `DONE` (3fe090a)
 - `P1.7` Restricted cycles policy (Delay/InitialValue only) as a validator extension. `DONE` (53b38a9)
@@ -255,7 +255,7 @@ Intent:
 - `P3.2` Autonomic tuning hooks (policy-driven throttles). `DONE` (a792677)
 - `P3.3` Optional LLM/controller layer (human-in-the-loop, gated). `NEXT` (optional)
 
-#### Phase 4: Legacy Decommission (IN PROGRESS)
+#### Phase 4: Legacy Decommission (DONE)
 
 의도(Intent):
 - v2 그래프가 필요한 운영 동작을 커버한 이후에만 `legacy/ai/*`를 제거합니다.
@@ -272,7 +272,7 @@ Intent:
   - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
 - `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
-- `P4.5` Remove legacy runtime from main tree after deprecation window or approved owner override. `GATED` (default: >= 90 days after `P4.3`; earliest date: 2026-05-15)
+- `P4.5` Remove legacy runtime from main tree after deprecation window or approved owner override. `DONE` (owner override 실행으로 `main`에서 레거시 런타임 제거 완료)
 
 #### Phase 5: 플랫폼 범용화(도메인 중립) (DONE)
 
@@ -361,4 +361,4 @@ Intent:
 - Phase 1 런타임 실행 모델은 무엇인가?
   - push vs pull, 배치/윈도우, 백프레셔 의미론
 - CCTV에 과적합하지 않으면서도 invalid graph를 막는 최소 port/type 시스템은 무엇인가?
-- 2026-05-15 이후 `P4.5` 레거시 제거를 위한 커뮤니케이션 계획과 검증 체크리스트를 어떻게 고정할 것인가?
+- 과거 `ai.*` 문서/예시를 참조하는 외부 사용자를 위한 커뮤니케이션 계획을 어떻게 운영할 것인가?

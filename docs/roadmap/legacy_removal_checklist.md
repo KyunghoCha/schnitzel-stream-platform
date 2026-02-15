@@ -52,6 +52,12 @@ When using owner override mode, record the following in PR description:
 - checklist evidence links (CI run + key test logs)
 - rollback tag name
 
+### Completion Record
+
+- Status: completed (owner override path)
+- Date: 2026-02-15 (UTC)
+- Result: legacy runtime removed from `main` (`legacy/ai/**`, `src/ai/**`, v1 graph/job path)
+
 ---
 
 ## 한국어
@@ -103,3 +109,9 @@ owner override 모드를 사용할 때 PR 설명에 아래를 남긴다:
 - 승인자 핸들
 - 체크리스트 증빙 링크(CI 실행 + 핵심 테스트 로그)
 - 롤백 태그명
+
+### 완료 기록
+
+- 상태: 완료(owner override 경로)
+- 일자: 2026-02-15 (UTC)
+- 결과: `main`에서 레거시 런타임 제거(`legacy/ai/**`, `src/ai/**`, v1 graph/job 경로)

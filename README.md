@@ -15,78 +15,59 @@ Stable entrypoint (SSOT): `python -m schnitzel_stream`
 
 ### Overview
 
-This repo is pivoting from a CCTV/video-specific pipeline into a **general-purpose stream platform**.
+`schnitzel-stream-platform` is a v2 node-graph runtime for stream processing.
 
-What you get today:
+Current focus:
+- portable node graph execution (`version: 2`)
+- strict graph validation (topology + compatibility)
+- plugin-based IO/policy nodes
+- durable queue primitives (SQLite/WAL)
+- edge-oriented ops conventions
 
-- v1 job graphs (legacy runtime indirection, still supported)
-- v2 node graphs (YAML) executed in-process (strict DAG)
-- Static validation (topology + compatibility)
-- Durable queue building blocks (SQLite WAL) for edge store-and-forward
-- Minimal observability contract (JSON run report + metric naming)
-
-SSOT docs:
-
-- Execution roadmap: `docs/roadmap/execution_roadmap.md`
-- StreamPacket: `docs/contracts/stream_packet.md`
-- Observability: `docs/contracts/observability.md`
+Legacy v1 runtime (`ai.*`, job graph) has been removed from `main`.
 
 ### Architecture
-
-#### Platform View (Ingress/Core/Egress/Meta)
 
 ```mermaid
 flowchart LR
   subgraph Ingress["Ingress"]
-    S["Sources (Adapters)"]
-    I["Ingress Interceptors"]
+    S["Source Plugins"]
   end
 
-  subgraph Core["Core"]
-    V["Validator: topology + compat"]
-    G["Graph Runtime: v2 in-proc DAG"]
-    N["Nodes: plugin boundary"]
+  subgraph Runtime["Runtime"]
+    V["Graph Validator"]
+    G["In-Proc Scheduler"]
+    N["Node Plugins"]
   end
 
   subgraph Egress["Egress"]
-    Q["Durable Queue: SQLite/WAL"]
-    R["Router/Policy"]
-    K["Sinks"]
+    D["Durable Queue Nodes"]
+    K["Sink Plugins"]
   end
 
   subgraph Meta["Meta"]
-    P["Plugin Policy: allowlist"]
-    O["Observability: run report"]
+    P["Plugin Policy Allowlist"]
+    O["Observability Contract"]
   end
 
-  S --> I --> G --> N --> Q --> R --> K
-  V -. validate .-> G
-  P -. govern .-> G
-  O -. report .-> G
+  S --> G --> N --> D --> K
+  V -."validate".-> G
+  P -."govern".-> G
+  O -."report".-> G
 ```
-
-#### v1 Compatibility (Legacy Job Graph)
-
-v1 graphs exist to keep migration reversible while the v2 platform evolves.
-
-- Default v2 graph: `configs/graphs/dev_vision_e2e_mock_v2.yaml`
-- Legacy v1 graph (deprecated): `configs/graphs/legacy_pipeline.yaml`
-- Legacy runtime is quarantined under `legacy/ai/` (import path remains `ai.*` via `src/ai` shim) and is executed via the v1 job graph.
-
----
 
 ### Quickstart
 
-#### 1) Install
+1. Install
 
 ```bash
 pip install -r requirements.txt
 ```
 
-#### 2) Environment
+2. Environment
 
 ```powershell
-# Windows (recommended)
+# Windows
 ./setup_env.ps1
 ```
 
@@ -95,72 +76,34 @@ pip install -r requirements.txt
 export PYTHONPATH=src
 ```
 
-#### 3) Validate (no run)
+3. Validate
 
 ```bash
-# default v2 graph
 python -m schnitzel_stream validate
-
-# legacy v1 graph
-python -m schnitzel_stream validate --graph configs/graphs/legacy_pipeline.yaml
 ```
 
-#### 4) Run Default v2 Graph (E2E Mock CCTV)
+4. Run default v2 graph
 
 ```bash
 python -m schnitzel_stream
 ```
 
-#### 5) Run v2 In-Proc Demo Graph
+5. Useful demo graphs
 
 ```bash
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
-
-# JSON run report (metrics)
-python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --report-json
-```
-
-#### 6) Durable Queue Demo (SQLite WAL)
-
-```bash
-# enqueue
 python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue_v2.yaml
-
-# drain + ack
 python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 ```
 
-#### 7) Run Legacy Video Pipeline (Optional)
+### Graph Spec (v2)
 
-The legacy pipeline is executed through the v1 job graph and uses the Phase 0 compatibility CLI flags.
-
-For a local smoke run without real model deps/backends:
-
-```powershell
-# PowerShell
-$env:AI_MODEL_MODE="mock"
-$env:AI_ZONES_SOURCE="none"
-python -m schnitzel_stream --graph configs/graphs/legacy_pipeline.yaml --dry-run --max-events 5
-```
-
-More details: `docs/ops/command_reference.md`
-
----
-
-### Graph Spec Formats
-
-#### v1 (job graph)
-
-```yaml
-version: 1
-job: schnitzel_stream.jobs.legacy_ai_pipeline:LegacyAIPipelineJob
-config: {}
-```
-
-#### v2 (node graph)
-
-- `plugin` must be `module:ClassName`
-- `kind` is currently: `source`, `node`, `sink` (reserved: `delay`, `initial`)
+- `plugin` format: `module:ClassName`
+- node `kind`: `source`, `node`, `sink` (reserved: `delay`, `initial`)
 
 ```yaml
 version: 2
@@ -179,56 +122,19 @@ edges:
 config: {}
 ```
 
----
-
 ### Plugin Policy
 
-By default, plugin loading is allowlisted to repo namespaces (`schnitzel_stream.*`, `ai.*`).
+Default allowlist is `schnitzel_stream.*`.
 
 - `ALLOWED_PLUGIN_PREFIXES` (comma-separated prefixes)
 - `ALLOW_ALL_PLUGINS=true` (dev only)
 
----
-
 ### Documentation
 
-Start here:
-
-- `docs/index.md`
-
-Key SSOT docs:
-
-- `docs/roadmap/execution_roadmap.md`
-- `docs/roadmap/strategic_roadmap.md`
-- `docs/contracts/stream_packet.md`
-- `docs/contracts/observability.md`
-
----
-
-### Project Status
-
-Authoritative status is tracked in: `docs/roadmap/execution_roadmap.md`
-
-| Track | Status |
-| :--- | :--- |
-| Phase 0 (Entrypoint SSOT) | DONE |
-| Phase 1 (v2 in-proc DAG runtime) | DONE |
-| Phase 2 (Durable queue hardening) | DONE |
-| Phase 3 (Control plane) | IN PROGRESS (`P3.3` is optional) |
-
----
-
-### License
-
-Apache License 2.0 (`LICENSE`)
-
----
-
-### Contributing
-
-1. Fork this repository
-2. Create a feature branch
-3. Submit a Pull Request
+- Docs index: `docs/index.md`
+- Execution SSOT: `docs/roadmap/execution_roadmap.md`
+- StreamPacket contract: `docs/contracts/stream_packet.md`
+- Observability contract: `docs/contracts/observability.md`
 
 ---
 
@@ -236,78 +142,59 @@ Apache License 2.0 (`LICENSE`)
 
 ### 개요
 
-이 레포는 CCTV/영상 파이프라인에서 출발했지만, 이제는 **범용 스트림 플랫폼**으로 피벗 중입니다.
+`schnitzel-stream-platform`은 v2 노드 그래프 기반 스트림 처리 런타임입니다.
 
-현재 제공되는 것:
+현재 핵심:
+- `version: 2` 노드 그래프 실행
+- 그래프 정적 검증(토폴로지 + 호환성)
+- 플러그인 기반 입출력/정책 노드
+- 내구 큐(SQLite/WAL) 빌딩블록
+- 엣지 운영 관례 정리
 
-- v1 job 그래프(레거시 런타임 우회/호환 유지)
-- v2 node graph(YAML) in-proc 실행(엄격 DAG)
-- 정적 검증(토폴로지 + 호환성)
-- 엣지 store-and-forward용 durable queue 빌딩블록(SQLite WAL)
-- 최소 관측 가능성 계약(JSON 실행 리포트 + 메트릭 네이밍)
-
-SSOT 문서:
-
-- 실행 로드맵: `docs/roadmap/execution_roadmap.md`
-- StreamPacket: `docs/contracts/stream_packet.md`
-- Observability: `docs/contracts/observability.md`
+레거시 v1 런타임(`ai.*`, job graph)은 `main`에서 제거되었습니다.
 
 ### 아키텍처
-
-#### 플랫폼 뷰 (Ingress/Core/Egress/Meta)
 
 ```mermaid
 flowchart LR
   subgraph Ingress["Ingress"]
-    S["Sources (Adapters)"]
-    I["Ingress Interceptors"]
+    S["입력 소스 플러그인"]
   end
 
-  subgraph Core["Core"]
-    V["Validator: topology + compat"]
-    G["Graph Runtime: v2 in-proc DAG"]
-    N["Nodes: plugin boundary"]
+  subgraph Runtime["Runtime"]
+    V["그래프 검증기"]
+    G["인프로세스 스케줄러"]
+    N["노드 플러그인"]
   end
 
   subgraph Egress["Egress"]
-    Q["Durable Queue: SQLite/WAL"]
-    R["Router/Policy"]
-    K["Sinks"]
+    D["내구 큐 노드"]
+    K["출력 싱크 플러그인"]
   end
 
   subgraph Meta["Meta"]
-    P["Plugin Policy: allowlist"]
-    O["Observability: run report"]
+    P["플러그인 Allowlist 정책"]
+    O["관측 가능성 계약"]
   end
 
-  S --> I --> G --> N --> Q --> R --> K
-  V -. validate .-> G
-  P -. govern .-> G
-  O -. report .-> G
+  S --> G --> N --> D --> K
+  V -."검증".-> G
+  P -."정책".-> G
+  O -."리포트".-> G
 ```
-
-#### v1 호환성 (Legacy Job Graph)
-
-v1 그래프는 v2 플랫폼이 진화하는 동안 마이그레이션을 되돌릴 수 있도록(가역성) 유지됩니다.
-
-- 기본 v2 그래프: `configs/graphs/dev_vision_e2e_mock_v2.yaml`
-- 레거시 v1 그래프(deprecated): `configs/graphs/legacy_pipeline.yaml`
-- 레거시 런타임은 `legacy/ai/` 아래에 격리되어 있으며(`src/ai` shim을 통해 import 경로 `ai.*` 유지), v1 job 그래프로 실행됩니다.
-
----
 
 ### 빠른 시작
 
-#### 1) 설치
+1. 설치
 
 ```bash
 pip install -r requirements.txt
 ```
 
-#### 2) 환경
+2. 환경 설정
 
 ```powershell
-# Windows (권장)
+# Windows
 ./setup_env.ps1
 ```
 
@@ -316,72 +203,34 @@ pip install -r requirements.txt
 export PYTHONPATH=src
 ```
 
-#### 3) 검증(실행 안 함)
+3. 검증
 
 ```bash
-# 기본 v2 그래프
 python -m schnitzel_stream validate
-
-# 레거시 v1 그래프
-python -m schnitzel_stream validate --graph configs/graphs/legacy_pipeline.yaml
 ```
 
-#### 4) 기본 v2 그래프 실행 (E2E Mock CCTV)
+4. 기본 v2 그래프 실행
 
 ```bash
 python -m schnitzel_stream
 ```
 
-#### 5) v2 In-Proc 데모 그래프 실행
+5. 주요 데모 그래프
 
 ```bash
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
-
-# JSON 실행 리포트 (metrics)
-python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --report-json
-```
-
-#### 6) Durable Queue 데모 (SQLite WAL)
-
-```bash
-# enqueue
 python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue_v2.yaml
-
-# drain + ack
 python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 ```
 
-#### 7) 레거시 비디오 파이프라인 실행 (선택)
+### 그래프 스펙(v2)
 
-레거시 파이프라인은 v1 job 그래프로 실행되며, Phase 0 호환 CLI 플래그를 사용합니다.
-
-실제 모델/백엔드 의존성 없이 로컬 스모크 테스트를 하려면:
-
-```powershell
-# PowerShell
-$env:AI_MODEL_MODE="mock"
-$env:AI_ZONES_SOURCE="none"
-python -m schnitzel_stream --graph configs/graphs/legacy_pipeline.yaml --dry-run --max-events 5
-```
-
-자세한 내용: `docs/ops/command_reference.md`
-
----
-
-### 그래프 스펙 포맷
-
-#### v1 (job graph)
-
-```yaml
-version: 1
-job: schnitzel_stream.jobs.legacy_ai_pipeline:LegacyAIPipelineJob
-config: {}
-```
-
-#### v2 (node graph)
-
-- `plugin`은 `module:ClassName` 형식이어야 합니다.
-- `kind`는 현재 `source`, `node`, `sink` (예약: `delay`, `initial`) 입니다.
+- `plugin` 형식: `module:ClassName`
+- 노드 `kind`: `source`, `node`, `sink` (예약: `delay`, `initial`)
 
 ```yaml
 version: 2
@@ -400,56 +249,25 @@ edges:
 config: {}
 ```
 
----
-
 ### 플러그인 정책
 
-기본적으로 플러그인 로딩은 레포 네임스페이스(`schnitzel_stream.*`, `ai.*`)로 allowlist 됩니다.
+기본 allowlist는 `schnitzel_stream.*` 입니다.
 
-- `ALLOWED_PLUGIN_PREFIXES` (콤마로 구분된 prefix)
-- `ALLOW_ALL_PLUGINS=true` (dev 전용)
-
----
+- `ALLOWED_PLUGIN_PREFIXES` (콤마 구분 prefix)
+- `ALLOW_ALL_PLUGINS=true` (개발용)
 
 ### 문서
 
-시작 지점:
-
-- `docs/index.md`
-
-핵심 SSOT 문서:
-
-- `docs/roadmap/execution_roadmap.md`
-- `docs/roadmap/strategic_roadmap.md`
-- `docs/contracts/stream_packet.md`
-- `docs/contracts/observability.md`
+- 문서 인덱스: `docs/index.md`
+- 실행 SSOT: `docs/roadmap/execution_roadmap.md`
+- StreamPacket 계약: `docs/contracts/stream_packet.md`
+- 관측 가능성 계약: `docs/contracts/observability.md`
 
 ---
 
-### 현황
-
-권위 있는 상태(Authoritative status)는 `docs/roadmap/execution_roadmap.md` 에서 추적합니다.
-
-| 트랙 | 상태 |
-| :--- | :--- |
-| Phase 0 (Entrypoint SSOT) | DONE |
-| Phase 1 (v2 in-proc DAG runtime) | DONE |
-| Phase 2 (Durable queue hardening) | DONE |
-| Phase 3 (Control plane) | IN PROGRESS (`P3.3` is optional) |
-
----
-
-### 라이센스
+### License
 
 Apache License 2.0 (`LICENSE`)
-
----
-
-### 기여
-
-1. Fork this repository
-2. Create a feature branch
-3. Submit a Pull Request
 
 ---
 

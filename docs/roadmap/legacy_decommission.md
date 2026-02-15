@@ -8,6 +8,9 @@ Goal: planfully remove the legacy runtime (`legacy/ai/**`, import path `ai.*`) a
 
 This document is the Phase 4 (`P4.*`) SSOT that defines **when** and **by what criteria** legacy can be removed.
 
+Status:
+- `P4.5` is complete on `main` (owner override path was used with checklist evidence).
+
 ### What Counts As "Legacy"
 
 - Code: `legacy/ai/**` (plus the `src/ai` shim)
@@ -85,6 +88,9 @@ Owner override path:
 목표: `legacy/ai/**` 레거시 런타임(import 경로: `ai.*`)과 v1(job) 그래프 포맷을 **계획적으로 제거**하고, v2(node) 그래프 기반 플랫폼으로 완전히 전환한다.
 
 이 문서는 Phase 4(`P4.*`)의 SSOT이며, “언제/무엇을 기준으로 레거시를 없애는가”를 정의한다.
+
+상태:
+- `P4.5`는 `main`에서 완료되었고, owner override + 체크리스트 증빙 경로를 사용했다.
 
 ### 레거시 정의(무엇이 레거시인가)
 
