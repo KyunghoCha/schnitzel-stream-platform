@@ -47,7 +47,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 5** (while `P4.5` is gated by the deprecation window; `P3.3` remains optional)
+Current position: **Phase 8** (`P8.2` is NOW; `P4.5` remains gated by the deprecation window; `P3.3` remains optional)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -93,7 +93,7 @@ Intent:
 - `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
 - `P4.5` Remove legacy runtime from main tree after the deprecation window. `GATED` (>= 90 days after `P4.3`)
 
-#### Phase 5: Platform Generalization (Domain-Neutral) (NOW)
+#### Phase 5: Platform Generalization (Domain-Neutral) (DONE)
 
 Intent:
 - Phase 5 makes the repo feel like a **universal stream platform**, not a CCTV project:
@@ -111,7 +111,7 @@ Intent:
     - backend/JSONL/stdout are "just" `sink` plugins.
     - `schnitzel_stream` core remains free of CCTV/backend schema assumptions (contract stays `StreamPacket`).
 
-#### Phase 6: Streaming In-Proc Runtime Semantics (NOW)
+#### Phase 6: Streaming In-Proc Runtime Semantics (DONE)
 
 Problem:
 - The current in-proc runner executes each source to completion before downstream nodes run. That is OK for tiny demos but not OK for streaming sources (RTSP/webcam) or large files.
@@ -129,7 +129,7 @@ Intent:
     - configurable per-node inbox limits
     - metrics reflect drops/backpressure events
 
-#### Phase 7: Payload Portability + Transport Lanes (NEXT)
+#### Phase 7: Payload Portability + Transport Lanes (DONE)
 
 Intent:
 - Make "what can cross a boundary" explicit (in-proc objects vs durable/IPC/network portability).
@@ -142,7 +142,7 @@ Intent:
   - DoD:
     - `StreamPacket` supports a portable reference form (file/shm/uri) with clear lifecycle rules
 
-#### Phase 8: IO Plugin Packs (RTSP/Webcam/HTTP/etc) (NEXT)
+#### Phase 8: IO Plugin Packs (RTSP/Webcam/HTTP/etc) (NOW)
 
 Intent:
 - Treat RTSP and "backend" as replaceable adapters. Platform ships with minimal batteries; deployments can bring their own.
@@ -226,7 +226,7 @@ Intent:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-현재 위치: **Phase 4** (legacy decommission이 우선순위이며, `P3.3`는 보류됨)
+현재 위치: **Phase 8** (`P8.2`가 NOW이며, `P4.5`는 deprecation window로 GATED 상태, `P3.3`는 optional)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -272,7 +272,7 @@ Intent:
 - `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
 - `P4.5` Remove legacy runtime from main tree after the deprecation window. `GATED` (>= 90 days after `P4.3`)
 
-#### Phase 5: 플랫폼 범용화(도메인 중립) (NOW)
+#### Phase 5: 플랫폼 범용화(도메인 중립) (DONE)
 
 의도(Intent):
 - Phase 5의 목표는 레포가 **범용 스트림 플랫폼**처럼 보이고 동작하게 만드는 것입니다.
@@ -290,7 +290,7 @@ Intent:
     - backend/JSONL/stdout 출력은 `sink` 플러그인으로만 제공됩니다.
     - `schnitzel_stream` 코어는 CCTV/백엔드 스키마 가정을 포함하지 않습니다(계약은 `StreamPacket`).
 
-#### Phase 6: 스트리밍 in-proc 런타임 의미론 (NOW)
+#### Phase 6: 스트리밍 in-proc 런타임 의미론 (DONE)
 
 문제:
 - 현재 in-proc runner는 source를 끝까지 실행한 다음에 downstream 노드를 실행합니다. 작은 데모엔 괜찮지만 RTSP/webcam 같은 스트리밍 소스나 큰 파일에서는 메모리/지연 문제가 생깁니다.
@@ -308,7 +308,7 @@ Intent:
     - 노드별 inbox limit 설정 가능
     - drop/backpressure 이벤트가 메트릭으로 남음
 
-#### Phase 7: Payload 이식성 + Transport Lane (NEXT)
+#### Phase 7: Payload 이식성 + Transport Lane (DONE)
 
 의도(Intent):
 - “어떤 데이터가 경계를 넘을 수 있는가”를 명시합니다(in-proc 객체 vs durable/IPC/network).
@@ -321,7 +321,7 @@ Intent:
   - DoD:
     - `StreamPacket`이 file/shm/uri 기반 portable reference를 지원하며, lifecycle 규칙이 명확합니다.
 
-#### Phase 8: IO 플러그인 팩(RTSP/Webcam/HTTP 등) (NEXT)
+#### Phase 8: IO 플러그인 팩(RTSP/Webcam/HTTP 등) (NOW)
 
 의도(Intent):
 - RTSP와 “backend”는 교체 가능한 어댑터입니다. 플랫폼은 최소 배터리를 제공하고, 배포 환경은 필요한 어댑터를 가져옵니다.
