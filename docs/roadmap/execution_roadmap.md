@@ -47,7 +47,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 9 complete** (`P4.5` is GATED until 2026-05-15; `P3.3` remains optional NEXT)
+Current position: **Phase 9 complete** (`P4.5` is GATED by default until 2026-05-15; owner override path exists; `P3.3` remains optional NEXT)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -80,7 +80,8 @@ Intent:
 Intent:
 - Remove `legacy/ai/*` only after v2 graphs cover the required production behavior.
 - Prefer extraction (separate package/repo) over hard-delete if external users still depend on it.
-- Legacy removal requires a **deprecation window**: do not delete `legacy/ai/*` earlier than **90 days after** `P4.3` lands.
+- Legacy removal default requires a **deprecation window**: do not delete `legacy/ai/*` earlier than **90 days after** `P4.3` lands.
+- Owner override path is allowed only with explicit approval + full checklist evidence (`docs/roadmap/legacy_removal_checklist.md`).
 
 - `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (SSOT: `docs/roadmap/legacy_decommission.md`)
 - `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `DONE` (P4.2.1-P4.2.5)
@@ -91,7 +92,7 @@ Intent:
   - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
 - `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
-- `P4.5` Remove legacy runtime from main tree after the deprecation window. `GATED` (>= 90 days after `P4.3`; earliest date: 2026-05-15)
+- `P4.5` Remove legacy runtime from main tree after deprecation window or approved owner override. `GATED` (default: >= 90 days after `P4.3`; earliest date: 2026-05-15)
 
 #### Phase 5: Platform Generalization (Domain-Neutral) (DONE)
 
@@ -226,7 +227,7 @@ Intent:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-현재 위치: **Phase 9 완료** (`P4.5`는 2026-05-15까지 GATED, `P3.3`는 optional NEXT)
+현재 위치: **Phase 9 완료** (`P4.5`는 기본적으로 2026-05-15까지 GATED이며 owner override 경로가 존재, `P3.3`는 optional NEXT)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -259,7 +260,8 @@ Intent:
 의도(Intent):
 - v2 그래프가 필요한 운영 동작을 커버한 이후에만 `legacy/ai/*`를 제거합니다.
 - 외부 사용자가 여전히 의존한다면 hard-delete 대신 추출(별도 패키지/리포) 우선입니다.
-- 레거시 제거는 **deprecation window**가 필요합니다: `P4.3` 머지 이후 **최소 90일** 이전에 `legacy/ai/*`를 삭제하지 않습니다.
+- 레거시 제거 기본 경로는 **deprecation window**를 따릅니다: `P4.3` 머지 이후 **최소 90일** 이전에 `legacy/ai/*`를 삭제하지 않습니다.
+- 조기 삭제는 owner 승인 + 체크리스트 증빙(`docs/roadmap/legacy_removal_checklist.md`)이 있을 때만 허용합니다.
 
 - `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (SSOT: `docs/roadmap/legacy_decommission.md`)
 - `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `DONE` (P4.2.1-P4.2.5)
@@ -270,7 +272,7 @@ Intent:
   - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
 - `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
-- `P4.5` Remove legacy runtime from main tree after the deprecation window. `GATED` (>= 90 days after `P4.3`; earliest date: 2026-05-15)
+- `P4.5` Remove legacy runtime from main tree after deprecation window or approved owner override. `GATED` (default: >= 90 days after `P4.3`; earliest date: 2026-05-15)
 
 #### Phase 5: 플랫폼 범용화(도메인 중립) (DONE)
 

@@ -53,12 +53,18 @@ Explicitly out-of-scope initially:
 - On `main`, `schnitzel_stream.*` has **zero** direct imports from `ai.*`.
 - There are no internal/external consumers of v1 graphs (or they were moved/isolated via `P4.4`).
 
+Owner override path:
+- The 90-day window is the default safety path.
+- Earlier removal is allowed only with explicit owner approval and full completion of
+  `docs/roadmap/legacy_removal_checklist.md`.
+
 ### Deprecation Policy (Timeline)
 
 - Never delete legacy immediately.
 - The deprecation window is managed by **roadmap events**, not calendar dates.
   - Start: when `P4.3` is merged
   - Earliest deletion: at least 90 days after `P4.3` merge
+- Owner override is permitted only with explicit approval + checklist evidence.
 
 ### Operational Policy (Until Removed)
 
@@ -125,12 +131,18 @@ Baseline 후보(조정 가능):
 - `main` 기준으로 `schnitzel_stream.*`에서 `ai.*` 직접 import가 0이다.
 - v1 그래프를 사용하는 내부/외부 소비자가 없다(또는 `P4.4`로 별도 패키지로 격리/이관됨).
 
+Owner override 경로:
+- 90일 규칙은 기본 안전 경로입니다.
+- 조기 삭제는 owner의 명시적 승인 + `docs/roadmap/legacy_removal_checklist.md`
+  전 항목 통과 시에만 허용합니다.
+
 ### 디프리케이션 정책 (Timeline)
 
 - 레거시 삭제는 **절대 즉시 삭제하지 않는다**.
 - deprecation window는 “절대 날짜”가 아니라 **로드맵 이벤트 기준**으로 관리한다.
   - 시작: `P4.3` 머지 시점
   - 삭제 가능 최단: `P4.3` 머지 이후 최소 90일 경과
+- owner override는 승인 기록 + 체크리스트 증빙이 있을 때만 허용한다.
 
 ### 운영 정책 (삭제 전까지)
 
