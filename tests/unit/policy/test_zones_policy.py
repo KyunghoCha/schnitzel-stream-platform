@@ -3,8 +3,8 @@ from __future__ import annotations
 import json
 import time
 
-import schnitzel_stream.policy.zones as zones_mod
-from schnitzel_stream.policy.zones import ZoneEvaluator, evaluate_zones, point_in_polygon
+import schnitzel_stream.packs.vision.policy.zones as zones_mod
+from schnitzel_stream.packs.vision.policy.zones import ZoneEvaluator, evaluate_zones, point_in_polygon
 
 
 def test_point_in_polygon_basic():
@@ -245,4 +245,3 @@ def test_zones_file_cache_ttl(tmp_path, monkeypatch):
     )
     assert result3 != result1
     assert result3[0]["zone_id"] == "Z1"
-

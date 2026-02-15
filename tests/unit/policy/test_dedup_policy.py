@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from schnitzel_stream.policy.dedup import DedupController
+from schnitzel_stream.packs.vision.policy.dedup import DedupController
 
 
 def test_dedup_cooldown_and_severity_override():
@@ -11,4 +11,3 @@ def test_dedup_cooldown_and_severity_override():
 
     payload2 = {"camera_id": "C1", "event_type": "ZONE_INTRUSION", "track_id": 1, "severity": "HIGH"}
     assert ctrl.allow_emit(payload2) is True  # allow on severity change
-

@@ -17,6 +17,7 @@ What lives here:
 - Class taxonomy (draft): `docs/packs/vision/model_class_taxonomy.md`
 - I/O samples: `docs/packs/vision/model_io_samples.md`
 - Ops/Training docs: `docs/packs/vision/ops/ai/`
+- Code namespace: `src/schnitzel_stream/packs/vision/` (plugins: `schnitzel_stream.packs.vision.nodes:*`)
 
 Related:
 
@@ -40,6 +41,7 @@ Related:
 - 클래스 분류(초안): `docs/packs/vision/model_class_taxonomy.md`
 - 입출력 샘플: `docs/packs/vision/model_io_samples.md`
 - 운영/학습 문서: `docs/packs/vision/ops/ai/`
+- 코드 네임스페이스: `src/schnitzel_stream/packs/vision/` (플러그인: `schnitzel_stream.packs.vision.nodes:*`)
 
 관련 문서:
 

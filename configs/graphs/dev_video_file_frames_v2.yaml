@@ -2,7 +2,7 @@ version: 2
 nodes:
   - id: src
     kind: source
-    plugin: schnitzel_stream.nodes.video:OpenCvVideoFileSource
+    plugin: schnitzel_stream.packs.vision.nodes:OpenCvVideoFileSource
     config:
       path: data/samples/2048246-hd_1920_1080_24fps.mp4
       source_id: cam01
@@ -10,7 +10,7 @@ nodes:
 
   - id: sample
     kind: node
-    plugin: schnitzel_stream.nodes.video:EveryNthFrameSamplerNode
+    plugin: schnitzel_stream.packs.vision.nodes:EveryNthFrameSamplerNode
     config:
       every_n: 10
 
@@ -28,4 +28,3 @@ edges:
     to: out
 
 config: {}
-

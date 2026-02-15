@@ -24,13 +24,13 @@ def test_v2_durable_queue_produces_stable_idempotency_keys(tmp_path):
         NodeSpec(
             node_id="sample",
             kind="node",
-            plugin="schnitzel_stream.nodes.video:EveryNthFrameSamplerNode",
+            plugin="schnitzel_stream.packs.vision.nodes:EveryNthFrameSamplerNode",
             config={"every_n": 1},
         ),
         NodeSpec(
             node_id="detect",
             kind="node",
-            plugin="schnitzel_stream.nodes.mock_detection:MockDetectorNode",
+            plugin="schnitzel_stream.packs.vision.nodes:MockDetectorNode",
             config={
                 "emit_every_n": 1,
                 "event_type": "ZONE_INTRUSION",
@@ -44,13 +44,13 @@ def test_v2_durable_queue_produces_stable_idempotency_keys(tmp_path):
         NodeSpec(
             node_id="events",
             kind="node",
-            plugin="schnitzel_stream.nodes.event_builder:ProtocolV02EventBuilderNode",
+            plugin="schnitzel_stream.packs.vision.nodes:ProtocolV02EventBuilderNode",
             config={"site_id": "S001"},
         ),
         NodeSpec(
             node_id="zones",
             kind="node",
-            plugin="schnitzel_stream.nodes.policy:ZonePolicyNode",
+            plugin="schnitzel_stream.packs.vision.nodes:ZonePolicyNode",
             config={
                 "rule_map": {"ZONE_INTRUSION": "bottom_center"},
                 "zones": [{"zone_id": "Z1", "enabled": True, "polygon": [[0, 0], [10, 0], [10, 10], [0, 10]]}],
@@ -59,7 +59,7 @@ def test_v2_durable_queue_produces_stable_idempotency_keys(tmp_path):
         NodeSpec(
             node_id="dedup",
             kind="node",
-            plugin="schnitzel_stream.nodes.policy:DedupPolicyNode",
+            plugin="schnitzel_stream.packs.vision.nodes:DedupPolicyNode",
             config={"cooldown_sec": 9999.0, "prune_interval": 1},
         ),
         NodeSpec(

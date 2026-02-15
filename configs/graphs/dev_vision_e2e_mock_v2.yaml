@@ -20,13 +20,13 @@ nodes:
 
   - id: sample
     kind: node
-    plugin: schnitzel_stream.nodes.video:EveryNthFrameSamplerNode
+    plugin: schnitzel_stream.packs.vision.nodes:EveryNthFrameSamplerNode
     config:
       every_n: 1
 
   - id: detect
     kind: node
-    plugin: schnitzel_stream.nodes.mock_detection:MockDetectorNode
+    plugin: schnitzel_stream.packs.vision.nodes:MockDetectorNode
     config:
       emit_every_n: 1
       event_type: ZONE_INTRUSION
@@ -38,13 +38,13 @@ nodes:
 
   - id: events
     kind: node
-    plugin: schnitzel_stream.nodes.event_builder:ProtocolV02EventBuilderNode
+    plugin: schnitzel_stream.packs.vision.nodes:ProtocolV02EventBuilderNode
     config:
       site_id: S001
 
   - id: zones
     kind: node
-    plugin: schnitzel_stream.nodes.policy:ZonePolicyNode
+    plugin: schnitzel_stream.packs.vision.nodes:ZonePolicyNode
     config:
       rule_map:
         ZONE_INTRUSION: bottom_center
@@ -55,7 +55,7 @@ nodes:
 
   - id: dedup
     kind: node
-    plugin: schnitzel_stream.nodes.policy:DedupPolicyNode
+    plugin: schnitzel_stream.packs.vision.nodes:DedupPolicyNode
     config:
       cooldown_sec: 9999.0
       prune_interval: 1
@@ -82,4 +82,3 @@ edges:
     to: out
 
 config: {}
-

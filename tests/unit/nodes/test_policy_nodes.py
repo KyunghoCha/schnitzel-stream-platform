@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from schnitzel_stream.graph.compat import GraphCompatibilityError, validate_graph_compat
 from schnitzel_stream.graph.model import EdgeSpec, NodeSpec
-from schnitzel_stream.nodes.policy import DedupPolicyNode, ZonePolicyNode
+from schnitzel_stream.packs.vision.nodes import DedupPolicyNode, ZonePolicyNode
 from schnitzel_stream.packet import StreamPacket
 from schnitzel_stream.runtime.inproc import InProcGraphRunner
 
@@ -54,7 +54,7 @@ def test_dedup_policy_node_filters_duplicates_and_allows_severity_change():
 def test_graph_compat_rejects_kind_mismatch_for_policy_nodes():
     nodes = [
         NodeSpec(node_id="src", kind="source", plugin="schnitzel_stream.nodes.dev:FooSource"),
-        NodeSpec(node_id="zones", kind="node", plugin="schnitzel_stream.nodes.policy:ZonePolicyNode"),
+        NodeSpec(node_id="zones", kind="node", plugin="schnitzel_stream.packs.vision.nodes:ZonePolicyNode"),
     ]
     edges = [EdgeSpec(src="src", dst="zones")]
     try:
@@ -113,7 +113,7 @@ def test_inproc_graph_with_zone_and_dedup_nodes_filters_as_expected():
         NodeSpec(
             node_id="zones",
             kind="node",
-            plugin="schnitzel_stream.nodes.policy:ZonePolicyNode",
+            plugin="schnitzel_stream.packs.vision.nodes:ZonePolicyNode",
             config={
                 "rule_map": {"ZONE_INTRUSION": "bottom_center"},
                 "zones": [{"zone_id": "Z1", "enabled": True, "polygon": [[0, 0], [10, 0], [10, 10], [0, 10]]}],
@@ -122,7 +122,7 @@ def test_inproc_graph_with_zone_and_dedup_nodes_filters_as_expected():
         NodeSpec(
             node_id="dedup",
             kind="node",
-            plugin="schnitzel_stream.nodes.policy:DedupPolicyNode",
+            plugin="schnitzel_stream.packs.vision.nodes:DedupPolicyNode",
             config={"cooldown_sec": 10.0, "prune_interval": 1},
         ),
         NodeSpec(
@@ -150,4 +150,3 @@ def test_inproc_graph_with_zone_and_dedup_nodes_filters_as_expected():
     outs = result.outputs_by_node["out"]
     assert len(outs) == 2
     assert outs[0].payload["zone"]["inside"] is True
-
