@@ -21,7 +21,7 @@ This folder documents the maintained vision plugin pack for the v2 runtime.
 
 ## Notes
 
-- Legacy AI-model training/operations notes were archived to `docs/archive/packs_vision_ai_ops_legacy/`.
+- Legacy AI-model training/operations notes were archived to `legacy/docs/archive/packs_vision_ai_ops_legacy/`.
 
 ---
 
@@ -44,4 +44,4 @@ This folder documents the maintained vision plugin pack for the v2 runtime.
 
 ## 참고
 
-- 기존 AI 모델 학습/운영 노트는 `docs/archive/packs_vision_ai_ops_legacy/`로 이동했다.
+- 기존 AI 모델 학습/운영 노트는 `legacy/docs/archive/packs_vision_ai_ops_legacy/`로 이동했다.

@@ -49,7 +49,7 @@ Last Updated: 2026-02-10
   - Added optional ROS2 emitter plugin `ai.plugins.ros2.event_emitter:Ros2EventEmitter`.
   - Added ROS2 plugin env examples and command references in `.env.example`, `README.md`, and `docs/ops/command_reference.md`.
 - **Multimodal Architecture Baseline Added**:
-  - Added `docs/legacy/design/multimodal_pipeline_design.md` for video+sensor runtime design.
+  - Added `legacy/docs/legacy/design/multimodal_pipeline_design.md` for video+sensor runtime design.
   - Defined two-lane input architecture (`VideoSource` + `SensorSource`) with a single fusion boundary.
   - Fixed roadmap wording to avoid overloading `FrameSource`; future sensor expansion now uses dedicated sensor lane.
 - **Sensor Lane P2 Baseline Implemented**:
@@ -87,20 +87,20 @@ Last Updated: 2026-02-10
   - Previous: 60 passed (2026-02-09). Additional regression-prevention tests were added.
 - Regression (golden): `python scripts/regression_check.py` -> regression_ok.
   - Snapshots: `/tmp/snapshots_regression_test`
-- RTSP E2E (host): `scripts/check_rtsp.py` (Linux: `scripts/legacy/rtsp_e2e_stability.sh`) -> reconnect recovered.
+- RTSP E2E (host): `scripts/check_rtsp.py` (Linux: `legacy/scripts/rtsp_e2e_stability.sh`) -> reconnect recovered.
   - Example result: `count_before=3`, `count_after=9`.
   - Logs: `/tmp/ai_pipeline_e2e_rtsp_stability`
   - Mock backend log: `/tmp/ai_pipeline_e2e_rtsp_stability/mock_backend.log` (port 18080)
-- RTSP E2E (docker): `scripts/legacy/rtsp_e2e_stability_docker.sh` (Requires Docker) -> reconnect recovered.
+- RTSP E2E (docker): `legacy/scripts/rtsp_e2e_stability_docker.sh` (Requires Docker) -> reconnect recovered.
   - Example result: `count_before=3`, `count_after=9`.
   - Logs: `/tmp/ai_pipeline_e2e_rtsp_stability_docker`
-- RTSP reconnect cycle: `scripts/check_rtsp.py` (Linux: `scripts/legacy/rtsp_e2e_reconnect_cycle.sh`) -> reconnect recovered.
+- RTSP reconnect cycle: `scripts/check_rtsp.py` (Linux: `legacy/scripts/rtsp_e2e_reconnect_cycle.sh`) -> reconnect recovered.
   - Example result: `count_before=3`, `count_after=8`.
   - Logs: `/tmp/ai_pipeline_e2e_rtsp_reconnect`
-- Multi-camera smoke (rtsp+file): `scripts/multi_cam.py` (Linux: `scripts/legacy/multi_camera_smoke.sh`) -> both cameras emit.
+- Multi-camera smoke (rtsp+file): `scripts/multi_cam.py` (Linux: `legacy/scripts/multi_camera_smoke.sh`) -> both cameras emit.
   - Example result: `cam01_events=5`, `cam02_events=5`.
   - Logs: `/tmp/ai_pipeline_multi_cam`
-- Dual RTSP smoke (rtsp x2): `scripts/multi_cam.py` (Linux: `scripts/legacy/rtsp_multi_cam_dual.sh`) -> both cameras emit.
+- Dual RTSP smoke (rtsp x2): `scripts/multi_cam.py` (Linux: `legacy/scripts/rtsp_multi_cam_dual.sh`) -> both cameras emit.
   - Example result: `cam01_events=5`, `cam02_events=5`.
   - Logs: `/tmp/ai_pipeline_rtsp_multi_cam`
 - Tracker (IOU): `TRACKER_TYPE=iou` -> stable track_id assigned.
@@ -122,8 +122,8 @@ Last Updated: 2026-02-10
 
 ### Notes
 
-- Ops runbook: `docs/legacy/ops/ops_runbook.md`
-- Snapshot policy: `docs/legacy/ops/snapshot_policy.md`
+- Ops runbook: `legacy/docs/legacy/ops/ops_runbook.md`
+- Snapshot policy: `legacy/docs/legacy/ops/snapshot_policy.md`
 - Multi-model merge supported via comma-separated `AI_MODEL_ADAPTER`
 - RTSP E2E scripts export `LOG_DIR` to keep event counting stable in strict shells.
 - RTSP E2E scripts export `CHECK_PORT` so mock backend port checks work in subprocesses.
@@ -217,7 +217,7 @@ Last Updated: 2026-02-10
   - 선택형 ROS2 출력 플러그인 `ai.plugins.ros2.event_emitter:Ros2EventEmitter` 추가.
   - `.env.example`, `README.md`, `docs/ops/command_reference.md`에 ROS2 플러그인 환경변수/실행 예시 반영.
 - **멀티모달 아키텍처 기준 추가**:
-  - 영상+센서 런타임 설계 문서 `docs/legacy/design/multimodal_pipeline_design.md` 추가.
+  - 영상+센서 런타임 설계 문서 `legacy/docs/legacy/design/multimodal_pipeline_design.md` 추가.
   - 입력 2축(`VideoSource` + `SensorSource`) + 단일 fusion 경계 원칙 정의.
   - `FrameSource` 과적재를 피하도록 로드맵 표현을 `SensorSource` 전용 축 기준으로 수정.
 - **센서 축 P2 기반 구현**:
@@ -255,20 +255,20 @@ Last Updated: 2026-02-10
   - 이전: 60개 통과 (2026-02-09). 회귀 방지 테스트를 추가 반영.
 - Regression (golden): `python scripts/regression_check.py` -> regression_ok.
   - 스냅샷: `/tmp/snapshots_regression_test`
-- RTSP E2E (host): `scripts/check_rtsp.py` (Linux: `scripts/legacy/rtsp_e2e_stability.sh`) -> 재연결 후 복구.
+- RTSP E2E (host): `scripts/check_rtsp.py` (Linux: `legacy/scripts/rtsp_e2e_stability.sh`) -> 재연결 후 복구.
   - 예시 결과: `count_before=3`, `count_after=9`.
   - 로그: `/tmp/ai_pipeline_e2e_rtsp_stability`
   - Mock 백엔드 로그: `/tmp/ai_pipeline_e2e_rtsp_stability/mock_backend.log` (포트 18080)
-- RTSP E2E (docker): `scripts/legacy/rtsp_e2e_stability_docker.sh` (Docker 필요) -> 재연결 후 복구.
+- RTSP E2E (docker): `legacy/scripts/rtsp_e2e_stability_docker.sh` (Docker 필요) -> 재연결 후 복구.
   - 예시 결과: `count_before=3`, `count_after=9`.
   - 로그: `/tmp/ai_pipeline_e2e_rtsp_stability_docker`
-- RTSP 재연결 반복: `scripts/check_rtsp.py` (Linux: `scripts/legacy/rtsp_e2e_reconnect_cycle.sh`) -> 재연결 후 복구.
+- RTSP 재연결 반복: `scripts/check_rtsp.py` (Linux: `legacy/scripts/rtsp_e2e_reconnect_cycle.sh`) -> 재연결 후 복구.
   - 예시 결과: `count_before=3`, `count_after=8`.
   - 로그: `/tmp/ai_pipeline_e2e_rtsp_reconnect`
-- 멀티 카메라 스모크(rtsp+file): `scripts/multi_cam.py` (Linux: `scripts/legacy/multi_camera_smoke.sh`) -> 두 카메라 모두 emit 확인.
+- 멀티 카메라 스모크(rtsp+file): `scripts/multi_cam.py` (Linux: `legacy/scripts/multi_camera_smoke.sh`) -> 두 카메라 모두 emit 확인.
   - 예시 결과: `cam01_events=5`, `cam02_events=5`.
   - 로그: `/tmp/ai_pipeline_multi_cam`
-- 듀얼 RTSP 스모크(rtsp x2): `scripts/multi_cam.py` (Linux: `scripts/legacy/rtsp_multi_cam_dual.sh`) -> 두 카메라 모두 emit 확인.
+- 듀얼 RTSP 스모크(rtsp x2): `scripts/multi_cam.py` (Linux: `legacy/scripts/rtsp_multi_cam_dual.sh`) -> 두 카메라 모두 emit 확인.
   - 예시 결과: `cam01_events=5`, `cam02_events=5`.
   - 로그: `/tmp/ai_pipeline_rtsp_multi_cam`
 - 트래커(IOU): `TRACKER_TYPE=iou` -> track_id 안정 부여 확인.
@@ -290,8 +290,8 @@ Last Updated: 2026-02-10
 
 ### 노트
 
-- 운영 런북: `docs/legacy/ops/ops_runbook.md`
-- 스냅샷 정책: `docs/legacy/ops/snapshot_policy.md`
+- 운영 런북: `legacy/docs/legacy/ops/ops_runbook.md`
+- 스냅샷 정책: `legacy/docs/legacy/ops/snapshot_policy.md`
 - 다중 모델 병합 지원: `AI_MODEL_ADAPTER` 콤마 구분
 - RTSP E2E 스크립트는 `LOG_DIR`를 export하여 이벤트 카운트가 안정적으로 유지되도록 한다.
 - RTSP E2E 스크립트는 `CHECK_PORT`를 export하여 포트 체크가 하위 프로세스에서도 동작하도록 한다.

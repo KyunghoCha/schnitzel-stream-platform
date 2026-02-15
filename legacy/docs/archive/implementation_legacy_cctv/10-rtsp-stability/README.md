@@ -16,7 +16,7 @@ Implemented in `src/ai/pipeline/sources/rtsp.py` (`RtspSource`) and `src/ai/pipe
 - Host E2E uses mock backend on `MOCK_BACKEND_PORT` (default 18080) to avoid port conflicts.
 - If the port is already in use, the script auto-selects a free port and writes it to `status.txt`.
 - Reconnect cycle test (cross-platform): `python scripts/check_rtsp.py` (시스템에 맞는 MediaMTX 자동 다운로드).
-- Legacy bash script: `scripts/legacy/rtsp_e2e_stability.sh` (Linux only).
+- Legacy bash script: `legacy/scripts/rtsp_e2e_stability.sh` (Linux only).
 - Real RTSP environment validation is still pending.
 
 ## Code Mapping
@@ -41,7 +41,7 @@ Implemented in `src/ai/pipeline/sources/rtsp.py` (`RtspSource`) and `src/ai/pipe
 - Host E2E는 `MOCK_BACKEND_PORT`(기본 18080)로 mock backend를 띄워 포트 충돌을 피한다.
 - 포트가 이미 사용 중이면 스크립트가 사용 가능한 포트를 자동 선택하고 `status.txt`에 기록한다.
 - 재연결 반복 테스트 (크로스 플랫폼): `python scripts/check_rtsp.py` (시스템에 맞는 MediaMTX 자동 다운로드).
-- 기존 bash 스크립트: `scripts/legacy/rtsp_e2e_stability.sh` (Linux 전용).
+- 기존 bash 스크립트: `legacy/scripts/rtsp_e2e_stability.sh` (Linux 전용).
 - 실제 RTSP 환경 검증은 아직 진행 전이다.
 
 ## 코드 매핑

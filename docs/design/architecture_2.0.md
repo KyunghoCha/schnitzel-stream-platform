@@ -23,7 +23,7 @@ Intent:
   - Contracts: `src/schnitzel_stream/packet.py`, `src/schnitzel_stream/node.py`
 - Plugin packs: `src/schnitzel_stream/packs/`
   - Example: vision nodes/policy/event builders
-- Historical docs only: `docs/legacy/`
+- Historical docs only: `legacy/docs/legacy/`
   - Legacy v1 runtime code is removed from `main`.
 
 ### Runtime Contract
@@ -71,7 +71,7 @@ Intent:
   - 계약: `src/schnitzel_stream/packet.py`, `src/schnitzel_stream/node.py`
 - 플러그인 팩: `src/schnitzel_stream/packs/`
   - 예: vision 노드/정책/이벤트 빌더
-- 참고용 역사 문서: `docs/legacy/`
+- 참고용 역사 문서: `legacy/docs/legacy/`
   - 레거시 v1 런타임 코드는 `main`에서 제거됨
 
 ### 런타임 계약

@@ -84,7 +84,7 @@ Runbook for running the AI pipeline in dev/prod and troubleshooting common issue
 - Run RTSP E2E scripts (local RTSP via MediaMTX + ffmpeg).
 - RTSP E2E requires `ffmpeg` installed on the host.
 - RTSP reconnect cycle test: `python scripts/check_rtsp.py` (cross-platform).
-- Multi-camera smoke tests (legacy): see `scripts/legacy/` or use `scripts/multi_cam.py`.
+- Multi-camera smoke tests (legacy): see `legacy/scripts/` or use `scripts/multi_cam.py`.
 - Confirm logs are written to `outputs/logs`.
 - Confirm snapshots are created in `/tmp/snapshots` (or configured path).
 

@@ -23,7 +23,7 @@ Related Docs
 ------------
 - Contract: `docs/packs/vision/event_protocol_v0.2.md`
 - Model I/O: `docs/packs/vision/model_interface.md`
-- Pipeline behavior: `docs/legacy/specs/legacy_pipeline_spec.md`
+- Pipeline behavior: `legacy/docs/legacy/specs/legacy_pipeline_spec.md`
 
 ## 한국어
 목적
@@ -48,4 +48,4 @@ Related Docs
 ---------
 - 계약: `docs/packs/vision/event_protocol_v0.2.md`
 - 모델 입출력: `docs/packs/vision/model_interface.md`
-- 파이프라인 동작: `docs/legacy/specs/legacy_pipeline_spec.md`
+- 파이프라인 동작: `legacy/docs/legacy/specs/legacy_pipeline_spec.md`

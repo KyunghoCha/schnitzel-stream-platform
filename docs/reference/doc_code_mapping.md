@@ -35,7 +35,7 @@ This document is the active mapping between runtime code and maintained docs.
 
 ## Archive Boundary
 
-Historical CCTV/legacy implementation docs are moved to `docs/archive/` and `docs/legacy/`.
+Historical CCTV/legacy implementation docs are moved to `legacy/docs/archive/` and `legacy/docs/legacy/`.
 They are not normative for active runtime behavior.
 
 ---
@@ -73,5 +73,5 @@ They are not normative for active runtime behavior.
 
 ## 아카이브 경계
 
-역사적 CCTV/legacy 구현 문서는 `docs/archive/`, `docs/legacy/`로 이동했다.
+역사적 CCTV/legacy 구현 문서는 `legacy/docs/archive/`, `legacy/docs/legacy/`로 이동했다.
 현재 런타임 동작의 규범 문서로 사용하지 않는다.

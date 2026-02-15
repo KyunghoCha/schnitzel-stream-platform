@@ -103,15 +103,15 @@ Phase 4) Multimodal Sensor Integration
 
 ### References
 
-- Architecture/design: `docs/legacy/design/pipeline_design.md`
-- Runtime spec: `docs/legacy/specs/legacy_pipeline_spec.md`
+- Architecture/design: `legacy/docs/legacy/design/pipeline_design.md`
+- Runtime spec: `legacy/docs/legacy/specs/legacy_pipeline_spec.md`
 - Model interface: `docs/packs/vision/model_interface.md`
-- Ops runbook: `docs/legacy/ops/ops_runbook.md`
+- Ops runbook: `legacy/docs/legacy/ops/ops_runbook.md`
 
 ### Code Mapping
 
-- Progress logs: `docs/archive/progress_legacy/progress_log.md`
-- Implementation checklist: `docs/archive/progress_legacy/implementation_checklist.md`
+- Progress logs: `legacy/docs/archive/progress_legacy/progress_log.md`
+- Implementation checklist: `legacy/docs/archive/progress_legacy/implementation_checklist.md`
 
 ## 한국어
 
@@ -216,12 +216,12 @@ Phase 4) 멀티 센서 및 멀티모달 연동
 
 ## 참고
 
-- 아키텍처/설계: `docs/legacy/design/pipeline_design.md`
-- 실행 스펙: `docs/legacy/specs/legacy_pipeline_spec.md`
+- 아키텍처/설계: `legacy/docs/legacy/design/pipeline_design.md`
+- 실행 스펙: `legacy/docs/legacy/specs/legacy_pipeline_spec.md`
 - 모델 인터페이스: `docs/packs/vision/model_interface.md`
-- 운영 런북: `docs/legacy/ops/ops_runbook.md`
+- 운영 런북: `legacy/docs/legacy/ops/ops_runbook.md`
 
 ## 코드 매핑
 
-- 진행 로그: `docs/archive/progress_legacy/progress_log.md`
-- 구현 체크리스트: `docs/archive/progress_legacy/implementation_checklist.md`
+- 진행 로그: `legacy/docs/archive/progress_legacy/progress_log.md`
+- 구현 체크리스트: `legacy/docs/archive/progress_legacy/implementation_checklist.md`

@@ -12,7 +12,7 @@ This folder contains active implementation documentation for the v2 runtime.
 - `testing_quality.md`: test strategy, gates, and verification policy
 
 Historical CCTV/legacy implementation notes were moved to:
-- `docs/archive/implementation_legacy_cctv/`
+- `legacy/docs/archive/implementation_legacy_cctv/`
 
 ---
 
@@ -26,4 +26,4 @@ Historical CCTV/legacy implementation notes were moved to:
 - `testing_quality.md`: 테스트 전략, 게이트, 검증 정책
 
 역사적 CCTV/레거시 구현 노트는 다음으로 이동했다:
-- `docs/archive/implementation_legacy_cctv/`
+- `legacy/docs/archive/implementation_legacy_cctv/`

@@ -9,7 +9,7 @@ Active progress tracking lives in:
 - `docs/roadmap/execution_roadmap.md` (execution SSOT)
 
 Historical progress logs moved to:
-- `docs/archive/progress_legacy/`
+- `legacy/docs/archive/progress_legacy/`
 
 ## 한국어
 
@@ -18,4 +18,4 @@ Historical progress logs moved to:
 - `docs/roadmap/execution_roadmap.md` (실행 SSOT)
 
 기존 진행 로그는 다음으로 이동했다:
-- `docs/archive/progress_legacy/`
+- `legacy/docs/archive/progress_legacy/`

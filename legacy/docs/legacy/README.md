@@ -12,12 +12,12 @@ These docs are **not** the platform core SSOT.
 
 Start here:
 
-- Runtime behavior (v1 legacy job): `docs/legacy/specs/legacy_pipeline_spec.md`
-- Legacy pipeline architecture: `docs/legacy/design/pipeline_design.md`
-- Legacy multimodal design (video + sensor): `docs/legacy/design/multimodal_pipeline_design.md`
-- Ops runbook: `docs/legacy/ops/ops_runbook.md`
-- Multi-camera operations: `docs/legacy/ops/multi_camera_run.md`
-- Snapshot policy: `docs/legacy/ops/snapshot_policy.md`
+- Runtime behavior (v1 legacy job): `legacy/docs/legacy/specs/legacy_pipeline_spec.md`
+- Legacy pipeline architecture: `legacy/docs/legacy/design/pipeline_design.md`
+- Legacy multimodal design (video + sensor): `legacy/docs/legacy/design/multimodal_pipeline_design.md`
+- Ops runbook: `legacy/docs/legacy/ops/ops_runbook.md`
+- Multi-camera operations: `legacy/docs/legacy/ops/multi_camera_run.md`
+- Snapshot policy: `legacy/docs/legacy/ops/snapshot_policy.md`
 
 Related:
 
@@ -38,12 +38,12 @@ Related:
 
 시작:
 
-- 런타임 동작(v1 레거시 job): `docs/legacy/specs/legacy_pipeline_spec.md`
-- 레거시 파이프라인 설계: `docs/legacy/design/pipeline_design.md`
-- 레거시 멀티모달(영상+센서) 설계: `docs/legacy/design/multimodal_pipeline_design.md`
-- 운영 런북: `docs/legacy/ops/ops_runbook.md`
-- 멀티 카메라 운영: `docs/legacy/ops/multi_camera_run.md`
-- 스냅샷 정책: `docs/legacy/ops/snapshot_policy.md`
+- 런타임 동작(v1 레거시 job): `legacy/docs/legacy/specs/legacy_pipeline_spec.md`
+- 레거시 파이프라인 설계: `legacy/docs/legacy/design/pipeline_design.md`
+- 레거시 멀티모달(영상+센서) 설계: `legacy/docs/legacy/design/multimodal_pipeline_design.md`
+- 운영 런북: `legacy/docs/legacy/ops/ops_runbook.md`
+- 멀티 카메라 운영: `legacy/docs/legacy/ops/multi_camera_run.md`
+- 스냅샷 정책: `legacy/docs/legacy/ops/snapshot_policy.md`
 
 관련:
 

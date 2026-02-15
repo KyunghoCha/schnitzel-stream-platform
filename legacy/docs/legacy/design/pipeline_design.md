@@ -65,7 +65,7 @@ Current Scope (2026-02-09)
 - Model adapters (YOLO/ONNX), multi-model merge, and IOU tracker are integrated (ByteTrack optional).
 - Full codebase audit completed (G1-G10): 169 items reviewed, critical/major bugs fixed, latest local verification 153 passed, 2 skipped (2026-02-11).
 - Remaining work: production model integration and real RTSP device validation.
-- Planned multimodal (video+sensor) extension is documented separately in `docs/legacy/design/multimodal_pipeline_design.md`.
+- Planned multimodal (video+sensor) extension is documented separately in `legacy/docs/legacy/design/multimodal_pipeline_design.md`.
 
 Code Mapping
 ------------
@@ -146,7 +146,7 @@ FrameSource -> FrameSampler -> EventBuilder -> Dedup -> EventEmitter -> backend 
 - 모델 어댑터(YOLO/ONNX), 다중 모델 병합, IOU 트래커 연동 완료(ByteTrack 선택).
 - 전체 코드 감사 완료(G1-G10): 169개 항목 검토, critical/major 버그 수정, 최신 로컬 검증 153개 통과, 2개 스킵 (2026-02-11).
 - 남은 작업: 프로덕션 모델 연동, 실장비 RTSP 검증.
-- 계획된 멀티모달(영상+센서) 확장 설계는 `docs/legacy/design/multimodal_pipeline_design.md`에 분리 문서화.
+- 계획된 멀티모달(영상+센서) 확장 설계는 `legacy/docs/legacy/design/multimodal_pipeline_design.md`에 분리 문서화.
 
 코드 매핑
 ---------

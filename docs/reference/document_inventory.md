@@ -32,8 +32,8 @@ Last updated: 2026-02-15
 
 ## Historical Documentation Set
 
-- `docs/archive/**`
-- `docs/legacy/**`
+- `legacy/docs/archive/**`
+- `legacy/docs/legacy/**`
 
 ---
 
@@ -67,5 +67,5 @@ Last updated: 2026-02-15
 
 ## 역사 문서 세트
 
-- `docs/archive/**`
-- `docs/legacy/**`
+- `legacy/docs/archive/**`
+- `legacy/docs/legacy/**`

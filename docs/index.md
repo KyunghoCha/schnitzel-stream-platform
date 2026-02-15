@@ -35,8 +35,8 @@ Runtime baseline:
 
 ## Historical Folders
 
-- `docs/archive/`: archived implementation/ops/progress docs
-- `docs/legacy/`: legacy runtime historical docs
+- `legacy/docs/archive/`: archived implementation/ops/progress docs
+- `legacy/docs/legacy/`: legacy runtime historical docs
 
 ## Code Mapping Entrypoints
 
@@ -81,8 +81,8 @@ Runtime baseline:
 
 ## 역사 폴더
 
-- `docs/archive/`: 아카이브 구현/운영/진행 문서
-- `docs/legacy/`: 레거시 런타임 역사 문서
+- `legacy/docs/archive/`: 아카이브 구현/운영/진행 문서
+- `legacy/docs/legacy/`: 레거시 런타임 역사 문서
 
 ## 코드 매핑 진입점
 

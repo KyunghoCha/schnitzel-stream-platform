@@ -10,7 +10,7 @@ Note:
 
 ### Summary
 
-- **SSOT docs used**: `docs/roadmap/strategic_roadmap.md`, `docs/design/architecture_2.0.md`, `docs/archive/implementation_legacy_cctv/90-packaging/entrypoint/design.md`, `PROMPT_CORE.md`.
+- **SSOT docs used**: `docs/roadmap/strategic_roadmap.md`, `docs/design/architecture_2.0.md`, `legacy/docs/archive/implementation_legacy_cctv/90-packaging/entrypoint/design.md`, `PROMPT_CORE.md`.
 - **Scope**: Phase 0 "Strangler" migration to make `python -m schnitzel_stream` the single supported runtime entrypoint, while executing the existing `ai.pipeline` runtime as a legacy job.
 - **Non-scope**: Full DAG runtime, distributed execution, and finalized long-term StreamPacket schema (these remain provisional).
 
@@ -37,7 +37,7 @@ Note:
 6. **Test migration**: switch subprocess integration/regression tests from `-m ai.pipeline` to `-m schnitzel_stream`.
 7. **Disable legacy CLI**: keep `legacy/ai/pipeline/__main__.py` but make it fail-fast with a clear migration message.
 8. **Ops + docs migration**: update Docker CMD, scripts, and docs to reference `python -m schnitzel_stream` instead of `python -m ai.pipeline`.
-9. **SSOT documents (this change-set)**: add `docs/design/architecture_2.0.md`, update `docs/index.md` and `docs/legacy/specs/legacy_pipeline_spec.md` to reflect the new entrypoint and Phase 0 indirection.
+9. **SSOT documents (this change-set)**: add `docs/design/architecture_2.0.md`, update `docs/index.md` and `legacy/docs/legacy/specs/legacy_pipeline_spec.md` to reflect the new entrypoint and Phase 0 indirection.
 
 ### Verification
 
@@ -64,7 +64,7 @@ Note:
 
 ### 요약
 
-- **참조 SSOT 문서**: `docs/roadmap/strategic_roadmap.md`, `docs/design/architecture_2.0.md`, `docs/archive/implementation_legacy_cctv/90-packaging/entrypoint/design.md`, `PROMPT_CORE.md`.
+- **참조 SSOT 문서**: `docs/roadmap/strategic_roadmap.md`, `docs/design/architecture_2.0.md`, `legacy/docs/archive/implementation_legacy_cctv/90-packaging/entrypoint/design.md`, `PROMPT_CORE.md`.
 - **범위**: `python -m schnitzel_stream`를 유일한 지원 엔트리포인트로 만들면서, 기존 `ai.pipeline` 런타임은 레거시 job으로 실행하는 Phase 0(스트랭글러) 마이그레이션 계획.
 - **비범위**: 완전한 DAG 런타임, 분산 실행, 장기적으로 확정된 StreamPacket 스키마(모두 잠정/단계적).
 
@@ -91,7 +91,7 @@ Note:
 6. **테스트 마이그레이션**: subprocess 기반 통합/회귀 테스트 엔트리포인트를 `-m ai.pipeline`에서 `-m schnitzel_stream`로 전환합니다.
 7. **레거시 CLI 비활성화**: `legacy/ai/pipeline/__main__.py`는 유지하되, 명확한 마이그레이션 메시지로 fail-fast 합니다.
 8. **운영/문서 마이그레이션**: Docker CMD, 스크립트, 문서에서 `python -m ai.pipeline` 대신 `python -m schnitzel_stream`를 참조하도록 수정합니다.
-9. **SSOT 문서(본 변경셋)**: `docs/design/architecture_2.0.md`를 추가하고, `docs/index.md` 및 `docs/legacy/specs/legacy_pipeline_spec.md`를 업데이트해 새 엔트리포인트와 Phase 0 우회(indirection)를 반영합니다.
+9. **SSOT 문서(본 변경셋)**: `docs/design/architecture_2.0.md`를 추가하고, `docs/index.md` 및 `legacy/docs/legacy/specs/legacy_pipeline_spec.md`를 업데이트해 새 엔트리포인트와 Phase 0 우회(indirection)를 반영합니다.
 
 ### 검증
 

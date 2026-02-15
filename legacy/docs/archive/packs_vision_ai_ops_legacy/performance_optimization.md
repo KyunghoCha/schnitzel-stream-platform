@@ -47,7 +47,7 @@ Status
 Related Docs
 ------------
 - Model integration: `docs/packs/vision/model_interface.md`
-- Runbook: `docs/legacy/ops/ops_runbook.md`
+- Runbook: `legacy/docs/legacy/ops/ops_runbook.md`
 
 ## 한국어
 목적
@@ -96,4 +96,4 @@ Phase 2: 모델 최적화 (모델 확정 후)
 관련 문서
 ---------
 - 모델 연동: `docs/packs/vision/model_interface.md`
-- 운영 런북: `docs/legacy/ops/ops_runbook.md`
+- 운영 런북: `legacy/docs/legacy/ops/ops_runbook.md`

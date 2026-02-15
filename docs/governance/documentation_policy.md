@@ -16,7 +16,7 @@ Define a maintainable documentation system for `schnitzel-stream-platform` so do
 | Reference | Accurate mapping/indexes | Update whenever paths or ownership change | `docs/reference/` |
 | Implementation | How current runtime is built | Update with architecture/runtime changes | `docs/implementation/` |
 | Guides/Ops | Task-oriented usage | Update when CLI/config/workflow changes | `docs/guides/`, `docs/ops/`, `docs/packs/*` |
-| Archive | Historical record only | No functional guarantees; do not use as SSOT | `docs/archive/`, `docs/legacy/` |
+| Archive | Historical record only | No functional guarantees; do not use as SSOT | `legacy/docs/archive/`, `legacy/docs/legacy/` |
 
 ## Lifecycle States
 
@@ -39,7 +39,7 @@ Rule:
 For PRs that change runtime behavior:
 1. update at least one SSOT/reference doc in the same PR
 2. update `docs/reference/doc_code_mapping.md` when paths/ownership change
-3. move obsolete docs to `docs/archive/` instead of silently leaving stale content
+3. move obsolete docs to `legacy/docs/archive/` instead of silently leaving stale content
 
 ## Change Control
 
@@ -62,7 +62,7 @@ For PRs that change runtime behavior:
 | Reference | 정확한 매핑/인덱스 | 경로/소유권 변경 시 즉시 갱신 | `docs/reference/` |
 | Implementation | 현재 런타임 구현 구조 | 아키텍처/런타임 변경 시 갱신 | `docs/implementation/` |
 | Guides/Ops | 작업 중심 사용법 | CLI/설정/운영 워크플로우 변경 시 갱신 | `docs/guides/`, `docs/ops/`, `docs/packs/*` |
-| Archive | 역사 기록 | 기능 보장 없음, SSOT로 사용 금지 | `docs/archive/`, `docs/legacy/` |
+| Archive | 역사 기록 | 기능 보장 없음, SSOT로 사용 금지 | `legacy/docs/archive/`, `legacy/docs/legacy/` |
 
 ## 라이프사이클 상태
 
@@ -85,7 +85,7 @@ For PRs that change runtime behavior:
 런타임 동작을 변경하는 PR은 다음을 따른다:
 1. 같은 PR에서 SSOT/reference 문서를 최소 1개 이상 갱신
 2. 경로/소유권이 바뀌면 `docs/reference/doc_code_mapping.md` 갱신
-3. 오래된 문서는 방치하지 말고 `docs/archive/`로 이동
+3. 오래된 문서는 방치하지 말고 `legacy/docs/archive/`로 이동
 
 ## 변경 통제
 

@@ -51,8 +51,8 @@ python scripts/multi_cam.py start --log-dir /path/to/logs
 python scripts/multi_cam.py start --extra-args "--dry-run"
 ```
 
-> **Note**: Legacy bash scripts are preserved in `scripts/legacy/` for reference.
-> bash 스크립트는 `scripts/legacy/`에 보관되어 있습니다.
+> **Note**: Legacy bash scripts are preserved in `legacy/scripts/` for reference.
+> bash 스크립트는 `legacy/scripts/`에 보관되어 있습니다.
 
 Examples (Docker)
 -----------------
@@ -149,7 +149,7 @@ python scripts/multi_cam.py start --log-dir /path/to/logs
 python scripts/multi_cam.py start --extra-args "--dry-run"
 ```
 
-> **참고**: 기존 bash 스크립트는 `scripts/legacy/`에 보관되어 있습니다.
+> **참고**: 기존 bash 스크립트는 `legacy/scripts/`에 보관되어 있습니다.
 
 예시 (Docker)
 -------------

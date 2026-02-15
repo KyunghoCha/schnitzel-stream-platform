@@ -26,7 +26,7 @@ Rule:
 
 ### Mismatches (path)
 
-- Legacy CCTV-only roadmap is preserved at `docs/archive/roadmap_legacy/legacy_cctv_execution_roadmap_2026-02-08.md` (historical reference, not SSOT).
+- Legacy CCTV-only roadmap is preserved at `legacy/docs/archive/roadmap_legacy/legacy_cctv_execution_roadmap_2026-02-08.md` (historical reference, not SSOT).
 
 ### Fix Plan
 
@@ -104,7 +104,7 @@ Intent:
 - `P5.1` Docs + examples taxonomy cleanup (platform vs legacy) and naming de-CCTVization. `DONE` (48455a1, 41e9439, f389234)
   - DoD:
     - Top-level entry docs (`README.md`, `PROMPT*.md`, `docs/index.md`) clearly separate `platform` vs `legacy`.
-    - Legacy-only docs/specs are explicitly named `legacy_*` or moved under `docs/legacy/`.
+    - Legacy-only docs/specs are explicitly named `legacy_*` or moved under `legacy/docs/legacy/`.
     - Default/example v2 graphs avoid CCTV-specific naming unless the example is explicitly legacy.
 - `P5.2` Plugin boundary hardening for IO (sources/sinks) and policy nodes. `DONE` (05719be, 5925f2e)
   - DoD:
@@ -207,7 +207,7 @@ Intent:
 
 ### 불일치(경로)
 
-- 레거시 CCTV 전용 로드맵은 `docs/archive/roadmap_legacy/legacy_cctv_execution_roadmap_2026-02-08.md` 에 보존합니다. (역사 기록용, SSOT 아님)
+- 레거시 CCTV 전용 로드맵은 `legacy/docs/archive/roadmap_legacy/legacy_cctv_execution_roadmap_2026-02-08.md` 에 보존합니다. (역사 기록용, SSOT 아님)
 
 ### 실행 계획
 
@@ -284,7 +284,7 @@ Intent:
 - `P5.1` 문서 + 예시 그래프 분류/정리(platform vs legacy) 및 네이밍 de-CCTVization. `DONE` (48455a1, 41e9439, f389234)
   - DoD:
     - 최상위 진입 문서(`README.md`, `PROMPT*.md`, `docs/index.md`)에서 `platform`과 `legacy`가 명확히 분리되어야 합니다.
-    - 레거시 전용 문서/스펙은 `legacy_*`로 명시하거나 `docs/legacy/`로 이동합니다.
+    - 레거시 전용 문서/스펙은 `legacy_*`로 명시하거나 `legacy/docs/legacy/`로 이동합니다.
     - 기본/예시 v2 그래프는 레거시 예시가 아닌 한 CCTV 네이밍을 피합니다.
 - `P5.2` IO(소스/싱크) 및 정책 노드의 플러그인 경계 강화. `DONE` (05719be, 5925f2e)
   - DoD:
