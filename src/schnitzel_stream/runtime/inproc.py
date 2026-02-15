@@ -7,6 +7,10 @@ Intent:
 - Execute a v2 node/edge graph in a single process for rapid iteration on edge devices.
 - Strict DAG only (no cycles) in Phase 1; restricted cycles are planned in `P1.7`.
 - No transport layer yet; nodes exchange StreamPackets in-memory (side-effects are implemented by node plugins).
+
+Phase 6 note:
+- The Phase 1 implementation was a "batch DAG evaluator" (sources ran to completion before downstream nodes ran).
+- `P6.1` evolves this into an interleaved scheduler so packets flow incrementally through the graph.
 """
 
 from collections import defaultdict, deque
@@ -117,58 +121,89 @@ class InProcGraphRunner:
         for e in edges:
             outgoing[e.src].append(e.dst)
 
-        order = _topological_order(nodes, edges)
-
-        inbox: dict[str, deque[StreamPacket]] = {nid: deque() for nid in nodes_by_id}
         instances: dict[str, Any] = {}
         for n in nodes:
             instances[n.node_id] = _instantiate_node(self._registry, n)
 
-        def _emit(src_id: str, pkt: StreamPacket) -> None:
-            for dst_id in outgoing.get(src_id, []):
-                inbox[dst_id].append(pkt)
+        # Work queue of (node_id, packet) tasks. FIFO order provides deterministic behavior.
+        work_q: deque[tuple[str, StreamPacket]] = deque()
 
-        try:
-            for nid in order:
+        def _enqueue(src_id: str, pkt: StreamPacket) -> None:
+            for dst_id in outgoing.get(src_id, []):
+                work_q.append((dst_id, pkt))
+
+        def _drain_work_q() -> None:
+            while work_q:
+                nid, inp = work_q.popleft()
                 node_spec = nodes_by_id[nid]
                 inst = instances[nid]
-
-                if node_spec.kind == "source":
-                    run_fn = getattr(inst, "run", None)
-                    if not callable(run_fn):
-                        raise TypeError(f"source node does not implement run(): {node_spec.plugin}")
-                    produced = run_fn()
-                    if produced is None:
-                        raise TypeError(f"source node run() must return Iterable[StreamPacket]: {node_spec.plugin}")
-                    if not th.allow_source_emit(node_id=nid, emitted_total=source_emitted_total):
-                        continue
-                    for pkt in produced:
-                        if not th.allow_source_emit(node_id=nid, emitted_total=source_emitted_total):
-                            break
-                        if not isinstance(pkt, StreamPacket):
-                            raise TypeError(f"node output must be StreamPacket: {node_spec.plugin}")
-                        outputs_by_node[nid].append(pkt)
-                        produced_by_node[nid] += 1
-                        source_emitted_total += 1
-                        _emit(nid, pkt)
-                    continue
 
                 process_fn = getattr(inst, "process", None)
                 if not callable(process_fn):
                     raise TypeError(f"node does not implement process(): {node_spec.plugin}")
 
-                while inbox[nid]:
-                    inp = inbox[nid].popleft()
-                    consumed_by_node[nid] += 1
-                    produced = process_fn(inp)
-                    if produced is None:
-                        raise TypeError(f"node process() must return Iterable[StreamPacket]: {node_spec.plugin}")
-                    for pkt in produced:
-                        if not isinstance(pkt, StreamPacket):
-                            raise TypeError(f"node output must be StreamPacket: {node_spec.plugin}")
-                        outputs_by_node[nid].append(pkt)
-                        produced_by_node[nid] += 1
-                        _emit(nid, pkt)
+                consumed_by_node[nid] += 1
+                produced = process_fn(inp)
+                if produced is None:
+                    raise TypeError(f"node process() must return Iterable[StreamPacket]: {node_spec.plugin}")
+
+                for pkt in produced:
+                    if not isinstance(pkt, StreamPacket):
+                        raise TypeError(f"node output must be StreamPacket: {node_spec.plugin}")
+                    outputs_by_node[nid].append(pkt)
+                    produced_by_node[nid] += 1
+                    _enqueue(nid, pkt)
+
+        try:
+            # Interleaved scheduler:
+            # - Initialize all sources and iterate them in a deterministic round-robin.
+            # - After each source emission, drain the work queue so downstream processing
+            #   keeps up and inboxes do not grow unbounded.
+            sources: list[str] = [n.node_id for n in nodes if str(n.kind).strip().lower() == "source"]
+            source_iters: dict[str, Any] = {}
+            for nid in sources:
+                node_spec = nodes_by_id[nid]
+                inst = instances[nid]
+                run_fn = getattr(inst, "run", None)
+                if not callable(run_fn):
+                    raise TypeError(f"source node does not implement run(): {node_spec.plugin}")
+                produced = run_fn()
+                if produced is None:
+                    raise TypeError(f"source node run() must return Iterable[StreamPacket]: {node_spec.plugin}")
+                source_iters[nid] = iter(produced)
+
+            active_sources: list[str] = list(sources)
+            rr_idx = 0
+            while active_sources:
+                nid = active_sources[rr_idx]
+                node_spec = nodes_by_id[nid]
+
+                if not th.allow_source_emit(node_id=nid, emitted_total=source_emitted_total):
+                    break
+
+                it = source_iters[nid]
+                try:
+                    pkt = next(it)
+                except StopIteration:
+                    active_sources.pop(rr_idx)
+                    if not active_sources:
+                        break
+                    rr_idx = rr_idx % len(active_sources)
+                    continue
+
+                if not isinstance(pkt, StreamPacket):
+                    raise TypeError(f"node output must be StreamPacket: {node_spec.plugin}")
+
+                outputs_by_node[nid].append(pkt)
+                produced_by_node[nid] += 1
+                source_emitted_total += 1
+                _enqueue(nid, pkt)
+                _drain_work_q()
+
+                rr_idx = (rr_idx + 1) % len(active_sources)
+
+            # Best-effort drain of any remaining queued work (should be empty with strict DAG).
+            _drain_work_q()
 
             metrics: dict[str, int] = {
                 "packets.consumed_total": sum(consumed_by_node.values()),

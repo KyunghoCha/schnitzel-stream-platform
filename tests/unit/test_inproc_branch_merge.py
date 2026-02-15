@@ -63,3 +63,42 @@ def test_inproc_runtime_merges_multiple_sources_into_one_node_deterministically(
     outs = result.outputs_by_node["out"]
     assert [p.payload["id"] for p in outs] == ["a1", "b1"]
 
+
+def test_inproc_runtime_interleaves_multiple_sources_round_robin():
+    nodes = [
+        NodeSpec(
+            node_id="a",
+            kind="source",
+            plugin="schnitzel_stream.nodes.dev:StaticSource",
+            config={
+                "packets": [
+                    {"kind": "demo", "source_id": "a", "payload": {"id": "a1"}},
+                    {"kind": "demo", "source_id": "a", "payload": {"id": "a2"}},
+                ]
+            },
+        ),
+        NodeSpec(
+            node_id="b",
+            kind="source",
+            plugin="schnitzel_stream.nodes.dev:StaticSource",
+            config={
+                "packets": [
+                    {"kind": "demo", "source_id": "b", "payload": {"id": "b1"}},
+                    {"kind": "demo", "source_id": "b", "payload": {"id": "b2"}},
+                ]
+            },
+        ),
+        NodeSpec(node_id="merge", kind="node", plugin="schnitzel_stream.nodes.dev:Identity"),
+        NodeSpec(node_id="out", kind="sink", plugin="schnitzel_stream.nodes.dev:Identity"),
+    ]
+    edges = [
+        EdgeSpec(src="a", dst="merge"),
+        EdgeSpec(src="b", dst="merge"),
+        EdgeSpec(src="merge", dst="out"),
+    ]
+
+    runner = InProcGraphRunner()
+    result = runner.run(nodes=nodes, edges=edges)
+
+    outs = result.outputs_by_node["out"]
+    assert [p.payload["id"] for p in outs] == ["a1", "b1", "a2", "b2"]
