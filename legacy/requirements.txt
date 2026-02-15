@@ -1,7 +1,0 @@
-# Legacy runtime dependencies (pinned via repo root).
-#
-# Install:
-#   pip install -r legacy/requirements.txt
-
--r ../requirements.txt
--r ../requirements-model.txt
