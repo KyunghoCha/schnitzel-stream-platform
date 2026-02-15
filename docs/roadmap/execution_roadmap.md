@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P5.1`
+Current step id: `P5.2`
 
 ## English
 
@@ -100,12 +100,12 @@ Intent:
   - domain-specific things remain supported, but they live behind plugin boundaries or under `legacy/`
   - docs/examples naming should be domain-neutral by default
 
-- `P5.1` Docs + examples taxonomy cleanup (platform vs legacy) and naming de-CCTVization. `NOW`
+- `P5.1` Docs + examples taxonomy cleanup (platform vs legacy) and naming de-CCTVization. `DONE` (48455a1, 41e9439, f389234)
   - DoD:
     - Top-level entry docs (`README.md`, `PROMPT*.md`, `docs/index.md`) clearly separate `platform` vs `legacy`.
     - Legacy-only docs/specs are explicitly named `legacy_*` or moved under `docs/legacy/`.
     - Default/example v2 graphs avoid CCTV-specific naming unless the example is explicitly legacy.
-- `P5.2` Plugin boundary hardening for IO (sources/sinks) and policy nodes. `NEXT`
+- `P5.2` Plugin boundary hardening for IO (sources/sinks) and policy nodes. `NOW`
   - DoD:
     - RTSP/webcam/file sources are "just" `source` plugins (no core coupling).
     - backend/JSONL/stdout are "just" `sink` plugins.
@@ -279,12 +279,12 @@ Intent:
   - 도메인 특화 기능은 계속 지원하되, 플러그인 경계 뒤로 보내거나 `legacy/`로 격리합니다.
   - 문서/예시 네이밍은 기본적으로 도메인 중립이어야 합니다.
 
-- `P5.1` 문서 + 예시 그래프 분류/정리(platform vs legacy) 및 네이밍 de-CCTVization. `NOW`
+- `P5.1` 문서 + 예시 그래프 분류/정리(platform vs legacy) 및 네이밍 de-CCTVization. `DONE` (48455a1, 41e9439, f389234)
   - DoD:
     - 최상위 진입 문서(`README.md`, `PROMPT*.md`, `docs/index.md`)에서 `platform`과 `legacy`가 명확히 분리되어야 합니다.
     - 레거시 전용 문서/스펙은 `legacy_*`로 명시하거나 `docs/legacy/`로 이동합니다.
     - 기본/예시 v2 그래프는 레거시 예시가 아닌 한 CCTV 네이밍을 피합니다.
-- `P5.2` IO(소스/싱크) 및 정책 노드의 플러그인 경계 강화. `NEXT`
+- `P5.2` IO(소스/싱크) 및 정책 노드의 플러그인 경계 강화. `NOW`
   - DoD:
     - RTSP/webcam/file 입력은 코어와 결합되지 않은 `source` 플러그인으로만 제공됩니다.
     - backend/JSONL/stdout 출력은 `sink` 플러그인으로만 제공됩니다.
