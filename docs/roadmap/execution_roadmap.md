@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P8.3`
+Current step id: `P8.4`
 
 ## English
 
@@ -47,7 +47,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 8** (`P8.3` is NOW; `P4.5` remains gated by the deprecation window; `P3.3` remains optional)
+Current position: **Phase 8** (`P8.4` is NOW; `P4.5` remains gated by the deprecation window; `P3.3` remains optional)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -149,8 +149,8 @@ Intent:
 
 - `P8.1` RTSP source plugin (reconnect/backoff) + tests + demo graph. `DONE` (8cf52e8, 471ff6c)
 - `P8.2` Webcam source plugin + tests + demo graph. `DONE` (3d9e889, 9886e63)
-- `P8.3` HTTP sink plugin (idempotency + retry policy) + tests + demo graph. `NOW`
-- `P8.4` JSONL/file sink plugin + tests. `LATER`
+- `P8.3` HTTP sink plugin (idempotency + retry policy) + tests + demo graph. `DONE` (2d7442c, 83baaad)
+- `P8.4` JSONL/file sink plugin + tests. `NOW`
 
 #### Phase 9: Cross-Platform Packaging + Release Discipline (NEXT)
 
@@ -226,7 +226,7 @@ Intent:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-현재 위치: **Phase 8** (`P8.3`이 NOW이며, `P4.5`는 deprecation window로 GATED 상태, `P3.3`는 optional)
+현재 위치: **Phase 8** (`P8.4`가 NOW이며, `P4.5`는 deprecation window로 GATED 상태, `P3.3`는 optional)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -328,8 +328,8 @@ Intent:
 
 - `P8.1` RTSP source 플러그인(reconnect/backoff) + 테스트 + 데모 그래프. `DONE` (8cf52e8, 471ff6c)
 - `P8.2` Webcam source 플러그인 + 테스트 + 데모 그래프. `DONE` (3d9e889, 9886e63)
-- `P8.3` HTTP sink 플러그인(idempotency + retry 정책) + 테스트 + 데모 그래프. `NOW`
-- `P8.4` JSONL/file sink 플러그인 + 테스트. `LATER`
+- `P8.3` HTTP sink 플러그인(idempotency + retry 정책) + 테스트 + 데모 그래프. `DONE` (2d7442c, 83baaad)
+- `P8.4` JSONL/file sink 플러그인 + 테스트. `NOW`
 
 #### Phase 9: 크로스플랫폼 패키징 + 릴리즈 규율 (NEXT)
 
