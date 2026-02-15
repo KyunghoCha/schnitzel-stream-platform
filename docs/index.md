@@ -22,6 +22,7 @@ Phase 0 note:
   9. `contracts/stream_packet.md` (Internal node-to-node contract, provisional)
   10. `contracts/observability.md` (Metrics/health contract, provisional)
   11. `packs/vision/event_protocol_v0.2.md` (Event schema / transport contract)
+  12. `guides/v2_node_graph_guide.md` (Korean-only: v2 node catalog + swap rules)
 
 ### Legacy AI Pipeline Deep Dive (Optional)
 
@@ -47,6 +48,7 @@ Phase 0 note:
 - `contracts/`: schema/protocol contracts and policy notes
 - `specs/`: runtime/behavior specifications
 - `design/`: architecture/design docs
+- `guides/`: hands-on guides (non-SSOT)
 - `ops/`: operations, deployment, troubleshooting
 - `legacy/`: quarantined legacy-only docs (v1 runtime lineage)
 - `packs/`: optional domain packs (vision, sensors, etc)
@@ -84,6 +86,7 @@ Phase 0 참고:
   9. `contracts/stream_packet.md` (노드 간 내부 계약, 잠정)
   10. `contracts/observability.md` (메트릭/헬스 계약, 잠정)
   11. `packs/vision/event_protocol_v0.2.md` (이벤트 스키마/전송 계약)
+  12. `guides/v2_node_graph_guide.md` (v2 노드 카탈로그 + 교체 규칙, 개인 학습용)
 
 ### 레거시 AI 파이프라인 상세 (선택)
 
@@ -109,6 +112,7 @@ Phase 0 참고:
 - `contracts/`: 스키마/프로토콜 계약 및 정책 노트
 - `specs/`: 실행/동작 스펙
 - `design/`: 설계 문서
+- `guides/`: 실전 가이드(SSOT 아님)
 - `ops/`: 운영/배포/트러블슈팅
 - `legacy/`: 격리된 레거시 전용 문서(v1 런타임 계보)
 - `packs/`: 옵션 도메인 팩(vision, sensors 등)
