@@ -44,14 +44,14 @@ You are continuing work on the runtime pipeline repo `schnitzel-stream-platform`
 - When adding features, update SSOT first, then implement.
 - Before making changes, re-read the relevant files to confirm current state.
 - If asked for doc/code alignment, follow the established method: read in full, compare to code, update all related docs/configs/tests, and record changes consistently.
-- If any contract/interface changes occur, update `docs/contracts/protocol.md` and relevant SSOT docs (`docs/specs/model_interface.md`, `docs/specs/model_class_taxonomy.md`), and sync external docs if they reference the contract.
+- If any contract/interface changes occur, update `docs/packs/vision/event_protocol_v0.2.md` and relevant SSOT docs (`docs/packs/vision/model_interface.md`, `docs/packs/vision/model_class_taxonomy.md`), and sync external docs if they reference the contract.
 
 ### Key docs to read first
 
 1. `docs/index.md`
-2. `docs/contracts/protocol.md`
-3. `docs/specs/legacy_pipeline_spec.md`
-4. `docs/ops/ops_runbook.md`
+2. `docs/packs/vision/event_protocol_v0.2.md`
+3. `docs/legacy/specs/legacy_pipeline_spec.md`
+4. `docs/legacy/ops/ops_runbook.md`
 
 ### Not done yet / external
 
@@ -127,14 +127,14 @@ You are continuing work on the runtime pipeline repo `schnitzel-stream-platform`
 - 기능 추가 시 SSOT 업데이트를 선행한 뒤 구현한다.
 - 변경 전 관련 파일을 다시 읽어 최신 상태를 확인한다.
 - 문서-코드 정합성 요청 시 기존 방식대로: 문서 정독 → 코드 비교 → 관련 문서/설정/테스트 동시 갱신 → 일관성 기록.
-- 계약/인터페이스 변경 시 `docs/contracts/protocol.md`와 관련 SSOT(`docs/specs/model_interface.md`, `docs/specs/model_class_taxonomy.md`)를 갱신하고 외부 참조 문서를 동기화한다.
+- 계약/인터페이스 변경 시 `docs/packs/vision/event_protocol_v0.2.md`와 관련 SSOT(`docs/packs/vision/model_interface.md`, `docs/packs/vision/model_class_taxonomy.md`)를 갱신하고 외부 참조 문서를 동기화한다.
 
 ### 우선 읽을 문서
 
 1. `docs/index.md`
-2. `docs/contracts/protocol.md`
-3. `docs/specs/legacy_pipeline_spec.md`
-4. `docs/ops/ops_runbook.md`
+2. `docs/packs/vision/event_protocol_v0.2.md`
+3. `docs/legacy/specs/legacy_pipeline_spec.md`
+4. `docs/legacy/ops/ops_runbook.md`
 
 ### 아직 미완 / 외부 의존
 

@@ -1,4 +1,4 @@
-# Docs: docs/implementation/25-model-tracking/spec.md, docs/specs/model_interface.md
+# Docs: docs/implementation/25-model-tracking/spec.md, docs/packs/vision/model_interface.md
 # 베이스라인으로 사용되는 경량 IoU 기반 트래커.
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-# Docs: docs/design/pipeline_design.md, docs/implementation/00-overview/data-flow/spec.md
+# Docs: docs/legacy/design/pipeline_design.md, docs/implementation/00-overview/data-flow/spec.md
 from __future__ import annotations
 
 # 파이프라인 코어

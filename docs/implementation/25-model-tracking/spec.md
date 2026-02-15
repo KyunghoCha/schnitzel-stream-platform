@@ -31,7 +31,7 @@ Baseline Tuning (Temporary)
 
 - The defaults above are **baseline values** only.
 - Final tuning must be done after the real model/data is fixed.
-- Record tuned values in `docs/ops/ai/model_yolo_run.md` and update this spec.
+- Record tuned values in `docs/packs/vision/ops/ai/model_yolo_run.md` and update this spec.
 
 Status
 ------
@@ -79,7 +79,7 @@ Code Mapping
 
 - 위 기본값은 **임시 기준값**이다.
 - 실제 모델/데이터가 확정된 뒤 반드시 재튜닝한다.
-- 튜닝 결과는 `docs/ops/ai/model_yolo_run.md`에 기록하고 본 문서를 갱신한다.
+- 튜닝 결과는 `docs/packs/vision/ops/ai/model_yolo_run.md`에 기록하고 본 문서를 갱신한다.
 
 상태
 -----

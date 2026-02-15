@@ -1,4 +1,4 @@
-# Docs: docs/specs/model_class_taxonomy.md
+# Docs: docs/packs/vision/model_class_taxonomy.md
 # 모델 클래스 ID를 프로토콜 이벤트/객체/심각도 필드에 매핑.
 from __future__ import annotations
 

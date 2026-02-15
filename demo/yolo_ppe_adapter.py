@@ -1,5 +1,5 @@
 # Demo PPE adapter (non-production)
-# Docs: docs/ops/ai/demo/ppe_demo.md
+# Docs: docs/packs/vision/ops/ai/demo/ppe_demo.md
 # Intended for demo runs; not wired as a default adapter.
 
 from __future__ import annotations

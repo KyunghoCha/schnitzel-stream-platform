@@ -1,4 +1,4 @@
-# Docs: docs/specs/model_interface.md
+# Docs: docs/packs/vision/model_interface.md
 from __future__ import annotations
 
 # 모델 어댑터 인터페이스 (스켈레톤)

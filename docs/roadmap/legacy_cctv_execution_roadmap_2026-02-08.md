@@ -28,7 +28,7 @@ Deploy a multi-camera AI pipeline that ingests real RTSP streams, runs model/tra
 1) Hardware target is not fixed (GPU, Jetson, or CPU-only).
 2) Resolution/FPS/latency targets are TBD.
 3) Budget target: ~KRW 1,000,000 (draft).
-4) Final class taxonomy and severity rules require project policy lock (`docs/specs/model_class_taxonomy.md`).
+4) Final class taxonomy and severity rules require project policy lock (`docs/packs/vision/model_class_taxonomy.md`).
 5) Labeling policy and training report format are defined in ops docs; owner confirmation is required.
 
 ### Completed
@@ -68,7 +68,7 @@ Deploy a multi-camera AI pipeline that ingests real RTSP streams, runs model/tra
 Phase 1) Model/Tracker Adapter
 
 1. Implement EventBuilder adapter for model outputs. (done)
-2. Verify payload mapping against `docs/specs/model_interface.md`. (done)
+2. Verify payload mapping against `docs/packs/vision/model_interface.md`. (done)
 3. Add smoke tests with sample model outputs. (done)
 4. Enable multi-model merge (comma-separated adapters). (done)
 5. Add tracker integration or synthetic track_id policy for PERSON. (done, IOU tracker)
@@ -94,19 +94,19 @@ Phase 4) Multimodal Sensor Integration
 
 ### Project Policy Decisions (must decide)
 
-- Event schema finalization (`docs/contracts/protocol.md`)
+- Event schema finalization (`docs/packs/vision/event_protocol_v0.2.md`)
 - Zone coordinate system (pixel 기준 여부)
 - RTSP stream spec (resolution, fps, codec, auth)
 - Snapshot path/public URL contract
-- Model class taxonomy and severity policy (`docs/specs/model_class_taxonomy.md`)
+- Model class taxonomy and severity policy (`docs/packs/vision/model_class_taxonomy.md`)
 - Hardware target (GPU/Jetson/CPU) and performance targets (FPS/latency)
 
 ### References
 
-- Architecture/design: `docs/design/pipeline_design.md`
-- Runtime spec: `docs/specs/legacy_pipeline_spec.md`
-- Model interface: `docs/specs/model_interface.md`
-- Ops runbook: `docs/ops/ops_runbook.md`
+- Architecture/design: `docs/legacy/design/pipeline_design.md`
+- Runtime spec: `docs/legacy/specs/legacy_pipeline_spec.md`
+- Model interface: `docs/packs/vision/model_interface.md`
+- Ops runbook: `docs/legacy/ops/ops_runbook.md`
 
 ### Code Mapping
 
@@ -141,7 +141,7 @@ Phase 4) Multimodal Sensor Integration
 1) 실행 하드웨어 미정(GPU/Jetson/CPU).
 2) 해상도/FPS/지연 목표 미정.
 3) 예산 목표: 약 100만원(초안).
-4) 클래스 분류와 severity 정책은 프로젝트 정책 확정 필요 (`docs/specs/model_class_taxonomy.md`).
+4) 클래스 분류와 severity 정책은 프로젝트 정책 확정 필요 (`docs/packs/vision/model_class_taxonomy.md`).
 5) 라벨링 정책/학습 리포트 포맷은 ops 문서 기준으로 최종 확인 필요.
 
 ### 완료
@@ -181,7 +181,7 @@ Phase 4) Multimodal Sensor Integration
 Phase 1) 모델/트래커 어댑터
 
 1. Implement EventBuilder adapter for model outputs. (완료)
-2. `docs/specs/model_interface.md` 기준으로 매핑 검증 (완료)
+2. `docs/packs/vision/model_interface.md` 기준으로 매핑 검증 (완료)
 3. 샘플 모델 출력 기반 스모크 테스트 추가 (완료)
 4. 다중 모델 병합(콤마 구분 어댑터) 지원 (완료)
 5. 트래커 연동 또는 PERSON 합성 track_id 정책 정리 (IOU 기준 완료)
@@ -207,19 +207,19 @@ Phase 4) 멀티 센서 및 멀티모달 연동
 
 ### 프로젝트 정책 확정 항목(필수)
 
-- 이벤트 스키마 확정 (`docs/contracts/protocol.md`)
+- 이벤트 스키마 확정 (`docs/packs/vision/event_protocol_v0.2.md`)
 - zone 좌표 기준(픽셀 좌표 여부)
 - RTSP 스트림 규격(해상도, fps, 코덱, 인증)
 - 스냅샷 경로/공개 URL 계약
-- 모델 클래스 분류 및 severity 정책 (`docs/specs/model_class_taxonomy.md`)
+- 모델 클래스 분류 및 severity 정책 (`docs/packs/vision/model_class_taxonomy.md`)
 - 하드웨어 타깃(GPU/Jetson/CPU)과 성능 목표(FPS/지연)
 
 ## 참고
 
-- 아키텍처/설계: `docs/design/pipeline_design.md`
-- 실행 스펙: `docs/specs/legacy_pipeline_spec.md`
-- 모델 인터페이스: `docs/specs/model_interface.md`
-- 운영 런북: `docs/ops/ops_runbook.md`
+- 아키텍처/설계: `docs/legacy/design/pipeline_design.md`
+- 실행 스펙: `docs/legacy/specs/legacy_pipeline_spec.md`
+- 모델 인터페이스: `docs/packs/vision/model_interface.md`
+- 운영 런북: `docs/legacy/ops/ops_runbook.md`
 
 ## 코드 매핑
 

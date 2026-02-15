@@ -1,4 +1,4 @@
-# Docs: docs/specs/legacy_pipeline_spec.md
+# Docs: docs/legacy/specs/legacy_pipeline_spec.md
 """
 프레임 소스 패키지
 

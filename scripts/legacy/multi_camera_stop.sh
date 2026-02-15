@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Docs: docs/ops/multi_camera_run.md
+# Docs: docs/legacy/ops/multi_camera_run.md
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

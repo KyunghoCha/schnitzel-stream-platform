@@ -1,4 +1,4 @@
-# Docs: docs/specs/legacy_pipeline_spec.md
+# Docs: docs/legacy/specs/legacy_pipeline_spec.md
 from __future__ import annotations
 
 # 프레임 샘플러

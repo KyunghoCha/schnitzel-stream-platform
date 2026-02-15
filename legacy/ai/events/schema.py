@@ -1,4 +1,4 @@
-# Docs: docs/contracts/protocol.md
+# Docs: docs/packs/vision/event_protocol_v0.2.md
 from __future__ import annotations
 
 # 이벤트 스키마/더미 이벤트 생성기

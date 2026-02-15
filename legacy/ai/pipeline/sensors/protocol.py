@@ -1,4 +1,4 @@
-# Docs: docs/design/multimodal_pipeline_design.md
+# Docs: docs/legacy/design/multimodal_pipeline_design.md
 from __future__ import annotations
 
 from typing import Any, Protocol

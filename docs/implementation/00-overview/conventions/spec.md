@@ -17,7 +17,7 @@ Edge Cases
 
 Status
 ------
-Core conventions are implemented; event field naming rules are documented in `docs/contracts/protocol.md`.
+Core conventions are implemented; event field naming rules are documented in `docs/packs/vision/event_protocol_v0.2.md`.
 
 Code Mapping
 ------------
@@ -41,7 +41,7 @@ Code Mapping
 
 상태
 ----
-핵심 컨벤션은 구현되었고, 이벤트 필드 네이밍 규칙은 `docs/contracts/protocol.md`에 문서화됨.
+핵심 컨벤션은 구현되었고, 이벤트 필드 네이밍 규칙은 `docs/packs/vision/event_protocol_v0.2.md`에 문서화됨.
 
 코드 매핑
 ---------

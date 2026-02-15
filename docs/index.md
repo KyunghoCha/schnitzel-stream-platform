@@ -18,29 +18,29 @@ Phase 0 note:
   5. `design/architecture_2.0.md` (Provisional architecture spec)
   6. `implementation/90-packaging/entrypoint/design.md` (Entrypoint design)
   7. `implementation/90-packaging/support_matrix.md` (Edge support matrix, provisional)
-  8. `specs/legacy_pipeline_spec.md` (Legacy pipeline behavior, executed via `schnitzel_stream`)
+  8. `legacy/specs/legacy_pipeline_spec.md` (Legacy pipeline behavior, executed via `schnitzel_stream`)
   9. `contracts/stream_packet.md` (Internal node-to-node contract, provisional)
   10. `contracts/observability.md` (Metrics/health contract, provisional)
-  11. `contracts/protocol.md` (Event schema / transport contract)
+  11. `packs/vision/event_protocol_v0.2.md` (Event schema / transport contract)
 
 ### Legacy AI Pipeline Deep Dive (Optional)
 
-- `design/pipeline_design.md`: legacy pipeline architecture
-- `design/multimodal_pipeline_design.md`: legacy multimodal (video + sensor) design and rollout
-- `specs/model_interface.md`: model adapter I/O contract
-- `specs/model_class_taxonomy.md`: class taxonomy (draft)
-- `ops/ops_runbook.md`: operations runbook
-- `ops/multi_camera_run.md`: multi-camera operations
+- `legacy/design/pipeline_design.md`: legacy pipeline architecture
+- `legacy/design/multimodal_pipeline_design.md`: legacy multimodal (video + sensor) design and rollout
+- `packs/vision/model_interface.md`: model adapter I/O contract
+- `packs/vision/model_class_taxonomy.md`: class taxonomy (draft)
+- `legacy/ops/ops_runbook.md`: operations runbook
+- `legacy/ops/multi_camera_run.md`: multi-camera operations
 
 ### Single Source Of Truth
 
 - Platform pivot: `roadmap/strategic_roadmap.md`, `roadmap/migration_plan_phase0.md`, `design/architecture_2.0.md`
 - Execution plan/status: `roadmap/execution_roadmap.md`
-- Runtime behavior (legacy job): `specs/legacy_pipeline_spec.md`
+- Runtime behavior (legacy job): `legacy/specs/legacy_pipeline_spec.md`
 - Node-to-node contract: `contracts/stream_packet.md`
 - Observability contract: `contracts/observability.md`
-- Event schema: `contracts/protocol.md`
-- Model/Tracker contract: `specs/model_interface.md`
+- Event schema: `packs/vision/event_protocol_v0.2.md`
+- Model/Tracker contract: `packs/vision/model_interface.md`
 
 ### Folders
 
@@ -48,6 +48,8 @@ Phase 0 note:
 - `specs/`: runtime/behavior specifications
 - `design/`: architecture/design docs
 - `ops/`: operations, deployment, troubleshooting
+- `legacy/`: quarantined legacy-only docs (v1 runtime lineage)
+- `packs/`: optional domain packs (vision, sensors, etc)
 - `roadmap/`: strategic/execution roadmap and backlog
 - `progress/`: current status and validation logs
 - `implementation/`: design/spec notes by topic (reference)
@@ -78,29 +80,29 @@ Phase 0 참고:
   5. `design/architecture_2.0.md` (아키텍처 명세, 잠정)
   6. `implementation/90-packaging/entrypoint/design.md` (엔트리포인트 설계)
   7. `implementation/90-packaging/support_matrix.md` (엣지 지원 매트릭스, 잠정)
-  8. `specs/legacy_pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
+  8. `legacy/specs/legacy_pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
   9. `contracts/stream_packet.md` (노드 간 내부 계약, 잠정)
   10. `contracts/observability.md` (메트릭/헬스 계약, 잠정)
-  11. `contracts/protocol.md` (이벤트 스키마/전송 계약)
+  11. `packs/vision/event_protocol_v0.2.md` (이벤트 스키마/전송 계약)
 
 ### 레거시 AI 파이프라인 상세 (선택)
 
-- `design/pipeline_design.md`: 레거시 파이프라인 설계
-- `design/multimodal_pipeline_design.md`: 레거시 멀티모달(영상+센서) 설계/확장 계획
-- `specs/model_interface.md`: 모델 어댑터 I/O 계약
-- `specs/model_class_taxonomy.md`: 클래스 분류(초안)
-- `ops/ops_runbook.md`: 운영 런북
-- `ops/multi_camera_run.md`: 멀티 카메라 운영
+- `legacy/design/pipeline_design.md`: 레거시 파이프라인 설계
+- `legacy/design/multimodal_pipeline_design.md`: 레거시 멀티모달(영상+센서) 설계/확장 계획
+- `packs/vision/model_interface.md`: 모델 어댑터 I/O 계약
+- `packs/vision/model_class_taxonomy.md`: 클래스 분류(초안)
+- `legacy/ops/ops_runbook.md`: 운영 런북
+- `legacy/ops/multi_camera_run.md`: 멀티 카메라 운영
 
 ### 단일 기준(SSOT)
 
 - 플랫폼 피벗: `roadmap/strategic_roadmap.md`, `roadmap/migration_plan_phase0.md`, `design/architecture_2.0.md`
 - 실행 계획/상태: `roadmap/execution_roadmap.md`
-- 런타임 동작(레거시 job): `specs/legacy_pipeline_spec.md`
+- 런타임 동작(레거시 job): `legacy/specs/legacy_pipeline_spec.md`
 - 노드 간 계약: `contracts/stream_packet.md`
 - 관측 가능성 계약: `contracts/observability.md`
-- 이벤트 스키마: `contracts/protocol.md`
-- 모델/트래커 계약: `specs/model_interface.md`
+- 이벤트 스키마: `packs/vision/event_protocol_v0.2.md`
+- 모델/트래커 계약: `packs/vision/model_interface.md`
 
 ### 폴더 안내
 
@@ -108,6 +110,8 @@ Phase 0 참고:
 - `specs/`: 실행/동작 스펙
 - `design/`: 설계 문서
 - `ops/`: 운영/배포/트러블슈팅
+- `legacy/`: 격리된 레거시 전용 문서(v1 런타임 계보)
+- `packs/`: 옵션 도메인 팩(vision, sensors 등)
 - `roadmap/`: 전략/실행 로드맵 및 백로그
 - `progress/`: 진행 현황/검증 로그
 - `implementation/`: 주제별 설계/명세 노트(참고)

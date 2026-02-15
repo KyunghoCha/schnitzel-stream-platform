@@ -7,7 +7,7 @@ Purpose
 
 Key Decisions
 -------------
-- Use `docs/contracts/protocol.md` as source of truth.
+- Use `docs/packs/vision/event_protocol_v0.2.md` as source of truth.
 - Keep additional fields optional for extensibility.
 
 Interfaces
@@ -33,7 +33,7 @@ Code Mapping
 
 핵심 결정
 ---------
-- `docs/contracts/protocol.md`를 단일 기준으로 한다.
+- `docs/packs/vision/event_protocol_v0.2.md`를 단일 기준으로 한다.
 - 확장을 위해 추가 필드는 optional로 유지한다.
 
 인터페이스

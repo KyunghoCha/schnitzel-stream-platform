@@ -10,7 +10,7 @@ General Rules
 - Label only visible objects; partial occlusion is still valid if class is clear.
 - If class is ambiguous, mark as UNKNOWN and exclude from training (unless policy says otherwise).
 - Keep bounding boxes tight to the visible object.
-- Use the class taxonomy in `docs/specs/model_class_taxonomy.md`.
+- Use the class taxonomy in `docs/packs/vision/model_class_taxonomy.md`.
 
 Class Rules (Phase 1)
 ----------------------
@@ -47,7 +47,7 @@ Quality Control
 - 보이는 객체만 라벨링한다. 부분 가림도 클래스가 명확하면 라벨링.
 - 모호한 경우 UNKNOWN 처리 후 학습 제외(정책에 따라 다름).
 - 박스는 보이는 객체에 타이트하게 맞춘다.
-- 클래스 분류는 `docs/specs/model_class_taxonomy.md`를 따른다.
+- 클래스 분류는 `docs/packs/vision/model_class_taxonomy.md`를 따른다.
 
 클래스 규칙(1단계)
 -------------------

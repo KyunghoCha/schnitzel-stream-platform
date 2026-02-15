@@ -13,7 +13,7 @@ Scope
 
 1. Pretrained YOLO only (no custom training in this phase).
 2. Model adapter implements `ModelAdapter` in `src/ai/pipeline/model_adapter.py`.
-3. Output must conform to `docs/specs/model_interface.md` and `docs/contracts/protocol.md`.
+3. Output must conform to `docs/packs/vision/model_interface.md` and `docs/packs/vision/event_protocol_v0.2.md`.
 
 Constraints
 -----------
@@ -144,7 +144,7 @@ Local GPU Validation (Reference)
 --------------------------------
 
 This is a **local-only** record for reproducibility. Different machines may need reinstallation.
-See `docs/ops/ai/README.md` for the verified combo and quick checks.
+See `docs/packs/vision/ops/ai/README.md` for the verified combo and quick checks.
 
 Dependencies (optional)
 -----------------------
@@ -164,7 +164,7 @@ Dependencies (optional)
 
 1. 사전학습 YOLO만 사용(커스텀 학습은 후속 단계).
 2. 모델 어댑터는 `src/ai/pipeline/model_adapter.py`의 `ModelAdapter`를 구현.
-3. 출력은 `docs/specs/model_interface.md`와 `docs/contracts/protocol.md`를 준수.
+3. 출력은 `docs/packs/vision/model_interface.md`와 `docs/packs/vision/event_protocol_v0.2.md`를 준수.
 
 제약
 ----
@@ -295,7 +295,7 @@ PYTHONPATH=src:. python -m schnitzel_stream --source-type file --dry-run --max-e
 -------------------------
 
 **로컬 환경 의존** 기록이며, 다른 머신에서는 재설치가 필요할 수 있다.
-검증 조합/확인 명령은 `docs/ops/ai/README.md`를 참고.
+검증 조합/확인 명령은 `docs/packs/vision/ops/ai/README.md`를 참고.
 
 의존성(선택)
 -----------

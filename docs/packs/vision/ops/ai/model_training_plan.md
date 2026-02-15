@@ -27,7 +27,7 @@ Data Collection
 
 Labeling Policy
 ---------------
-- Use a single label taxonomy aligned with `docs/specs/model_class_taxonomy.md`.
+- Use a single label taxonomy aligned with `docs/packs/vision/model_class_taxonomy.md`.
 - Define class boundaries and ambiguous cases in a shared labeling guide.
 - Track labeling quality with random audits and inter-annotator agreement checks.
 - Maintain label versioning and change logs.
@@ -59,7 +59,7 @@ Acceptance Criteria (Draft)
 Deployment/Export
 -----------------
 - Export to ONNX for runtime use in `ai.vision.adapters.onnx_adapter`.
-- Validate model input/output shapes against `docs/specs/model_interface.md`.
+- Validate model input/output shapes against `docs/packs/vision/model_interface.md`.
 - Run a dry-run smoke test in the pipeline with `--visualize`.
 
 Iteration Loop
@@ -107,7 +107,7 @@ Outputs
 
 라벨링 정책
 -----------
-- `docs/specs/model_class_taxonomy.md`와 동일한 라벨 체계 사용.
+- `docs/packs/vision/model_class_taxonomy.md`와 동일한 라벨 체계 사용.
 - 클래스 경계와 모호 사례를 라벨링 가이드로 명문화.
 - 랜덤 감사와 라벨러 간 일치도 점검으로 품질 관리.
 - 라벨 변경 기록과 버전 관리 유지.
@@ -139,7 +139,7 @@ Outputs
 배포/내보내기
 -------------
 - 런타임 사용을 위해 ONNX로 내보낸다.
-- `docs/specs/model_interface.md`와 입력/출력 형태를 일치시킨다.
+- `docs/packs/vision/model_interface.md`와 입력/출력 형태를 일치시킨다.
 - 파이프라인에서 `--visualize`로 스모크 테스트 수행.
 
 반복 개선 루프

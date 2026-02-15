@@ -1,4 +1,4 @@
-# Docs: docs/specs/model_interface.md, docs/contracts/protocol.md
+# Docs: docs/packs/vision/model_interface.md, docs/packs/vision/event_protocol_v0.2.md
 from __future__ import annotations
 
 # 이벤트 빌더 추상화/더미 구현

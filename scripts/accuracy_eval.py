@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Docs: docs/ops/ai/accuracy_validation.md
+# Docs: docs/packs/vision/ops/ai/accuracy_validation.md
 from __future__ import annotations
 
 import argparse

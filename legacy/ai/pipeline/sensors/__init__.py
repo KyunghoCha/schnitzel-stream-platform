@@ -1,4 +1,4 @@
-# Docs: docs/design/multimodal_pipeline_design.md
+# Docs: docs/legacy/design/multimodal_pipeline_design.md
 """
 센서 소스 패키지 (P1 런타임)
 

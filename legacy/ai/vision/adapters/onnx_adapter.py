@@ -1,4 +1,4 @@
-# Docs: docs/ops/ai/model_yolo_run.md, docs/specs/model_interface.md
+# Docs: docs/packs/vision/ops/ai/model_yolo_run.md, docs/packs/vision/model_interface.md
 from __future__ import annotations
 
 # YOLOv8용 ONNX 어댑터 (단일 클래스 베이스라인: PERSON)

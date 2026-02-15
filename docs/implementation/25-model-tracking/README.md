@@ -7,7 +7,7 @@ Define how tracking (stable `track_id`) should be integrated into the model adap
 
 Scope
 -----
-- Track IDs for PERSON are required by `docs/contracts/protocol.md`.
+- Track IDs for PERSON are required by `docs/packs/vision/event_protocol_v0.2.md`.
 - FIRE/SMOKE may omit `track_id`.
 - IOU tracker is implemented; ByteTrack is optional (dependency-based).
 - DeepSORT is a future extension (not implemented).
@@ -21,9 +21,9 @@ Status
 
 Related Docs
 ------------
-- Contract: `docs/contracts/protocol.md`
-- Model I/O: `docs/specs/model_interface.md`
-- Pipeline behavior: `docs/specs/legacy_pipeline_spec.md`
+- Contract: `docs/packs/vision/event_protocol_v0.2.md`
+- Model I/O: `docs/packs/vision/model_interface.md`
+- Pipeline behavior: `docs/legacy/specs/legacy_pipeline_spec.md`
 
 ## 한국어
 목적
@@ -32,7 +32,7 @@ Related Docs
 
 범위
 ----
-- PERSON의 track_id는 `docs/contracts/protocol.md` 기준 필수.
+- PERSON의 track_id는 `docs/packs/vision/event_protocol_v0.2.md` 기준 필수.
 - FIRE/SMOKE는 track_id가 없어도 된다.
 - IOU 트래커는 구현 완료, ByteTrack은 의존성 있을 때만 선택.
 - DeepSORT는 향후 확장 항목(현재 미구현).
@@ -46,6 +46,6 @@ Related Docs
 
 관련 문서
 ---------
-- 계약: `docs/contracts/protocol.md`
-- 모델 입출력: `docs/specs/model_interface.md`
-- 파이프라인 동작: `docs/specs/legacy_pipeline_spec.md`
+- 계약: `docs/packs/vision/event_protocol_v0.2.md`
+- 모델 입출력: `docs/packs/vision/model_interface.md`
+- 파이프라인 동작: `docs/legacy/specs/legacy_pipeline_spec.md`

@@ -23,7 +23,7 @@ Notes
 
 Code Mapping
 ------------
-- Runbook: `docs/ops/ops_runbook.md`
+- Runbook: `docs/legacy/ops/ops_runbook.md`
 - Dockerfile: `Dockerfile`
 
 ## 한국어
@@ -49,5 +49,5 @@ Code Mapping
 
 코드 매핑
 ---------
-- 런북: `docs/ops/ops_runbook.md`
+- 런북: `docs/legacy/ops/ops_runbook.md`
 - Dockerfile: `Dockerfile`

@@ -151,5 +151,5 @@ Enhancing safety awareness by combining visual data with complementary environme
 ### 관련 문서 링크
 
 - [Implementation Docs Index](../implementation/README.md)
-- [Ops Runbook](../ops/ops_runbook.md)
+- [Ops Runbook](../legacy/ops/ops_runbook.md)
 - [Project Artifacts](../../README.md)

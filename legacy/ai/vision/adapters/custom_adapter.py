@@ -1,4 +1,4 @@
-# Docs: docs/specs/model_interface.md, docs/ops/ai/model_yolo_run.md
+# Docs: docs/packs/vision/model_interface.md, docs/packs/vision/ops/ai/model_yolo_run.md
 # 사용자 정의 모델 연결을 위한 최소 템플릿 어댑터.
 from __future__ import annotations
 

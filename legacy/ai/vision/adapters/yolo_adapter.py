@@ -1,4 +1,4 @@
-# Docs: docs/ops/ai/model_yolo_run.md, docs/specs/model_interface.md
+# Docs: docs/packs/vision/ops/ai/model_yolo_run.md, docs/packs/vision/model_interface.md
 from __future__ import annotations
 
 # YOLO 어댑터 스켈레톤 (미리 학습된 베이스라인)

@@ -49,7 +49,7 @@ Last Updated: 2026-02-10
   - Added optional ROS2 emitter plugin `ai.plugins.ros2.event_emitter:Ros2EventEmitter`.
   - Added ROS2 plugin env examples and command references in `.env.example`, `README.md`, and `docs/ops/command_reference.md`.
 - **Multimodal Architecture Baseline Added**:
-  - Added `docs/design/multimodal_pipeline_design.md` for video+sensor runtime design.
+  - Added `docs/legacy/design/multimodal_pipeline_design.md` for video+sensor runtime design.
   - Defined two-lane input architecture (`VideoSource` + `SensorSource`) with a single fusion boundary.
   - Fixed roadmap wording to avoid overloading `FrameSource`; future sensor expansion now uses dedicated sensor lane.
 - **Sensor Lane P2 Baseline Implemented**:
@@ -122,8 +122,8 @@ Last Updated: 2026-02-10
 
 ### Notes
 
-- Ops runbook: `docs/ops/ops_runbook.md`
-- Snapshot policy: `docs/ops/snapshot_policy.md`
+- Ops runbook: `docs/legacy/ops/ops_runbook.md`
+- Snapshot policy: `docs/legacy/ops/snapshot_policy.md`
 - Multi-model merge supported via comma-separated `AI_MODEL_ADAPTER`
 - RTSP E2E scripts export `LOG_DIR` to keep event counting stable in strict shells.
 - RTSP E2E scripts export `CHECK_PORT` so mock backend port checks work in subprocesses.
@@ -131,14 +131,14 @@ Last Updated: 2026-02-10
 - RTSP E2E scripts use `PYTHON_BIN` (default `python3`) to avoid sudo PATH issues.
 - Docker RTSP E2E re-run (sudo + PYTHON_BIN) recovered: `count_before=3`, `count_after=9` (2026-02-06).
 - Protocol updated with local-only validation status and agreement-required items (2026-02-06).
-- Performance roadmap: `docs/ops/ai/performance_optimization.md`
-- Model training plan: `docs/ops/ai/model_training_plan.md`
-- Labeling guide: `docs/ops/ai/labeling_guide.md`
-- Training report template: `docs/ops/ai/training_report_template.md`
-- Class taxonomy draft: `docs/specs/model_class_taxonomy.md`
+- Performance roadmap: `docs/packs/vision/ops/ai/performance_optimization.md`
+- Model training plan: `docs/packs/vision/ops/ai/model_training_plan.md`
+- Labeling guide: `docs/packs/vision/ops/ai/labeling_guide.md`
+- Training report template: `docs/packs/vision/ops/ai/training_report_template.md`
+- Class taxonomy draft: `docs/packs/vision/model_class_taxonomy.md`
 - Class mapping draft: `configs/model_class_map.yaml` (optional)
 - Class mapping now applied to YOLO/ONNX adapters via `MODEL_CLASS_MAP_PATH`.
-- Accuracy validation guide: `docs/ops/ai/accuracy_validation.md`
+- Accuracy validation guide: `docs/packs/vision/ops/ai/accuracy_validation.md`
 - Accuracy eval script template: `scripts/accuracy_eval.py`
 - ByteTrack optional tracker (fallback to IOU when deps missing).
 - Protocol v0.2 draft includes PPE/POSTURE/HAZARD event types.
@@ -217,7 +217,7 @@ Last Updated: 2026-02-10
   - 선택형 ROS2 출력 플러그인 `ai.plugins.ros2.event_emitter:Ros2EventEmitter` 추가.
   - `.env.example`, `README.md`, `docs/ops/command_reference.md`에 ROS2 플러그인 환경변수/실행 예시 반영.
 - **멀티모달 아키텍처 기준 추가**:
-  - 영상+센서 런타임 설계 문서 `docs/design/multimodal_pipeline_design.md` 추가.
+  - 영상+센서 런타임 설계 문서 `docs/legacy/design/multimodal_pipeline_design.md` 추가.
   - 입력 2축(`VideoSource` + `SensorSource`) + 단일 fusion 경계 원칙 정의.
   - `FrameSource` 과적재를 피하도록 로드맵 표현을 `SensorSource` 전용 축 기준으로 수정.
 - **센서 축 P2 기반 구현**:
@@ -290,8 +290,8 @@ Last Updated: 2026-02-10
 
 ### 노트
 
-- 운영 런북: `docs/ops/ops_runbook.md`
-- 스냅샷 정책: `docs/ops/snapshot_policy.md`
+- 운영 런북: `docs/legacy/ops/ops_runbook.md`
+- 스냅샷 정책: `docs/legacy/ops/snapshot_policy.md`
 - 다중 모델 병합 지원: `AI_MODEL_ADAPTER` 콤마 구분
 - RTSP E2E 스크립트는 `LOG_DIR`를 export하여 이벤트 카운트가 안정적으로 유지되도록 한다.
 - RTSP E2E 스크립트는 `CHECK_PORT`를 export하여 포트 체크가 하위 프로세스에서도 동작하도록 한다.
@@ -299,14 +299,14 @@ Last Updated: 2026-02-10
 - RTSP E2E 스크립트는 `PYTHON_BIN`(기본 `python3`)을 사용해 sudo 환경의 PATH 이슈를 피한다.
 - Docker RTSP E2E 재실행(sudo + PYTHON_BIN) 복구 확인: `count_before=3`, `count_after=9` (2026-02-06).
 - 프로토콜에 로컬 단독 검증 상태/합의 필요 항목을 추가(2026-02-06).
-- 성능 로드맵: `docs/ops/ai/performance_optimization.md`
-- 모델 학습 계획: `docs/ops/ai/model_training_plan.md`
-- 라벨링 가이드: `docs/ops/ai/labeling_guide.md`
-- 학습 리포트 템플릿: `docs/ops/ai/training_report_template.md`
-- 클래스 분류 초안: `docs/specs/model_class_taxonomy.md`
+- 성능 로드맵: `docs/packs/vision/ops/ai/performance_optimization.md`
+- 모델 학습 계획: `docs/packs/vision/ops/ai/model_training_plan.md`
+- 라벨링 가이드: `docs/packs/vision/ops/ai/labeling_guide.md`
+- 학습 리포트 템플릿: `docs/packs/vision/ops/ai/training_report_template.md`
+- 클래스 분류 초안: `docs/packs/vision/model_class_taxonomy.md`
 - 클래스 매핑 초안: `configs/model_class_map.yaml` (선택)
 - 클래스 매핑은 `MODEL_CLASS_MAP_PATH`로 YOLO/ONNX 어댑터에 적용됨.
-- 정확도 검증 가이드: `docs/ops/ai/accuracy_validation.md`
+- 정확도 검증 가이드: `docs/packs/vision/ops/ai/accuracy_validation.md`
 - 정확도 평가 스크립트 템플릿: `scripts/accuracy_eval.py`
 - ByteTrack 선택 트래커(의존성 없으면 IOU로 폴백).
 - 프로토콜 v0.2 초안에 PPE/POSTURE/HAZARD 이벤트 타입 포함.

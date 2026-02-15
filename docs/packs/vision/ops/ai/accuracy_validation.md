@@ -15,7 +15,7 @@ Scope
 Phase 0: Dataset Readiness
 --------------------------
 1. Collect labeled frames (or short clips) with ground truth boxes.
-2. Ensure labels align with `docs/specs/model_class_taxonomy.md`.
+2. Ensure labels align with `docs/packs/vision/model_class_taxonomy.md`.
 3. Split into train/val/test sets (at least val/test for evaluation).
 4. Prepare GT JSONL (one line per image):
 ```json
@@ -64,8 +64,8 @@ PYTHONPATH=src python scripts/accuracy_eval.py \
 
 Related Docs
 ------------
-- Class taxonomy: `docs/specs/model_class_taxonomy.md`
-- Model interface: `docs/specs/model_interface.md`
+- Class taxonomy: `docs/packs/vision/model_class_taxonomy.md`
+- Model interface: `docs/packs/vision/model_interface.md`
 
 ## 한국어
 목적
@@ -82,7 +82,7 @@ Related Docs
 Phase 0: 데이터셋 준비
 ----------------------
 1. GT 박스가 있는 라벨링 데이터 수집(프레임/클립).
-2. 라벨이 `docs/specs/model_class_taxonomy.md`와 일치하는지 확인.
+2. 라벨이 `docs/packs/vision/model_class_taxonomy.md`와 일치하는지 확인.
 3. train/val/test 분리(최소 val/test 필요).
 4. GT JSONL 준비(이미지당 한 줄):
 ```json
@@ -131,5 +131,5 @@ PYTHONPATH=src python scripts/accuracy_eval.py \
 
 관련 문서
 ---------
-- 클래스 분류: `docs/specs/model_class_taxonomy.md`
-- 모델 인터페이스: `docs/specs/model_interface.md`
+- 클래스 분류: `docs/packs/vision/model_class_taxonomy.md`
+- 모델 인터페이스: `docs/packs/vision/model_interface.md`

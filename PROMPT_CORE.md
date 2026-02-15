@@ -41,8 +41,8 @@ Legacy CCTV/AI runtime lives under `src/ai/`, but execution is routed through th
 4. `docs/design/architecture_2.0.md` (Provisional platform architecture)
 5. `docs/implementation/90-packaging/entrypoint/design.md` (Entrypoint packaging)
 6. `docs/contracts/stream_packet.md` (Node-to-node contract, provisional)
-7. `docs/contracts/protocol.md` (Event schema; legacy runtime contract)
-8. `docs/specs/legacy_pipeline_spec.md` (Legacy pipeline behavior via `schnitzel_stream`)
+7. `docs/packs/vision/event_protocol_v0.2.md` (Event schema; legacy runtime contract)
+8. `docs/legacy/specs/legacy_pipeline_spec.md` (Legacy pipeline behavior via `schnitzel_stream`)
 
 ### Immediate Next Steps (Provisional)
 
@@ -100,8 +100,8 @@ If you are running low on context/token budget, update `PROMPT_CORE.md` with:
 4. `docs/design/architecture_2.0.md` (플랫폼 아키텍처, 잠정)
 5. `docs/implementation/90-packaging/entrypoint/design.md` (엔트리포인트/패키징)
 6. `docs/contracts/stream_packet.md` (노드 간 계약, 잠정)
-7. `docs/contracts/protocol.md` (이벤트 스키마; 레거시 계약)
-8. `docs/specs/legacy_pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
+7. `docs/packs/vision/event_protocol_v0.2.md` (이벤트 스키마; 레거시 계약)
+8. `docs/legacy/specs/legacy_pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
 
 ### 즉시 다음 단계 (잠정)
 

@@ -13,15 +13,15 @@ Provide a modular AI pipeline that reads frames from file or RTSP, builds events
 Inputs Used for Alignment
 -------------------------
 
-- `docs/contracts/protocol.md`: event schema and API contract
-- `docs/specs/model_interface.md`: model/tracker output contract
+- `docs/packs/vision/event_protocol_v0.2.md`: event schema and API contract
+- `docs/packs/vision/model_interface.md`: model/tracker output contract
 
 High-level Flow
 ---------------
 
 1) Source ingest (`FileSource` or `RtspSource`)
 2) Frame sampling (`FrameSampler`)
-3) Event build (real-first; mock explicit for tests) aligned to `docs/contracts/protocol.md`
+3) Event build (real-first; mock explicit for tests) aligned to `docs/packs/vision/event_protocol_v0.2.md`
 4) Dedup (optional)
 5) Emit (`BackendEmitter`/`StdoutEmitter`/`FileEmitter`) to `/api/events`
 
@@ -65,7 +65,7 @@ Current Scope (2026-02-09)
 - Model adapters (YOLO/ONNX), multi-model merge, and IOU tracker are integrated (ByteTrack optional).
 - Full codebase audit completed (G1-G10): 169 items reviewed, critical/major bugs fixed, latest local verification 153 passed, 2 skipped (2026-02-11).
 - Remaining work: production model integration and real RTSP device validation.
-- Planned multimodal (video+sensor) extension is documented separately in `docs/design/multimodal_pipeline_design.md`.
+- Planned multimodal (video+sensor) extension is documented separately in `docs/legacy/design/multimodal_pipeline_design.md`.
 
 Code Mapping
 ------------
@@ -94,15 +94,15 @@ Code Mapping
 정렬 기준 입력
 --------------
 
-- `docs/contracts/protocol.md`: 이벤트 스키마 및 API 계약
-- `docs/specs/model_interface.md`: 모델/트래커 출력 계약
+- `docs/packs/vision/event_protocol_v0.2.md`: 이벤트 스키마 및 API 계약
+- `docs/packs/vision/model_interface.md`: 모델/트래커 출력 계약
 
 상위 수준 흐름
 --------------
 
 1) 소스 인제스트 (`FileSource` 또는 `RtspSource`)
 2) 프레임 샘플링 (`FrameSampler`)
-3) 이벤트 생성 (실사용 우선, mock은 테스트 시 명시적으로만 사용, `docs/contracts/protocol.md` 기준)
+3) 이벤트 생성 (실사용 우선, mock은 테스트 시 명시적으로만 사용, `docs/packs/vision/event_protocol_v0.2.md` 기준)
 4) 중복 억제(선택)
 5) `/api/events`로 전송 (`BackendEmitter`/`StdoutEmitter`/`FileEmitter`)
 
@@ -146,7 +146,7 @@ FrameSource -> FrameSampler -> EventBuilder -> Dedup -> EventEmitter -> backend 
 - 모델 어댑터(YOLO/ONNX), 다중 모델 병합, IOU 트래커 연동 완료(ByteTrack 선택).
 - 전체 코드 감사 완료(G1-G10): 169개 항목 검토, critical/major 버그 수정, 최신 로컬 검증 153개 통과, 2개 스킵 (2026-02-11).
 - 남은 작업: 프로덕션 모델 연동, 실장비 RTSP 검증.
-- 계획된 멀티모달(영상+센서) 확장 설계는 `docs/design/multimodal_pipeline_design.md`에 분리 문서화.
+- 계획된 멀티모달(영상+센서) 확장 설계는 `docs/legacy/design/multimodal_pipeline_design.md`에 분리 문서화.
 
 코드 매핑
 ---------

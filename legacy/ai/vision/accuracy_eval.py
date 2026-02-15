@@ -1,4 +1,4 @@
-# Docs: docs/ops/ai/accuracy_validation.md
+# Docs: docs/packs/vision/ops/ai/accuracy_validation.md
 # 오프라인 평가 헬퍼; 라이브 파이프라인 런타임에서는 사용되지 않음.
 from __future__ import annotations
 

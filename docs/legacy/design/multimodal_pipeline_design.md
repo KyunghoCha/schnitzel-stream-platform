@@ -104,7 +104,7 @@ Implementation status (2026-02-10): P2 baseline is implemented (`SensorRuntime` 
 - `sensor_event`: sensor-origin event (no mandatory bbox)
 - `fused_event`: correlated result from video + sensor
 
-Note: backend-facing schema extension should be versioned in `docs/contracts/protocol.md` when implementation begins.
+Note: backend-facing schema extension should be versioned in `docs/packs/vision/event_protocol_v0.2.md` when implementation begins.
 
 ## Time Synchronization Model
 
@@ -207,7 +207,7 @@ Add sensor/fusion metrics (names tentative):
 - Sensor/fusion builders: `src/ai/pipeline/sensors/builder.py`, `src/ai/pipeline/sensors/fusion.py`
 - Reference sensor plugin: `src/ai/plugins/sensors/fake_ultrasonic.py`
 - Phase 0 runtime wiring: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`, `src/ai/pipeline/core.py`
-- Docs SSOT updates: `docs/specs/legacy_pipeline_spec.md`, `docs/contracts/protocol.md`
+- Docs SSOT updates: `docs/legacy/specs/legacy_pipeline_spec.md`, `docs/packs/vision/event_protocol_v0.2.md`
 
 ---
 
@@ -315,7 +315,7 @@ Add sensor/fusion metrics (names tentative):
 - `sensor_event`: 센서 기반 이벤트(필수 bbox 없음)
 - `fused_event`: 영상+센서 융합 이벤트
 
-주의: 구현 단계에서 백엔드 스키마 확장은 `docs/contracts/protocol.md` 버전 업으로 관리한다.
+주의: 구현 단계에서 백엔드 스키마 확장은 `docs/packs/vision/event_protocol_v0.2.md` 버전 업으로 관리한다.
 
 ## 시간 동기화 모델
 
@@ -418,4 +418,4 @@ Add sensor/fusion metrics (names tentative):
 - Sensor/Fusion 빌더: `src/ai/pipeline/sensors/builder.py`, `src/ai/pipeline/sensors/fusion.py`
 - 기준 센서 플러그인: `src/ai/plugins/sensors/fake_ultrasonic.py`
 - Phase 0 런타임 연결 지점: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`, `src/ai/pipeline/core.py`
-- SSOT 반영 대상: `docs/specs/legacy_pipeline_spec.md`, `docs/contracts/protocol.md`
+- SSOT 반영 대상: `docs/legacy/specs/legacy_pipeline_spec.md`, `docs/packs/vision/event_protocol_v0.2.md`
