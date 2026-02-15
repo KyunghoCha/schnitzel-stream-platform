@@ -68,6 +68,27 @@ Sensor packet (payload is sensor adapter output):
 }
 ```
 
+Blob reference packet (portable payload handle; JSON-only):
+
+```jsonc
+{
+  "packet_id": "uuid-...",
+  "ts": "2026-02-13T00:00:00Z",
+  "kind": "bytes_ref",
+  "source_id": "cam01",
+  "payload": {
+    "ref": {
+      "scheme": "file",
+      "path": "/abs/path/to/blob.bin",
+      "content_type": "image/jpeg",
+      "size_bytes": 12345,
+      "sha256": "..."
+    }
+  },
+  "meta": {}
+}
+```
+
 ---
 
 ## 한국어
@@ -133,6 +154,27 @@ Sensor packet (payload is sensor adapter output):
   "source_id": "ultrasonic-front-01",
   "payload": {
     "distance_cm": 82.4
+  },
+  "meta": {}
+}
+```
+
+Blob 참조 패킷(이식 가능한 payload 핸들; JSON-only):
+
+```jsonc
+{
+  "packet_id": "uuid-...",
+  "ts": "2026-02-13T00:00:00Z",
+  "kind": "bytes_ref",
+  "source_id": "cam01",
+  "payload": {
+    "ref": {
+      "scheme": "file",
+      "path": "/abs/path/to/blob.bin",
+      "content_type": "image/jpeg",
+      "size_bytes": 12345,
+      "sha256": "..."
+    }
   },
   "meta": {}
 }

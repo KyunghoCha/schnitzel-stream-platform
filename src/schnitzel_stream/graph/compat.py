@@ -26,7 +26,7 @@ class GraphCompatibilityError(ValueError):
 
 _ALLOWED_NODE_KINDS = ("source", "node", "sink", "delay", "initial")
 _PORT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
-_NON_PORTABLE_KINDS = {"frame"}  # best-effort v1: frames are in-proc only until a blob/handle strategy exists
+_NON_PORTABLE_KINDS = {"frame", "bytes"}  # best-effort v1: in-proc only until a blob/handle strategy exists
 
 
 def _norm(raw: str) -> str:
