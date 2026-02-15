@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P7.2`
+Current step id: `P8.1`
 
 ## English
 
@@ -138,7 +138,7 @@ Intent:
   - DoD:
     - graphs fail validation if a non-portable payload (ex: raw frames) is routed through durable/network lanes
     - durable queue nodes are explicitly documented as JSON-only until a blob/handle strategy exists
-- `P7.2` Blob/handle strategy (`payload_ref`) for large/binary payloads (frames, audio). `NOW`
+- `P7.2` Blob/handle strategy (`payload_ref`) for large/binary payloads (frames, audio). `DONE` (c4d40bf)
   - DoD:
     - `StreamPacket` supports a portable reference form (file/shm/uri) with clear lifecycle rules
 
@@ -147,7 +147,7 @@ Intent:
 Intent:
 - Treat RTSP and "backend" as replaceable adapters. Platform ships with minimal batteries; deployments can bring their own.
 
-- `P8.1` RTSP source plugin (reconnect/backoff) + tests + demo graph. `NEXT`
+- `P8.1` RTSP source plugin (reconnect/backoff) + tests + demo graph. `NOW`
 - `P8.2` Webcam source plugin + tests + demo graph. `LATER`
 - `P8.3` HTTP sink plugin (idempotency + retry policy) + tests + demo graph. `LATER`
 - `P8.4` JSONL/file sink plugin + tests. `LATER`
@@ -317,7 +317,7 @@ Intent:
   - DoD:
     - non-portable payload(예: raw frame)가 durable/network 경로로 라우팅되면 validate에서 실패합니다.
     - durable queue 노드는 blob/handle 전략이 나오기 전까지 JSON-only임을 문서화합니다.
-- `P7.2` 큰/바이너리 payload(프레임/오디오)용 handle 전략(`payload_ref`). `NOW`
+- `P7.2` 큰/바이너리 payload(프레임/오디오)용 handle 전략(`payload_ref`). `DONE` (c4d40bf)
   - DoD:
     - `StreamPacket`이 file/shm/uri 기반 portable reference를 지원하며, lifecycle 규칙이 명확합니다.
 
@@ -326,7 +326,7 @@ Intent:
 의도(Intent):
 - RTSP와 “backend”는 교체 가능한 어댑터입니다. 플랫폼은 최소 배터리를 제공하고, 배포 환경은 필요한 어댑터를 가져옵니다.
 
-- `P8.1` RTSP source 플러그인(reconnect/backoff) + 테스트 + 데모 그래프. `NEXT`
+- `P8.1` RTSP source 플러그인(reconnect/backoff) + 테스트 + 데모 그래프. `NOW`
 - `P8.2` Webcam source 플러그인 + 테스트 + 데모 그래프. `LATER`
 - `P8.3` HTTP sink 플러그인(idempotency + retry 정책) + 테스트 + 데모 그래프. `LATER`
 - `P8.4` JSONL/file sink 플러그인 + 테스트. `LATER`
