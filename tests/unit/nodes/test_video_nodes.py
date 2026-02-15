@@ -5,7 +5,12 @@ from pathlib import Path
 import pytest
 
 import schnitzel_stream.packs.vision.nodes.video as video_mod
-from schnitzel_stream.packs.vision.nodes.video import EveryNthFrameSamplerNode, OpenCvRtspSource, OpenCvVideoFileSource
+from schnitzel_stream.packs.vision.nodes.video import (
+    EveryNthFrameSamplerNode,
+    OpenCvRtspSource,
+    OpenCvVideoFileSource,
+    OpenCvWebcamSource,
+)
 from schnitzel_stream.packet import StreamPacket
 
 
@@ -134,5 +139,86 @@ def test_rtsp_source_emits_frames_and_stops_at_max_frames(monkeypatch):
         assert out[0].meta["epoch"] == 1
         assert out[0].meta["frame_idx"] == 0
         assert out[0].meta["idempotency_key"] == "frame:cam01:1:0"
+    finally:
+        src.close()
+
+
+def test_webcam_source_respects_max_attempts(monkeypatch):
+    class _FakeCap:
+        def __init__(self, *_args, **_kwargs):
+            self._opened = False
+            self.released = False
+
+        def isOpened(self):
+            return bool(self._opened)
+
+        def read(self):
+            return False, None
+
+        def release(self):
+            self.released = True
+
+    class _FakeCv2:
+        def VideoCapture(self, *_args, **_kwargs):
+            return _FakeCap()
+
+    monkeypatch.setattr(video_mod, "cv2", _FakeCv2())
+
+    with pytest.raises(RuntimeError):
+        OpenCvWebcamSource(
+            config={
+                "camera_index": 0,
+                "reconnect": True,
+                "reconnect_backoff_sec": 0.0,
+                "reconnect_backoff_max_sec": 0.0,
+                "reconnect_max_attempts": 2,
+            }
+        )
+
+
+def test_webcam_source_emits_frames_and_stops_at_max_frames(monkeypatch):
+    frames = ["f0", "f1"]
+
+    class _FakeCap:
+        def __init__(self, *_args, **_kwargs):
+            self._opened = True
+            self._i = 0
+            self.released = False
+
+        def isOpened(self):
+            return bool(self._opened)
+
+        def read(self):
+            if self._i >= len(frames):
+                return False, None
+            f = frames[self._i]
+            self._i += 1
+            return True, f
+
+        def release(self):
+            self.released = True
+
+    class _FakeCv2:
+        def VideoCapture(self, *_args, **_kwargs):
+            return _FakeCap()
+
+    monkeypatch.setattr(video_mod, "cv2", _FakeCv2())
+
+    src = OpenCvWebcamSource(
+        config={
+            "camera_index": 0,
+            "source_id": "webcam01",
+            "max_frames": 2,
+            "reconnect": False,
+        }
+    )
+    try:
+        out = list(src.run())
+        assert len(out) == 2
+        assert out[0].kind == "frame"
+        assert out[0].meta["camera_index"] == 0
+        assert out[0].meta["epoch"] == 1
+        assert out[0].meta["frame_idx"] == 0
+        assert out[0].meta["idempotency_key"] == "frame:webcam01:1:0"
     finally:
         src.close()
