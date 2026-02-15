@@ -12,7 +12,6 @@ Intent:
 
 import argparse
 import json
-import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -57,65 +56,13 @@ def _build_parser() -> argparse.ArgumentParser:
         help="print a JSON run report (v2 in-proc runtime only)",
     )
 
-    # Intent: keep legacy flags parseable for wrapper script compatibility.
-    # They are ignored by the v2 runtime path.
-    parser.add_argument("--camera-id", type=str, default=None, help="camera id override")
-    parser.add_argument("--video", type=str, default=None, help="mp4 file path override")
-    parser.add_argument(
-        "--source-type",
-        type=str,
-        choices=("file", "rtsp", "webcam", "plugin"),
-        default=None,
-        help="override source type",
-    )
-    parser.add_argument(
-        "--camera-index",
-        type=int,
-        default=None,
-        help="webcam device index override (default: camera config index or 0)",
-    )
-    parser.add_argument("--dry-run", action="store_true", help="do not post to backend")
-    parser.add_argument("--output-jsonl", type=str, default=None, help="write events to jsonl file")
     parser.add_argument("--max-events", type=int, default=None, help="limit emitted events")
-    parser.add_argument("--visualize", action="store_true", help="show debug window with detections")
-    parser.add_argument("--loop", action="store_true", help="loop video file indefinitely")
     return parser
-
-
-def _maybe_warn_ignored_legacy_flags(args: argparse.Namespace) -> None:
-    if os.environ.get("SCHNITZEL_STREAM_SILENCE_CLI_COMPAT_WARNING"):
-        return
-    ignored: list[str] = []
-    if args.camera_id is not None:
-        ignored.append("--camera-id")
-    if args.video is not None:
-        ignored.append("--video")
-    if args.source_type is not None:
-        ignored.append("--source-type")
-    if args.camera_index is not None:
-        ignored.append("--camera-index")
-    if args.dry_run:
-        ignored.append("--dry-run")
-    if args.output_jsonl is not None:
-        ignored.append("--output-jsonl")
-    if args.visualize:
-        ignored.append("--visualize")
-    if args.loop:
-        ignored.append("--loop")
-    if not ignored:
-        return
-    print(
-        "WARNING: legacy compatibility flags are ignored in v2 runtime: "
-        f"{', '.join(ignored)}. "
-        "Use v2 graph/plugin config instead. "
-        "Set SCHNITZEL_STREAM_SILENCE_CLI_COMPAT_WARNING=1 to silence this warning.",
-        file=sys.stderr,
-    )
 
 
 def main(argv: list[str] | None = None) -> int:
     # Intent:
-    # - Keep backwards-compatible flag-based CLI.
+    # - Keep a simple flag-based CLI for v2 graph runtime.
     # - Also support a UX-friendly `validate` alias without introducing subparsers.
     if argv is None:
         argv = sys.argv[1:]
@@ -139,8 +86,6 @@ def main(argv: list[str] | None = None) -> int:
     validate_graph_compat(spec2.nodes, spec2.edges, transport="inproc", registry=registry)
     if args.validate_only:
         return 0
-
-    _maybe_warn_ignored_legacy_flags(args)
 
     runner = InProcGraphRunner(registry=registry)
     # Intent: reuse legacy `--max-events` as a generic packet budget for v2 graphs

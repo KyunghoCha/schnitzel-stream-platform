@@ -33,14 +33,6 @@ Default graph: `configs/graphs/dev_vision_e2e_mock_v2.yaml`
 | `--validate-only` | flag | off | Validate and exit |
 | `--report-json` | flag | off | Print JSON run report |
 | `--max-events` | int | unlimited | Source packet budget |
-| `--camera-id` | string | none | Legacy compat flag (ignored in v2 runtime) |
-| `--video` | string | none | Legacy compat flag (ignored in v2 runtime) |
-| `--source-type` | string | none | Legacy compat flag (ignored in v2 runtime) |
-| `--camera-index` | int | none | Legacy compat flag (ignored in v2 runtime) |
-| `--dry-run` | flag | off | Legacy compat flag (ignored in v2 runtime) |
-| `--output-jsonl` | string | none | Legacy compat flag (ignored in v2 runtime) |
-| `--visualize` | flag | off | Legacy compat flag (ignored in v2 runtime) |
-| `--loop` | flag | off | Legacy compat flag (ignored in v2 runtime) |
 
 ### Common Commands
 
@@ -152,14 +144,6 @@ python -m schnitzel_stream validate [--graph <path>]
 | `--validate-only` | flag | off | 검증 후 종료 |
 | `--report-json` | flag | off | JSON 실행 리포트 출력 |
 | `--max-events` | int | unlimited | 소스 패킷 예산 |
-| `--camera-id` | string | none | 레거시 호환 플래그(v2에서 무시) |
-| `--video` | string | none | 레거시 호환 플래그(v2에서 무시) |
-| `--source-type` | string | none | 레거시 호환 플래그(v2에서 무시) |
-| `--camera-index` | int | none | 레거시 호환 플래그(v2에서 무시) |
-| `--dry-run` | flag | off | 레거시 호환 플래그(v2에서 무시) |
-| `--output-jsonl` | string | none | 레거시 호환 플래그(v2에서 무시) |
-| `--visualize` | flag | off | 레거시 호환 플래그(v2에서 무시) |
-| `--loop` | flag | off | 레거시 호환 플래그(v2에서 무시) |
 
 ### 자주 쓰는 명령
 

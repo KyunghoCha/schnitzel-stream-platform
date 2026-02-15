@@ -5,6 +5,8 @@ import sys
 import textwrap
 from pathlib import Path
 
+import pytest
+
 
 def test_cli_validate_only_default_graph():
     root = Path(__file__).resolve().parents[2]
@@ -47,3 +49,24 @@ def test_cli_validate_only_v2_graph_spec_without_version(tmp_path):
     cmd = [sys.executable, "-m", "schnitzel_stream", "validate", "--graph", str(p)]
     result = subprocess.run(cmd, cwd=str(root / "src"), check=True)
     assert result.returncode == 0
+
+
+@pytest.mark.parametrize(
+    "flag",
+    [
+        "--camera-id",
+        "--video",
+        "--source-type",
+        "--camera-index",
+        "--dry-run",
+        "--output-jsonl",
+        "--visualize",
+        "--loop",
+    ],
+)
+def test_cli_rejects_removed_legacy_flags(flag: str):
+    root = Path(__file__).resolve().parents[2]
+    cmd = [sys.executable, "-m", "schnitzel_stream", flag]
+    result = subprocess.run(cmd, cwd=str(root / "src"), capture_output=True, text=True, check=False)
+    assert result.returncode != 0
+    assert "unrecognized arguments" in (result.stderr or "")

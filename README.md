@@ -23,6 +23,7 @@ Current focus:
 - plugin-based IO/policy nodes
 - durable queue primitives (SQLite/WAL)
 - edge-oriented ops conventions
+- CLI is graph-native only (legacy compatibility flags removed)
 
 Legacy v1 runtime (`ai.*`, job graph) has been removed from `main`.
 
@@ -155,6 +156,7 @@ Default allowlist is `schnitzel_stream.*`.
 - 플러그인 기반 입출력/정책 노드
 - 내구 큐(SQLite/WAL) 빌딩블록
 - 엣지 운영 관례 정리
+- CLI는 그래프 중심 인터페이스만 지원(레거시 호환 플래그 제거)
 
 레거시 v1 런타임(`ai.*`, job graph)은 `main`에서 제거되었습니다.
 
