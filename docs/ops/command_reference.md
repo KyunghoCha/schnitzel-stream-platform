@@ -33,7 +33,7 @@ Note:
 - `python -m schnitzel_stream` supports both v1 (legacy job graph) and v2 (node graph).
 - This doc contains many **legacy(v1)** examples. For legacy runs, explicitly pass `--graph configs/graphs/legacy_pipeline.yaml`.
 - Typical v2 runs use `--graph`, `--validate-only`, `--max-events`, and `--report-json`.
-- v2 examples: `configs/graphs/dev_vision_e2e_mock_v2.yaml`, `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`, `configs/graphs/dev_rtsp_frames_v2.yaml`, `configs/graphs/dev_webcam_frames_v2.yaml`, `configs/graphs/dev_http_event_sink_v2.yaml`.
+- v2 examples: `configs/graphs/dev_vision_e2e_mock_v2.yaml`, `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`, `configs/graphs/dev_rtsp_frames_v2.yaml`, `configs/graphs/dev_webcam_frames_v2.yaml`, `configs/graphs/dev_http_event_sink_v2.yaml`, `configs/graphs/dev_jsonl_sink_v2.yaml`, `configs/graphs/dev_json_file_sink_v2.yaml`.
 - v2 node config reserved key: `config.__runtime__` (runner behavior, not passed to plugins)
   - `inbox_max` (int): per-node inbox limit (backpressure)
   - `inbox_overflow` (`drop_new`|`drop_oldest`|`error`): overflow policy
@@ -105,6 +105,18 @@ python -m ai.pipeline.mock_backend
 
 # Terminal 2
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
+```
+
+**0e) Run v2 JSONL sink graph**
+
+```powershell
+python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
+```
+
+**0f) Run v2 JSON file sink graph**
+
+```powershell
+python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
 ```
 
 **1) First-time quick test (no backend needed)**
@@ -573,7 +585,7 @@ export PYTHONPATH=src
 - `python -m schnitzel_stream`는 v1(레거시 job 그래프)과 v2(node graph)를 모두 지원합니다.
 - 이 문서의 많은 예시는 **레거시(v1)** 기준입니다. 레거시 실행은 `--graph configs/graphs/legacy_pipeline.yaml`를 명시하세요.
 - v2 실행은 보통 `--graph`, `--validate-only`, `--max-events`, `--report-json`만 사용합니다.
-- v2 예시: `configs/graphs/dev_vision_e2e_mock_v2.yaml`, `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`, `configs/graphs/dev_rtsp_frames_v2.yaml`, `configs/graphs/dev_webcam_frames_v2.yaml`, `configs/graphs/dev_http_event_sink_v2.yaml`.
+- v2 예시: `configs/graphs/dev_vision_e2e_mock_v2.yaml`, `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`, `configs/graphs/dev_rtsp_frames_v2.yaml`, `configs/graphs/dev_webcam_frames_v2.yaml`, `configs/graphs/dev_http_event_sink_v2.yaml`, `configs/graphs/dev_jsonl_sink_v2.yaml`, `configs/graphs/dev_json_file_sink_v2.yaml`.
 - v2 노드 설정 예약 키: `config.__runtime__` (러너 동작 제어, 플러그인에는 전달되지 않음)
   - `inbox_max` (정수): 노드별 inbox 제한(백프레셔)
   - `inbox_overflow` (`drop_new`|`drop_oldest`|`error`): overflow 정책
@@ -645,6 +657,18 @@ python -m ai.pipeline.mock_backend
 
 # 터미널 2
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
+```
+
+**0e) v2 JSONL sink 그래프 실행**
+
+```powershell
+python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
+```
+
+**0f) v2 JSON 파일 sink 그래프 실행**
+
+```powershell
+python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
 ```
 
 **1) 처음 빠르게 테스트 (백엔드 불필요)**

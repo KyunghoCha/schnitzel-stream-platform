@@ -223,7 +223,28 @@ config: {}
     - `body` (`payload` 또는 `packet`)
   - 특징: at-least-once 전송 시 멱등키 헤더를 항상 붙이도록 기본 동작 제공
 
-### 6.5 Vision pack 노드 (도메인 전용)
+### 6.5 파일 출력 노드 (플랫폼 공통)
+
+파일: `src/schnitzel_stream/nodes/file_sink.py`
+
+- `schnitzel_stream.nodes.file_sink:JsonlSink`
+  - 역할: sink (또는 `forward: true`면 node처럼 downstream 전달 가능)
+  - 입력 kind: `*`
+  - 요구: JSON 직렬화 가능 payload/meta (`REQUIRES_PORTABLE_PAYLOAD = True`)
+  - 핵심 설정:
+    - `path`: JSONL 파일 경로
+    - `body`: `payload` 또는 `packet`
+    - `flush`: 매 라인 flush 여부
+- `schnitzel_stream.nodes.file_sink:JsonFileSink`
+  - 역할: sink (또는 `forward: true`면 node처럼 downstream 전달 가능)
+  - 입력 kind: `*`
+  - 요구: JSON 직렬화 가능 payload/meta (`REQUIRES_PORTABLE_PAYLOAD = True`)
+  - 핵심 설정:
+    - `dir`: 파일 출력 디렉터리
+    - `filename_template`: 파일명 템플릿(`seq`, `packet_id`, `source_id`, `kind`, `ts`)
+    - `body`: `payload` 또는 `packet`
+
+### 6.6 Vision pack 노드 (도메인 전용)
 
 export: `src/schnitzel_stream/packs/vision/nodes/__init__.py`
 
@@ -313,6 +334,18 @@ flowchart LR
 ```mermaid
 flowchart LR
   S["StaticSource(event)"] --> H["HttpJsonSink"]
+```
+
+### 7.6 JSONL/파일 출력
+
+그래프:
+
+- JSONL: `configs/graphs/dev_jsonl_sink_v2.yaml`
+- JSON 파일: `configs/graphs/dev_json_file_sink_v2.yaml`
+
+```mermaid
+flowchart LR
+  S["StaticSource(event)"] --> J["JsonlSink / JsonFileSink"]
 ```
 
 ## 8) 교체 규칙(노드 하나를 바꿀 때 어디까지 영향?)

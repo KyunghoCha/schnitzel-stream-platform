@@ -1,0 +1,27 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.dev:StaticSource
+    config:
+      packets:
+        - kind: event
+          source_id: demo01
+          ts: "2026-02-15T00:00:00Z"
+          payload:
+            event_id: evt-0001
+            event_type: DEMO
+
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.file_sink:JsonFileSink
+    config:
+      dir: outputs/dev_packets
+      body: payload
+      filename_template: "{seq:03d}_{kind}.json"
+
+edges:
+  - from: src
+    to: out
+
+config: {}

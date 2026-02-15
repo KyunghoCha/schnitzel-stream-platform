@@ -1,0 +1,29 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.dev:StaticSource
+    config:
+      packets:
+        - kind: event
+          source_id: demo01
+          ts: "2026-02-15T00:00:00Z"
+          payload:
+            event_id: evt-0001
+            event_type: DEMO
+          meta:
+            idempotency_key: "event:demo01:evt-0001"
+
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.file_sink:JsonlSink
+    config:
+      path: outputs/dev_events_v2.jsonl
+      body: packet
+      flush: true
+
+edges:
+  - from: src
+    to: out
+
+config: {}
