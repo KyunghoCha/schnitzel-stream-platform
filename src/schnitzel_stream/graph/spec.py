@@ -8,31 +8,12 @@ from omegaconf import OmegaConf
 
 from schnitzel_stream.graph.model import EdgeSpec, NodeSpec
 
-_SUPPORTED_GRAPH_VERSIONS = (1, 2)
-
-
-@dataclass(frozen=True)
-class GraphSpec:
-    """Graph specification (Phase 0 minimal).
-
-    Intent:
-    - Phase 0 uses a "job" indirection instead of a full DAG runtime.
-    - This keeps the migration reversible while SSOT is still evolving.
-    """
-
-    version: int
-    job: str
-    config: dict[str, Any]
+_SUPPORTED_GRAPH_VERSIONS = (2,)
 
 
 @dataclass(frozen=True)
 class NodeGraphSpec:
-    """Graph specification (Phase 1 draft).
-
-    Intent:
-    - Keep the YAML shape minimal: nodes + edges.
-    - Validation and runtime semantics live outside the loader.
-    """
+    """Node graph specification."""
 
     version: int
     nodes: list[NodeSpec]
@@ -56,80 +37,56 @@ def _as_list(value: Any) -> list[Any]:
     return []
 
 
+def _load_yaml_mapping(path: str | Path) -> tuple[Path, dict[str, Any]]:
+    p = Path(path)
+    if not p.exists():
+        raise FileNotFoundError(f"graph spec not found: {p}")
+
+    data = OmegaConf.load(p)
+    cont = OmegaConf.to_container(data, resolve=True)
+    if not isinstance(cont, dict):
+        raise ValueError(f"graph spec top-level must be a mapping: {p}")
+    return p, cont
+
+
 def peek_graph_version(path: str | Path) -> int:
     """Read only the graph version from YAML.
 
     Intent:
-    - CLI needs to dispatch to v1(job) vs v2(node graph) loaders.
-    - Keep this logic centralized to avoid duplicate parsing behavior.
+    - Keep version dispatch centralized.
+    - Legacy v1(job) specs are intentionally rejected.
     """
-    p = Path(path)
-    if not p.exists():
-        raise FileNotFoundError(f"graph spec not found: {p}")
-
-    data = OmegaConf.load(p)
-    cont = OmegaConf.to_container(data, resolve=True)
-    if not isinstance(cont, dict):
-        raise ValueError(f"graph spec top-level must be a mapping: {p}")
+    p, cont = _load_yaml_mapping(path)
 
     version_raw = cont.get("version")
     if version_raw is None:
-        # Intent:
-        # - Keep v1(job) as the backwards-compatible default when the version is absent.
-        # - Allow v2(node graph) specs to omit version if nodes/edges shape is present.
         has_job = "job" in cont
         has_nodes = "nodes" in cont
         has_edges = "edges" in cont
-        if has_job and (has_nodes or has_edges):
-            raise ValueError(f"graph spec is ambiguous (contains job + nodes/edges) without version: {p}")
+        if has_job:
+            # Intent: fail fast with a migration hint instead of silently treating v1 as default.
+            raise ValueError(
+                f"legacy v1 job graph is no longer supported: {p}. "
+                "Migrate to v2 node graph (nodes/edges).",
+            )
         if has_nodes or has_edges:
             return 2
-        return 1
+        raise ValueError(f"graph spec must define version=2 or nodes/edges: {p}")
 
     try:
         version = int(version_raw)
     except (TypeError, ValueError) as exc:
         raise ValueError(f"graph spec version must be int: {p}") from exc
-    if version not in _SUPPORTED_GRAPH_VERSIONS:
-        raise ValueError(f"unsupported graph spec version: {version} (supported: {_SUPPORTED_GRAPH_VERSIONS})")
+    if version != 2:
+        raise ValueError(
+            f"unsupported graph spec version: {version} (supported: {_SUPPORTED_GRAPH_VERSIONS}); "
+            "legacy v1(job) is removed.",
+        )
     return version
 
 
-def load_graph_spec(path: str | Path) -> GraphSpec:
-    p = Path(path)
-    if not p.exists():
-        raise FileNotFoundError(f"graph spec not found: {p}")
-
-    data = OmegaConf.load(p)
-    cont = OmegaConf.to_container(data, resolve=True)
-    if not isinstance(cont, dict):
-        raise ValueError(f"graph spec top-level must be a mapping: {p}")
-
-    version_raw = cont.get("version", 1)
-    try:
-        version = int(version_raw)
-    except (TypeError, ValueError) as exc:
-        raise ValueError(f"graph spec version must be int: {p}") from exc
-    if version != 1:
-        raise ValueError(f"job graph spec version must be 1: {p} (got {version})")
-
-    job = cont.get("job")
-    if not isinstance(job, str) or not job.strip():
-        raise ValueError(f"graph spec requires 'job' (module:Name): {p}")
-
-    config = _as_dict(cont.get("config"))
-    return GraphSpec(version=version, job=job.strip(), config=config)
-
-
 def load_node_graph_spec(path: str | Path) -> NodeGraphSpec:
-    p = Path(path)
-    if not p.exists():
-        raise FileNotFoundError(f"graph spec not found: {p}")
-
-    data = OmegaConf.load(p)
-    cont = OmegaConf.to_container(data, resolve=True)
-    if not isinstance(cont, dict):
-        raise ValueError(f"graph spec top-level must be a mapping: {p}")
+    p, cont = _load_yaml_mapping(path)
 
     version_raw = cont.get("version", 2)
     try:
@@ -137,7 +94,7 @@ def load_node_graph_spec(path: str | Path) -> NodeGraphSpec:
     except (TypeError, ValueError) as exc:
         raise ValueError(f"graph spec version must be int: {p}") from exc
     if version != 2:
-        raise ValueError(f"node graph spec version must be 2: {p}")
+        raise ValueError(f"node graph spec version must be 2 (v1 removed): {p}")
 
     nodes_raw = _as_list(cont.get("nodes"))
     edges_raw = _as_list(cont.get("edges"))

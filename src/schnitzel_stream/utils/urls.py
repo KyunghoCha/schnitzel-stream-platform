@@ -4,7 +4,7 @@ from __future__ import annotations
 URL masking helpers.
 
 Intent:
-- Ported from legacy `ai.utils.urls` so new platform code does not depend on `src/ai/**`.
+- Originally ported from legacy code; now fully platform-owned.
 - Hide credentials in logs by default.
 """
 
@@ -29,4 +29,3 @@ def mask_url(url: str) -> str:
         return urlunparse((parts.scheme, netloc, parts.path, parts.params, parts.query, parts.fragment))
     except Exception:
         return url
-

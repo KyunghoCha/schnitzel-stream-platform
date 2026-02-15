@@ -5,9 +5,9 @@ schnitzel_stream
 
 Universal stream processing platform (core package).
 
-Phase 0: Strangler migration.
-- New CLI/graph entrypoint lives under `schnitzel_stream.cli`.
-- Legacy runtime remains under `ai.*` modules but is no longer executed via `python -m ai.pipeline`.
+Status:
+- Stable CLI/graph entrypoint lives under `schnitzel_stream.cli`.
+- Graph execution is v2 node-graph only (legacy v1 runtime removed from main tree).
 """
 
 __all__ = ["__version__"]

@@ -4,17 +4,21 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
-import subprocess
 import sys
 import tempfile
 from pathlib import Path
 from typing import Any
 
-
 ROOT = Path(__file__).resolve().parents[1]
-GOLDEN = ROOT / "tests" / "regression" / "golden_events.jsonl"
+sys.path.insert(0, str(ROOT / "src"))
+
+from schnitzel_stream.control.throttle import FixedBudgetThrottle
+from schnitzel_stream.graph.spec import load_node_graph_spec
+from schnitzel_stream.runtime.inproc import InProcGraphRunner
+
+GOLDEN = ROOT / "tests" / "regression" / "v2_golden_events.jsonl"
 TMP_OUT = Path(tempfile.gettempdir()) / "events_regression.jsonl"
+GRAPH = ROOT / "configs" / "graphs" / "dev_vision_e2e_mock_v2.yaml"
 
 
 _COMPARE_KEYS = {"event_type", "object_type", "severity", "track_id", "bbox", "confidence", "zone"}
@@ -30,23 +34,18 @@ def _load_jsonl(path: Path) -> list[dict[str, Any]]:
 
 
 def _run_pipeline(max_events: int) -> None:
-    env = os.environ.copy()
-    # 회귀 검증은 runtime default(real)와 분리해 mock 모드를 명시적으로 고정한다.
-    env["AI_MODEL_MODE"] = "mock"
-    snap_dir = str(Path(tempfile.gettempdir()) / "snapshots_regression")
-    env["AI_EVENTS_SNAPSHOT_BASE_DIR"] = snap_dir
-    env["AI_EVENTS_SNAPSHOT_PUBLIC_PREFIX"] = snap_dir
+    spec = load_node_graph_spec(GRAPH)
+    runner = InProcGraphRunner()
+    throttle = FixedBudgetThrottle(max_source_emits_total=max_events) if max_events > 0 else None
+    result = runner.run(nodes=spec.nodes, edges=spec.edges, throttle=throttle)
 
-    cmd = [
-        sys.executable,
-        "-m",
-        "schnitzel_stream",
-        "--output-jsonl",
-        str(TMP_OUT),
-        "--max-events",
-        str(max_events),
-    ]
-    subprocess.run(cmd, cwd=str(ROOT / "src"), env=env, check=True)
+    # Intent: for v2 golden checks we persist forwarded packets from terminal node `out`.
+    outs = result.outputs_by_node.get("out", [])
+    lines: list[str] = []
+    for packet in outs:
+        if isinstance(packet.payload, dict):
+            lines.append(json.dumps(packet.payload, ensure_ascii=False))
+    TMP_OUT.write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf-8")
 
 
 def _compare(golden: list[dict[str, Any]], current: list[dict[str, Any]]) -> tuple[bool, str]:

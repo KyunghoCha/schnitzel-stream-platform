@@ -64,10 +64,9 @@ model:
   # Runtime default is real mode.
   # mock mode is allowed only when explicitly enabled for tests/verification.
   mode: "real"   # real | mock
-  # Template adapter path.
-  # This adapter fails fast until implemented to prevent accidental fake events.
-  # Set to a concrete adapter (YOLO/ONNX/custom implementation) before deployment.
-  adapter: "ai.vision.adapters.custom_adapter:CustomModelAdapter"
+  # Legacy global adapter path is deprecated in v2 node graphs.
+  # Intent: keep this key nullable to avoid implying an `ai.*` runtime dependency.
+  adapter: null
 
 zones:
   # 1) 정적 파일을 쓸지 2) backend에서 가져올지 선택

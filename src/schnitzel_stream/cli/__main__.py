@@ -5,8 +5,7 @@ CLI entrypoint (SSOT).
 
 Intent:
 - `python -m schnitzel_stream` is the new stable entrypoint for the repo.
-- v1 graph spec runs a single "job" (legacy runtime indirection).
-- v2 graph spec runs the in-proc node graph runtime (DAG only).
+- Only v2 node-graph specs are supported.
 - The default graph spec path is resolved from the repo root, not CWD, to keep
   behavior stable across edge devices, Docker, and subprocess tests.
 """
@@ -19,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from schnitzel_stream.control.throttle import FixedBudgetThrottle
-from schnitzel_stream.graph.spec import load_graph_spec, load_node_graph_spec, peek_graph_version
+from schnitzel_stream.graph.spec import load_node_graph_spec, peek_graph_version
 from schnitzel_stream.graph.validate import validate_graph
 from schnitzel_stream.graph.compat import validate_graph_compat
 from schnitzel_stream.plugins.registry import PluginRegistry
@@ -58,7 +57,8 @@ def _build_parser() -> argparse.ArgumentParser:
         help="print a JSON run report (v2 in-proc runtime only)",
     )
 
-    # Keep legacy pipeline flags as the Phase 0 compatibility surface.
+    # Intent: keep legacy flags parseable for wrapper script compatibility.
+    # They are ignored by the v2 runtime path.
     parser.add_argument("--camera-id", type=str, default=None, help="camera id override")
     parser.add_argument("--video", type=str, default=None, help="mp4 file path override")
     parser.add_argument(
@@ -82,15 +82,33 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _maybe_warn_legacy_v1_deprecation() -> None:
-    # Intent: v1(job) graphs run the legacy runtime (`src/ai/**`).
-    # We want this to be explicit so migrations don't silently stall.
-    if os.environ.get("SCHNITZEL_STREAM_SILENCE_LEGACY_WARNING"):
+def _maybe_warn_ignored_legacy_flags(args: argparse.Namespace) -> None:
+    if os.environ.get("SCHNITZEL_STREAM_SILENCE_CLI_COMPAT_WARNING"):
+        return
+    ignored: list[str] = []
+    if args.camera_id is not None:
+        ignored.append("--camera-id")
+    if args.video is not None:
+        ignored.append("--video")
+    if args.source_type is not None:
+        ignored.append("--source-type")
+    if args.camera_index is not None:
+        ignored.append("--camera-index")
+    if args.dry_run:
+        ignored.append("--dry-run")
+    if args.output_jsonl is not None:
+        ignored.append("--output-jsonl")
+    if args.visualize:
+        ignored.append("--visualize")
+    if args.loop:
+        ignored.append("--loop")
+    if not ignored:
         return
     print(
-        "WARNING: running a v1 job graph (legacy runtime under `src/ai/**`). "
-        "Legacy removal is tracked in Phase 4 (see `docs/roadmap/execution_roadmap.md`). "
-        "Set SCHNITZEL_STREAM_SILENCE_LEGACY_WARNING=1 to silence this warning.",
+        "WARNING: legacy compatibility flags are ignored in v2 runtime: "
+        f"{', '.join(ignored)}. "
+        "Use v2 graph/plugin config instead. "
+        "Set SCHNITZEL_STREAM_SILENCE_CLI_COMPAT_WARNING=1 to silence this warning.",
         file=sys.stderr,
     )
 
@@ -111,51 +129,38 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     version = peek_graph_version(args.graph)
+    if version != 2:
+        raise ValueError(f"unsupported graph spec version: {version} (only v2 is supported)")
 
-    if version == 1:
-        spec = load_graph_spec(args.graph)
-        # Structural validation only; loading plugins is intentionally skipped here.
-        PluginPolicy.from_env().ensure_path_allowed(spec.job)
-        if args.validate_only:
-            return 0
-
-        _maybe_warn_legacy_v1_deprecation()
-        registry = PluginRegistry()
-        job = registry.load(spec.job)
-        run = registry.require_callable(job, "run")
-        run(spec, args)
+    spec2 = load_node_graph_spec(args.graph)
+    validate_graph(spec2.nodes, spec2.edges, allow_cycles=False)
+    policy = PluginPolicy.from_env()
+    registry = PluginRegistry(policy=policy)
+    validate_graph_compat(spec2.nodes, spec2.edges, transport="inproc", registry=registry)
+    if args.validate_only:
         return 0
 
-    if version == 2:
-        spec2 = load_node_graph_spec(args.graph)
-        validate_graph(spec2.nodes, spec2.edges, allow_cycles=False)
-        policy = PluginPolicy.from_env()
-        registry = PluginRegistry(policy=policy)
-        validate_graph_compat(spec2.nodes, spec2.edges, transport="inproc", registry=registry)
-        if args.validate_only:
-            return 0
+    _maybe_warn_ignored_legacy_flags(args)
 
-        runner = InProcGraphRunner(registry=registry)
-        # Intent: reuse legacy `--max-events` as a generic packet budget for v2 graphs
-        # (counts source-emitted packets, not backend-acked events).
-        throttle = FixedBudgetThrottle(max_source_emits_total=args.max_events) if args.max_events is not None else None
-        result = runner.run(nodes=spec2.nodes, edges=spec2.edges, throttle=throttle)
-        produced = sum(len(v) for v in result.outputs_by_node.values())
-        if args.report_json:
-            report = {
-                "ts": datetime.now(timezone.utc).isoformat(),
-                "status": "ok",
-                "engine": "inproc",
-                "graph_version": 2,
-                "graph": str(args.graph),
-                "metrics": result.metrics,
-            }
-            print(json.dumps(report, separators=(",", ":"), default=str))
-        else:
-            print(f"v2 graph executed (in-proc): nodes={len(spec2.nodes)} edges={len(spec2.edges)} packets={produced}")
-        return 0
-
-    raise AssertionError(f"unreachable: unsupported version={version}")
+    runner = InProcGraphRunner(registry=registry)
+    # Intent: reuse legacy `--max-events` as a generic packet budget for v2 graphs
+    # (counts source-emitted packets, not backend-acked events).
+    throttle = FixedBudgetThrottle(max_source_emits_total=args.max_events) if args.max_events is not None else None
+    result = runner.run(nodes=spec2.nodes, edges=spec2.edges, throttle=throttle)
+    produced = sum(len(v) for v in result.outputs_by_node.values())
+    if args.report_json:
+        report = {
+            "ts": datetime.now(timezone.utc).isoformat(),
+            "status": "ok",
+            "engine": "inproc",
+            "graph_version": 2,
+            "graph": str(args.graph),
+            "metrics": result.metrics,
+        }
+        print(json.dumps(report, separators=(",", ":"), default=str))
+    else:
+        print(f"v2 graph executed (in-proc): nodes={len(spec2.nodes)} edges={len(spec2.edges)} packets={produced}")
+    return 0
 
 
 if __name__ == "__main__":

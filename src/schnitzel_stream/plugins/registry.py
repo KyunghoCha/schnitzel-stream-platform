@@ -36,7 +36,7 @@ class PluginPolicy:
     @classmethod
     def from_env(cls) -> PluginPolicy:
         # Default allowlist: repo-owned namespaces only.
-        default_prefixes = ("schnitzel_stream.", "ai.")
+        default_prefixes = ("schnitzel_stream.",)
         raw = os.environ.get("ALLOWED_PLUGIN_PREFIXES", "")
         prefixes = _parse_prefixes(raw) or default_prefixes
         allow_all = os.environ.get("ALLOW_ALL_PLUGINS", "").strip().lower() in ("1", "true", "yes")

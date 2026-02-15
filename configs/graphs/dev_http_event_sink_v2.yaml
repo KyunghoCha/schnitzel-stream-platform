@@ -24,7 +24,7 @@ nodes:
     kind: sink
     plugin: schnitzel_stream.nodes.http:HttpJsonSink
     config:
-      # Demo target; run `python -m ai.pipeline.mock_backend` first.
+      # Demo target; run `python -m schnitzel_stream.tools.mock_backend` first.
       url: "http://127.0.0.1:18080/api/events"
       method: POST
       body: payload
