@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P5.2`
+Current step id: `P6.1`
 
 ## English
 
@@ -105,7 +105,7 @@ Intent:
     - Top-level entry docs (`README.md`, `PROMPT*.md`, `docs/index.md`) clearly separate `platform` vs `legacy`.
     - Legacy-only docs/specs are explicitly named `legacy_*` or moved under `docs/legacy/`.
     - Default/example v2 graphs avoid CCTV-specific naming unless the example is explicitly legacy.
-- `P5.2` Plugin boundary hardening for IO (sources/sinks) and policy nodes. `NOW`
+- `P5.2` Plugin boundary hardening for IO (sources/sinks) and policy nodes. `DONE` (05719be, 5925f2e)
   - DoD:
     - RTSP/webcam/file sources are "just" `source` plugins (no core coupling).
     - backend/JSONL/stdout are "just" `sink` plugins.
@@ -119,7 +119,7 @@ Problem:
 Intent:
 - Evolve the runtime from a "batch DAG evaluator" into a "streaming packet scheduler" while keeping strict DAG safety by default.
 
-- `P6.1` Interleaved scheduler: process packets incrementally (no unbounded buffering before downstream). `NEXT`
+- `P6.1` Interleaved scheduler: process packets incrementally (no unbounded buffering before downstream). `NOW`
   - DoD:
     - Sources can be infinite iterators without starving downstream nodes.
     - Downstream processing happens as packets flow (bounded queues).
@@ -284,7 +284,7 @@ Intent:
     - 최상위 진입 문서(`README.md`, `PROMPT*.md`, `docs/index.md`)에서 `platform`과 `legacy`가 명확히 분리되어야 합니다.
     - 레거시 전용 문서/스펙은 `legacy_*`로 명시하거나 `docs/legacy/`로 이동합니다.
     - 기본/예시 v2 그래프는 레거시 예시가 아닌 한 CCTV 네이밍을 피합니다.
-- `P5.2` IO(소스/싱크) 및 정책 노드의 플러그인 경계 강화. `NOW`
+- `P5.2` IO(소스/싱크) 및 정책 노드의 플러그인 경계 강화. `DONE` (05719be, 5925f2e)
   - DoD:
     - RTSP/webcam/file 입력은 코어와 결합되지 않은 `source` 플러그인으로만 제공됩니다.
     - backend/JSONL/stdout 출력은 `sink` 플러그인으로만 제공됩니다.
@@ -298,7 +298,7 @@ Intent:
 의도(Intent):
 - strict DAG 안전성을 기본으로 유지하면서, 런타임을 “배치 DAG 평가기”에서 “스트리밍 패킷 스케줄러”로 진화시킵니다.
 
-- `P6.1` 인터리빙 스케줄러: 패킷을 점진적으로 처리(다운스트림 실행 전 무한 버퍼링 금지). `NEXT`
+- `P6.1` 인터리빙 스케줄러: 패킷을 점진적으로 처리(다운스트림 실행 전 무한 버퍼링 금지). `NOW`
   - DoD:
     - 소스가 무한 iterator여도 다운스트림이 굶지 않습니다(starvation 없음).
     - 패킷이 흐르면서 처리됩니다(바운디드 큐).
