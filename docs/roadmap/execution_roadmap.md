@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id: `P10.1`
+Current step id: `P3.3`
 
 ## English
 
@@ -54,7 +54,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 9 complete; Phase 10 hardening track started** (`P10.1` NOW)
+Current position: **Phase 10 hardening complete** (`P3.3` remains optional NEXT)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -169,18 +169,18 @@ Intent:
     - optional: multi-arch Docker build lane
 - `P9.2` Edge ops conventions (paths, service mode, logs) hardened. `DONE` (880be80)
 
-#### Phase 10: Hardening & DX (NOW)
+#### Phase 10: Hardening & DX (DONE)
 
 Intent:
 - Lock quality/documentation gates so platform changes do not drift.
 - Remove legacy CLI compatibility shims and keep only v2 graph-native interfaces.
 - Lower plugin authoring cost with scaffolding and explicit profile contracts.
 
-- `P10.1` SSOT realignment for hardening track (step id switch, docs sync). `NOW`
-- `P10.2` Quality gate hardening (docs hygiene + broken reference checks in CI). `NEXT`
-- `P10.3` Remove legacy CLI compatibility flags and migrate helper scripts to graph-native flow. `NEXT`
-- `P10.4` Plugin scaffold SDK (code/test/graph templates + guide). `NEXT`
-- `P10.5` Payload profile v1 (`inproc_any`/`json_portable`/`ref_portable`) with validator bridge. `NEXT`
+- `P10.1` SSOT realignment for hardening track (step id switch, docs sync). `DONE` (e73925a)
+- `P10.2` Quality gate hardening (docs hygiene + broken reference checks in CI). `DONE` (965deb4)
+- `P10.3` Remove legacy CLI compatibility flags and migrate helper scripts to graph-native flow. `DONE` (1fec4c2, e574ee1)
+- `P10.4` Plugin scaffold SDK (code/test/graph templates + guide). `DONE` (b7de1b2)
+- `P10.5` Payload profile v1 (`inproc_any`/`json_portable`/`ref_portable`) with validator bridge. `DONE` (5f1e66a)
 
 #### Research Track (Not On Critical Path)
 
@@ -223,8 +223,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P10.1`
-- 전체 위치: **P0~P9 핵심 항목 완료, P10 하드닝 트랙 진행 중**
+- current step id: `P3.3`
+- 전체 위치: **P0~P10 핵심 항목 완료, P3.3은 선택 연구 트랙으로 보류**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -246,13 +246,13 @@ Intent:
 | Phase 7 | DONE | payload 이식성 규칙 + `payload_ref` 전략 반영 |
 | Phase 8 | DONE | RTSP/Webcam/HTTP/JSONL 등 IO 플러그인 팩 정리 |
 | Phase 9 | DONE | 패키징/릴리즈 규율 및 엣지 운영 규약 정리 |
-| Phase 10 | NOW | 품질 게이트/CLI 정리/플러그인 DX/데이터 프로파일 하드닝 |
+| Phase 10 | DONE | 품질 게이트/CLI 정리/플러그인 DX/데이터 프로파일 하드닝 |
 
 ### 현재 우선순위
 
-1. `P10.1`: 실행 SSOT와 handoff 문서를 하드닝 트랙 기준으로 동기화
-2. `P10.2`: 문서 무결성/참조 경로 검증을 CI 품질 게이트에 추가
-3. `P10.3`: 레거시 CLI 플래그 제거 + 그래프 중심 유틸리티 스크립트 정리
+1. `P3.3` (optional): 사람 승인 기반 컨트롤러 계층의 범위 확정
+2. 연구 트랙(`R1~R3`)은 실행 트랙과 분리하여 검증 단위로 진행
+3. 운영 문서와 코드 매핑 정합성 지속 점검
 
 ### 레거시 관련 기준
 
@@ -266,6 +266,6 @@ Intent:
 
 ### 열린 쟁점
 
-1. Payload profile(`json_portable`, `ref_portable`)를 어디까지 validator에서 강제할지(`P10.5`)
-2. multi-cam 런처의 그래프 템플릿/환경변수 UX를 어느 수준까지 표준화할지(`P10.3`)
+1. 순환 그래프 실행 모델을 어디까지 런타임에 편입할지(`R1`)
+2. 분산 실행 시 전송/스케줄링 책임 경계를 어떻게 나눌지(`R2`)
 3. `P3.3`/연구 트랙(`R1~R3`) 재개 시점을 어떤 운영 신호로 판단할지

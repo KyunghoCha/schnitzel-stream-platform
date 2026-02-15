@@ -61,6 +61,7 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_camera_template_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
@@ -186,6 +187,7 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_camera_template_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml

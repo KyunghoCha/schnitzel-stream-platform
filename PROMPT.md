@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id (SSOT): `P10.1` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P3.3` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -18,7 +18,7 @@ Current baseline:
 - graph format: v2 node graph (`version: 2`)
 - legacy runtime/docs removed from working tree
 - historical legacy references are available in git tag: `pre-legacy-purge-20260216`
-- hardening track is active (`P10.1` -> `P10.5`)
+- hardening track completed (`P10.1` -> `P10.5`)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -40,7 +40,7 @@ Verification (local):
 - 그래프 포맷: v2 노드 그래프(`version: 2`)
 - 레거시 런타임/문서는 워킹 트리에서 제거됨
 - 과거 레거시 이력은 git 태그 `pre-legacy-purge-20260216`에서 조회
-- 하드닝 트랙 진행 중(`P10.1` -> `P10.5`)
+- 하드닝 트랙 완료(`P10.1` -> `P10.5`)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`

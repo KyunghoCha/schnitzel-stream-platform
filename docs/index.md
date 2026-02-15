@@ -24,6 +24,7 @@ Runtime baseline:
 9. `docs/contracts/observability.md`
 10. `docs/design/architecture_2.0.md`
 11. `docs/ops/command_reference.md`
+12. `docs/guides/plugin_authoring_guide.md`
 
 ## Active Folders
 
@@ -75,6 +76,7 @@ Runtime baseline:
 9. `docs/contracts/observability.md`
 10. `docs/design/architecture_2.0.md`
 11. `docs/ops/command_reference.md`
+12. `docs/guides/plugin_authoring_guide.md`
 
 ## 활성 폴더
 

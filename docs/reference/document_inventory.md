@@ -40,6 +40,7 @@ Last updated: 2026-02-16
 - Usage:
   - `docs/ops/command_reference.md`
   - `docs/guides/v2_node_graph_guide.md`
+  - `docs/guides/plugin_authoring_guide.md`
   - `docs/packs/vision/README.md`
   - `docs/packs/vision/event_protocol_v0.2.md`
   - `docs/packs/vision/model_class_taxonomy.md`
@@ -90,6 +91,7 @@ Last updated: 2026-02-16
 - 사용:
   - `docs/ops/command_reference.md`
   - `docs/guides/v2_node_graph_guide.md`
+  - `docs/guides/plugin_authoring_guide.md`
   - `docs/packs/vision/README.md`
   - `docs/packs/vision/event_protocol_v0.2.md`
   - `docs/packs/vision/model_class_taxonomy.md`
