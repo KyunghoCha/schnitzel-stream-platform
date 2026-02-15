@@ -1,0 +1,40 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.dev:StaticSource
+    config:
+      packets:
+        - kind: event
+          source_id: cam01
+          ts: "2026-02-15T00:00:00Z"
+          payload:
+            event_id: evt-0001
+            site_id: S001
+            camera_id: cam01
+            event_type: ZONE_INTRUSION
+            object_type: PERSON
+            severity: LOW
+            confidence: 0.91
+            bbox: { x1: 10, y1: 20, x2: 70, y2: 120 }
+          meta:
+            idempotency_key: "event:S001:cam01:evt-0001"
+
+  - id: http
+    kind: sink
+    plugin: schnitzel_stream.nodes.http:HttpJsonSink
+    config:
+      # Demo target; run `python -m ai.pipeline.mock_backend` first.
+      url: "http://127.0.0.1:18080/api/events"
+      method: POST
+      body: payload
+      timeout_sec: 3.0
+      retry_max_attempts: 3
+      retry_backoff_sec: 0.5
+      retry_backoff_max_sec: 5.0
+
+edges:
+  - from: src
+    to: http
+
+config: {}

@@ -208,7 +208,22 @@ config: {}
   - `bytes_ref -> bytes`
   - 설정: `output_kind`
 
-### 6.4 Vision pack 노드 (도메인 전용)
+### 6.4 HTTP I/O 노드 (플랫폼 공통)
+
+파일: `src/schnitzel_stream/nodes/http.py`
+
+- `schnitzel_stream.nodes.http:HttpJsonSink`
+  - 역할: sink (또는 `forward: true`면 node처럼 downstream 전달 가능)
+  - 입력 kind: `*`
+  - 요구: JSON 직렬화 가능 payload/meta (`REQUIRES_PORTABLE_PAYLOAD = True`)
+  - 핵심 설정:
+    - `url`, `method`, `timeout_sec`
+    - `idempotency_header` (기본 `Idempotency-Key`)
+    - `retry_max_attempts`, `retry_backoff_sec`, `retry_backoff_max_sec`, `retry_on_status`
+    - `body` (`payload` 또는 `packet`)
+  - 특징: at-least-once 전송 시 멱등키 헤더를 항상 붙이도록 기본 동작 제공
+
+### 6.5 Vision pack 노드 (도메인 전용)
 
 export: `src/schnitzel_stream/packs/vision/nodes/__init__.py`
 
@@ -289,6 +304,15 @@ flowchart LR
     K --> A["SqliteQueueAckSink"]
   end
   Q -. "sqlite file" .-> S
+```
+
+### 7.5 HTTP 이벤트 전송 (mock backend)
+
+그래프: `configs/graphs/dev_http_event_sink_v2.yaml`
+
+```mermaid
+flowchart LR
+  S["StaticSource(event)"] --> H["HttpJsonSink"]
 ```
 
 ## 8) 교체 규칙(노드 하나를 바꿀 때 어디까지 영향?)
