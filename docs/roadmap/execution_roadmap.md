@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P9.1`
+Current step id: `P9.2`
 
 ## English
 
@@ -47,7 +47,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 9** (`P9.1` is NOW; `P4.5` remains gated by the deprecation window; `P3.3` remains optional)
+Current position: **Phase 9** (`P9.2` is NOW; `P4.5` remains gated by the deprecation window; `P3.3` remains optional)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -154,12 +154,12 @@ Intent:
 
 #### Phase 9: Cross-Platform Packaging + Release Discipline (NOW)
 
-- `P9.1` Finalize support matrix and packaging lanes (Docker + no-Docker). `NOW`
+- `P9.1` Finalize support matrix and packaging lanes (Docker + no-Docker). `DONE` (36a588c, 166b95e)
   - DoD:
     - documented target list (OS/arch) and lane policy
     - CI verifies at least one "no-Docker" lane (`pip` + venv) end-to-end
     - optional: multi-arch Docker build lane
-- `P9.2` Edge ops conventions (paths, service mode, logs) hardened. `LATER`
+- `P9.2` Edge ops conventions (paths, service mode, logs) hardened. `NOW`
 
 #### Research Track (Not On Critical Path)
 
@@ -180,7 +180,7 @@ Intent:
 - What is the Phase 1 runtime execution model?
   - push vs pull, batching/windowing, and backpressure semantics
 - What is the minimal port/type system to prevent invalid graphs without overfitting to CCTV?
-- What is the official edge support matrix (OS/arch/GPU) and packaging lane policy (Docker required or optional)?
+- What are the OS-specific service-mode and default path conventions for long-running edge deployments?
 
 ---
 
@@ -226,7 +226,7 @@ Intent:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-현재 위치: **Phase 9** (`P9.1`이 NOW이며, `P4.5`는 deprecation window로 GATED 상태, `P3.3`는 optional)
+현재 위치: **Phase 9** (`P9.2`가 NOW이며, `P4.5`는 deprecation window로 GATED 상태, `P3.3`는 optional)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -333,12 +333,12 @@ Intent:
 
 #### Phase 9: 크로스플랫폼 패키징 + 릴리즈 규율 (NOW)
 
-- `P9.1` 지원 매트릭스/패키징 레인(Docker + no-Docker) 확정. `NOW`
+- `P9.1` 지원 매트릭스/패키징 레인(Docker + no-Docker) 확정. `DONE` (36a588c, 166b95e)
   - DoD:
     - 타겟(OS/arch)과 레인 정책이 문서화되어야 함
     - CI가 최소 1개의 no-Docker 레인(pip+venv)을 E2E로 검증
     - 옵션: multi-arch Docker 빌드 레인
-- `P9.2` 엣지 운영 규약(경로/서비스 모드/로그) 강화. `LATER`
+- `P9.2` 엣지 운영 규약(경로/서비스 모드/로그) 강화. `NOW`
 
 #### 연구 트랙(크리티컬 패스 아님)
 
@@ -359,4 +359,4 @@ Intent:
 - Phase 1 런타임 실행 모델은 무엇인가?
   - push vs pull, 배치/윈도우, 백프레셔 의미론
 - CCTV에 과적합하지 않으면서도 invalid graph를 막는 최소 port/type 시스템은 무엇인가?
-- 공식 엣지 지원 매트릭스(OS/arch/GPU)와 패키징 레인 정책은 무엇인가? (Docker 필수 vs 옵션)
+- 장기 실행 엣지 배포에서 OS별 서비스 모드 및 기본 경로 규약을 어떻게 표준화할 것인가?
