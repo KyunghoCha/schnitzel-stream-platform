@@ -38,10 +38,10 @@ Runtime baseline:
 - `docs/packs/`: pack-specific docs (vision etc.)
 - `docs/progress/`: current status snapshots
 
-## Historical Folders
+## Historical Docs
 
-- `legacy/docs/archive/`: archived implementation/ops/progress docs
-- `legacy/docs/legacy/`: legacy runtime historical docs
+- Legacy docs were removed from the working tree on 2026-02-16.
+- Use git history/tag for historical lookup: `pre-legacy-purge-20260216`.
 
 ## Code Mapping Entrypoints
 
@@ -89,10 +89,10 @@ Runtime baseline:
 - `docs/packs/`: 팩별 문서(vision 등)
 - `docs/progress/`: 현재 상태 스냅샷
 
-## 역사 폴더
+## 역사 문서
 
-- `legacy/docs/archive/`: 아카이브 구현/운영/진행 문서
-- `legacy/docs/legacy/`: 레거시 런타임 역사 문서
+- 레거시 문서는 2026-02-16에 워킹 트리에서 제거됨.
+- 과거 문서는 git 이력/태그(`pre-legacy-purge-20260216`)에서 조회.
 
 ## 코드 매핑 진입점
 

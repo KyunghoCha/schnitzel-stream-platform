@@ -1,5 +1,5 @@
 # scripts/process_manager.py
-# Docs: legacy/docs/legacy/ops/multi_camera_run.md
+# Docs: docs/ops/command_reference.md
 """
 Cross-platform process management utility.
 프로세스 시작/중지/PID 관리를 위한 크로스 플랫폼 유틸리티.

@@ -1,6 +1,6 @@
 # v2 노드 그래프 가이드 (노드 카탈로그 + 교체 규칙)
 
-Last updated: 2026-02-15
+Last updated: 2026-02-16
 
 현재 step id (SSOT): `P3.3` (`docs/roadmap/execution_roadmap.md` 참고)
 

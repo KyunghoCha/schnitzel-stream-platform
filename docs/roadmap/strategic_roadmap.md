@@ -1,6 +1,6 @@
 # Strategic Roadmap: schnitzel-stream-platform
 
-Last updated: 2026-02-15
+Last updated: 2026-02-16
 
 ## English
 
@@ -12,7 +12,7 @@ It does **not** track execution status or completion percentages.
 Roadmap stack:
 - Execution status SSOT: `docs/roadmap/execution_roadmap.md`
 - Candidate backlog: `docs/roadmap/future_backlog.md`
-- Historical/completed sub-plans: `legacy/docs/archive/roadmap_legacy/`
+- Historical/completed sub-plans: git history/tag `pre-legacy-purge-20260216`
 
 ## North Star
 
@@ -78,7 +78,7 @@ For operational progress updates, modify `docs/roadmap/execution_roadmap.md` ins
 로드맵 체계:
 - 실행 상태 SSOT: `docs/roadmap/execution_roadmap.md`
 - 후보 과제 백로그: `docs/roadmap/future_backlog.md`
-- 완료된 과거 계획 아카이브: `legacy/docs/archive/roadmap_legacy/`
+- 완료된 과거 계획 아카이브: git 이력/태그 `pre-legacy-purge-20260216`
 
 ## 지향점
 

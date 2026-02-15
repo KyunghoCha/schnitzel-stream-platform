@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # scripts/multi_cam.py
-# Docs: legacy/docs/legacy/ops/multi_camera_run.md
+# Docs: docs/ops/command_reference.md
 """
 멀티 카메라 파이프라인 실행기 (크로스 플랫폼).
 multi_camera_run.sh 및 multi_camera_stop.sh를 대체.

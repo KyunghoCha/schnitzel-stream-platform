@@ -8,8 +8,8 @@ Last updated: 2026-02-16
 
 | Scope | Active (Normative) | Legacy (Historical Only) |
 |---|---|---|
-| Documentation | `docs/**` | `legacy/docs/**` |
-| Scripts | `scripts/**` | `legacy/scripts/**` |
+| Documentation | `docs/**` | none (in-tree) |
+| Scripts | `scripts/**` | none (in-tree) |
 | Runtime source/config | `src/schnitzel_stream/**`, `configs/**` | none |
 
 ## Active Documentation Set
@@ -48,8 +48,7 @@ Last updated: 2026-02-16
 
 ## Historical Documentation Set
 
-- `legacy/docs/archive/**`
-- `legacy/docs/legacy/**`
+- Historical docs are preserved in git history/tag (`pre-legacy-purge-20260216`).
 
 ---
 
@@ -59,8 +58,8 @@ Last updated: 2026-02-16
 
 | 범위 | Active(규범) | Legacy(역사 보관용) |
 |---|---|---|
-| 문서 | `docs/**` | `legacy/docs/**` |
-| 스크립트 | `scripts/**` | `legacy/scripts/**` |
+| 문서 | `docs/**` | 없음(in-tree) |
+| 스크립트 | `scripts/**` | 없음(in-tree) |
 | 런타임 소스/설정 | `src/schnitzel_stream/**`, `configs/**` | 없음 |
 
 ## 활성 문서 세트
@@ -99,5 +98,4 @@ Last updated: 2026-02-16
 
 ## 역사 문서 세트
 
-- `legacy/docs/archive/**`
-- `legacy/docs/legacy/**`
+- 역사 문서는 git 이력/태그(`pre-legacy-purge-20260216`)로 보존한다.

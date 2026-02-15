@@ -1,6 +1,6 @@
 # Execution Roadmap (Platform Pivot SSOT)
 
-Last updated: 2026-02-15
+Last updated: 2026-02-16
 
 Current step id: `P3.3`
 
@@ -22,7 +22,7 @@ Rule:
 - `docs/roadmap/execution_roadmap.md`: execution status and step ownership (this file)
 - `docs/roadmap/strategic_roadmap.md`: long-term direction/principles (no step-by-step status tracking)
 - `docs/roadmap/future_backlog.md`: candidate items with no committed schedule
-- `legacy/docs/archive/roadmap_legacy/*.md`: completed/historical sub-plans (reference only)
+- completed/historical sub-plans: git history/tag `pre-legacy-purge-20260216` (reference only)
 
 ### Risks (P0–P3)
 
@@ -33,7 +33,7 @@ Rule:
 
 ### Mismatches (path)
 
-- Legacy CCTV-only roadmap is preserved at `legacy/docs/archive/roadmap_legacy/legacy_cctv_execution_roadmap_2026-02-08.md` (historical reference, not SSOT).
+- Legacy CCTV-only roadmap is preserved in git history/tag `pre-legacy-purge-20260216` (historical reference, not SSOT).
 
 ### Fix Plan
 
@@ -85,12 +85,12 @@ Intent:
 #### Phase 4: Legacy Decommission (DONE)
 
 Intent:
-- Remove `legacy/ai/*` only after v2 graphs cover the required production behavior.
+- Legacy runtime removal was executed after v2 graph coverage was validated.
 - Prefer extraction (separate package/repo) over hard-delete if external users still depend on it.
-- Legacy removal default requires a **deprecation window**: do not delete `legacy/ai/*` earlier than **90 days after** `P4.3` lands.
-- Owner override path is allowed only with explicit approval + full checklist evidence (`legacy/docs/archive/roadmap_legacy/legacy_removal_checklist.md`).
+- Legacy removal default used a **deprecation window** policy tied to `P4.3`.
+- Owner override path required explicit approval + checklist evidence (historical record in git history/tag).
 
-- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (archive: `legacy/docs/archive/roadmap_legacy/legacy_decommission.md`)
+- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (historical record in git history/tag)
 - `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `DONE` (P4.2.1-P4.2.5)
   - `P4.2.1` Port critical policy nodes (zones/dedup) into `schnitzel_stream` + tests + demo graph. `DONE` (ba6ea9d, 2ef7481, 1b0aa83, d14abcf)
   - `P4.2.2` v2 event builder (protocol v0.2) node + tests. `DONE` (8860377, 618b20a, 8f558b2)
@@ -98,20 +98,20 @@ Intent:
   - `P4.2.4` v2 mock model/detection node (frame -> detection) + tests. `DONE` (6af347c, 201f808)
   - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
-- `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
+- `P4.4` Extract/quarantine legacy runtime with pinned dependencies before final removal. `DONE` (cefd89f, 37d7537, a57ee5a)
 - `P4.5` Remove legacy runtime from main tree after deprecation window or approved owner override. `DONE` (owner override executed; legacy runtime removed on `main`)
 
 #### Phase 5: Platform Generalization (Domain-Neutral) (DONE)
 
 Intent:
 - Phase 5 makes the repo feel like a **universal stream platform**, not a CCTV project:
-  - domain-specific things remain supported, but they live behind plugin boundaries or under `legacy/`
+  - domain-specific things remain supported, but they live behind plugin boundaries
   - docs/examples naming should be domain-neutral by default
 
 - `P5.1` Docs + examples taxonomy cleanup (platform vs legacy) and naming de-CCTVization. `DONE` (48455a1, 41e9439, f389234)
   - DoD:
     - Top-level entry docs (`README.md`, `PROMPT*.md`, `docs/index.md`) clearly separate `platform` vs `legacy`.
-    - Legacy-only docs/specs are explicitly named `legacy_*` or moved under `legacy/docs/legacy/`.
+    - Legacy-only docs/specs are removed from active docs and preserved in git history/tag.
     - Default/example v2 graphs avoid CCTV-specific naming unless the example is explicitly legacy.
 - `P5.2` Plugin boundary hardening for IO (sources/sinks) and policy nodes. `DONE` (05719be, 5925f2e)
   - DoD:
@@ -206,13 +206,13 @@ Intent:
 - 실행 상태: `docs/roadmap/execution_roadmap.md` (본 문서)
 - 장기 방향: `docs/roadmap/strategic_roadmap.md`
 - 후보 과제: `docs/roadmap/future_backlog.md`
-- 완료/역사 계획: `legacy/docs/archive/roadmap_legacy/*.md`
+- 완료/역사 계획: git 이력/태그 `pre-legacy-purge-20260216`
 
 ### 현재 상태 한눈에 보기
 
 - current step id: `P3.3`
 - 전체 위치: **P0~P9 핵심 항목 완료, P3.3은 선택 연구 트랙으로 보류**
-- 레거시 런타임(`legacy/ai/*`, `src/ai/*`)은 `main`에서 제거 완료
+- 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
 - `DONE`: 완료되어 `main` 반영
@@ -242,11 +242,8 @@ Intent:
 
 ### 레거시 관련 기준
 
-- 레거시 제거 계획/체크리스트는 실행 문서가 아니라 아카이브 문서로 관리한다.
-- 참조 경로:
-  - `legacy/docs/archive/roadmap_legacy/legacy_decommission.md`
-  - `legacy/docs/archive/roadmap_legacy/legacy_removal_checklist.md`
-  - `legacy/docs/archive/roadmap_legacy/legacy_cctv_execution_roadmap_2026-02-08.md`
+- 레거시 제거 계획/체크리스트는 워킹 트리에서 제거되었으며 git 이력/태그로 관리한다.
+- 참조: `pre-legacy-purge-20260216`
 
 ### 검증 상태
 

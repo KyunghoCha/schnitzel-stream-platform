@@ -1,6 +1,6 @@
 # Future Backlog
 
-Last updated: 2026-02-15
+Last updated: 2026-02-16
 
 ## English
 
@@ -13,7 +13,7 @@ Once an item gets schedule/owner/DoD, move it into `docs/roadmap/execution_roadm
 
 - Each backlog item must define: problem, expected value, risk.
 - No item in this file is considered `NOW` or `NEXT` by default.
-- Historical plans and completed sub-plans must live under `legacy/docs/archive/roadmap_legacy/`.
+- Historical plans and completed sub-plans must be tracked via git history/tag (`pre-legacy-purge-20260216`).
 
 ## Candidate Backlog
 
@@ -48,7 +48,7 @@ Promote only when all conditions are met:
 
 - 항목마다 문제, 기대효과, 리스크를 반드시 적는다.
 - 이 문서에 있는 항목은 기본적으로 `NOW`나 `NEXT`가 아니다.
-- 끝난 계획이나 과거 이력은 `legacy/docs/archive/roadmap_legacy/`에 보관한다.
+- 끝난 계획/과거 이력은 git 이력/태그(`pre-legacy-purge-20260216`)로 관리한다.
 
 ## 후보 과제
 

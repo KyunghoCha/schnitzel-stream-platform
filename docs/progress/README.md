@@ -8,8 +8,8 @@ Active progress tracking lives in:
 - `docs/progress/current_status.md`
 - `docs/roadmap/execution_roadmap.md` (execution SSOT)
 
-Historical progress logs moved to:
-- `legacy/docs/archive/progress_legacy/`
+Historical progress logs are no longer in the working tree.
+- Use git history/tag: `pre-legacy-purge-20260216`
 
 ## 한국어
 
@@ -17,5 +17,5 @@ Historical progress logs moved to:
 - `docs/progress/current_status.md`
 - `docs/roadmap/execution_roadmap.md` (실행 SSOT)
 
-기존 진행 로그는 다음으로 이동했다:
-- `legacy/docs/archive/progress_legacy/`
+기존 진행 로그는 워킹 트리에서 제거되었다.
+- git 이력/태그(`pre-legacy-purge-20260216`)에서 조회

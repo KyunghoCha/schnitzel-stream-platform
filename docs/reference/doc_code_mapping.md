@@ -1,6 +1,6 @@
 # Doc-Code Mapping
 
-Last updated: 2026-02-15
+Last updated: 2026-02-16
 
 ## English
 
@@ -10,10 +10,10 @@ This document is the active mapping between runtime code and maintained docs.
 
 | Scope | Active (Normative) | Legacy (Historical Only) | Rule |
 |---|---|---|---|
-| Documentation | `docs/**` | `legacy/docs/**` | Anything under `legacy/docs/**` is reference-only and must not be treated as SSOT. |
-| Scripts | `scripts/**` | `legacy/scripts/**` | Only `scripts/**` are active helper scripts for the current platform runtime. |
+| Documentation | `docs/**` | none (in-tree) | Historical docs are preserved via git history/tag (`pre-legacy-purge-20260216`). |
+| Scripts | `scripts/**` | none (in-tree) | Only `scripts/**` are active helper scripts for the current platform runtime. |
 | Runtime Code | `src/schnitzel_stream/**` | none | Legacy runtime code is not part of active tracked source roots. |
-| Runtime Config | `configs/**` | none | Legacy behavior/config intent is preserved as documents in `legacy/docs/**`. |
+| Runtime Config | `configs/**` | none | Historical behavior/config intent is preserved in git history/tag. |
 
 ## Core Platform Mapping
 
@@ -44,8 +44,8 @@ This document is the active mapping between runtime code and maintained docs.
 
 ## Archive Boundary
 
-Historical CCTV/legacy implementation docs are moved to `legacy/docs/archive/` and `legacy/docs/legacy/`.
-They are not normative for active runtime behavior.
+Historical CCTV/legacy implementation docs are not kept in the working tree.
+Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 
 ---
 
@@ -57,10 +57,10 @@ They are not normative for active runtime behavior.
 
 | 범위 | Active(규범) | Legacy(역사 보관용) | 규칙 |
 |---|---|---|---|
-| 문서 | `docs/**` | `legacy/docs/**` | `legacy/docs/**` 하위는 참고용이며 SSOT로 사용하지 않는다. |
-| 스크립트 | `scripts/**` | `legacy/scripts/**` | 현재 플랫폼 런타임 헬퍼 스크립트는 `scripts/**`만 Active로 본다. |
+| 문서 | `docs/**` | 없음(in-tree) | 역사 문서는 git 이력/태그(`pre-legacy-purge-20260216`)로 조회한다. |
+| 스크립트 | `scripts/**` | 없음(in-tree) | 현재 플랫폼 런타임 헬퍼 스크립트는 `scripts/**`만 Active로 본다. |
 | 런타임 코드 | `src/schnitzel_stream/**` | 없음 | 레거시 런타임 코드는 현재 추적 소스 루트에 포함하지 않는다. |
-| 런타임 설정 | `configs/**` | 없음 | 레거시 동작/설정 의도는 `legacy/docs/**` 문서로만 보존한다. |
+| 런타임 설정 | `configs/**` | 없음 | 과거 동작/설정 의도는 git 이력/태그로 보존한다. |
 
 ## 코어 플랫폼 매핑
 
@@ -91,5 +91,5 @@ They are not normative for active runtime behavior.
 
 ## 아카이브 경계
 
-역사적 CCTV/legacy 구현 문서는 `legacy/docs/archive/`, `legacy/docs/legacy/`로 이동했다.
-현재 런타임 동작의 규범 문서로 사용하지 않는다.
+역사적 CCTV/legacy 구현 문서는 워킹 트리에 두지 않는다.
+조회가 필요하면 git 이력/태그 `pre-legacy-purge-20260216`를 사용한다.
