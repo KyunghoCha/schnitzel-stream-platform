@@ -194,185 +194,67 @@ Intent:
 
 ## 한국어
 
-이 문서는 플랫폼 피벗을 위한 **실행 SSOT** 입니다.
+이 문서는 플랫폼 전환 작업의 **실행 상태 SSOT**다.
+세부 설계 원칙은 전략 문서에서, 아이디어 후보는 백로그 문서에서 관리한다.
 
-규칙:
-- 진행 상황을 보고(이슈/PR/채팅)할 때 항상 **current step id** 를 함께 언급합니다. (예: `P1.4/8`)
+운영 규칙:
+- 진행 보고(이슈/PR/채팅)에는 반드시 현재 step id를 함께 적는다.
+- 상태/우선순위 변경은 이 문서를 먼저 갱신한 뒤 코드 변경을 진행한다.
 
-### 요약
+### 문서 역할
 
-- **참조 SSOT 문서**: `docs/roadmap/strategic_roadmap.md`, `docs/contracts/stream_packet.md`, `PROMPT_CORE.md`.
-- **범위**: `schnitzel-stream-platform`을 안정적인 엔트리포인트를 가진 범용 스트림 플랫폼으로 진화시키기 위한 순서/상태/다음 액션을 추적합니다.
-- **비범위**: 최종 DAG 의미론, 분산 실행, 오토파일럿 컨트롤 플레인(각각 단계적으로 정의되며 잠정입니다).
+- 실행 상태: `docs/roadmap/execution_roadmap.md` (본 문서)
+- 장기 방향: `docs/roadmap/strategic_roadmap.md`
+- 후보 과제: `docs/roadmap/future_backlog.md`
+- 완료/역사 계획: `legacy/docs/archive/roadmap_legacy/*.md`
 
-### 로드맵 역할 분리
+### 현재 상태 한눈에 보기
 
-- `docs/roadmap/execution_roadmap.md`: 실행 상태/step 소유권 (본 문서)
-- `docs/roadmap/strategic_roadmap.md`: 장기 방향/원칙 (step-by-step 상태 추적 제외)
-- `docs/roadmap/future_backlog.md`: 일정 확정 전 후보 아이템
-- `legacy/docs/archive/roadmap_legacy/*.md`: 완료/역사 하위 계획 (참고 전용)
-
-### 리스크 (P0–P3)
-
-- **P0**: 계획 드리프트: SSOT에 step 상태를 업데이트하지 않은 채 기능을 추가하면 SSOT/코드 불일치가 발생합니다.
-- **P1**: 과설계: DAG/타입 시스템을 너무 빨리 고정하면 출시를 막을 수 있습니다.
-- **P2**: 과소설계: 검증/백프레셔 없이 런타임을 배포하면 엣지에서 불안정성이 커집니다.
-- **P3**: 문서 파편화: 여러 “계획” 문서가 SSOT처럼 경쟁하면 실행이 깨집니다.
-
-### 불일치(경로)
-
-- 레거시 CCTV 전용 로드맵은 `legacy/docs/archive/roadmap_legacy/legacy_cctv_execution_roadmap_2026-02-08.md` 에 보존합니다. (역사 기록용, SSOT 아님)
-
-### 실행 계획
+- current step id: `P3.3`
+- 전체 위치: **P0~P9 핵심 항목 완료, P3.3은 선택 연구 트랙으로 보류**
+- 레거시 런타임(`legacy/ai/*`, `src/ai/*`)은 `main`에서 제거 완료
 
 상태 표기:
-- `DONE`: 완료되어 `main`에 머지됨
-- `NOW`: 지금 실행할 작업
-- `NEXT`: NOW 이후 대기
-- `LATER`: 아직 시작하지 않음
+- `DONE`: 완료되어 `main` 반영
+- `NEXT`: 다음 후보
+- `LATER`: 연구/후순위
 
-#### Phase 0: Entrypoint SSOT + Strangler (DONE ~100%)
+### 단계 요약
 
-- `P0.1` Cross-platform LF canonical (`.gitattributes`). `DONE` (291874c)
-- `P0.2` Introduce `schnitzel_stream` core skeleton. `DONE` (287abde)
-- `P0.3` Phase 0 job spec + legacy job runner. `DONE` (29cb3ed)
-- `P0.4` New CLI entrypoint `python -m schnitzel_stream`. `DONE` (5cd6c43)
-- `P0.5` Migrate tests/scripts/Docker/docs, disable legacy CLI. `DONE` (c729fb9, 62786b7, aa8d515)
-- `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
-- `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
+| 구간 | 상태 | 메모 |
+|---|---|---|
+| Phase 0 | DONE | 엔트리포인트 통합, 기본 SSOT 정착 |
+| Phase 1 | DONE | v2 그래프 로더/검증기/실행기 기본선 확립 |
+| Phase 2 | DONE | durable queue, 재전송/멱등성 기반 강화 |
+| Phase 3 | DONE (core), NEXT (P3.3) | 운영 제어면(메트릭/스로틀) 완료, LLM 컨트롤러는 선택 과제 |
+| Phase 4 | DONE | v2 전환 완료 및 레거시 런타임 제거 |
+| Phase 5 | DONE | 도메인 중립 네이밍/경계 정리 |
+| Phase 6 | DONE | 스트리밍 in-proc 스케줄링/백프레셔 정착 |
+| Phase 7 | DONE | payload 이식성 규칙 + `payload_ref` 전략 반영 |
+| Phase 8 | DONE | RTSP/Webcam/HTTP/JSONL 등 IO 플러그인 팩 정리 |
+| Phase 9 | DONE | 패키징/릴리즈 규율 및 엣지 운영 규약 정리 |
 
-현재 위치: **Phase 9 + P4.5 완료** (`P3.3`는 optional NEXT)
+### 현재 우선순위
 
-#### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
+1. `P3.3` (optional): 사람 승인 기반 컨트롤러 계층의 범위 확정
+2. 연구 트랙(`R1~R3`)은 실행 트랙과 분리하여 검증 단위로 진행
+3. 운영 문서와 코드 매핑 정합성 지속 점검
 
-- `P1.1` Draft graph model + strict DAG validator + unit tests. `DONE` (27bb702)
-- `P1.2` Draft node-graph spec v2 loader + unit tests. `DONE` (2822ffa, 87d7a24)
-- `P1.3` Centralize plugin allowlist checks in `PluginPolicy`. `DONE` (4d95fd5)
-- `P1.4` CLI: add `validate` / `--validate-only` for graph validation (v2 node graph baseline). `DONE` (f4322d4)
-- `P1.5` Runtime MVP: execute v2 graph (topological order) for in-proc packets only. `DONE` (7e1a9e7)
-- `P1.6` Type/port/transport-compat validation (static). `DONE` (3fe090a)
-- `P1.7` Restricted cycles policy (Delay/InitialValue only) as a validator extension. `DONE` (53b38a9)
+### 레거시 관련 기준
 
-#### Phase 2: Durable Delivery Hardening (DONE ~100%)
+- 레거시 제거 계획/체크리스트는 실행 문서가 아니라 아카이브 문서로 관리한다.
+- 참조 경로:
+  - `legacy/docs/archive/roadmap_legacy/legacy_decommission.md`
+  - `legacy/docs/archive/roadmap_legacy/legacy_removal_checklist.md`
+  - `legacy/docs/archive/roadmap_legacy/legacy_cctv_execution_roadmap_2026-02-08.md`
 
-- `P2.1` Durable queue node plugin (`WAL/SQLite`), store-and-forward. `DONE` (fd02823)
-- `P2.2` Idempotency keys and ack semantics. `DONE` (e885e41)
-- `P2.3` Soak tests for outage/restart/backlog replay. `DONE` (9dabf8d)
+### 검증 상태
 
-#### Phase 3: 운영 제어 표면 (코어는 DONE, 연구/옵션 분리)
+- 로컬 실행 완료: `python3 -m compileall -q src tests`
+- 로컬 미실행: `pytest` (개발 의존성 설치 필요, push 시 CI 검증 권장)
 
-의도(Intent):
-- Phase 3는 멀티 카메라 오케스트레이터나 분산 스케줄러가 **아닙니다**.
-- Phase 3는 엣지에서 안전하게 돌리기 위한 최소 “제어 표면”입니다: metrics/health 계약 + 정책 기반 튜닝 훅.
+### 열린 쟁점
 
-- `P3.1` Unified metrics/health contract across transports. `DONE` (e6d14c5)
-- `P3.2` Autonomic tuning hooks (policy-driven throttles). `DONE` (a792677)
-- `P3.3` Optional LLM/controller layer (human-in-the-loop, gated). `NEXT` (optional)
-
-#### Phase 4: Legacy Decommission (DONE)
-
-의도(Intent):
-- v2 그래프가 필요한 운영 동작을 커버한 이후에만 `legacy/ai/*`를 제거합니다.
-- 외부 사용자가 여전히 의존한다면 hard-delete 대신 추출(별도 패키지/리포) 우선입니다.
-- 레거시 제거 기본 경로는 **deprecation window**를 따릅니다: `P4.3` 머지 이후 **최소 90일** 이전에 `legacy/ai/*`를 삭제하지 않습니다.
-- 조기 삭제는 owner 승인 + 체크리스트 증빙(`legacy/docs/archive/roadmap_legacy/legacy_removal_checklist.md`)이 있을 때만 허용합니다.
-
-- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (archive: `legacy/docs/archive/roadmap_legacy/legacy_decommission.md`)
-- `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `DONE` (P4.2.1-P4.2.5)
-  - `P4.2.1` Port critical policy nodes (zones/dedup) into `schnitzel_stream` + tests + demo graph. `DONE` (ba6ea9d, 2ef7481, 1b0aa83, d14abcf)
-  - `P4.2.2` v2 event builder (protocol v0.2) node + tests. `DONE` (8860377, 618b20a, 8f558b2)
-  - `P4.2.3` v2 file-video source + sampler nodes + tests. `DONE` (a2e34fa, 6d8cd5e, 570409f)
-  - `P4.2.4` v2 mock model/detection node (frame -> detection) + tests. `DONE` (6af347c, 201f808)
-  - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
-- `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
-- `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
-- `P4.5` Remove legacy runtime from main tree after deprecation window or approved owner override. `DONE` (owner override 실행으로 `main`에서 레거시 런타임 제거 완료)
-
-#### Phase 5: 플랫폼 범용화(도메인 중립) (DONE)
-
-의도(Intent):
-- Phase 5의 목표는 레포가 **범용 스트림 플랫폼**처럼 보이고 동작하게 만드는 것입니다.
-  - 도메인 특화 기능은 계속 지원하되, 플러그인 경계 뒤로 보내거나 `legacy/`로 격리합니다.
-  - 문서/예시 네이밍은 기본적으로 도메인 중립이어야 합니다.
-
-- `P5.1` 문서 + 예시 그래프 분류/정리(platform vs legacy) 및 네이밍 de-CCTVization. `DONE` (48455a1, 41e9439, f389234)
-  - DoD:
-    - 최상위 진입 문서(`README.md`, `PROMPT*.md`, `docs/index.md`)에서 `platform`과 `legacy`가 명확히 분리되어야 합니다.
-    - 레거시 전용 문서/스펙은 `legacy_*`로 명시하거나 `legacy/docs/legacy/`로 이동합니다.
-    - 기본/예시 v2 그래프는 레거시 예시가 아닌 한 CCTV 네이밍을 피합니다.
-- `P5.2` IO(소스/싱크) 및 정책 노드의 플러그인 경계 강화. `DONE` (05719be, 5925f2e)
-  - DoD:
-    - RTSP/webcam/file 입력은 코어와 결합되지 않은 `source` 플러그인으로만 제공됩니다.
-    - backend/JSONL/stdout 출력은 `sink` 플러그인으로만 제공됩니다.
-    - `schnitzel_stream` 코어는 CCTV/백엔드 스키마 가정을 포함하지 않습니다(계약은 `StreamPacket`).
-
-#### Phase 6: 스트리밍 in-proc 런타임 의미론 (DONE)
-
-문제:
-- 현재 in-proc runner는 source를 끝까지 실행한 다음에 downstream 노드를 실행합니다. 작은 데모엔 괜찮지만 RTSP/webcam 같은 스트리밍 소스나 큰 파일에서는 메모리/지연 문제가 생깁니다.
-
-의도(Intent):
-- strict DAG 안전성을 기본으로 유지하면서, 런타임을 “배치 DAG 평가기”에서 “스트리밍 패킷 스케줄러”로 진화시킵니다.
-
-- `P6.1` 인터리빙 스케줄러: 패킷을 점진적으로 처리(다운스트림 실행 전 무한 버퍼링 금지). `DONE` (282a74a)
-  - DoD:
-    - 소스가 무한 iterator여도 다운스트림이 굶지 않습니다(starvation 없음).
-    - 패킷이 흐르면서 처리됩니다(바운디드 큐).
-    - 결정적 stop 조건(`--max-packets` / 시간 예산 / throttle policy)이 존재합니다.
-- `P6.2` 백프레셔 + 큐 정책: bounded inbox, drop/slowdown 의미론, 메트릭. `DONE` (8e1b5db)
-  - DoD:
-    - 노드별 inbox limit 설정 가능
-    - drop/backpressure 이벤트가 메트릭으로 남음
-
-#### Phase 7: Payload 이식성 + Transport Lane (DONE)
-
-의도(Intent):
-- “어떤 데이터가 경계를 넘을 수 있는가”를 명시합니다(in-proc 객체 vs durable/IPC/network).
-
-- `P7.1` payload 이식성 정책 + validator 강제. `DONE` (18ddb75)
-  - DoD:
-    - non-portable payload(예: raw frame)가 durable/network 경로로 라우팅되면 validate에서 실패합니다.
-    - durable queue 노드는 blob/handle 전략이 나오기 전까지 JSON-only임을 문서화합니다.
-- `P7.2` 큰/바이너리 payload(프레임/오디오)용 handle 전략(`payload_ref`). `DONE` (c4d40bf)
-  - DoD:
-    - `StreamPacket`이 file/shm/uri 기반 portable reference를 지원하며, lifecycle 규칙이 명확합니다.
-
-#### Phase 8: IO 플러그인 팩(RTSP/Webcam/HTTP 등) (DONE)
-
-의도(Intent):
-- RTSP와 “backend”는 교체 가능한 어댑터입니다. 플랫폼은 최소 배터리를 제공하고, 배포 환경은 필요한 어댑터를 가져옵니다.
-
-- `P8.1` RTSP source 플러그인(reconnect/backoff) + 테스트 + 데모 그래프. `DONE` (8cf52e8, 471ff6c)
-- `P8.2` Webcam source 플러그인 + 테스트 + 데모 그래프. `DONE` (3d9e889, 9886e63)
-- `P8.3` HTTP sink 플러그인(idempotency + retry 정책) + 테스트 + 데모 그래프. `DONE` (2d7442c, 83baaad)
-- `P8.4` JSONL/file sink 플러그인 + 테스트. `DONE` (983be3f, c9f831e)
-
-#### Phase 9: 크로스플랫폼 패키징 + 릴리즈 규율 (DONE)
-
-- `P9.1` 지원 매트릭스/패키징 레인(Docker + no-Docker) 확정. `DONE` (36a588c, 166b95e)
-  - DoD:
-    - 타겟(OS/arch)과 레인 정책이 문서화되어야 함
-    - CI가 최소 1개의 no-Docker 레인(pip+venv)을 E2E로 검증
-    - 옵션: multi-arch Docker 빌드 레인
-- `P9.2` 엣지 운영 규약(경로/서비스 모드/로그) 강화. `DONE` (880be80)
-
-#### 연구 트랙(크리티컬 패스 아님)
-
-의도(Intent):
-- 오케스트레이터/LLM 컨트롤러는 논문급 과제가 될 수 있으므로, 코어 플랫폼이 안정화되기 전에는 크리티컬 패스에서 제외합니다.
-
-- `R1` validator-only를 넘는 cycle 실행 의미론(가드레일 포함). `LATER`
-- `R2` 멀티 카메라 오케스트레이터/프로세스 매니저/추론 서버 아키텍처. `LATER`
-- `R3` LLM/controller 레이어(사용자 승인 기반). `LATER`
-
-### 검증
-
-- 실행됨(로컬): `python3 -m compileall -q src tests`
-- 실행 안 함(로컬): `pytest` (venv deps 필요; push 시 CI가 강제)
-
-### 미해결 질문
-
-- Phase 1 런타임 실행 모델은 무엇인가?
-  - push vs pull, 배치/윈도우, 백프레셔 의미론
-- CCTV에 과적합하지 않으면서도 invalid graph를 막는 최소 port/type 시스템은 무엇인가?
-- 과거 `ai.*` 문서/예시를 참조하는 외부 사용자를 위한 커뮤니케이션 계획을 어떻게 운영할 것인가?
+1. 순환 그래프 실행 모델을 어디까지 런타임에 편입할지(`R1`)
+2. 분산 실행 시 전송/스케줄링 책임 경계를 어떻게 나눌지(`R2`)
+3. 과거 레거시 문서 참조 사용자에 대한 안내 정책을 어떻게 운영할지

@@ -30,6 +30,7 @@ Rule:
 ## Authoring Rules
 
 - Bilingual order: `## English` first, then `## 한국어`.
+- Write Korean sections as standalone Korean documentation, not sentence-by-sentence translation of English.
 - One primary owner doc per concern (avoid duplicated SSOT).
 - Include concrete file paths for code mapping.
 - Prefer short, durable docs over speculative large docs.
@@ -76,6 +77,7 @@ For PRs that change runtime behavior:
 ## 작성 규칙
 
 - 이중언어 순서: `## English` 먼저, `## 한국어` 다음.
+- 한국어 섹션은 영어 문장을 직역하지 않고, 한국어 독자를 기준으로 독립 작성한다.
 - 하나의 관심사에 하나의 주 문서(SSOT)만 둔다.
 - 코드 매핑은 실제 파일 경로를 명시한다.
 - 추측성 대문서보다 짧고 유지 가능한 문서를 우선한다.
