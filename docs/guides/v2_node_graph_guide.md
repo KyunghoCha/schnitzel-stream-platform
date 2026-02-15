@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-현재 step id (SSOT): `P8.2` (`docs/roadmap/execution_roadmap.md` 참고)
+현재 step id (SSOT): `P8.3` (`docs/roadmap/execution_roadmap.md` 참고)
 
 이 문서는 개인 학습/레포 이해를 위한 참고 문서이며 한국어로만 작성했습니다.
 
