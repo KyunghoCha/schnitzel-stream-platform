@@ -1,0 +1,36 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.packs.vision.nodes:OpenCvRtspSource
+    config:
+      # Replace with your RTSP URL.
+      # Tip: avoid embedding credentials in this file; prefer environment variables in deployment.
+      url: "rtsp://127.0.0.1:8554/demo"
+      source_id: cam01
+      reconnect: true
+      reconnect_backoff_sec: 1.0
+      reconnect_backoff_max_sec: 30.0
+      reconnect_max_attempts: 0
+
+  - id: sample
+    kind: node
+    plugin: schnitzel_stream.packs.vision.nodes:EveryNthFrameSamplerNode
+    config:
+      every_n: 10
+
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "RTSP "
+      forward: false
+
+edges:
+  - from: src
+    to: sample
+  - from: sample
+    to: out
+
+config: {}
+

@@ -11,10 +11,12 @@ Intent:
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+import time
 from typing import Any, Iterable
 
 from schnitzel_stream.packet import StreamPacket
 from schnitzel_stream.project import resolve_project_root
+from schnitzel_stream.utils.urls import mask_url
 
 try:  # pragma: no cover
     import cv2  # type: ignore
@@ -120,6 +122,143 @@ class OpenCvVideoFileSource:
                 "idempotency_key": f"frame:{self.source_id}:{frame_idx}",
             }
 
+            payload = {"frame": frame, "frame_idx": int(frame_idx)}
+            yield StreamPacket.new(kind="frame", source_id=self.source_id, payload=payload, ts=ts, meta=meta)
+
+            frame_idx += 1
+            if self.max_frames and frame_idx >= self.max_frames:
+                break
+
+    def close(self) -> None:
+        if getattr(self, "_closed", True):
+            return
+        self._closed = True
+        cap = getattr(self, "_cap", None)
+        if cap is not None:
+            cap.release()
+
+
+@dataclass
+class OpenCvRtspSource:
+    """Read frames from an RTSP URL and emit `kind=frame` packets.
+
+    Output payload:
+    - frame: np.ndarray (BGR)  (in-proc only; non-portable)
+    - frame_idx: int
+
+    Config:
+    - url: str (required)
+    - source_id: str (default: node_id)
+    - max_frames: int (default: 0 -> no limit; combine with CLI `--max-events` for demos)
+    - reconnect: bool (default: true)
+    - reconnect_backoff_sec: float (default: 1.0)
+    - reconnect_backoff_max_sec: float (default: 30.0)
+    - reconnect_max_attempts: int (default: 0 -> unlimited)
+    """
+
+    OUTPUT_KINDS = {"frame"}
+
+    node_id: str
+    url: str
+    source_id: str
+    max_frames: int
+    reconnect: bool
+    reconnect_backoff_sec: float
+    reconnect_backoff_max_sec: float
+    reconnect_max_attempts: int
+
+    def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
+        if cv2 is None:
+            raise ImportError("OpenCvRtspSource requires opencv-python(-headless)")
+
+        cfg = dict(config or {})
+        url = cfg.get("url")
+        if not isinstance(url, str) or not url.strip():
+            raise ValueError("OpenCvRtspSource requires config.url (rtsp url)")
+
+        self.node_id = str(node_id or "rtsp")
+        self.url = str(url.strip())
+        self.source_id = str(cfg.get("source_id") or self.node_id)
+
+        max_frames = int(cfg.get("max_frames", 0))
+        if max_frames < 0:
+            raise ValueError("OpenCvRtspSource config.max_frames must be >= 0")
+        self.max_frames = max_frames
+
+        self.reconnect = bool(cfg.get("reconnect", True))
+        self.reconnect_backoff_sec = float(cfg.get("reconnect_backoff_sec", 1.0))
+        self.reconnect_backoff_max_sec = float(cfg.get("reconnect_backoff_max_sec", 30.0))
+        self.reconnect_max_attempts = int(cfg.get("reconnect_max_attempts", 0))
+
+        self._cap = None
+        self._closed = False
+        self._epoch = 0
+        self._open_capture_or_raise()
+
+    def _open_capture(self) -> Any:
+        assert cv2 is not None  # for type checkers
+        cap = cv2.VideoCapture(self.url)
+        if not cap.isOpened():
+            try:
+                cap.release()
+            finally:
+                return None
+        return cap
+
+    def _open_capture_or_raise(self) -> None:
+        if self._closed:
+            return
+
+        attempts = 0
+        backoff = max(0.0, float(self.reconnect_backoff_sec))
+        backoff_max = max(backoff, float(self.reconnect_backoff_max_sec))
+
+        while not self._closed:
+            cap = self._open_capture()
+            if cap is not None:
+                self._cap = cap
+                self._epoch += 1
+                return
+
+            attempts += 1
+            if not self.reconnect:
+                raise RuntimeError(f"failed to open RTSP stream: {mask_url(self.url)}")
+            if self.reconnect_max_attempts > 0 and attempts >= self.reconnect_max_attempts:
+                raise RuntimeError(
+                    f"failed to open RTSP stream after {attempts} attempts: {mask_url(self.url)}",
+                )
+            if backoff > 0:
+                time.sleep(backoff)
+            backoff = min(backoff_max, backoff * 2.0 if backoff > 0 else 0.0)
+
+    def run(self) -> Iterable[StreamPacket]:
+        assert cv2 is not None  # for type checkers
+        if self._closed:
+            return []
+
+        frame_idx = 0
+        while not self._closed:
+            cap = getattr(self, "_cap", None)
+            if cap is None:
+                break
+
+            ok, frame = cap.read()
+            if not ok:
+                if not self.reconnect:
+                    break
+                try:
+                    cap.release()
+                finally:
+                    self._cap = None
+                self._open_capture_or_raise()
+                continue
+
+            ts = datetime.now(timezone.utc).isoformat()
+            meta = {
+                "frame_idx": int(frame_idx),
+                "epoch": int(self._epoch),
+                "idempotency_key": f"frame:{self.source_id}:{self._epoch}:{frame_idx}",
+            }
             payload = {"frame": frame, "frame_idx": int(frame_idx)}
             yield StreamPacket.new(kind="frame", source_id=self.source_id, payload=payload, ts=ts, meta=meta)
 
