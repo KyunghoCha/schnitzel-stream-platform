@@ -6,6 +6,15 @@ Last updated: 2026-02-15
 
 This document is the active mapping between runtime code and maintained docs.
 
+## Active vs Legacy Boundary
+
+| Scope | Active (Normative) | Legacy (Historical Only) | Rule |
+|---|---|---|---|
+| Documentation | `docs/**` | `legacy/docs/**` | Anything under `legacy/docs/**` is reference-only and must not be treated as SSOT. |
+| Scripts | `scripts/**` | `legacy/scripts/**` | Only `scripts/**` are active helper scripts for the current platform runtime. |
+| Runtime Code | `src/schnitzel_stream/**` | none | Legacy runtime code is not part of active tracked source roots. |
+| Runtime Config | `configs/**` | none | Legacy behavior/config intent is preserved as documents in `legacy/docs/**`. |
+
 ## Core Platform Mapping
 
 | Capability | Code | Tests | Primary Docs |
@@ -43,6 +52,15 @@ They are not normative for active runtime behavior.
 ## 한국어
 
 이 문서는 현재 유지되는 코드-문서 매핑 SSOT 입니다.
+
+## Active vs Legacy 경계
+
+| 범위 | Active(규범) | Legacy(역사 보관용) | 규칙 |
+|---|---|---|---|
+| 문서 | `docs/**` | `legacy/docs/**` | `legacy/docs/**` 하위는 참고용이며 SSOT로 사용하지 않는다. |
+| 스크립트 | `scripts/**` | `legacy/scripts/**` | 현재 플랫폼 런타임 헬퍼 스크립트는 `scripts/**`만 Active로 본다. |
+| 런타임 코드 | `src/schnitzel_stream/**` | 없음 | 레거시 런타임 코드는 현재 추적 소스 루트에 포함하지 않는다. |
+| 런타임 설정 | `configs/**` | 없음 | 레거시 동작/설정 의도는 `legacy/docs/**` 문서로만 보존한다. |
 
 ## 코어 플랫폼 매핑
 

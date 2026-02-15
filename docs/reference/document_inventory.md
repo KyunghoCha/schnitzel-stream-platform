@@ -4,6 +4,14 @@ Last updated: 2026-02-15
 
 ## English
 
+## Active vs Legacy Boundary
+
+| Scope | Active (Normative) | Legacy (Historical Only) |
+|---|---|---|
+| Documentation | `docs/**` | `legacy/docs/**` |
+| Scripts | `scripts/**` | `legacy/scripts/**` |
+| Runtime source/config | `src/schnitzel_stream/**`, `configs/**` | none |
+
 ## Active Documentation Set
 
 - Governance:
@@ -38,6 +46,14 @@ Last updated: 2026-02-15
 ---
 
 ## 한국어
+
+## Active vs Legacy 경계
+
+| 범위 | Active(규범) | Legacy(역사 보관용) |
+|---|---|---|
+| 문서 | `docs/**` | `legacy/docs/**` |
+| 스크립트 | `scripts/**` | `legacy/scripts/**` |
+| 런타임 소스/설정 | `src/schnitzel_stream/**`, `configs/**` | 없음 |
 
 ## 활성 문서 세트
 
