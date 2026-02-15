@@ -17,6 +17,13 @@ Rule:
 - **Scope**: Track the ordered plan, status, and next actions for evolving `schnitzel-stream-platform` into a universal stream platform with a stable entrypoint.
 - **Non-scope**: Final DAG semantics, distributed execution, and autopilot control plane (these are phased and provisional).
 
+### Roadmap Roles
+
+- `docs/roadmap/execution_roadmap.md`: execution status and step ownership (this file)
+- `docs/roadmap/strategic_roadmap.md`: long-term direction/principles (no step-by-step status tracking)
+- `docs/roadmap/future_backlog.md`: candidate items with no committed schedule
+- `legacy/docs/archive/roadmap_legacy/*.md`: completed/historical sub-plans (reference only)
+
 ### Risks (P0–P3)
 
 - **P0**: Plan drift: adding features without updating step status causes SSOT/code mismatch.
@@ -81,9 +88,9 @@ Intent:
 - Remove `legacy/ai/*` only after v2 graphs cover the required production behavior.
 - Prefer extraction (separate package/repo) over hard-delete if external users still depend on it.
 - Legacy removal default requires a **deprecation window**: do not delete `legacy/ai/*` earlier than **90 days after** `P4.3` lands.
-- Owner override path is allowed only with explicit approval + full checklist evidence (`docs/roadmap/legacy_removal_checklist.md`).
+- Owner override path is allowed only with explicit approval + full checklist evidence (`legacy/docs/archive/roadmap_legacy/legacy_removal_checklist.md`).
 
-- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (SSOT: `docs/roadmap/legacy_decommission.md`)
+- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (archive: `legacy/docs/archive/roadmap_legacy/legacy_decommission.md`)
 - `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `DONE` (P4.2.1-P4.2.5)
   - `P4.2.1` Port critical policy nodes (zones/dedup) into `schnitzel_stream` + tests + demo graph. `DONE` (ba6ea9d, 2ef7481, 1b0aa83, d14abcf)
   - `P4.2.2` v2 event builder (protocol v0.2) node + tests. `DONE` (8860377, 618b20a, 8f558b2)
@@ -198,6 +205,13 @@ Intent:
 - **범위**: `schnitzel-stream-platform`을 안정적인 엔트리포인트를 가진 범용 스트림 플랫폼으로 진화시키기 위한 순서/상태/다음 액션을 추적합니다.
 - **비범위**: 최종 DAG 의미론, 분산 실행, 오토파일럿 컨트롤 플레인(각각 단계적으로 정의되며 잠정입니다).
 
+### 로드맵 역할 분리
+
+- `docs/roadmap/execution_roadmap.md`: 실행 상태/step 소유권 (본 문서)
+- `docs/roadmap/strategic_roadmap.md`: 장기 방향/원칙 (step-by-step 상태 추적 제외)
+- `docs/roadmap/future_backlog.md`: 일정 확정 전 후보 아이템
+- `legacy/docs/archive/roadmap_legacy/*.md`: 완료/역사 하위 계획 (참고 전용)
+
 ### 리스크 (P0–P3)
 
 - **P0**: 계획 드리프트: SSOT에 step 상태를 업데이트하지 않은 채 기능을 추가하면 SSOT/코드 불일치가 발생합니다.
@@ -261,9 +275,9 @@ Intent:
 - v2 그래프가 필요한 운영 동작을 커버한 이후에만 `legacy/ai/*`를 제거합니다.
 - 외부 사용자가 여전히 의존한다면 hard-delete 대신 추출(별도 패키지/리포) 우선입니다.
 - 레거시 제거 기본 경로는 **deprecation window**를 따릅니다: `P4.3` 머지 이후 **최소 90일** 이전에 `legacy/ai/*`를 삭제하지 않습니다.
-- 조기 삭제는 owner 승인 + 체크리스트 증빙(`docs/roadmap/legacy_removal_checklist.md`)이 있을 때만 허용합니다.
+- 조기 삭제는 owner 승인 + 체크리스트 증빙(`legacy/docs/archive/roadmap_legacy/legacy_removal_checklist.md`)이 있을 때만 허용합니다.
 
-- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (SSOT: `docs/roadmap/legacy_decommission.md`)
+- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (archive: `legacy/docs/archive/roadmap_legacy/legacy_decommission.md`)
 - `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `DONE` (P4.2.1-P4.2.5)
   - `P4.2.1` Port critical policy nodes (zones/dedup) into `schnitzel_stream` + tests + demo graph. `DONE` (ba6ea9d, 2ef7481, 1b0aa83, d14abcf)
   - `P4.2.2` v2 event builder (protocol v0.2) node + tests. `DONE` (8860377, 618b20a, 8f558b2)

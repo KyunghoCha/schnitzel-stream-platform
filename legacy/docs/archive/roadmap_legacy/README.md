@@ -8,6 +8,8 @@ Historical roadmap documents kept for audit/history only.
 
 - `migration_plan_phase0.md`
 - `legacy_cctv_execution_roadmap_2026-02-08.md`
+- `legacy_decommission.md`
+- `legacy_removal_checklist.md`
 
 Status: `historical` (not current execution SSOT)
 
@@ -20,6 +22,8 @@ Current execution SSOT:
 
 - `migration_plan_phase0.md`
 - `legacy_cctv_execution_roadmap_2026-02-08.md`
+- `legacy_decommission.md`
+- `legacy_removal_checklist.md`
 
 상태: `historical` (현재 실행 SSOT 아님)
 

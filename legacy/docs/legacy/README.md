@@ -21,7 +21,7 @@ Start here:
 
 Related:
 
-- Decommission criteria and gating: `docs/roadmap/legacy_decommission.md`
+- Decommission criteria and gating: `legacy/docs/archive/roadmap_legacy/legacy_decommission.md`
 - Platform execution SSOT (current step id): `docs/roadmap/execution_roadmap.md`
 - Vision pack (optional, domain docs): `docs/packs/vision/README.md`
 
@@ -47,7 +47,6 @@ Related:
 
 관련:
 
-- 제거 기준/게이트: `docs/roadmap/legacy_decommission.md`
+- 제거 기준/게이트: `legacy/docs/archive/roadmap_legacy/legacy_decommission.md`
 - 플랫폼 실행 SSOT(현재 step id): `docs/roadmap/execution_roadmap.md`
 - Vision pack(옵션, 도메인 문서): `docs/packs/vision/README.md`
-

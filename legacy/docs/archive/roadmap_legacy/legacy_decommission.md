@@ -59,7 +59,7 @@ Explicitly out-of-scope initially:
 Owner override path:
 - The 90-day window is the default safety path.
 - Earlier removal is allowed only with explicit owner approval and full completion of
-  `docs/roadmap/legacy_removal_checklist.md`.
+  `legacy/docs/archive/roadmap_legacy/legacy_removal_checklist.md`.
 
 ### Deprecation Policy (Timeline)
 
@@ -139,7 +139,7 @@ Baseline 후보(조정 가능):
 
 Owner override 경로:
 - 90일 규칙은 기본 안전 경로입니다.
-- 조기 삭제는 owner의 명시적 승인 + `docs/roadmap/legacy_removal_checklist.md`
+- 조기 삭제는 owner의 명시적 승인 + `legacy/docs/archive/roadmap_legacy/legacy_removal_checklist.md`
   전 항목 통과 시에만 허용합니다.
 
 ### 디프리케이션 정책 (Timeline)
