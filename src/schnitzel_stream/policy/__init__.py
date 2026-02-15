@@ -1,5 +1,6 @@
-"""Policy helpers (routing, filtering, rule evaluation).
+"""Policy helpers.
 
-Intent:
-- Phase 4 legacy removal: keep new behavior in `schnitzel_stream.*` (no `ai.*` imports).
+Note:
+- Vision/CCTV lineage policies were moved to `schnitzel_stream.packs.vision.policy`.
+- This package is kept as a compatibility shim for older imports.
 """
