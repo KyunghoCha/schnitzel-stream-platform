@@ -19,7 +19,7 @@ Note:
 
 - **Video**: `data/samples/*.mp4` (default)
 - **CLI Overrides**:
-  - `--graph` (graph spec YAML path; default: `configs/graphs/dev_cctv_e2e_mock_v2.yaml`; legacy pipeline requires `configs/graphs/legacy_pipeline.yaml`)
+  - `--graph` (graph spec YAML path; default: `configs/graphs/dev_vision_e2e_mock_v2.yaml`; legacy pipeline requires `configs/graphs/legacy_pipeline.yaml`)
   - `--video` (mp4 path; forces file source, fails fast if path does not exist)
   - `--camera-id` (string; fails fast if id is not found in `configs/cameras.yaml`)
   - `--source-type` (file|rtsp|webcam|plugin; `--video` + `--source-type rtsp/plugin` is invalid)
@@ -197,7 +197,7 @@ Note:
 
 - **비디오**: `data/samples/*.mp4` (기본값)
 - **CLI 오버라이드**:
-  - `--graph` (그래프 스펙 YAML 경로; 기본값: `configs/graphs/dev_cctv_e2e_mock_v2.yaml`; 레거시 파이프라인은 `configs/graphs/legacy_pipeline.yaml` 필요)
+  - `--graph` (그래프 스펙 YAML 경로; 기본값: `configs/graphs/dev_vision_e2e_mock_v2.yaml`; 레거시 파이프라인은 `configs/graphs/legacy_pipeline.yaml` 필요)
   - `--video` (mp4 경로; 파일 소스로 강제하며, 경로가 없으면 즉시 종료)
   - `--camera-id` (문자열; `configs/cameras.yaml`에 없으면 즉시 종료)
   - `--source-type` (file|rtsp|webcam|plugin; `--video`와 `--source-type rtsp/plugin` 조합은 불가)

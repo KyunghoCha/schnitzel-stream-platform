@@ -26,20 +26,20 @@ export PYTHONPATH=src
 Universal stream platform entrypoint (SSOT).
 
 Defaults:
-- Default graph (v2): `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
+- Default graph (v2): `configs/graphs/dev_vision_e2e_mock_v2.yaml`
 - Legacy graph (v1): `configs/graphs/legacy_pipeline.yaml` (deprecated; runs `legacy/ai/**` via `src/ai` shim)
 
 Note:
 - `python -m schnitzel_stream` supports both v1 (legacy job graph) and v2 (node graph).
 - This doc contains many **legacy(v1)** examples. For legacy runs, explicitly pass `--graph configs/graphs/legacy_pipeline.yaml`.
 - Typical v2 runs use `--graph`, `--validate-only`, `--max-events`, and `--report-json`.
-- v2 examples: `configs/graphs/dev_cctv_e2e_mock_v2.yaml`, `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`.
+- v2 examples: `configs/graphs/dev_vision_e2e_mock_v2.yaml`, `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`.
 
 ### CLI Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `--graph` | string | `configs/graphs/dev_cctv_e2e_mock_v2.yaml` | Graph spec YAML path (default: v2 node graph; v1 legacy job graph is deprecated) |
+| `--graph` | string | `configs/graphs/dev_vision_e2e_mock_v2.yaml` | Graph spec YAML path (default: v2 node graph; v1 legacy job graph is deprecated) |
 | `--camera-id` | string | auto (from config) | Camera ID (must exist in `configs/cameras.yaml`) |
 | `--video` | string | `data/samples/*.mp4` | Video file path (forces file source) |
 | `--source-type` | file\|rtsp\|webcam\|plugin | auto | Override source type |
@@ -547,20 +547,20 @@ export PYTHONPATH=src
 범용 스트림 플랫폼 엔트리포인트(SSOT).
 
 기본값:
-- 기본 그래프(v2): `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
+- 기본 그래프(v2): `configs/graphs/dev_vision_e2e_mock_v2.yaml`
 - 레거시 그래프(v1): `configs/graphs/legacy_pipeline.yaml` (deprecated; `legacy/ai/**` 실행, `src/ai` shim)
 
 참고:
 - `python -m schnitzel_stream`는 v1(레거시 job 그래프)과 v2(node graph)를 모두 지원합니다.
 - 이 문서의 많은 예시는 **레거시(v1)** 기준입니다. 레거시 실행은 `--graph configs/graphs/legacy_pipeline.yaml`를 명시하세요.
 - v2 실행은 보통 `--graph`, `--validate-only`, `--max-events`, `--report-json`만 사용합니다.
-- v2 예시: `configs/graphs/dev_cctv_e2e_mock_v2.yaml`, `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`.
+- v2 예시: `configs/graphs/dev_vision_e2e_mock_v2.yaml`, `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`.
 
 ### CLI 옵션
 
 | 옵션 | 타입 | 기본값 | 설명 |
 |------|------|--------|------|
-| `--graph` | 문자열 | `configs/graphs/dev_cctv_e2e_mock_v2.yaml` | 그래프 스펙 YAML 경로 (기본값: v2 node graph; v1 레거시 job 그래프는 deprecated) |
+| `--graph` | 문자열 | `configs/graphs/dev_vision_e2e_mock_v2.yaml` | 그래프 스펙 YAML 경로 (기본값: v2 node graph; v1 레거시 job 그래프는 deprecated) |
 | `--camera-id` | 문자열 | 자동 (설정 기반) | 카메라 ID (`configs/cameras.yaml`에 존재해야 함) |
 | `--video` | 문자열 | `data/samples/*.mp4` | 비디오 파일 경로 (파일 소스 강제) |
 | `--source-type` | file\|rtsp\|webcam\|plugin | 자동 | 소스 타입 오버라이드 |

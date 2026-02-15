@@ -55,7 +55,7 @@ Phase 0 note:
 ### Code Mapping
 
 - Entrypoint: `src/schnitzel_stream/cli/__main__.py`
-- Default graph spec (v2): `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
+- Default graph spec (v2): `configs/graphs/dev_vision_e2e_mock_v2.yaml`
 - Legacy graph spec (v1): `configs/graphs/legacy_pipeline.yaml`
 - Phase 0 legacy job: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
 - Legacy pipeline core: `legacy/ai/pipeline/core.py` (import path remains `ai.*`)
@@ -115,7 +115,7 @@ Phase 0 참고:
 ### 코드 매핑
 
 - 엔트리포인트: `src/schnitzel_stream/cli/__main__.py`
-- 기본 그래프 스펙(v2): `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
+- 기본 그래프 스펙(v2): `configs/graphs/dev_vision_e2e_mock_v2.yaml`
 - 레거시 그래프 스펙(v1): `configs/graphs/legacy_pipeline.yaml`
 - Phase 0 레거시 job: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`
 - 레거시 파이프라인 코어: `legacy/ai/pipeline/core.py` (import 경로는 `ai.*` 유지)

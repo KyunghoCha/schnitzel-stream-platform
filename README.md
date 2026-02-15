@@ -69,7 +69,7 @@ flowchart LR
 
 v1 graphs exist to keep migration reversible while the v2 platform evolves.
 
-- Default v2 graph: `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
+- Default v2 graph: `configs/graphs/dev_vision_e2e_mock_v2.yaml`
 - Legacy v1 graph (deprecated): `configs/graphs/legacy_pipeline.yaml`
 - Legacy runtime is quarantined under `legacy/ai/` (import path remains `ai.*` via `src/ai` shim) and is executed via the v1 job graph.
 
@@ -290,7 +290,7 @@ flowchart LR
 
 v1 그래프는 v2 플랫폼이 진화하는 동안 마이그레이션을 되돌릴 수 있도록(가역성) 유지됩니다.
 
-- 기본 v2 그래프: `configs/graphs/dev_cctv_e2e_mock_v2.yaml`
+- 기본 v2 그래프: `configs/graphs/dev_vision_e2e_mock_v2.yaml`
 - 레거시 v1 그래프(deprecated): `configs/graphs/legacy_pipeline.yaml`
 - 레거시 런타임은 `legacy/ai/` 아래에 격리되어 있으며(`src/ai` shim을 통해 import 경로 `ai.*` 유지), v1 job 그래프로 실행됩니다.
 

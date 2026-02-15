@@ -11,7 +11,7 @@ from schnitzel_stream.runtime.inproc import InProcGraphRunner
 
 ROOT = Path(__file__).resolve().parents[2]
 GOLDEN = ROOT / "tests" / "regression" / "v2_golden_events.jsonl"
-GRAPH = ROOT / "configs" / "graphs" / "dev_cctv_e2e_mock_v2.yaml"
+GRAPH = ROOT / "configs" / "graphs" / "dev_vision_e2e_mock_v2.yaml"
 
 _COMPARE_KEYS = {"event_type", "object_type", "severity", "track_id", "bbox", "confidence", "zone"}
 
@@ -44,4 +44,3 @@ def test_v2_golden_regression():
 
     golden = _load_jsonl(GOLDEN)
     assert [_normalize(p) for p in current] == [_normalize(p) for p in golden]
-

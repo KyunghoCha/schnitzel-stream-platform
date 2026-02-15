@@ -6,7 +6,7 @@ Last updated: 2026-02-14
 
 Note:
 - Phase 0 is complete. This document is kept as historical context.
-- Current default graph is v2: `configs/graphs/dev_cctv_e2e_mock_v2.yaml` (see `docs/roadmap/execution_roadmap.md`).
+- Current default graph is v2: `configs/graphs/dev_vision_e2e_mock_v2.yaml` (see `docs/roadmap/execution_roadmap.md`).
 
 ### Summary
 
@@ -33,7 +33,7 @@ Note:
 4. **Phase 0 legacy job**: implement `LegacyAIPipelineJob` that runs `ai.pipeline` runtime via the new platform entrypoint.
 5. **New CLI**: implement `python -m schnitzel_stream` as the stable entrypoint.
    - Phase 0 default graph was `configs/graphs/legacy_pipeline.yaml` (v1 job graph).
-   - Phase 4 default graph is `configs/graphs/dev_cctv_e2e_mock_v2.yaml` (v2 node graph).
+   - Phase 4 default graph is `configs/graphs/dev_vision_e2e_mock_v2.yaml` (v2 node graph).
 6. **Test migration**: switch subprocess integration/regression tests from `-m ai.pipeline` to `-m schnitzel_stream`.
 7. **Disable legacy CLI**: keep `legacy/ai/pipeline/__main__.py` but make it fail-fast with a clear migration message.
 8. **Ops + docs migration**: update Docker CMD, scripts, and docs to reference `python -m schnitzel_stream` instead of `python -m ai.pipeline`.
@@ -60,7 +60,7 @@ Note:
 
 참고:
 - Phase 0는 완료되었습니다. 이 문서는 역사적 맥락을 위해 유지합니다.
-- 현재 기본 그래프는 v2 입니다: `configs/graphs/dev_cctv_e2e_mock_v2.yaml` (자세한 상태는 `docs/roadmap/execution_roadmap.md`).
+- 현재 기본 그래프는 v2 입니다: `configs/graphs/dev_vision_e2e_mock_v2.yaml` (자세한 상태는 `docs/roadmap/execution_roadmap.md`).
 
 ### 요약
 
@@ -87,7 +87,7 @@ Note:
 4. **Phase 0 레거시 job**: 새 엔트리포인트에서 `ai.pipeline`을 실행하는 `LegacyAIPipelineJob`을 구현합니다.
 5. **새 CLI**: 안정 엔트리포인트로 `python -m schnitzel_stream`를 제공합니다.
    - Phase 0 기본 그래프는 `configs/graphs/legacy_pipeline.yaml`(v1 job graph)였습니다.
-   - Phase 4 기본 그래프는 `configs/graphs/dev_cctv_e2e_mock_v2.yaml`(v2 node graph)입니다.
+   - Phase 4 기본 그래프는 `configs/graphs/dev_vision_e2e_mock_v2.yaml`(v2 node graph)입니다.
 6. **테스트 마이그레이션**: subprocess 기반 통합/회귀 테스트 엔트리포인트를 `-m ai.pipeline`에서 `-m schnitzel_stream`로 전환합니다.
 7. **레거시 CLI 비활성화**: `legacy/ai/pipeline/__main__.py`는 유지하되, 명확한 마이그레이션 메시지로 fail-fast 합니다.
 8. **운영/문서 마이그레이션**: Docker CMD, 스크립트, 문서에서 `python -m ai.pipeline` 대신 `python -m schnitzel_stream`를 참조하도록 수정합니다.
