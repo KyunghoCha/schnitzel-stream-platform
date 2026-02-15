@@ -43,20 +43,20 @@ flowchart LR
   end
 
   subgraph Core["Core"]
-    V["Validator<br/>(topology + compat)"]
-    G["Graph Runtime<br/>(v2 in-proc DAG)"]
-    N["Nodes<br/>(plugin boundary)"]
+    V["Validator: topology + compat"]
+    G["Graph Runtime: v2 in-proc DAG"]
+    N["Nodes: plugin boundary"]
   end
 
   subgraph Egress["Egress"]
-    Q["Durable Queue<br/>(SQLite/WAL)"]
+    Q["Durable Queue: SQLite/WAL"]
     R["Router/Policy"]
     K["Sinks"]
   end
 
   subgraph Meta["Meta"]
-    P["Plugin Policy<br/>(allowlist)"]
-    O["Observability<br/>(run report)"]
+    P["Plugin Policy: allowlist"]
+    O["Observability: run report"]
   end
 
   S --> I --> G --> N --> Q --> R --> K
@@ -264,20 +264,20 @@ flowchart LR
   end
 
   subgraph Core["Core"]
-    V["Validator<br/>(topology + compat)"]
-    G["Graph Runtime<br/>(v2 in-proc DAG)"]
-    N["Nodes<br/>(plugin boundary)"]
+    V["Validator: topology + compat"]
+    G["Graph Runtime: v2 in-proc DAG"]
+    N["Nodes: plugin boundary"]
   end
 
   subgraph Egress["Egress"]
-    Q["Durable Queue<br/>(SQLite/WAL)"]
+    Q["Durable Queue: SQLite/WAL"]
     R["Router/Policy"]
     K["Sinks"]
   end
 
   subgraph Meta["Meta"]
-    P["Plugin Policy<br/>(allowlist)"]
-    O["Observability<br/>(run report)"]
+    P["Plugin Policy: allowlist"]
+    O["Observability: run report"]
   end
 
   S --> I --> G --> N --> Q --> R --> K
