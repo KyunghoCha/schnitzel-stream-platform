@@ -5,7 +5,7 @@ from schnitzel_stream.runtime.inproc import InProcGraphRunner
 from schnitzel_stream.state.sqlite_queue import SqliteQueue
 
 
-def test_v2_cctv_pipeline_produces_stable_idempotency_keys_for_durable_queue(tmp_path):
+def test_v2_durable_queue_produces_stable_idempotency_keys(tmp_path):
     db_path = tmp_path / "events.sqlite3"
 
     nodes = [
@@ -115,4 +115,3 @@ def test_v2_cctv_pipeline_produces_stable_idempotency_keys_for_durable_queue(tmp
         assert q2.read(limit=10) == []
     finally:
         q2.close()
-
