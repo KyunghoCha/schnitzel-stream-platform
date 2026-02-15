@@ -26,6 +26,7 @@ class GraphCompatibilityError(ValueError):
 
 _ALLOWED_NODE_KINDS = ("source", "node", "sink", "delay", "initial")
 _PORT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+_NON_PORTABLE_KINDS = {"frame"}  # best-effort v1: frames are in-proc only until a blob/handle strategy exists
 
 
 def _norm(raw: str) -> str:
@@ -114,6 +115,7 @@ def validate_plugin_contracts(
 
     in_kinds: dict[str, set[str] | None] = {}
     out_kinds: dict[str, set[str] | None] = {}
+    requires_portable_input: dict[str, bool] = {}
 
     for n in nodes:
         target = reg.resolve(n.plugin)
@@ -134,10 +136,24 @@ def validate_plugin_contracts(
         declared_out = _parse_kinds(getattr(target, "OUTPUT_KINDS", None), attr="OUTPUT_KINDS", plugin=n.plugin)
         in_kinds[n.node_id] = declared_in
         out_kinds[n.node_id] = declared_out
+        requires_portable_input[n.node_id] = bool(getattr(target, "REQUIRES_PORTABLE_PAYLOAD", False))
 
     for e in edges:
         src_out = out_kinds.get(e.src)
         dst_in = in_kinds.get(e.dst)
+
+        if requires_portable_input.get(e.dst, False):
+            # Best-effort v1 portability check:
+            # - If a node declares it requires portable payloads, reject known non-portable kinds.
+            # - Runtime still enforces JSON serialization for durable lanes.
+            if not _is_wildcard(src_out):
+                assert src_out is not None
+                if not src_out.isdisjoint(_NON_PORTABLE_KINDS):
+                    raise GraphCompatibilityError(
+                        "non-portable payload kind routed into portable-only node: "
+                        f"{e.src} -> {e.dst} ({sorted(src_out)} includes {sorted(_NON_PORTABLE_KINDS)})"
+                    )
+
         if _is_wildcard(src_out) or _is_wildcard(dst_in):
             continue
         assert src_out is not None

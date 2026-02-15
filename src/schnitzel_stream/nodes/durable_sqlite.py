@@ -26,6 +26,7 @@ class SqliteQueueSink:
 
     INPUT_KINDS = {"*"}
     OUTPUT_KINDS = {"*"}
+    REQUIRES_PORTABLE_PAYLOAD = True  # JSON-only until a blob/handle strategy exists (P7.1).
 
     def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
         cfg = dict(config or {})
@@ -75,6 +76,7 @@ class SqliteQueueSource:
     """
 
     OUTPUT_KINDS = {"*"}
+    REQUIRES_PORTABLE_PAYLOAD = True  # Emitted packets are JSON-only (P7.1).
 
     def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
         cfg = dict(config or {})
@@ -133,6 +135,7 @@ class SqliteQueueAckSink:
     """
 
     INPUT_KINDS = {"*"}
+    REQUIRES_PORTABLE_PAYLOAD = True  # Ack lane assumes JSON-only packets (P7.1).
 
     def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
         cfg = dict(config or {})

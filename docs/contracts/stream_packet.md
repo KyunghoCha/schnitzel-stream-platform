@@ -29,6 +29,9 @@ Intent:
 - Large/binary payloads:
   - Phase 1: in-process objects are allowed (e.g., numpy frame), but this must be treated as **non-portable**.
   - Phase 2+: cross-process/network requires an explicit encoding/handle strategy (e.g., shared-memory handle, file reference, chunking).
+- Portable payload boundary (P7.1 draft):
+  - Durable lanes (example: SQLite queue) are **JSON-only**: `payload` and `meta` must be JSON-serializable.
+  - The runtime enforces this at enqueue time; the graph validator also rejects known non-portable kinds (example: `frame`) routed into durable nodes.
 
 ### Examples
 
@@ -96,6 +99,9 @@ Sensor packet (payload is sensor adapter output):
 - 큰/바이너리 payload:
   - Phase 1: 프로세스 내부 객체(numpy frame 등)를 허용하되, 이는 **이식 불가(non-portable)** 로 취급합니다.
   - Phase 2+: 프로세스/네트워크 경계를 넘으려면 인코딩/핸들 전략을 명시해야 합니다(예: shared-memory handle, 파일 참조, 청크 전송).
+- 이식 가능한 payload 경계(P7.1 초안):
+  - Durable lane(예: SQLite queue)은 **JSON-only**입니다: `payload`와 `meta`는 JSON 직렬화 가능해야 합니다.
+  - 런타임은 enqueue 시점에 이를 강제하며, 그래프 validator도 알려진 non-portable kind(예: `frame`)가 durable 노드로 라우팅되면 실패시킵니다.
 
 ### 예시
 

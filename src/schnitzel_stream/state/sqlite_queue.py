@@ -83,8 +83,17 @@ class SqliteQueue:
         if not key:
             raise ValueError("idempotency_key must not be empty")
 
-        payload_json = json.dumps(packet.payload, default=str, separators=(",", ":"))
-        meta_json = json.dumps(packet.meta, default=str, separators=(",", ":"))
+        # P7.1 portability rule:
+        # - Durable lanes are JSON-only until a blob/handle strategy exists.
+        # - Do not silently stringify non-serializable objects (it breaks replay correctness).
+        try:
+            payload_json = json.dumps(packet.payload, separators=(",", ":"))
+            meta_json = json.dumps(packet.meta, separators=(",", ":"))
+        except TypeError as exc:
+            raise TypeError(
+                "SqliteQueue requires JSON-serializable packet.payload and packet.meta "
+                f"(kind={packet.kind} source_id={packet.source_id})"
+            ) from exc
         cur = self._conn.cursor()
         cur.execute(
             """
