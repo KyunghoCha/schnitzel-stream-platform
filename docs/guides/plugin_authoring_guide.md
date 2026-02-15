@@ -1,0 +1,89 @@
+# Plugin Authoring Guide
+
+Last updated: 2026-02-16
+
+## English
+
+## Purpose
+
+This guide defines the fastest path to create a new plugin in the platform runtime.
+
+## Scaffold Command
+
+```bash
+python scripts/scaffold_plugin.py \
+  --pack sensor \
+  --kind node \
+  --name ThresholdNode
+```
+
+Optional flags:
+- `--module <module_name>`: override default module name derived from class name
+- `--input-kinds <k1,k2,...>`: set `INPUT_KINDS` for node/sink
+- `--output-kinds <k1,k2,...>`: set `OUTPUT_KINDS` for source/node
+- `--force`: overwrite existing generated files
+
+## Generated Files
+
+For `--pack sensor --kind node --name ThresholdNode`:
+- `src/schnitzel_stream/packs/sensor/nodes/threshold_node.py`
+- `tests/unit/packs/sensor/nodes/test_threshold_node.py`
+- `configs/graphs/dev_sensor_threshold_node_v2.yaml`
+
+## Authoring Rules
+
+1. Keep plugin behavior explicit via `StreamPacket` contract.
+2. Add `Intent:` comments when behavior is deliberate/non-obvious.
+3. Replace scaffold placeholder logic before production use.
+4. Validate graph and run tests after implementation.
+
+## Verify
+
+```bash
+python -m schnitzel_stream validate --graph configs/graphs/dev_sensor_threshold_node_v2.yaml
+python3 -m compileall -q src tests scripts
+```
+
+---
+
+## 한국어
+
+## 목적
+
+이 가이드는 플랫폼 런타임에서 새 플러그인을 가장 빠르게 만드는 방법을 정의한다.
+
+## 스캐폴드 명령
+
+```bash
+python scripts/scaffold_plugin.py \
+  --pack sensor \
+  --kind node \
+  --name ThresholdNode
+```
+
+선택 옵션:
+- `--module <module_name>`: 클래스명 기반 기본 모듈명을 직접 지정
+- `--input-kinds <k1,k2,...>`: node/sink의 `INPUT_KINDS` 지정
+- `--output-kinds <k1,k2,...>`: source/node의 `OUTPUT_KINDS` 지정
+- `--force`: 기존 생성 파일 덮어쓰기
+
+## 생성 파일
+
+예: `--pack sensor --kind node --name ThresholdNode`
+- `src/schnitzel_stream/packs/sensor/nodes/threshold_node.py`
+- `tests/unit/packs/sensor/nodes/test_threshold_node.py`
+- `configs/graphs/dev_sensor_threshold_node_v2.yaml`
+
+## 작성 규칙
+
+1. `StreamPacket` 계약 기반으로 플러그인 동작을 명확히 유지한다.
+2. 의도적/비자명 동작에는 `Intent:` 주석을 남긴다.
+3. 스캐폴드의 placeholder 로직은 실제 구현으로 교체한다.
+4. 구현 후 그래프 검증과 테스트를 실행한다.
+
+## 검증
+
+```bash
+python -m schnitzel_stream validate --graph configs/graphs/dev_sensor_threshold_node_v2.yaml
+python3 -m compileall -q src tests scripts
+```

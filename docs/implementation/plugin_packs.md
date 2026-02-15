@@ -24,6 +24,16 @@ Last updated: 2026-02-16
   - `schnitzel_stream.packs.vision.nodes:OpenCvRtspSource`
   - `schnitzel_stream.nodes.http:HttpJsonSink`
 
+## Scaffold
+
+Use the scaffold utility to bootstrap plugin code/test/graph files:
+
+```bash
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
+```
+
+Details: `docs/guides/plugin_authoring_guide.md`
+
 ## Operational Rule
 
 When adding/changing plugins:
@@ -54,6 +64,16 @@ When adding/changing plugins:
 - 예시:
   - `schnitzel_stream.packs.vision.nodes:OpenCvRtspSource`
   - `schnitzel_stream.nodes.http:HttpJsonSink`
+
+## 스캐폴드
+
+플러그인 코드/테스트/그래프 파일을 빠르게 만들려면 스캐폴드 유틸리티를 사용한다:
+
+```bash
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
+```
+
+상세 가이드: `docs/guides/plugin_authoring_guide.md`
 
 ## 운영 규칙
 

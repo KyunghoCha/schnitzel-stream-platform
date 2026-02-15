@@ -92,6 +92,12 @@ python scripts/regression_check.py --max-events 5
 python scripts/regression_check.py --max-events 5 --update-golden
 ```
 
+Plugin scaffold:
+
+```bash
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
+```
+
 Multi-camera graph launcher:
 
 ```bash
@@ -209,6 +215,12 @@ python scripts/check_rtsp.py --strict
 ```bash
 python scripts/regression_check.py --max-events 5
 python scripts/regression_check.py --max-events 5 --update-golden
+```
+
+플러그인 스캐폴드:
+
+```bash
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
 ```
 
 멀티 카메라 그래프 런처:
