@@ -4,7 +4,7 @@ import textwrap
 
 import pytest
 
-from schnitzel_stream.graph.spec import load_node_graph_spec
+from schnitzel_stream.graph.spec import load_node_graph_spec, peek_graph_version
 from schnitzel_stream.graph.validate import validate_graph
 
 
@@ -43,3 +43,9 @@ def test_load_node_graph_spec_rejects_wrong_version(tmp_path):
     with pytest.raises(ValueError, match="version must be 2"):
         load_node_graph_spec(p)
 
+
+def test_peek_graph_version_rejects_legacy_job_graph(tmp_path):
+    p = tmp_path / "graph.yaml"
+    p.write_text("job: legacy.module:Job\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="legacy v1 job graph"):
+        peek_graph_version(p)
