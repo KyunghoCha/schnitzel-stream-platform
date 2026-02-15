@@ -24,8 +24,12 @@ Baseline keys (runner-provided):
 - `packets.consumed_total`
 - `packets.produced_total`
 - `packets.source_emitted_total`
+- `packets.dropped_total` (inbox overflow, backpressure policy)
 - `node.<node_id>.consumed`
 - `node.<node_id>.produced`
+- `node.<node_id>.is_source` (0|1)
+- `node.<node_id>.is_sink` (0|1)
+- `node.<node_id>.inbox_dropped_total` (inbox overflow, runner-enforced)
 
 Extension keys (node-provided, optional):
 
@@ -55,8 +59,12 @@ Extension keys (node-provided, optional):
 - `packets.consumed_total`
 - `packets.produced_total`
 - `packets.source_emitted_total`
+- `packets.dropped_total` (inbox overflow, backpressure 정책)
 - `node.<node_id>.consumed`
 - `node.<node_id>.produced`
+- `node.<node_id>.is_source` (0|1)
+- `node.<node_id>.is_sink` (0|1)
+- `node.<node_id>.inbox_dropped_total` (inbox overflow, 러너 강제)
 
 확장 키(노드 제공, 선택):
 

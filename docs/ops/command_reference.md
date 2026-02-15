@@ -34,6 +34,9 @@ Note:
 - This doc contains many **legacy(v1)** examples. For legacy runs, explicitly pass `--graph configs/graphs/legacy_pipeline.yaml`.
 - Typical v2 runs use `--graph`, `--validate-only`, `--max-events`, and `--report-json`.
 - v2 examples: `configs/graphs/dev_vision_e2e_mock_v2.yaml`, `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`.
+- v2 node config reserved key: `config.__runtime__` (runner behavior, not passed to plugins)
+  - `inbox_max` (int): per-node inbox limit (backpressure)
+  - `inbox_overflow` (`drop_new`|`drop_oldest`|`error`): overflow policy
 
 ### CLI Options
 
@@ -555,6 +558,9 @@ export PYTHONPATH=src
 - 이 문서의 많은 예시는 **레거시(v1)** 기준입니다. 레거시 실행은 `--graph configs/graphs/legacy_pipeline.yaml`를 명시하세요.
 - v2 실행은 보통 `--graph`, `--validate-only`, `--max-events`, `--report-json`만 사용합니다.
 - v2 예시: `configs/graphs/dev_vision_e2e_mock_v2.yaml`, `configs/graphs/dev_inproc_demo_v2.yaml`, `configs/graphs/dev_durable_*_v2.yaml`.
+- v2 노드 설정 예약 키: `config.__runtime__` (러너 동작 제어, 플러그인에는 전달되지 않음)
+  - `inbox_max` (정수): 노드별 inbox 제한(백프레셔)
+  - `inbox_overflow` (`drop_new`|`drop_oldest`|`error`): overflow 정책
 
 ### CLI 옵션
 

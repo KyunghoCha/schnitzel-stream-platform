@@ -30,6 +30,21 @@ class GraphExecutionError(RuntimeError):
     pass
 
 
+_RUNTIME_CONFIG_KEY = "__runtime__"
+
+
+def _runtime_config(raw: dict[str, Any]) -> dict[str, Any]:
+    cont = dict(raw or {})
+    runtime_cfg = cont.get(_RUNTIME_CONFIG_KEY)
+    return dict(runtime_cfg) if isinstance(runtime_cfg, dict) else {}
+
+
+def _plugin_config(raw: dict[str, Any]) -> dict[str, Any]:
+    cont = dict(raw or {})
+    cont.pop(_RUNTIME_CONFIG_KEY, None)
+    return cont
+
+
 @dataclass(frozen=True)
 class ExecutionResult:
     outputs_by_node: dict[str, list[StreamPacket]]
@@ -75,7 +90,7 @@ def _build_factory_kwargs(factory: Any, spec: NodeSpec) -> dict[str, Any]:
     if accepts_kwargs or "node_id" in params:
         kwargs["node_id"] = spec.node_id
     if accepts_kwargs or "config" in params:
-        kwargs["config"] = dict(spec.config)
+        kwargs["config"] = _plugin_config(spec.config)
     return kwargs
 
 
@@ -121,20 +136,83 @@ class InProcGraphRunner:
         for e in edges:
             outgoing[e.src].append(e.dst)
 
+        inbox_max_by_node: dict[str, int] = {}
+        inbox_overflow_by_node: dict[str, str] = {}
+        for n in nodes:
+            nid = n.node_id
+            kind = str(n.kind).strip().lower()
+            if kind == "source":
+                continue
+            rcfg = _runtime_config(n.config)
+            raw_max = rcfg.get("inbox_max")
+            try:
+                max_v = int(raw_max) if raw_max is not None else 0
+            except (TypeError, ValueError):
+                max_v = 0
+            if max_v > 0:
+                inbox_max_by_node[nid] = max_v
+            raw_overflow = rcfg.get("inbox_overflow", "drop_new")
+            overflow = str(raw_overflow or "").strip().lower() or "drop_new"
+            inbox_overflow_by_node[nid] = overflow
+
         instances: dict[str, Any] = {}
         for n in nodes:
             instances[n.node_id] = _instantiate_node(self._registry, n)
 
         # Work queue of (node_id, packet) tasks. FIFO order provides deterministic behavior.
         work_q: deque[tuple[str, StreamPacket]] = deque()
+        inbox_counts: dict[str, int] = {nid: 0 for nid in nodes_by_id}
+        dropped_by_node: dict[str, int] = {nid: 0 for nid in nodes_by_id}
+        dropped_total = 0
+
+        def _drop_oldest_task(dst_id: str) -> bool:
+            # O(n) fallback used only under backpressure.
+            if inbox_counts.get(dst_id, 0) <= 0:
+                return False
+            new_q: deque[tuple[str, StreamPacket]] = deque()
+            dropped = False
+            while work_q:
+                nid, pkt = work_q.popleft()
+                if not dropped and nid == dst_id:
+                    dropped = True
+                    inbox_counts[dst_id] = max(0, int(inbox_counts.get(dst_id, 0)) - 1)
+                    continue
+                new_q.append((nid, pkt))
+            work_q.extend(new_q)
+            return dropped
 
         def _enqueue(src_id: str, pkt: StreamPacket) -> None:
+            nonlocal dropped_total
             for dst_id in outgoing.get(src_id, []):
+                max_items = inbox_max_by_node.get(dst_id)
+                if max_items is not None and inbox_counts.get(dst_id, 0) >= max_items:
+                    overflow = inbox_overflow_by_node.get(dst_id, "drop_new")
+                    if overflow == "error":
+                        raise GraphExecutionError(
+                            f"inbox overflow: node={dst_id} max={max_items} policy=error (src={src_id})",
+                        )
+                    if overflow == "drop_oldest":
+                        if _drop_oldest_task(dst_id):
+                            dropped_by_node[dst_id] += 1
+                            dropped_total += 1
+                        else:
+                            # Fallback: if we couldn't drop an existing task, drop the new one.
+                            dropped_by_node[dst_id] += 1
+                            dropped_total += 1
+                            continue
+                    else:
+                        # Default: drop the new packet.
+                        dropped_by_node[dst_id] += 1
+                        dropped_total += 1
+                        continue
+
                 work_q.append((dst_id, pkt))
+                inbox_counts[dst_id] = int(inbox_counts.get(dst_id, 0)) + 1
 
         def _drain_work_q() -> None:
             while work_q:
                 nid, inp = work_q.popleft()
+                inbox_counts[nid] = max(0, int(inbox_counts.get(nid, 0)) - 1)
                 node_spec = nodes_by_id[nid]
                 inst = instances[nid]
 
@@ -209,6 +287,7 @@ class InProcGraphRunner:
                 "packets.consumed_total": sum(consumed_by_node.values()),
                 "packets.produced_total": sum(produced_by_node.values()),
                 "packets.source_emitted_total": int(source_emitted_total),
+                "packets.dropped_total": int(dropped_total),
             }
             for node_id, n in nodes_by_id.items():
                 metrics[f"node.{node_id}.consumed"] = int(consumed_by_node[node_id])
@@ -216,6 +295,7 @@ class InProcGraphRunner:
                 # Keep kind as a numeric tag until a richer report contract lands.
                 metrics[f"node.{node_id}.is_source"] = 1 if n.kind == "source" else 0
                 metrics[f"node.{node_id}.is_sink"] = 1 if n.kind == "sink" else 0
+                metrics[f"node.{node_id}.inbox_dropped_total"] = int(dropped_by_node.get(node_id, 0))
 
             for node_id, inst in instances.items():
                 extra_fn = getattr(inst, "metrics", None)

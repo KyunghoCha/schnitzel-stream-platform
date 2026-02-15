@@ -73,6 +73,42 @@ class Identity:
         return
 
 
+class BurstNode:
+    """Emit N copies of an input packet (dev-only).
+
+    Intent:
+    - Used by runtime tests to create controlled fan-out and trigger backpressure behavior.
+
+    Config:
+    - count: int (default: 1) : packets to emit per input packet
+    - meta_key: str (default: "burst_seq") : meta key for the 0..N-1 index
+    """
+
+    INPUT_KINDS = {"*"}
+    OUTPUT_KINDS = {"*"}
+
+    def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None, **_kwargs: Any) -> None:
+        cfg = dict(config or {})
+        self._node_id = str(node_id or "burst")
+        self._count = max(0, int(cfg.get("count", 1)))
+        self._meta_key = str(cfg.get("meta_key", "burst_seq"))
+
+    def process(self, packet: StreamPacket) -> Iterable[StreamPacket]:
+        for i in range(self._count):
+            meta = dict(packet.meta)
+            meta[self._meta_key] = int(i)
+            yield StreamPacket.new(
+                kind=str(packet.kind),
+                source_id=str(packet.source_id),
+                payload=packet.payload,
+                ts=str(packet.ts),
+                meta=meta,
+            )
+
+    def close(self) -> None:
+        return
+
+
 class PrintSink:
     """Print each packet as one JSON line (dev-only)."""
 
