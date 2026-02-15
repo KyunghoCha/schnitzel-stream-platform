@@ -67,4 +67,4 @@ def test_graph_compat_accepts_ref_portable_to_json_portable():
         EdgeSpec(src="to_ref", dst="sink"),
     ]
 
-    validate_graph_compat(nodes, edges, transport="inproc")
+    assert validate_graph_compat(nodes, edges, transport="inproc") is None

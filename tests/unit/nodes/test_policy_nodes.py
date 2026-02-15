@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from schnitzel_stream.graph.compat import GraphCompatibilityError, validate_graph_compat
 from schnitzel_stream.graph.model import EdgeSpec, NodeSpec
 from schnitzel_stream.packs.vision.nodes import DedupPolicyNode, ZonePolicyNode
@@ -57,11 +59,8 @@ def test_graph_compat_rejects_kind_mismatch_for_policy_nodes():
         NodeSpec(node_id="zones", kind="node", plugin="schnitzel_stream.packs.vision.nodes:ZonePolicyNode"),
     ]
     edges = [EdgeSpec(src="src", dst="zones")]
-    try:
+    with pytest.raises(GraphCompatibilityError):
         validate_graph_compat(nodes, edges, transport="inproc")
-    except GraphCompatibilityError:
-        return
-    raise AssertionError("expected GraphCompatibilityError for kind mismatch (foo -> event)")
 
 
 def test_inproc_graph_with_zone_and_dedup_nodes_filters_as_expected():

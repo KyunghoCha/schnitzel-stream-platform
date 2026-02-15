@@ -12,6 +12,7 @@ def test_validate_graph_compat_rejects_sink_with_outgoing_edges():
         NodeSpec(node_id="b", kind="node", plugin="schnitzel_stream.nodes.dev:Identity"),
     ]
     edges = [EdgeSpec(src="a", dst="b")]
+    assert nodes[0].kind == "sink"
     with pytest.raises(GraphCompatibilityError, match="sink node must not have outgoing edges"):
         validate_graph_compat(nodes, edges)
 
@@ -30,4 +31,3 @@ def test_validate_graph_compat_rejects_packet_kind_mismatch():
     edges = [EdgeSpec(src="src", dst="sink")]
     with pytest.raises(GraphCompatibilityError, match="packet kind mismatch"):
         validate_graph_compat(nodes, edges)
-

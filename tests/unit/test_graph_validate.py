@@ -16,6 +16,7 @@ def test_validate_graph_ok_for_simple_chain():
         EdgeSpec(src="a", dst="b"),
         EdgeSpec(src="b", dst="c"),
     ]
+    assert find_cycle(nodes, edges) is None
     validate_graph(nodes, edges)
 
 
@@ -76,4 +77,5 @@ def test_validate_graph_restricted_cycles_allows_delay_node():
         EdgeSpec(src="a", dst="b"),
         EdgeSpec(src="b", dst="a"),
     ]
+    assert find_cycle(nodes, edges) is not None
     validate_graph(nodes, edges, allow_cycles=True)
