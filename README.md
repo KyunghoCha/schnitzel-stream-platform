@@ -63,20 +63,20 @@ flowchart LR
   end
 
   subgraph Core["Core"]
-    V["Validator\n(topology + compat)"]
-    G["Graph Runtime\n(v2 in-proc DAG)"]
-    N["Nodes\n(plugin boundary)"]
+    V["Validator<br/>(topology + compat)"]
+    G["Graph Runtime<br/>(v2 in-proc DAG)"]
+    N["Nodes<br/>(plugin boundary)"]
   end
 
   subgraph Egress["Egress"]
-    Q["Durable Queue\n(SQLite/WAL)"]
+    Q["Durable Queue<br/>(SQLite/WAL)"]
     R["Router/Policy"]
     K["Sinks"]
   end
 
   subgraph Meta["Meta"]
-    P["Plugin Policy\n(allowlist)"]
-    O["Observability\n(run report)"]
+    P["Plugin Policy<br/>(allowlist)"]
+    O["Observability<br/>(run report)"]
   end
 
   S --> I --> G --> N --> Q --> R --> K
