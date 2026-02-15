@@ -1,41 +1,29 @@
-# Implementation Docs Index
+# Implementation Docs (Active)
+
+Last updated: 2026-02-15
 
 ## English
-Overview
---------
-This folder organizes implementation notes as a directory tree. Each topic has
-its own folder with a README/spec as needed.
 
-Tree
-----
-00-overview/            High-level plan and scope (+ policy decisions)
-10-rtsp-stability/      RTSP reconnect/timeout/health
-20-zones-rules/         Zone loading + rule evaluation
-25-model-tracking/      Tracker integration (IOU/ByteTrack done, DeepSORT pending)
-30-event-dedup/         Cooldown + dedup logic
-40-snapshot/            Snapshot save + path policy
-50-backend-integration/ Event schema + API details
-60-observability/       Metrics + logging + health
-70-config/              Config schema + env overrides
-80-testing/             Unit/integration/regression tests
-90-packaging/           Docker/run/ops
+This folder contains active implementation documentation for the v2 runtime.
+
+- `runtime_core.md`: graph model, scheduler, packet flow, validation
+- `plugin_packs.md`: plugin boundaries, naming, extension contracts
+- `operations_release.md`: operational lanes, packaging, runtime conventions
+- `testing_quality.md`: test strategy, gates, and verification policy
+
+Historical CCTV/legacy implementation notes were moved to:
+- `docs/archive/implementation_legacy_cctv/`
+
+---
 
 ## 한국어
-개요
-----
-이 폴더는 구현 노트를 디렉터리 트리로 정리한다. 각 주제는 필요에 따라
-README/spec을 포함한다.
 
-트리
-----
-00-overview/            상위 계획 및 범위(+ 정책 결정)
-10-rtsp-stability/      RTSP 재연결/타임아웃/상태
-20-zones-rules/         Zone 로딩 + 룰 평가
-25-model-tracking/      트래커 연동(IOU/ByteTrack 완료, DeepSORT 보류)
-30-event-dedup/         쿨다운 + 중복 억제 로직
-40-snapshot/            스냅샷 저장 + 경로 정책
-50-backend-integration/ 이벤트 스키마 + API 세부
-60-observability/       메트릭 + 로깅 + 헬스
-70-config/              설정 스키마 + env 오버라이드
-80-testing/             unit/integration/regression 테스트
-90-packaging/           Docker/run/ops
+이 폴더는 v2 런타임의 활성 구현 문서를 담는다.
+
+- `runtime_core.md`: 그래프 모델, 스케줄러, 패킷 흐름, 검증
+- `plugin_packs.md`: 플러그인 경계, 네이밍, 확장 계약
+- `operations_release.md`: 운영 레인, 패키징, 런타임 규약
+- `testing_quality.md`: 테스트 전략, 게이트, 검증 정책
+
+역사적 CCTV/레거시 구현 노트는 다음으로 이동했다:
+- `docs/archive/implementation_legacy_cctv/`

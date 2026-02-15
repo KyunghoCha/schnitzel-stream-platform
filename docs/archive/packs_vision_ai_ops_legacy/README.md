@@ -1,4 +1,6 @@
-# AI Ops
+# AI Ops (Legacy Archive)
+
+Status: `historical` (not authoritative for current v2 runtime)
 
 ## English
 This folder contains AI-model-specific operational documents (training, labeling, validation, and performance).

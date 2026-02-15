@@ -110,8 +110,8 @@ Phase 4) Multimodal Sensor Integration
 
 ### Code Mapping
 
-- Progress logs: `docs/progress/progress_log.md`
-- Implementation checklist: `docs/progress/implementation_checklist.md`
+- Progress logs: `docs/archive/progress_legacy/progress_log.md`
+- Implementation checklist: `docs/archive/progress_legacy/implementation_checklist.md`
 
 ## 한국어
 
@@ -223,5 +223,5 @@ Phase 4) 멀티 센서 및 멀티모달 연동
 
 ## 코드 매핑
 
-- 진행 로그: `docs/progress/progress_log.md`
-- 구현 체크리스트: `docs/progress/implementation_checklist.md`
+- 진행 로그: `docs/archive/progress_legacy/progress_log.md`
+- 구현 체크리스트: `docs/archive/progress_legacy/implementation_checklist.md`

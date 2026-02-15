@@ -132,6 +132,8 @@ Default allowlist is `schnitzel_stream.*`.
 ### Documentation
 
 - Docs index: `docs/index.md`
+- Documentation policy: `docs/governance/documentation_policy.md`
+- Doc-code mapping: `docs/reference/doc_code_mapping.md`
 - Execution SSOT: `docs/roadmap/execution_roadmap.md`
 - StreamPacket contract: `docs/contracts/stream_packet.md`
 - Observability contract: `docs/contracts/observability.md`
@@ -259,6 +261,8 @@ config: {}
 ### 문서
 
 - 문서 인덱스: `docs/index.md`
+- 문서 정책: `docs/governance/documentation_policy.md`
+- 문서-코드 매핑: `docs/reference/doc_code_mapping.md`
 - 실행 SSOT: `docs/roadmap/execution_roadmap.md`
 - StreamPacket 계약: `docs/contracts/stream_packet.md`
 - 관측 가능성 계약: `docs/contracts/observability.md`

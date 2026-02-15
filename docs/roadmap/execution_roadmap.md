@@ -26,7 +26,7 @@ Rule:
 
 ### Mismatches (path)
 
-- Legacy CCTV-only roadmap is preserved at `docs/roadmap/legacy_cctv_execution_roadmap_2026-02-08.md` (historical reference, not SSOT).
+- Legacy CCTV-only roadmap is preserved at `docs/archive/roadmap_legacy/legacy_cctv_execution_roadmap_2026-02-08.md` (historical reference, not SSOT).
 
 ### Fix Plan
 
@@ -207,7 +207,7 @@ Intent:
 
 ### 불일치(경로)
 
-- 레거시 CCTV 전용 로드맵은 `docs/roadmap/legacy_cctv_execution_roadmap_2026-02-08.md` 에 보존합니다. (역사 기록용, SSOT 아님)
+- 레거시 CCTV 전용 로드맵은 `docs/archive/roadmap_legacy/legacy_cctv_execution_roadmap_2026-02-08.md` 에 보존합니다. (역사 기록용, SSOT 아님)
 
 ### 실행 계획
 

@@ -10,7 +10,7 @@ Note:
 
 ### Summary
 
-- **SSOT docs used**: `docs/roadmap/strategic_roadmap.md`, `docs/design/architecture_2.0.md`, `docs/implementation/90-packaging/entrypoint/design.md`, `PROMPT_CORE.md`.
+- **SSOT docs used**: `docs/roadmap/strategic_roadmap.md`, `docs/design/architecture_2.0.md`, `docs/archive/implementation_legacy_cctv/90-packaging/entrypoint/design.md`, `PROMPT_CORE.md`.
 - **Scope**: Phase 0 "Strangler" migration to make `python -m schnitzel_stream` the single supported runtime entrypoint, while executing the existing `ai.pipeline` runtime as a legacy job.
 - **Non-scope**: Full DAG runtime, distributed execution, and finalized long-term StreamPacket schema (these remain provisional).
 
@@ -64,7 +64,7 @@ Note:
 
 ### 요약
 
-- **참조 SSOT 문서**: `docs/roadmap/strategic_roadmap.md`, `docs/design/architecture_2.0.md`, `docs/implementation/90-packaging/entrypoint/design.md`, `PROMPT_CORE.md`.
+- **참조 SSOT 문서**: `docs/roadmap/strategic_roadmap.md`, `docs/design/architecture_2.0.md`, `docs/archive/implementation_legacy_cctv/90-packaging/entrypoint/design.md`, `PROMPT_CORE.md`.
 - **범위**: `python -m schnitzel_stream`를 유일한 지원 엔트리포인트로 만들면서, 기존 `ai.pipeline` 런타임은 레거시 job으로 실행하는 Phase 0(스트랭글러) 마이그레이션 계획.
 - **비범위**: 완전한 DAG 런타임, 분산 실행, 장기적으로 확정된 StreamPacket 스키마(모두 잠정/단계적).
 

@@ -1,72 +1,73 @@
-# Model Interface Specification v0.2
+# Vision Model Interface v2
+
+Last updated: 2026-02-15
 
 ## English
 
 ## Purpose
 
-Define the interface between the **AI Model Adapter** and the **Pipeline Core**. This ensures the pipeline can work with any model (YOLO v8/v11, ONNX, etc.) as long as it has a compatible adapter.
+Define the payload interface between a vision detection producer node and downstream event/policy nodes in v2 graphs.
 
-## Adapter Interface (Python)
+## Detection Payload Contract
 
-```python
-class ModelAdapter(Protocol):
-    def infer(self, frame: np.ndarray) -> list[dict[str, Any]]:
-        """
-        Input: BGR image (OpenCV format)
-        Output: List of detection dictionaries
-        """
-        ...
-```
+A detection packet payload is a dictionary with:
 
-### Detection Dictionary Fields
-
-- `bbox`: `{"x1": int, "y1": int, "x2": int, "y2": int}` (pixel coordinates)
+- `bbox`: `{"x1": int, "y1": int, "x2": int, "y2": int}`
 - `confidence`: `float` (0.0 ~ 1.0)
-- `track_id`: `int` (optional, but required for PERSISTENT tracking)
-- `event_type`: `str` (e.g., "ZONE_INTRUSION", "FIRE_DETECTED")
-- `object_type`: `str` (e.g., "PERSON", "FIRE", "SMOKE", "HELMET")
-- `severity`: `str` ("INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL")
+- `event_type`: `str`
+- `object_type`: `str`
+- `severity`: `str`
+- `track_id`: `int` (required when `object_type == "PERSON"`)
 
-## Code Mapping
+Optional fields:
+- `snapshot_path`: `str | null`
+- `sensor`: `dict | null`
 
-- Adapter Loader: `src/ai/pipeline/model_adapter.py`
-- Example Adapter: `src/ai/vision/adapters/yolo_adapter.py`
-- Real Builder: `src/ai/pipeline/events.py` -> `RealModelEventBuilder`
+## Producer/Consumer Mapping
+
+- Example producer node: `src/schnitzel_stream/packs/vision/nodes/mock_detection.py`
+- Event builder consumer: `src/schnitzel_stream/packs/vision/nodes/event_builder.py`
+- Policy consumers: `src/schnitzel_stream/packs/vision/nodes/policy.py`
+
+## Plugin Extension Pattern
+
+Custom model node should:
+1. receive `kind=frame` packet
+2. emit `kind=detection` packet(s) with the contract above
+3. keep non-portable objects (raw frames) inside in-proc boundary
 
 ---
 
 ## 한국어
 
-모델 인터페이스 명세 v0.2
-=======================
-
 ## 목적
 
-**AI 모델 어댑터(Adapter)**와 **파이프라인 코어(Core)** 간의 인터페이스를 정의함. 이를 통해 YOLO v8/v11, ONNX 등 다양한 모델이 어댑터만 있다면 파이프라인과 연동될 수 있도록 보장함.
+v2 그래프에서 비전 탐지 생성 노드와 하위 이벤트/정책 노드 사이의 payload 인터페이스를 정의한다.
 
-## 어댑터 인터페이스 (Python)
+## Detection Payload 계약
 
-```python
-class ModelAdapter(Protocol):
-    def infer(self, frame: np.ndarray) -> list[dict[str, Any]]:
-        """
-        입력: BGR 이미지 (OpenCV 포맷)
-        출력: 탐지 결과 딕셔너리 리스트
-        """
-        ...
-```
+detection 패킷 payload는 아래 키를 갖는 dict다:
 
-### 탐지 결과 필드 (Detection Dictionary)
-
-- `bbox`: `{"x1": int, "y1": int, "x2": int, "y2": int}` (픽셀 좌표)
+- `bbox`: `{"x1": int, "y1": int, "x2": int, "y2": int}`
 - `confidence`: `float` (0.0 ~ 1.0)
-- `track_id`: `int` (선택 사항, 단 지속적인 트래킹 시 필수)
-- `event_type`: `str` (예: "ZONE_INTRUSION", "FIRE_DETECTED")
-- `object_type`: `str` (예: "PERSON", "FIRE", "SMOKE", "HELMET")
-- `severity`: `str` ("INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL")
+- `event_type`: `str`
+- `object_type`: `str`
+- `severity`: `str`
+- `track_id`: `int` (`object_type == "PERSON"`일 때 필수)
 
-## 코드 매핑
+선택 필드:
+- `snapshot_path`: `str | null`
+- `sensor`: `dict | null`
 
-- 어댑터 로더: `src/ai/pipeline/model_adapter.py`
-- 어댑터 예시: `src/ai/vision/adapters/yolo_adapter.py`
-- 실제 빌더: `src/ai/pipeline/events.py` 내 `RealModelEventBuilder`
+## 생산자/소비자 매핑
+
+- 예시 생산자 노드: `src/schnitzel_stream/packs/vision/nodes/mock_detection.py`
+- 이벤트 빌더 소비자: `src/schnitzel_stream/packs/vision/nodes/event_builder.py`
+- 정책 소비자: `src/schnitzel_stream/packs/vision/nodes/policy.py`
+
+## 플러그인 확장 패턴
+
+커스텀 모델 노드는 다음을 따라야 한다:
+1. `kind=frame` 패킷 수신
+2. 위 계약을 만족하는 `kind=detection` 패킷 출력
+3. raw frame 같은 비이식 객체는 in-proc 경계 내에서만 처리
