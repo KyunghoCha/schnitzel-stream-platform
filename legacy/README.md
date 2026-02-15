@@ -1,69 +1,57 @@
-# Legacy Runtime (Quarantined)
+# Legacy Archive
 
 Last updated: 2026-02-15
 
 ## English
 
-This folder contains the legacy AI/CCTV runtime (import path: `ai.*`).
+This directory is an isolated archive for legacy artifacts.
+It is not part of the active runtime/source boundary.
 
-Intent:
-- Keep legacy code available during the deprecation window.
-- Prevent new development from accreting onto the legacy surface.
+## What Lives Here
 
-### Location / Import Path
+- Legacy documentation archive: `legacy/docs/archive/`
+- Legacy historical runtime docs: `legacy/docs/legacy/`
+- Legacy helper scripts: `legacy/scripts/`
 
-- Source code: `legacy/ai/**`
-- Compatibility shim: `src/ai/__init__.py`
-  - Keeps `import ai...` working by adding `legacy/` to `sys.path`.
+## What Does Not Live Here Anymore
 
-### How To Run (Legacy v1 Graph)
+- Legacy runtime source (`legacy/ai/**`) is removed from `main`.
+- Compatibility shim (`src/ai/**`) is removed from tracked source.
 
-```bash
-python -m schnitzel_stream --graph configs/graphs/legacy_pipeline.yaml
-```
+## Active SSOT References
 
-### Deprecation
+- Execution status SSOT: `docs/roadmap/execution_roadmap.md`
+- Doc/code boundary mapping: `docs/reference/doc_code_mapping.md`
 
-- v1 legacy runtime is deprecated (see Phase 4 `P4.3`).
-- Removal is gated by the deprecation window (>= 90 days after `P4.3`).
+## Policy
 
-SSOT: `docs/roadmap/execution_roadmap.md`, `docs/roadmap/legacy_decommission.md`
-
-### Policy (Freeze)
-
-- Allowed: security fixes, crash fixes, data-loss fixes.
-- Not allowed: new features, new configuration keys, new plugin boundaries.
+- Do not add new production features under `legacy/`.
+- If a historical artifact is needed, archive it under `legacy/docs/archive/`.
 
 ---
 
 ## 한국어
 
-이 폴더는 레거시 AI/CCTV 런타임(import 경로: `ai.*`)을 포함합니다.
+이 디렉터리는 레거시 아티팩트를 격리 보관하는 아카이브다.
+Active 런타임/소스 경계에 포함되지 않는다.
 
-의도(Intent):
-- deprecation window 동안 레거시 코드를 사용 가능 상태로 유지합니다.
-- 신규 개발이 레거시 표면(legacy surface)에 계속 붙는 것을 방지합니다.
+## 포함 대상
 
-### 위치 / 임포트 경로
+- 레거시 문서 아카이브: `legacy/docs/archive/`
+- 레거시 런타임 역사 문서: `legacy/docs/legacy/`
+- 레거시 보조 스크립트: `legacy/scripts/`
 
-- 소스 코드: `legacy/ai/**`
-- 호환 shim: `src/ai/__init__.py`
-  - `legacy/`를 `sys.path`에 추가하여 `import ai...`가 동작하도록 유지합니다.
+## 더 이상 포함하지 않는 항목
 
-### 실행 방법 (Legacy v1 Graph)
+- 레거시 런타임 소스(`legacy/ai/**`)는 `main`에서 제거됨
+- 호환 shim(`src/ai/**`)은 추적 소스에서 제거됨
 
-```bash
-python -m schnitzel_stream --graph configs/graphs/legacy_pipeline.yaml
-```
+## Active SSOT 참조
 
-### 디프리케이션
+- 실행 상태 SSOT: `docs/roadmap/execution_roadmap.md`
+- 문서/코드 경계 매핑: `docs/reference/doc_code_mapping.md`
 
-- v1 레거시 런타임은 deprecated 입니다(Phase 4 `P4.3` 참고).
-- 삭제는 deprecation window에 의해 게이트됩니다(`P4.3` 이후 최소 90일).
+## 정책
 
-SSOT: `docs/roadmap/execution_roadmap.md`, `docs/roadmap/legacy_decommission.md`
-
-### 운영 정책 (Freeze)
-
-- 허용: 보안/크래시/데이터 유실 버그 픽스
-- 금지: 신규 기능, 신규 설정 키, 신규 플러그인 경계 추가
+- `legacy/` 아래에 신규 운영 기능을 추가하지 않는다.
+- 역사 아티팩트가 필요하면 `legacy/docs/archive/`에 보관한다.

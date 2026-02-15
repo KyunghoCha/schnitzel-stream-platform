@@ -14,11 +14,13 @@ Runtime baseline:
 ## Start Here
 
 1. `docs/roadmap/execution_roadmap.md`
-2. `docs/contracts/stream_packet.md`
-3. `docs/contracts/observability.md`
-4. `docs/design/architecture_2.0.md`
-5. `docs/reference/doc_code_mapping.md`
-6. `docs/ops/command_reference.md`
+2. `docs/roadmap/strategic_roadmap.md`
+3. `docs/roadmap/future_backlog.md`
+4. `docs/contracts/stream_packet.md`
+5. `docs/contracts/observability.md`
+6. `docs/design/architecture_2.0.md`
+7. `docs/reference/doc_code_mapping.md`
+8. `docs/ops/command_reference.md`
 
 ## Active Folders
 
@@ -60,11 +62,13 @@ Runtime baseline:
 ## 시작 순서
 
 1. `docs/roadmap/execution_roadmap.md`
-2. `docs/contracts/stream_packet.md`
-3. `docs/contracts/observability.md`
-4. `docs/design/architecture_2.0.md`
-5. `docs/reference/doc_code_mapping.md`
-6. `docs/ops/command_reference.md`
+2. `docs/roadmap/strategic_roadmap.md`
+3. `docs/roadmap/future_backlog.md`
+4. `docs/contracts/stream_packet.md`
+5. `docs/contracts/observability.md`
+6. `docs/design/architecture_2.0.md`
+7. `docs/reference/doc_code_mapping.md`
+8. `docs/ops/command_reference.md`
 
 ## 활성 폴더
 
