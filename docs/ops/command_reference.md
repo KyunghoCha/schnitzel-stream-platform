@@ -92,13 +92,21 @@ python scripts/regression_check.py --max-events 5
 python scripts/regression_check.py --max-events 5 --update-golden
 ```
 
-Multi-process launcher (legacy naming, still available):
+Multi-camera graph launcher:
 
 ```bash
-python scripts/multi_cam.py start
+python scripts/multi_cam.py start --graph-template configs/graphs/dev_camera_template_v2.yaml
 python scripts/multi_cam.py status
 python scripts/multi_cam.py stop
 ```
+
+Runtime environment variables used per camera process:
+- `SS_CAMERA_ID`
+- `SS_SOURCE_TYPE`
+- `SS_SOURCE_PLUGIN`
+- `SS_SOURCE_URL` (rtsp/plugin)
+- `SS_SOURCE_PATH` (file/plugin)
+- `SS_CAMERA_INDEX` (webcam/plugin)
 
 ### Plugin Security Policy
 
@@ -203,13 +211,21 @@ python scripts/regression_check.py --max-events 5
 python scripts/regression_check.py --max-events 5 --update-golden
 ```
 
-멀티 프로세스 런처(레거시 네이밍, 사용 가능):
+멀티 카메라 그래프 런처:
 
 ```bash
-python scripts/multi_cam.py start
+python scripts/multi_cam.py start --graph-template configs/graphs/dev_camera_template_v2.yaml
 python scripts/multi_cam.py status
 python scripts/multi_cam.py stop
 ```
+
+카메라별 런타임 환경변수:
+- `SS_CAMERA_ID`
+- `SS_SOURCE_TYPE`
+- `SS_SOURCE_PLUGIN`
+- `SS_SOURCE_URL` (rtsp/plugin)
+- `SS_SOURCE_PATH` (file/plugin)
+- `SS_CAMERA_INDEX` (webcam/plugin)
 
 ### 플러그인 보안 정책
 
