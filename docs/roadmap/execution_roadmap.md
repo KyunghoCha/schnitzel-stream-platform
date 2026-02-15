@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P6.1`
+Current step id: `P6.2`
 
 ## English
 
@@ -119,12 +119,12 @@ Problem:
 Intent:
 - Evolve the runtime from a "batch DAG evaluator" into a "streaming packet scheduler" while keeping strict DAG safety by default.
 
-- `P6.1` Interleaved scheduler: process packets incrementally (no unbounded buffering before downstream). `NOW`
+- `P6.1` Interleaved scheduler: process packets incrementally (no unbounded buffering before downstream). `DONE` (282a74a)
   - DoD:
     - Sources can be infinite iterators without starving downstream nodes.
     - Downstream processing happens as packets flow (bounded queues).
     - Deterministic stop conditions exist (`--max-packets` / time budget / throttle policy).
-- `P6.2` Backpressure + queue policy: bounded inbox, drop/slowdown semantics, and metrics. `LATER`
+- `P6.2` Backpressure + queue policy: bounded inbox, drop/slowdown semantics, and metrics. `NOW`
   - DoD:
     - configurable per-node inbox limits
     - metrics reflect drops/backpressure events
@@ -298,12 +298,12 @@ Intent:
 의도(Intent):
 - strict DAG 안전성을 기본으로 유지하면서, 런타임을 “배치 DAG 평가기”에서 “스트리밍 패킷 스케줄러”로 진화시킵니다.
 
-- `P6.1` 인터리빙 스케줄러: 패킷을 점진적으로 처리(다운스트림 실행 전 무한 버퍼링 금지). `NOW`
+- `P6.1` 인터리빙 스케줄러: 패킷을 점진적으로 처리(다운스트림 실행 전 무한 버퍼링 금지). `DONE` (282a74a)
   - DoD:
     - 소스가 무한 iterator여도 다운스트림이 굶지 않습니다(starvation 없음).
     - 패킷이 흐르면서 처리됩니다(바운디드 큐).
     - 결정적 stop 조건(`--max-packets` / 시간 예산 / throttle policy)이 존재합니다.
-- `P6.2` 백프레셔 + 큐 정책: bounded inbox, drop/slowdown 의미론, 메트릭. `LATER`
+- `P6.2` 백프레셔 + 큐 정책: bounded inbox, drop/slowdown 의미론, 메트릭. `NOW`
   - DoD:
     - 노드별 inbox limit 설정 가능
     - drop/backpressure 이벤트가 메트릭으로 남음
