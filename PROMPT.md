@@ -1,59 +1,45 @@
 # Handoff Prompt (schnitzel-stream-platform)
 
-Last updated: 2026-02-15
+Last updated: 2026-02-16
 
-Current step id (SSOT): `P8.2` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P3.3` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
 This file is the stable handoff entrypoint.
 
-Canonical pivot rules/status live in:
+Canonical sources:
+- `PROMPT_CORE.md` (working rules + execution context)
+- `docs/roadmap/execution_roadmap.md` (execution SSOT)
+- `docs/index.md` (active docs entrypoint)
 
-- `PROMPT_CORE.md` (platform pivot rules + current status)
-- `docs/roadmap/execution_roadmap.md` (execution SSOT: ordered plan + step id)
-
-Legacy CCTV pipeline prompt (archived): `PROMPT_LEGACY.md`
-
-Key facts:
-
-- Stable runtime entrypoint: `python -m schnitzel_stream`
-- Legacy runtime: `legacy/ai/**` (import path `ai.*` via `src/ai` shim)
-
-Latest snapshot:
-
-- Last completed: `P8.1` RTSP source plugin + tests + demo graph (commits: `8cf52e8`, `471ff6c`)
-- Next: `P8.2` Webcam source plugin + tests + demo graph
+Current baseline:
+- runtime entrypoint: `python -m schnitzel_stream`
+- graph format: v2 node graph (`version: 2`)
+- legacy runtime/docs removed from working tree
+- historical legacy references are available in git tag: `pre-legacy-purge-20260216`
 
 Verification (local):
-
-- Minimal syntax check: `python3 -m compileall -q src tests`
-- Full tests (after deps): `pip install -r requirements-dev.txt` then `PYTHONPATH=src PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q`
+- syntax check: `python3 -m compileall -q src tests`
+- tests: `pip install -r requirements-dev.txt` then `PYTHONPATH=src PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q`
 
 ---
 
 ## 한국어
 
-이 파일은 핸드오프를 위한 안정적인 엔트리 문서입니다.
+이 파일은 핸드오프용 진입 문서다.
 
-플랫폼 피벗의 기준(규칙/상태)은 아래에 있습니다:
+기준 문서:
+- `PROMPT_CORE.md` (작업 규칙 + 실행 컨텍스트)
+- `docs/roadmap/execution_roadmap.md` (실행 SSOT)
+- `docs/index.md` (active 문서 진입점)
 
-- `PROMPT_CORE.md` (플랫폼 피벗 규칙 + 현재 상태)
-- `docs/roadmap/execution_roadmap.md` (실행 SSOT: 계획 + step id)
-
-레거시 CCTV 파이프라인 프롬프트(보관): `PROMPT_LEGACY.md`
-
-핵심 사실:
-
-- 안정 엔트리포인트: `python -m schnitzel_stream`
-- 레거시 런타임: `legacy/ai/**` (`src/ai` shim으로 import 경로 `ai.*` 유지)
-
-최신 스냅샷:
-
-- 최근 완료: `P8.1` RTSP source 플러그인 + 테스트 + 데모 그래프 (commits: `8cf52e8`, `471ff6c`)
-- 다음: `P8.2` Webcam source 플러그인 + 테스트 + 데모 그래프
+현재 기준선:
+- 런타임 엔트리포인트: `python -m schnitzel_stream`
+- 그래프 포맷: v2 노드 그래프(`version: 2`)
+- 레거시 런타임/문서는 워킹 트리에서 제거됨
+- 과거 레거시 이력은 git 태그 `pre-legacy-purge-20260216`에서 조회
 
 검증(로컬):
-
-- 최소 문법 체크: `python3 -m compileall -q src tests`
-- 전체 테스트(의존성 설치 후): `pip install -r requirements-dev.txt` 다음 `PYTHONPATH=src PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q`
+- 문법 검사: `python3 -m compileall -q src tests`
+- 테스트: `pip install -r requirements-dev.txt` 후 `PYTHONPATH=src PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q`
