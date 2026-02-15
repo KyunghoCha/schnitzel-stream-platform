@@ -1,6 +1,6 @@
 # Legacy Decommission (P4.1 SSOT)
 
-Last updated: 2026-02-14
+Last updated: 2026-02-15
 
 목표: `legacy/ai/**` 레거시 런타임(import 경로: `ai.*`)과 v1(job) 그래프 포맷을 **계획적으로 제거**하고, v2(node) 그래프 기반 플랫폼으로 완전히 전환한다.
 
@@ -54,11 +54,9 @@ Baseline 후보(조정 가능):
 ## Deprecation Policy (Timeline)
 
 - 레거시 삭제는 **절대 즉시 삭제하지 않는다**.
-- `P4.3` 머지 시점에 이 문서와 `docs/roadmap/execution_roadmap.md`에 “절대 날짜”를 기록한다.
-
-현재 기록:
-- v1 deprecation 시작일: **2026-02-14**
-- `legacy/ai/**` 제거 가능 최단일: **2026-05-15** (>= 90 days after `P4.3`)
+- deprecation window는 “절대 날짜”가 아니라 **로드맵 이벤트 기준**으로 관리한다.
+  - 시작: `P4.3` 머지 시점
+  - 삭제 가능 최단: `P4.3` 머지 이후 최소 90일 경과
 
 ## Operational Policy (Until Removed)
 

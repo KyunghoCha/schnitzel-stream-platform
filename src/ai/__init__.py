@@ -8,8 +8,8 @@ Intent:
 - New code must live under `schnitzel_stream.*` (platform-owned).
 
 Deprecation:
-- v1 legacy runtime is deprecated as of 2026-02-14.
-- Earliest removal date for the legacy runtime from this repo: 2026-05-15.
+- v1 legacy runtime is deprecated as part of Phase 4 (`P4.3`).
+- Removal is gated by the deprecation window (>= 90 days after `P4.3`).
 """
 
 from pathlib import Path
@@ -36,4 +36,3 @@ if _legacy_root.exists():
 
 # Intent: allow resolving submodules from both `src/ai` (shim) and `legacy/ai`.
 __path__ = extend_path(__path__, __name__)  # type: ignore[name-defined]
-
