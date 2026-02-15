@@ -64,7 +64,11 @@ Current position: **Phase 4** (legacy decommission is now the priority; `P3.3` i
 - `P2.2` Idempotency keys and ack semantics. `DONE` (e885e41)
 - `P2.3` Soak tests for outage/restart/backlog replay. `DONE` (9dabf8d)
 
-#### Phase 3: Control Plane (IN PROGRESS ~60–75%)
+#### Phase 3: Ops Control Surface (DONE core; research optional)
+
+Intent:
+- Phase 3 is **not** a multi-camera orchestrator or a distributed scheduler.
+- Phase 3 is the minimal "control surface" required to run safely on edge: metrics/health contracts and policy-driven tuning hooks.
 
 - `P3.1` Unified metrics/health contract across transports. `DONE` (e6d14c5)
 - `P3.2` Autonomic tuning hooks (policy-driven throttles). `DONE` (a792677)
@@ -162,7 +166,11 @@ Intent:
 - `P2.2` Idempotency keys and ack semantics. `DONE` (e885e41)
 - `P2.3` Soak tests for outage/restart/backlog replay. `DONE` (9dabf8d)
 
-#### Phase 3: Control Plane (IN PROGRESS ~60–75%)
+#### Phase 3: 운영 제어 표면 (코어는 DONE, 연구/옵션 분리)
+
+의도(Intent):
+- Phase 3는 멀티 카메라 오케스트레이터나 분산 스케줄러가 **아닙니다**.
+- Phase 3는 엣지에서 안전하게 돌리기 위한 최소 “제어 표면”입니다: metrics/health 계약 + 정책 기반 튜닝 훅.
 
 - `P3.1` Unified metrics/health contract across transports. `DONE` (e6d14c5)
 - `P3.2` Autonomic tuning hooks (policy-driven throttles). `DONE` (a792677)
