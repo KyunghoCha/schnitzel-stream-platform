@@ -1,9 +1,8 @@
-# pipeline_spec
+# Legacy Pipeline Spec (v1 job graph)
+
+Last updated: 2026-02-15
 
 ## English
-
-Pipeline Spec
-=============
 
 Note:
 - This document specifies the **legacy CCTV/video pipeline** behavior (executed via the v1 job graph).

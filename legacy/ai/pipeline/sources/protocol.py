@@ -1,4 +1,4 @@
-# Docs: docs/specs/pipeline_spec.md
+# Docs: docs/specs/legacy_pipeline_spec.md
 from __future__ import annotations
 
 # 프레임 소스 공통 인터페이스 (Protocol)

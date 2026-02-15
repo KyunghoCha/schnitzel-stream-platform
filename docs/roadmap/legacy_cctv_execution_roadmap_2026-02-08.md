@@ -104,7 +104,7 @@ Phase 4) Multimodal Sensor Integration
 ### References
 
 - Architecture/design: `docs/design/pipeline_design.md`
-- Runtime spec: `docs/specs/pipeline_spec.md`
+- Runtime spec: `docs/specs/legacy_pipeline_spec.md`
 - Model interface: `docs/specs/model_interface.md`
 - Ops runbook: `docs/ops/ops_runbook.md`
 
@@ -217,7 +217,7 @@ Phase 4) 멀티 센서 및 멀티모달 연동
 ## 참고
 
 - 아키텍처/설계: `docs/design/pipeline_design.md`
-- 실행 스펙: `docs/specs/pipeline_spec.md`
+- 실행 스펙: `docs/specs/legacy_pipeline_spec.md`
 - 모델 인터페이스: `docs/specs/model_interface.md`
 - 운영 런북: `docs/ops/ops_runbook.md`
 

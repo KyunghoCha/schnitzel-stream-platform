@@ -1,4 +1,4 @@
-# Docs: docs/specs/pipeline_spec.md, docs/implementation/10-rtsp-stability/README.md
+# Docs: docs/specs/legacy_pipeline_spec.md, docs/implementation/10-rtsp-stability/README.md
 from __future__ import annotations
 
 # 라이브 소스 스레드 분리 래퍼

@@ -207,7 +207,7 @@ Add sensor/fusion metrics (names tentative):
 - Sensor/fusion builders: `src/ai/pipeline/sensors/builder.py`, `src/ai/pipeline/sensors/fusion.py`
 - Reference sensor plugin: `src/ai/plugins/sensors/fake_ultrasonic.py`
 - Phase 0 runtime wiring: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`, `src/ai/pipeline/core.py`
-- Docs SSOT updates: `docs/specs/pipeline_spec.md`, `docs/contracts/protocol.md`
+- Docs SSOT updates: `docs/specs/legacy_pipeline_spec.md`, `docs/contracts/protocol.md`
 
 ---
 
@@ -418,4 +418,4 @@ Add sensor/fusion metrics (names tentative):
 - Sensor/Fusion 빌더: `src/ai/pipeline/sensors/builder.py`, `src/ai/pipeline/sensors/fusion.py`
 - 기준 센서 플러그인: `src/ai/plugins/sensors/fake_ultrasonic.py`
 - Phase 0 런타임 연결 지점: `src/schnitzel_stream/jobs/legacy_ai_pipeline.py`, `src/ai/pipeline/core.py`
-- SSOT 반영 대상: `docs/specs/pipeline_spec.md`, `docs/contracts/protocol.md`
+- SSOT 반영 대상: `docs/specs/legacy_pipeline_spec.md`, `docs/contracts/protocol.md`

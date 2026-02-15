@@ -23,7 +23,7 @@ Related Docs
 ------------
 - Contract: `docs/contracts/protocol.md`
 - Model I/O: `docs/specs/model_interface.md`
-- Pipeline behavior: `docs/specs/pipeline_spec.md`
+- Pipeline behavior: `docs/specs/legacy_pipeline_spec.md`
 
 ## 한국어
 목적
@@ -48,4 +48,4 @@ Related Docs
 ---------
 - 계약: `docs/contracts/protocol.md`
 - 모델 입출력: `docs/specs/model_interface.md`
-- 파이프라인 동작: `docs/specs/pipeline_spec.md`
+- 파이프라인 동작: `docs/specs/legacy_pipeline_spec.md`

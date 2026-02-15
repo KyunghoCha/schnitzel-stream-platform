@@ -18,7 +18,7 @@ Phase 0 note:
   5. `design/architecture_2.0.md` (Provisional architecture spec)
   6. `implementation/90-packaging/entrypoint/design.md` (Entrypoint design)
   7. `implementation/90-packaging/support_matrix.md` (Edge support matrix, provisional)
-  8. `specs/pipeline_spec.md` (Legacy pipeline behavior, executed via `schnitzel_stream`)
+  8. `specs/legacy_pipeline_spec.md` (Legacy pipeline behavior, executed via `schnitzel_stream`)
   9. `contracts/stream_packet.md` (Internal node-to-node contract, provisional)
   10. `contracts/observability.md` (Metrics/health contract, provisional)
   11. `contracts/protocol.md` (Event schema / transport contract)
@@ -36,7 +36,7 @@ Phase 0 note:
 
 - Platform pivot: `roadmap/strategic_roadmap.md`, `roadmap/migration_plan_phase0.md`, `design/architecture_2.0.md`
 - Execution plan/status: `roadmap/execution_roadmap.md`
-- Runtime behavior (legacy job): `specs/pipeline_spec.md`
+- Runtime behavior (legacy job): `specs/legacy_pipeline_spec.md`
 - Node-to-node contract: `contracts/stream_packet.md`
 - Observability contract: `contracts/observability.md`
 - Event schema: `contracts/protocol.md`
@@ -78,7 +78,7 @@ Phase 0 참고:
   5. `design/architecture_2.0.md` (아키텍처 명세, 잠정)
   6. `implementation/90-packaging/entrypoint/design.md` (엔트리포인트 설계)
   7. `implementation/90-packaging/support_matrix.md` (엣지 지원 매트릭스, 잠정)
-  8. `specs/pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
+  8. `specs/legacy_pipeline_spec.md` (레거시 파이프라인 동작, `schnitzel_stream`로 실행)
   9. `contracts/stream_packet.md` (노드 간 내부 계약, 잠정)
   10. `contracts/observability.md` (메트릭/헬스 계약, 잠정)
   11. `contracts/protocol.md` (이벤트 스키마/전송 계약)
@@ -96,7 +96,7 @@ Phase 0 참고:
 
 - 플랫폼 피벗: `roadmap/strategic_roadmap.md`, `roadmap/migration_plan_phase0.md`, `design/architecture_2.0.md`
 - 실행 계획/상태: `roadmap/execution_roadmap.md`
-- 런타임 동작(레거시 job): `specs/pipeline_spec.md`
+- 런타임 동작(레거시 job): `specs/legacy_pipeline_spec.md`
 - 노드 간 계약: `contracts/stream_packet.md`
 - 관측 가능성 계약: `contracts/observability.md`
 - 이벤트 스키마: `contracts/protocol.md`

@@ -71,14 +71,14 @@ Last Updated: 2026-02-10
   - **G5**: Fixed mock_backend default bind `0.0.0.0` -> `127.0.0.1`. Added SIGTERM -> SIGKILL escalation in `process_manager.py`. Made RTSP test URL/port configurable via env vars.
   - **G6**: Moved `AI_MODEL_ADAPTER` from `os.getenv()` to `settings.model.adapter` (DI pattern). Added warning log for missing source path fallback.
   - **G7**: Added 14 new tests (emitter 4, env_override 9, adapter loader 1). Fixed `test_golden.py` to use `pytest.skip()`.
-  - **G8**: Documented 4xx non-retry policy in `pipeline_spec.md`. Reorganized `.env.example` with all env vars.
+  - **G8**: Documented 4xx non-retry policy in `legacy_pipeline_spec.md` (formerly `pipeline_spec.md`). Reorganized `.env.example` with all env vars.
   - **G9**: Fixed float `==` comparison in `zones.py` with `math.isclose()`. Added JSON type validation. Replaced private field access with `get_stale()` method.
   - **G10**: Full test suite (60 tests) passed. Regression check passed.
 
 ### Recent Activities (2026-02-08)
 
 - **Engine Enhancement**: Added `--loop` functionality to `FileSource` and implemented core-level FPS throttling for stable local benchmarking.
-- **Korean Encoding Recovery**: Fully reconstructed and audited broken Korean text in all major specification and operation documents (`pipeline_spec.md`, `protocol.md`, etc.).
+- **Korean Encoding Recovery**: Fully reconstructed and audited broken Korean text in all major specification and operation documents (`legacy_pipeline_spec.md` (formerly `pipeline_spec.md`), `protocol.md`, etc.).
 - **Multimodal AI Roadmap**: Defined the technical design for integrating ultrasonic/IoT sensors into the vision pipeline.
 
 ### Completed Tests
@@ -239,7 +239,7 @@ Last Updated: 2026-02-10
   - **G5**: mock_backend 기본 바인드 `0.0.0.0` → `127.0.0.1` 수정. `process_manager.py`에 SIGTERM → SIGKILL 에스컬레이션 추가. RTSP 테스트 URL/포트 환경변수 설정 가능.
   - **G6**: `AI_MODEL_ADAPTER`를 `os.getenv()`에서 `settings.model.adapter`로 이동(DI 패턴). 소스 경로 미존재 시 경고 로그 추가.
   - **G7**: 14개 신규 테스트 추가 (에미터 4, env_override 9, 어댑터 로더 1). `test_golden.py`에 `pytest.skip()` 적용.
-  - **G8**: `pipeline_spec.md`에 4xx 비재시도 정책 문서화. `.env.example` 전면 재정리.
+  - **G8**: `legacy_pipeline_spec.md`(기존 `pipeline_spec.md`)에 4xx 비재시도 정책 문서화. `.env.example` 전면 재정리.
   - **G9**: `zones.py` 부동소수점 `==` 비교를 `math.isclose()`로 수정. JSON 타입 검증 추가. private 필드 접근을 `get_stale()` 공개 메서드로 대체.
   - **G10**: 전체 테스트 (60개) 통과 확인. 회귀 검증 통과.
 

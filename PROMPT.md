@@ -42,7 +42,7 @@ You are continuing work on the runtime pipeline repo `schnitzel-stream-platform`
 
 1. `docs/index.md`
 2. `docs/contracts/protocol.md`
-3. `docs/specs/pipeline_spec.md`
+3. `docs/specs/legacy_pipeline_spec.md`
 4. `docs/ops/ops_runbook.md`
 
 ### Not done yet / external
@@ -71,7 +71,7 @@ You are continuing work on the runtime pipeline repo `schnitzel-stream-platform`
 - **Multi-Camera Visualization Fix (2026-02-09)**: Updated `OpencvVisualizer` initialization to include `camera_id` in the window name. This prevents window collisions when running multiple pipelines concurrently with `--visualize`.
 - **Visualization Buffer Staining Fix (2026-02-09)**: Modified `OpencvVisualizer` to draw detections on a copy of the frame instead of in-place. This prevents "ghost" or "stained" boxes from previous frames appearing in subsequent ones due to OpenCV's buffer reuse policy.
 - **Smooth Visualization (2026-02-08)**: Decoupled visualization from sampling; all frames are now displayed with retained detection boxes to prevent flickering.
-- **Korean Encoding Recovery (2026-02-08)**: Fully reconstructed and repaired broken Korean characters in `pipeline_spec.md`, `protocol.md`, `ops_runbook.md`, and other spec documents to ensure UTF-8 (No BOM) integrity.
+- **Korean Encoding Recovery (2026-02-08)**: Fully reconstructed and repaired broken Korean characters in `legacy_pipeline_spec.md` (formerly `pipeline_spec.md`), `protocol.md`, `ops_runbook.md`, and other spec documents to ensure UTF-8 (No BOM) integrity.
 - **Multimodal Sensor Roadmap (2026-02-08)**: Added technical vision for integrating non-vision sensors (Ultrasonic, IoT) into the pipeline core.
 - **Cross-platform script migration (2026-02-07)**: All bash scripts replaced with Python equivalents.
   - `scripts/multi_cam.py`, `scripts/check_rtsp.py`, `scripts/process_manager.py`.
@@ -125,7 +125,7 @@ You are continuing work on the runtime pipeline repo `schnitzel-stream-platform`
 
 1. `docs/index.md`
 2. `docs/contracts/protocol.md`
-3. `docs/specs/pipeline_spec.md`
+3. `docs/specs/legacy_pipeline_spec.md`
 4. `docs/ops/ops_runbook.md`
 
 ### 아직 미완 / 외부 의존
