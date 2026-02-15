@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-15
 
-Current step id: `P4.5`
+Current step id: `P5.1`
 
 ## English
 
@@ -35,6 +35,7 @@ Status legend:
 - `NOW`: next work to execute
 - `NEXT`: queued after NOW
 - `LATER`: not started
+- `GATED`: blocked by an explicit precondition (ex: deprecation window)
 
 #### Phase 0: Entrypoint SSOT + Strangler (DONE ~100%)
 
@@ -46,7 +47,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 4** (legacy decommission is now the priority; `P3.3` is deferred)
+Current position: **Phase 5** (while `P4.5` is gated by the deprecation window; `P3.3` remains optional)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -90,7 +91,84 @@ Intent:
   - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
 - `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
-- `P4.5` Remove legacy runtime from main tree after the deprecation window. `NEXT` (>= 90 days after `P4.3`)
+- `P4.5` Remove legacy runtime from main tree after the deprecation window. `GATED` (>= 90 days after `P4.3`)
+
+#### Phase 5: Platform Generalization (Domain-Neutral) (NOW)
+
+Intent:
+- Phase 5 makes the repo feel like a **universal stream platform**, not a CCTV project:
+  - domain-specific things remain supported, but they live behind plugin boundaries or under `legacy/`
+  - docs/examples naming should be domain-neutral by default
+
+- `P5.1` Docs + examples taxonomy cleanup (platform vs legacy) and naming de-CCTVization. `NOW`
+  - DoD:
+    - Top-level entry docs (`README.md`, `PROMPT*.md`, `docs/index.md`) clearly separate `platform` vs `legacy`.
+    - Legacy-only docs/specs are explicitly named `legacy_*` or moved under `docs/legacy/`.
+    - Default/example v2 graphs avoid CCTV-specific naming unless the example is explicitly legacy.
+- `P5.2` Plugin boundary hardening for IO (sources/sinks) and policy nodes. `NEXT`
+  - DoD:
+    - RTSP/webcam/file sources are "just" `source` plugins (no core coupling).
+    - backend/JSONL/stdout are "just" `sink` plugins.
+    - `schnitzel_stream` core remains free of CCTV/backend schema assumptions (contract stays `StreamPacket`).
+
+#### Phase 6: Streaming In-Proc Runtime Semantics (NOW)
+
+Problem:
+- The current in-proc runner executes each source to completion before downstream nodes run. That is OK for tiny demos but not OK for streaming sources (RTSP/webcam) or large files.
+
+Intent:
+- Evolve the runtime from a "batch DAG evaluator" into a "streaming packet scheduler" while keeping strict DAG safety by default.
+
+- `P6.1` Interleaved scheduler: process packets incrementally (no unbounded buffering before downstream). `NEXT`
+  - DoD:
+    - Sources can be infinite iterators without starving downstream nodes.
+    - Downstream processing happens as packets flow (bounded queues).
+    - Deterministic stop conditions exist (`--max-packets` / time budget / throttle policy).
+- `P6.2` Backpressure + queue policy: bounded inbox, drop/slowdown semantics, and metrics. `LATER`
+  - DoD:
+    - configurable per-node inbox limits
+    - metrics reflect drops/backpressure events
+
+#### Phase 7: Payload Portability + Transport Lanes (NEXT)
+
+Intent:
+- Make "what can cross a boundary" explicit (in-proc objects vs durable/IPC/network portability).
+
+- `P7.1` Payload portability policy + validator enforcement. `NEXT`
+  - DoD:
+    - graphs fail validation if a non-portable payload (ex: raw frames) is routed through durable/network lanes
+    - durable queue nodes are explicitly documented as JSON-only until a blob/handle strategy exists
+- `P7.2` Blob/handle strategy (`payload_ref`) for large/binary payloads (frames, audio). `LATER`
+  - DoD:
+    - `StreamPacket` supports a portable reference form (file/shm/uri) with clear lifecycle rules
+
+#### Phase 8: IO Plugin Packs (RTSP/Webcam/HTTP/etc) (NEXT)
+
+Intent:
+- Treat RTSP and "backend" as replaceable adapters. Platform ships with minimal batteries; deployments can bring their own.
+
+- `P8.1` RTSP source plugin (reconnect/backoff) + tests + demo graph. `NEXT`
+- `P8.2` Webcam source plugin + tests + demo graph. `LATER`
+- `P8.3` HTTP sink plugin (idempotency + retry policy) + tests + demo graph. `LATER`
+- `P8.4` JSONL/file sink plugin + tests. `LATER`
+
+#### Phase 9: Cross-Platform Packaging + Release Discipline (NEXT)
+
+- `P9.1` Finalize support matrix and packaging lanes (Docker + no-Docker). `NEXT`
+  - DoD:
+    - documented target list (OS/arch) and lane policy
+    - CI verifies at least one "no-Docker" lane (`pip` + venv) end-to-end
+    - optional: multi-arch Docker build lane
+- `P9.2` Edge ops conventions (paths, service mode, logs) hardened. `LATER`
+
+#### Research Track (Not On Critical Path)
+
+Intent:
+- Orchestrators/LLM controllers can be thesis-grade work; keep them out of the critical path until the core platform is stable.
+
+- `R1` Cycle-capable runtime semantics (beyond validator-only) with safety guardrails. `LATER`
+- `R2` Multi-camera orchestrator/process manager/inference server architecture. `LATER`
+- `R3` LLM/controller layer (human-in-the-loop). `LATER`
 
 ### Verification
 
@@ -192,7 +270,84 @@ Intent:
   - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
 - `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
 - `P4.4` Extract legacy runtime (`legacy/ai/*`) to a separate package/repo or move under `legacy/` with pinned deps. `DONE` (cefd89f, 37d7537, a57ee5a)
-- `P4.5` Remove legacy runtime from main tree after the deprecation window. `NEXT` (>= 90 days after `P4.3`)
+- `P4.5` Remove legacy runtime from main tree after the deprecation window. `GATED` (>= 90 days after `P4.3`)
+
+#### Phase 5: 플랫폼 범용화(도메인 중립) (NOW)
+
+의도(Intent):
+- Phase 5의 목표는 레포가 **범용 스트림 플랫폼**처럼 보이고 동작하게 만드는 것입니다.
+  - 도메인 특화 기능은 계속 지원하되, 플러그인 경계 뒤로 보내거나 `legacy/`로 격리합니다.
+  - 문서/예시 네이밍은 기본적으로 도메인 중립이어야 합니다.
+
+- `P5.1` 문서 + 예시 그래프 분류/정리(platform vs legacy) 및 네이밍 de-CCTVization. `NOW`
+  - DoD:
+    - 최상위 진입 문서(`README.md`, `PROMPT*.md`, `docs/index.md`)에서 `platform`과 `legacy`가 명확히 분리되어야 합니다.
+    - 레거시 전용 문서/스펙은 `legacy_*`로 명시하거나 `docs/legacy/`로 이동합니다.
+    - 기본/예시 v2 그래프는 레거시 예시가 아닌 한 CCTV 네이밍을 피합니다.
+- `P5.2` IO(소스/싱크) 및 정책 노드의 플러그인 경계 강화. `NEXT`
+  - DoD:
+    - RTSP/webcam/file 입력은 코어와 결합되지 않은 `source` 플러그인으로만 제공됩니다.
+    - backend/JSONL/stdout 출력은 `sink` 플러그인으로만 제공됩니다.
+    - `schnitzel_stream` 코어는 CCTV/백엔드 스키마 가정을 포함하지 않습니다(계약은 `StreamPacket`).
+
+#### Phase 6: 스트리밍 in-proc 런타임 의미론 (NOW)
+
+문제:
+- 현재 in-proc runner는 source를 끝까지 실행한 다음에 downstream 노드를 실행합니다. 작은 데모엔 괜찮지만 RTSP/webcam 같은 스트리밍 소스나 큰 파일에서는 메모리/지연 문제가 생깁니다.
+
+의도(Intent):
+- strict DAG 안전성을 기본으로 유지하면서, 런타임을 “배치 DAG 평가기”에서 “스트리밍 패킷 스케줄러”로 진화시킵니다.
+
+- `P6.1` 인터리빙 스케줄러: 패킷을 점진적으로 처리(다운스트림 실행 전 무한 버퍼링 금지). `NEXT`
+  - DoD:
+    - 소스가 무한 iterator여도 다운스트림이 굶지 않습니다(starvation 없음).
+    - 패킷이 흐르면서 처리됩니다(바운디드 큐).
+    - 결정적 stop 조건(`--max-packets` / 시간 예산 / throttle policy)이 존재합니다.
+- `P6.2` 백프레셔 + 큐 정책: bounded inbox, drop/slowdown 의미론, 메트릭. `LATER`
+  - DoD:
+    - 노드별 inbox limit 설정 가능
+    - drop/backpressure 이벤트가 메트릭으로 남음
+
+#### Phase 7: Payload 이식성 + Transport Lane (NEXT)
+
+의도(Intent):
+- “어떤 데이터가 경계를 넘을 수 있는가”를 명시합니다(in-proc 객체 vs durable/IPC/network).
+
+- `P7.1` payload 이식성 정책 + validator 강제. `NEXT`
+  - DoD:
+    - non-portable payload(예: raw frame)가 durable/network 경로로 라우팅되면 validate에서 실패합니다.
+    - durable queue 노드는 blob/handle 전략이 나오기 전까지 JSON-only임을 문서화합니다.
+- `P7.2` 큰/바이너리 payload(프레임/오디오)용 handle 전략(`payload_ref`). `LATER`
+  - DoD:
+    - `StreamPacket`이 file/shm/uri 기반 portable reference를 지원하며, lifecycle 규칙이 명확합니다.
+
+#### Phase 8: IO 플러그인 팩(RTSP/Webcam/HTTP 등) (NEXT)
+
+의도(Intent):
+- RTSP와 “backend”는 교체 가능한 어댑터입니다. 플랫폼은 최소 배터리를 제공하고, 배포 환경은 필요한 어댑터를 가져옵니다.
+
+- `P8.1` RTSP source 플러그인(reconnect/backoff) + 테스트 + 데모 그래프. `NEXT`
+- `P8.2` Webcam source 플러그인 + 테스트 + 데모 그래프. `LATER`
+- `P8.3` HTTP sink 플러그인(idempotency + retry 정책) + 테스트 + 데모 그래프. `LATER`
+- `P8.4` JSONL/file sink 플러그인 + 테스트. `LATER`
+
+#### Phase 9: 크로스플랫폼 패키징 + 릴리즈 규율 (NEXT)
+
+- `P9.1` 지원 매트릭스/패키징 레인(Docker + no-Docker) 확정. `NEXT`
+  - DoD:
+    - 타겟(OS/arch)과 레인 정책이 문서화되어야 함
+    - CI가 최소 1개의 no-Docker 레인(pip+venv)을 E2E로 검증
+    - 옵션: multi-arch Docker 빌드 레인
+- `P9.2` 엣지 운영 규약(경로/서비스 모드/로그) 강화. `LATER`
+
+#### 연구 트랙(크리티컬 패스 아님)
+
+의도(Intent):
+- 오케스트레이터/LLM 컨트롤러는 논문급 과제가 될 수 있으므로, 코어 플랫폼이 안정화되기 전에는 크리티컬 패스에서 제외합니다.
+
+- `R1` validator-only를 넘는 cycle 실행 의미론(가드레일 포함). `LATER`
+- `R2` 멀티 카메라 오케스트레이터/프로세스 매니저/추론 서버 아키텍처. `LATER`
+- `R3` LLM/controller 레이어(사용자 승인 기반). `LATER`
 
 ### 검증
 
