@@ -24,10 +24,11 @@ Runtime baseline:
 9. `docs/contracts/stream_packet.md`
 10. `docs/contracts/observability.md`
 11. `docs/design/architecture_2.0.md`
-12. `docs/ops/command_reference.md`
-13. `docs/guides/plugin_authoring_guide.md`
-14. `docs/guides/process_graph_foundation_guide.md`
-15. `docs/guides/professor_showcase_guide.md`
+12. `docs/design/future_structure.md`
+13. `docs/ops/command_reference.md`
+14. `docs/guides/plugin_authoring_guide.md`
+15. `docs/guides/process_graph_foundation_guide.md`
+16. `docs/guides/professor_showcase_guide.md`
 
 ## Active Folders
 
@@ -82,10 +83,11 @@ Runtime baseline:
 9. `docs/contracts/stream_packet.md`
 10. `docs/contracts/observability.md`
 11. `docs/design/architecture_2.0.md`
-12. `docs/ops/command_reference.md`
-13. `docs/guides/plugin_authoring_guide.md`
-14. `docs/guides/process_graph_foundation_guide.md`
-15. `docs/guides/professor_showcase_guide.md`
+12. `docs/design/future_structure.md`
+13. `docs/ops/command_reference.md`
+14. `docs/guides/plugin_authoring_guide.md`
+15. `docs/guides/process_graph_foundation_guide.md`
+16. `docs/guides/professor_showcase_guide.md`
 
 ## 활성 폴더
 

@@ -21,6 +21,7 @@ Last updated: 2026-02-16
   - `docs/contracts/stream_packet.md`
   - `docs/contracts/observability.md`
   - `docs/design/architecture_2.0.md`
+  - `docs/design/future_structure.md`
 - Roadmap support:
   - `docs/roadmap/strategic_roadmap.md`
   - `docs/roadmap/future_backlog.md`
@@ -75,6 +76,7 @@ Last updated: 2026-02-16
   - `docs/contracts/stream_packet.md`
   - `docs/contracts/observability.md`
   - `docs/design/architecture_2.0.md`
+  - `docs/design/future_structure.md`
 - 로드맵 보조:
   - `docs/roadmap/strategic_roadmap.md`
   - `docs/roadmap/future_backlog.md`

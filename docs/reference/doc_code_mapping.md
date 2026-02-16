@@ -20,6 +20,7 @@ This document is the active mapping between runtime code and maintained docs.
 | Capability | Code | Tests | Primary Docs |
 |---|---|---|---|
 | Ownership split and research gate contract | `N/A (docs policy artifact)` | `python3 scripts/docs_hygiene.py --strict` | `docs/roadmap/owner_split_playbook.md`, `docs/roadmap/execution_roadmap.md`, `docs/progress/current_status.md` |
+| Future target structure blueprint | `N/A (docs design artifact)` | `python3 scripts/docs_hygiene.py --strict` | `docs/design/future_structure.md`, `docs/roadmap/future_backlog.md`, `docs/roadmap/owner_split_playbook.md` |
 | CLI entrypoint and command dispatch | `src/schnitzel_stream/__main__.py`, `src/schnitzel_stream/cli/__main__.py` | `tests/unit/test_cli_validate_only.py` | `docs/ops/command_reference.md`, `docs/implementation/runtime_core.md` |
 | Graph spec loading (v2) | `src/schnitzel_stream/graph/spec.py` | `tests/unit/test_node_graph_spec.py` | `docs/implementation/runtime_core.md` |
 | Process-graph spec loading (v1 foundation) | `src/schnitzel_stream/procgraph/spec.py`, `src/schnitzel_stream/procgraph/model.py` | `tests/unit/procgraph/test_proc_graph_spec.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/implementation/runtime_core.md` |
@@ -77,6 +78,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | 기능 | 코드 | 테스트 | 주 문서 |
 |---|---|---|---|
 | 소유권 분리/연구 게이트 계약 | `N/A (문서 정책 산출물)` | `python3 scripts/docs_hygiene.py --strict` | `docs/roadmap/owner_split_playbook.md`, `docs/roadmap/execution_roadmap.md`, `docs/progress/current_status.md` |
+| 미래 목표 구조 블루프린트 | `N/A (문서 설계 산출물)` | `python3 scripts/docs_hygiene.py --strict` | `docs/design/future_structure.md`, `docs/roadmap/future_backlog.md`, `docs/roadmap/owner_split_playbook.md` |
 | CLI 엔트리포인트/명령 분기 | `src/schnitzel_stream/__main__.py`, `src/schnitzel_stream/cli/__main__.py` | `tests/unit/test_cli_validate_only.py` | `docs/ops/command_reference.md`, `docs/implementation/runtime_core.md` |
 | 그래프 스펙 로딩(v2) | `src/schnitzel_stream/graph/spec.py` | `tests/unit/test_node_graph_spec.py` | `docs/implementation/runtime_core.md` |
 | 프로세스 그래프 스펙 로딩(v1 foundation) | `src/schnitzel_stream/procgraph/spec.py`, `src/schnitzel_stream/procgraph/model.py` | `tests/unit/procgraph/test_proc_graph_spec.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/implementation/runtime_core.md` |
