@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id: `P3.3`
+Current step id: `P12.1`
 
 ## English
 
@@ -54,7 +54,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 11 demo packaging complete** (`P3.3` remains optional research track)
+Current position: **Phase 11 demo packaging complete, Phase 12 process-graph foundation started**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -196,6 +196,21 @@ Intent:
 - `P11.5` Add demo-pack tests + CI smoke integration (`--profile ci`). `DONE` (032752d, 1f76708)
 - `P11.6` Sync docs mapping/inventory/status for showcase assets. `DONE`
 
+#### Phase 12: Process Graph Foundation (Validator-First) (NOW)
+
+Intent:
+- Keep runtime core unchanged (in-proc scheduler remains the execution baseline).
+- Productize process-graph **specification and validation** before introducing orchestration/runtime automation.
+- Pin first bridge to SQLite durable queue with strict semantics.
+
+- `P12.1` Switch SSOT step and define process-graph foundation scope. `NOW`
+- `P12.2` Add process-graph model/spec loader (`version: 1`). `NEXT`
+- `P12.3` Add process-graph validator with SQLite bridge contracts (strict `1 producer + 1 consumer`). `NEXT`
+- `P12.4` Add standalone validator command (`scripts/proc_graph_validate.py`) + exit-code contract. `NEXT`
+- `P12.5` Add sample process-graph spec + guide/ops docs sync. `NEXT`
+- `P12.6` Add unit tests for spec/validator/script contracts. `NEXT`
+- `P12.7` Record expansion hook for future `N:N` channel semantics (validator-rule relaxation, no schema break). `NEXT`
+
 #### Research Track (Not On Critical Path)
 
 Intent:
@@ -212,10 +227,9 @@ Intent:
 
 ### Open Questions
 
-- What is the Phase 1 runtime execution model?
-  - push vs pull, batching/windowing, and backpressure semantics
-- What is the minimal port/type system to prevent invalid graphs without overfitting to CCTV?
-- What is the communication plan for external users that still reference historical `ai.*` docs/examples?
+- What is the first promoted transport after SQLite bridge (HTTP/MQTT/NATS)?
+- How should `N:N` channel semantics define ownership/ack policy in a backward-compatible way?
+- What objective readiness criteria should promote foundation validation into runtime orchestration?
 
 ---
 
@@ -237,8 +251,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P3.3`
-- 전체 위치: **P0~P11 핵심 항목 완료, P3.3은 선택 연구 트랙으로 유지**
+- current step id: `P12.1`
+- 전체 위치: **P0~P11 핵심 항목 완료, P12 프로세스 그래프 foundation 트랙 시작**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -253,7 +267,7 @@ Intent:
 | Phase 0 | DONE | 엔트리포인트 통합, 기본 SSOT 정착 |
 | Phase 1 | DONE | v2 그래프 로더/검증기/실행기 기본선 확립 |
 | Phase 2 | DONE | durable queue, 재전송/멱등성 기반 강화 |
-| Phase 3 | DONE (core), NEXT (P3.3) | 운영 제어면(메트릭/스로틀) 완료, LLM 컨트롤러는 선택 과제 |
+| Phase 3 | DONE (core), LATER (P3.3) | 운영 제어면(메트릭/스로틀) 완료, LLM 컨트롤러는 선택 과제 |
 | Phase 4 | DONE | v2 전환 완료 및 레거시 런타임 제거 |
 | Phase 5 | DONE | 도메인 중립 네이밍/경계 정리 |
 | Phase 6 | DONE | 스트리밍 in-proc 스케줄링/백프레셔 정착 |
@@ -262,12 +276,13 @@ Intent:
 | Phase 9 | DONE | 패키징/릴리즈 규율 및 엣지 운영 규약 정리 |
 | Phase 10 | DONE | 품질 게이트/CLI 정리/플러그인 DX/데이터 프로파일 하드닝 |
 | Phase 11 | DONE | 교수님 시연용 데모 패키지/재현성 고정 |
+| Phase 12 | NOW | 프로세스 그래프 스펙/검증기(Validator-First, SQLite 1:1) 도입 |
 
 ### 현재 우선순위
 
-1. `P3.3` (optional): 사람 승인 기반 컨트롤러 계층 범위 검토
+1. `P12.1`~`P12.7`: 프로세스 그래프 foundation 스펙/검증/문서/테스트 완료
 2. 연구 트랙(`R1~R3`)은 제품 트랙과 분리 유지
-3. 데모 패키지(`showcase_*`, `scripts/demo_pack.py`)의 운영 피드백 기반 개선
+3. `P3.3`(optional)은 foundation 완료 이후 재평가
 
 ### 레거시 관련 기준
 
@@ -281,6 +296,6 @@ Intent:
 
 ### 열린 쟁점
 
-1. 순환 그래프 실행 모델을 어디까지 런타임에 편입할지(`R1`)
-2. 분산 실행 시 전송/스케줄링 책임 경계를 어떻게 나눌지(`R2`)
+1. SQLite 1:1 foundation에서 `N:N`으로 확장할 때 ack ownership을 어떻게 고정할지
+2. 분산 실행 승격 시 transport/오케스트레이션 경계를 어디서 나눌지(`B2`, `B3`)
 3. `P3.3`/연구 트랙(`R1~R3`) 재개 시점을 어떤 운영 신호로 판단할지

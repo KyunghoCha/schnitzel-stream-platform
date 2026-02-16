@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id (SSOT): `P3.3` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P12.1` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -20,6 +20,7 @@ Current baseline:
 - historical legacy references are available in git tag: `pre-legacy-purge-20260216`
 - hardening track completed (`P10.1` -> `P10.5`)
 - demo packaging track completed (`P11.1` -> `P11.6`)
+- process-graph foundation track started (`P12.1`, validator-first with SQLite bridge)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -43,6 +44,7 @@ Verification (local):
 - 과거 레거시 이력은 git 태그 `pre-legacy-purge-20260216`에서 조회
 - 하드닝 트랙 완료(`P10.1` -> `P10.5`)
 - 데모 패키징 트랙 완료(`P11.1` -> `P11.6`)
+- 프로세스 그래프 foundation 트랙 시작(`P12.1`, SQLite 기반 validator-first)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`
