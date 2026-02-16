@@ -16,6 +16,11 @@ nodes:
     kind: node
     plugin: schnitzel_stream.packs.vision.nodes:YoloV8DetectorNode
     config:
+      __runtime__:
+        # Intent: real-time friendly behavior for camera streams.
+        # Drop stale backlog and prioritize the newest frame.
+        inbox_max: 1
+        inbox_overflow: drop_oldest
       model_path: ${oc.env:SS_YOLO_MODEL_PATH,models/yolov8n.pt}
       conf: ${oc.env:SS_YOLO_CONF,0.35}
       iou: ${oc.env:SS_YOLO_IOU,0.45}
@@ -26,6 +31,10 @@ nodes:
     kind: sink
     plugin: schnitzel_stream.packs.vision.nodes:OpenCvBboxDisplaySink
     config:
+      __runtime__:
+        # Intent: keep UI responsive by bounding the display queue.
+        inbox_max: 1
+        inbox_overflow: drop_oldest
       window_name: ${oc.env:SS_WINDOW_NAME,Schnitzel Stream - Webcam YOLO}
       wait_key_ms: 1
       line_thickness: 2
