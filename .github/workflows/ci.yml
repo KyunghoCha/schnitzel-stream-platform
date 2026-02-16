@@ -62,10 +62,16 @@ jobs:
           pip install -r requirements.txt -r requirements-dev.txt
 
       - name: Compile check
-        run: python -m compileall -q src tests
+        run: python -m compileall -q src tests scripts
 
       - name: Docs hygiene gate
         run: python scripts/docs_hygiene.py --strict
+
+      - name: Test hygiene gate
+        run: python scripts/test_hygiene.py --strict --max-duplicate-groups 0 --max-no-assert 0 --max-trivial-assert-true 0
+
+      - name: Environment doctor gate
+        run: python scripts/env_doctor.py --strict
 
       - name: Validate representative v2 graphs
         env:
@@ -75,6 +81,10 @@ jobs:
           python -m schnitzel_stream validate --graph configs/graphs/dev_http_event_sink_v2.yaml
           python -m schnitzel_stream validate --graph configs/graphs/dev_jsonl_sink_v2.yaml
           python -m schnitzel_stream validate --graph configs/graphs/dev_json_file_sink_v2.yaml
+          python -m schnitzel_stream validate --graph configs/graphs/showcase_inproc_v2.yaml
+
+      - name: Validate process-graph foundation spec
+        run: python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml
 
       - name: Run no-dependency v2 graph
         env:
