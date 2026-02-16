@@ -22,6 +22,7 @@ Rule:
 - `docs/roadmap/execution_roadmap.md`: execution status and step ownership (this file)
 - `docs/roadmap/strategic_roadmap.md`: long-term direction/principles (no step-by-step status tracking)
 - `docs/roadmap/future_backlog.md`: candidate items with no committed schedule
+- `docs/roadmap/owner_split_playbook.md`: owner split (`E*`/`R*`) and research gate (`G*`) contract
 - completed/historical sub-plans: git history/tag `pre-legacy-purge-20260216` (reference only)
 
 ### Risks (P0–P3)
@@ -230,6 +231,7 @@ Intent:
 - What is the first promoted transport after SQLite bridge (HTTP/MQTT/NATS)?
 - How should `N:N` channel semantics define ownership/ack policy in a backward-compatible way?
 - What objective readiness criteria should promote foundation validation into runtime orchestration?
+- Which `R*` decisions in `docs/roadmap/owner_split_playbook.md` are ready for promotion into execution steps?
 
 ---
 
@@ -247,6 +249,7 @@ Intent:
 - 실행 상태: `docs/roadmap/execution_roadmap.md` (본 문서)
 - 장기 방향: `docs/roadmap/strategic_roadmap.md`
 - 후보 과제: `docs/roadmap/future_backlog.md`
+- 소유권/게이트 계약: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 - 완료/역사 계획: git 이력/태그 `pre-legacy-purge-20260216`
 
 ### 현재 상태 한눈에 보기
@@ -298,4 +301,5 @@ Intent:
 
 1. SQLite 1:1 foundation에서 `N:N`으로 확장할 때 ack ownership을 어떻게 고정할지
 2. 분산 실행 승격 시 transport/오케스트레이션 경계를 어디서 나눌지(`B2`, `B3`)
+3. `docs/roadmap/owner_split_playbook.md`의 `R*` 결정 중 어떤 항목을 실행 단계로 승격할지
 3. `P3.3`/연구 트랙(`R1~R3`) 재개 시점을 어떤 운영 신호로 판단할지
