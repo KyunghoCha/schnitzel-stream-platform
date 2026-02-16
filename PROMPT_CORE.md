@@ -10,8 +10,9 @@ Execution SSOT:
 - `docs/roadmap/execution_roadmap.md`
 
 Current status:
-- Current step id: `P3.3` (optional research/control-plane track)
+- Current step id: `P11.1` (demo packaging track)
 - Core platform phases (`P0`~`P10`) are complete on `main`
+- Demo packaging phase (`P11`) is in progress
 - Legacy runtime/docs were removed from the working tree
 - Historical legacy state can be inspected via tag `pre-legacy-purge-20260216`
 
@@ -43,8 +44,9 @@ Context budget rule:
 - `docs/roadmap/execution_roadmap.md`
 
 현재 상태:
-- 현재 step id: `P3.3` (옵션 연구/컨트롤플레인 트랙)
+- 현재 step id: `P11.1` (데모 패키징 트랙)
 - 코어 플랫폼 단계(`P0`~`P10`)는 `main` 기준 완료
+- 데모 패키징 단계(`P11`) 진행 중
 - 레거시 런타임/문서는 워킹 트리에서 제거됨
 - 과거 레거시 상태는 태그 `pre-legacy-purge-20260216`에서 확인
 
