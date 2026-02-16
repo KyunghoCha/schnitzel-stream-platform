@@ -3,25 +3,24 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict, dataclass
 import importlib
 import json
 from pathlib import Path
 import sys
 from typing import Sequence
 
-MIN_PYTHON = (3, 11)
-BASE_REQUIRED_MODULES = ("omegaconf", "numpy", "pandas", "requests")
-BASE_OPTIONAL_MODULES = ("cv2",)
-YOLO_REQUIRED_MODULES = ("ultralytics", "torch")
+# Add project src path for direct script execution.
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR.parent
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+from schnitzel_stream.ops import envcheck as env_ops
 
-@dataclass(frozen=True)
-class CheckResult:
-    name: str
-    required: bool
-    ok: bool
-    detail: str
+MIN_PYTHON = env_ops.MIN_PYTHON
+BASE_REQUIRED_MODULES = env_ops.BASE_REQUIRED_MODULES
+BASE_OPTIONAL_MODULES = env_ops.BASE_OPTIONAL_MODULES
+YOLO_REQUIRED_MODULES = env_ops.YOLO_REQUIRED_MODULES
+CheckResult = env_ops.CheckResult
 
 
 def _python_version_info() -> tuple[int, int, int]:
@@ -30,75 +29,27 @@ def _python_version_info() -> tuple[int, int, int]:
 
 
 def _check_python() -> CheckResult:
-    major, minor, micro = _python_version_info()
-    ok = (major, minor) >= MIN_PYTHON
-    detail = f"detected={major}.{minor}.{micro} required>={MIN_PYTHON[0]}.{MIN_PYTHON[1]}"
-    return CheckResult(name="python", required=True, ok=ok, detail=detail)
+    env_ops.python_version_info = _python_version_info
+    return env_ops.check_python()
 
 
 def _check_import(module_name: str, *, required: bool) -> CheckResult:
-    try:
-        importlib.import_module(module_name)
-        return CheckResult(name=module_name, required=required, ok=True, detail="import ok")
-    except Exception as exc:  # pragma: no cover - exact import errors are environment-specific
-        return CheckResult(name=module_name, required=required, ok=False, detail=str(exc))
+    env_ops.importlib = importlib
+    return env_ops.check_import(module_name, required=required)
 
 
 def _check_torch_cuda() -> CheckResult:
-    try:
-        torch = importlib.import_module("torch")
-    except Exception as exc:
-        return CheckResult(name="torch_cuda", required=False, ok=False, detail=f"torch import failed: {exc}")
-
-    try:
-        available = bool(torch.cuda.is_available())
-        count = int(torch.cuda.device_count())
-        cuda_ver = getattr(torch.version, "cuda", None)
-        detail = f"available={available} device_count={count} torch_cuda={cuda_ver}"
-        return CheckResult(name="torch_cuda", required=False, ok=available, detail=detail)
-    except Exception as exc:
-        return CheckResult(name="torch_cuda", required=False, ok=False, detail=f"cuda probe failed: {exc}")
+    env_ops.importlib = importlib
+    return env_ops.check_torch_cuda()
 
 
 def _check_model_path(path: Path) -> CheckResult:
-    target = Path(path).resolve()
-    ok = target.exists()
-    detail = f"path={target}"
-    if not ok:
-        detail += " (not found)"
-    return CheckResult(name="yolo_model_path", required=False, ok=ok, detail=detail)
+    return env_ops.check_model_path(path)
 
 
 def _check_webcam_probe(*, camera_index: int, enabled: bool) -> CheckResult:
-    if not enabled:
-        return CheckResult(
-            name="webcam_probe",
-            required=False,
-            ok=True,
-            detail="probe skipped (set --probe-webcam to test camera open)",
-        )
-
-    try:
-        cv2 = importlib.import_module("cv2")
-    except Exception as exc:
-        return CheckResult(name="webcam_probe", required=False, ok=False, detail=f"cv2 import failed: {exc}")
-
-    if not hasattr(cv2, "VideoCapture"):
-        return CheckResult(name="webcam_probe", required=False, ok=False, detail="cv2.VideoCapture not available")
-
-    try:
-        cap = cv2.VideoCapture(int(camera_index))
-        opened = bool(cap.isOpened())
-        cap.release()
-    except Exception as exc:
-        return CheckResult(name="webcam_probe", required=False, ok=False, detail=f"probe exception: {exc}")
-
-    return CheckResult(
-        name="webcam_probe",
-        required=False,
-        ok=opened,
-        detail=f"camera_index={int(camera_index)} opened={opened}",
-    )
+    env_ops.importlib = importlib
+    return env_ops.check_webcam_probe(camera_index=camera_index, enabled=enabled)
 
 
 def run_checks(
@@ -123,22 +74,11 @@ def run_checks(
 
 
 def _exit_code(checks: Sequence[CheckResult], *, strict: bool) -> int:
-    if not strict:
-        return 0
-    return 1 if any(item.required and not item.ok for item in checks) else 0
+    return env_ops.exit_code(checks, strict=strict)
 
 
 def _summary(checks: Sequence[CheckResult]) -> dict[str, int]:
-    required_total = sum(1 for item in checks if item.required)
-    required_failed = sum(1 for item in checks if item.required and not item.ok)
-    optional_total = sum(1 for item in checks if not item.required)
-    optional_failed = sum(1 for item in checks if (not item.required) and (not item.ok))
-    return {
-        "required_total": int(required_total),
-        "required_failed": int(required_failed),
-        "optional_total": int(optional_total),
-        "optional_failed": int(optional_failed),
-    }
+    return env_ops.summary(checks)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -172,14 +112,7 @@ def run(argv: list[str] | None = None) -> int:
     summary = _summary(checks)
     code = _exit_code(checks, strict=bool(args.strict))
 
-    payload = {
-        "tool": "env_doctor",
-        "profile": str(args.profile),
-        "strict": bool(args.strict),
-        "status": "ok" if code == 0 else "failed",
-        "summary": summary,
-        "checks": [asdict(item) for item in checks],
-    }
+    payload = env_ops.payload(profile=str(args.profile), strict=bool(args.strict), checks=checks)
 
     if args.json:
         print(json.dumps(payload, separators=(",", ":")))

@@ -7,12 +7,15 @@ One-command preset launcher for common v2 stream workflows.
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass
-import os
 from pathlib import Path
-import shlex
-import subprocess
 import sys
+
+# Add project src path for direct script execution.
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR.parent
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
+
+from schnitzel_stream.ops import presets as preset_ops
 
 
 EXIT_OK = 0
@@ -20,73 +23,8 @@ EXIT_RUN_FAILED = 1
 EXIT_USAGE = 2
 
 
-@dataclass(frozen=True)
-class PresetSpec:
-    preset_id: str
-    description: str
-    graph: Path
-    experimental: bool = False
-    env_defaults: dict[str, str] | None = None
-
-
 def _repo_root() -> Path:
-    return Path(__file__).resolve().parents[1]
-
-
-def _resolve_input_path(raw: str, *, repo_root: Path) -> str:
-    p = Path(raw)
-    if not p.is_absolute():
-        p = (repo_root / p).resolve()
-    return str(p)
-
-
-def _preset_table(repo_root: Path) -> dict[str, PresetSpec]:
-    graphs = repo_root / "configs" / "graphs"
-    return {
-        "inproc_demo": PresetSpec(
-            preset_id="inproc_demo",
-            description="Minimal in-proc packet flow demo",
-            graph=graphs / "dev_inproc_demo_v2.yaml",
-        ),
-        "file_frames": PresetSpec(
-            preset_id="file_frames",
-            description="Video-file source + frame sampler + print sink",
-            graph=graphs / "dev_video_file_frames_v2.yaml",
-            env_defaults={
-                "SS_INPUT_PATH": str((repo_root / "data" / "samples" / "2048246-hd_1920_1080_24fps.mp4").resolve()),
-                "SS_INPUT_LOOP": "false",
-            },
-        ),
-        "webcam_frames": PresetSpec(
-            preset_id="webcam_frames",
-            description="Webcam source + frame sampler + print sink",
-            graph=graphs / "dev_webcam_frames_v2.yaml",
-            env_defaults={"SS_CAMERA_INDEX": "0"},
-        ),
-        "file_yolo": PresetSpec(
-            preset_id="file_yolo",
-            description="Video-file YOLO overlay (loop + low-latency queue policy)",
-            graph=graphs / "dev_video_file_yolo_overlay_v2.yaml",
-            experimental=True,
-            env_defaults={
-                "SS_INPUT_PATH": str((repo_root / "data" / "samples" / "2048246-hd_1920_1080_24fps.mp4").resolve()),
-                "SS_YOLO_MODEL_PATH": str((repo_root / "models" / "yolov8n.pt").resolve()),
-                "SS_YOLO_DEVICE": "cpu",
-                "SS_INPUT_LOOP": "true",
-            },
-        ),
-        "webcam_yolo": PresetSpec(
-            preset_id="webcam_yolo",
-            description="Webcam YOLO overlay",
-            graph=graphs / "dev_webcam_yolo_overlay_v2.yaml",
-            experimental=True,
-            env_defaults={
-                "SS_CAMERA_INDEX": "0",
-                "SS_YOLO_MODEL_PATH": str((repo_root / "models" / "yolov8n.pt").resolve()),
-                "SS_YOLO_DEVICE": "cpu",
-            },
-        ),
-    }
+    return preset_ops.repo_root_from_script(Path(__file__))
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -110,53 +48,39 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def _list_presets(*, table: dict[str, PresetSpec], include_experimental: bool) -> int:
+def _list_presets(*, table: dict[str, preset_ops.PresetSpec], include_experimental: bool) -> int:
+    rows = preset_ops.list_presets_rows(table=table, include_experimental=include_experimental)
     print("preset_id\texperimental\tgraph\tdescription")
-    for preset_id in sorted(table):
-        spec = table[preset_id]
-        if spec.experimental and not include_experimental:
-            continue
-        mark = "yes" if spec.experimental else "no"
-        print(f"{spec.preset_id}\t{mark}\t{spec.graph}\t{spec.description}")
+    for row in rows:
+        print("\t".join(row))
     if not include_experimental:
         print("hint: add --experimental to list opt-in presets")
     return EXIT_OK
 
 
-def _build_env(*, repo_root: Path, spec: PresetSpec, args: argparse.Namespace) -> dict[str, str]:
-    env = dict(os.environ)
-    py_path = str((repo_root / "src").resolve())
-    existing = env.get("PYTHONPATH", "")
-    env["PYTHONPATH"] = f"{py_path}{os.pathsep}{existing}" if existing else py_path
-
-    for key, value in (spec.env_defaults or {}).items():
-        env.setdefault(str(key), str(value))
-
-    if args.input_path:
-        env["SS_INPUT_PATH"] = _resolve_input_path(str(args.input_path), repo_root=repo_root)
-    if args.camera_index is not None:
-        env["SS_CAMERA_INDEX"] = str(int(args.camera_index))
-    if args.device:
-        env["SS_YOLO_DEVICE"] = str(args.device)
-    if args.loop:
-        env["SS_INPUT_LOOP"] = str(args.loop)
-
-    return env
+def _build_env(*, repo_root: Path, spec: preset_ops.PresetSpec, args: argparse.Namespace) -> dict[str, str]:
+    return preset_ops.build_preset_env(
+        repo_root=repo_root,
+        spec=spec,
+        input_path=str(args.input_path),
+        camera_index=int(args.camera_index) if args.camera_index is not None else None,
+        device=str(args.device),
+        loop=str(args.loop),
+    )
 
 
 def _shell_cmd(cmd: list[str]) -> str:
-    return " ".join(shlex.quote(part) for part in cmd)
+    return preset_ops.shell_cmd(cmd)
 
 
 def _run_subprocess(*, cmd: list[str], cwd: Path, env: dict[str, str]) -> int:
-    proc = subprocess.run(cmd, cwd=str(cwd), env=env)
-    return int(proc.returncode)
+    return preset_ops.run_subprocess(cmd=cmd, cwd=cwd, env=env)
 
 
 def run(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     repo_root = _repo_root()
-    table = _preset_table(repo_root)
+    table = preset_ops.build_preset_table(repo_root)
 
     if bool(args.list):
         return _list_presets(table=table, include_experimental=bool(args.experimental))

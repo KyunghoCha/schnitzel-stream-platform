@@ -8,13 +8,9 @@ Start/stop/status management for per-stream v2 graph processes.
 from __future__ import annotations
 
 import argparse
-from collections.abc import Mapping
-import shlex
 import sys
 import tempfile
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
 # Add project root to path for imports.
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -22,6 +18,7 @@ PROJECT_ROOT = SCRIPT_DIR.parent
 sys.path.insert(0, str(SCRIPT_DIR))
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
+from schnitzel_stream.ops import fleet as fleet_ops
 from process_manager import is_process_running, start_process, stop_process
 
 
@@ -30,160 +27,33 @@ DEFAULT_GRAPH_TEMPLATE = str(PROJECT_ROOT / "configs" / "graphs" / "dev_stream_t
 DEFAULT_CONFIG = str(PROJECT_ROOT / "configs" / "fleet.yaml")
 
 
-@dataclass(frozen=True)
-class StreamSpec:
-    stream_id: str
-    input_type: str
-    input_cfg: dict[str, Any]
-
-
-_INPUT_PLUGIN_DEFAULTS: dict[str, str] = {
-    "rtsp": "schnitzel_stream.packs.vision.nodes:OpenCvRtspSource",
-    "file": "schnitzel_stream.packs.vision.nodes:OpenCvVideoFileSource",
-    "webcam": "schnitzel_stream.packs.vision.nodes:OpenCvWebcamSource",
-}
-
-
-def _as_mapping(raw: Any) -> dict[str, Any]:
-    # Intent:
-    # - OmegaConf returns DictConfig (Mapping), not a plain dict.
-    # - Keep parser robust for both stream(input) and legacy camera(source) keys.
-    return dict(raw) if isinstance(raw, Mapping) else {}
-
-
-def _as_list(raw: Any) -> list[Any]:
-    if raw is None or isinstance(raw, (str, bytes, Mapping)):
-        return []
-    try:
-        return list(raw)
-    except TypeError:
-        return []
+StreamSpec = fleet_ops.StreamSpec
 
 
 def load_stream_specs(config_path: Path) -> list[StreamSpec]:
-    """Load enabled stream specs from fleet config.
-
-    Supports both:
-    - new schema: `streams[].input`
-    - legacy schema: `cameras[].source`
-    """
-    try:
-        from omegaconf import OmegaConf
-    except ImportError:
-        print("Error: omegaconf is required. Run: pip install omegaconf", file=sys.stderr)
-        sys.exit(1)
-
+    """Load enabled stream specs from fleet config."""
     if not config_path.exists():
         print(f"Error: Config not found: {config_path}", file=sys.stderr)
         sys.exit(1)
 
-    data = OmegaConf.load(config_path)
-    raw_streams = _as_list(data.get("streams", []))
-    if not raw_streams:
-        # Intent: one-cycle compatibility bridge for prior camera/source inventory files.
-        raw_streams = _as_list(data.get("cameras", []))
-
-    specs: list[StreamSpec] = []
-    for raw in raw_streams:
-        item = _as_mapping(raw)
-        if not item or not bool(item.get("enabled", True)):
-            continue
-
-        stream_id = item.get("id") or item.get("stream_id") or item.get("camera_id")
-        if not stream_id:
-            continue
-
-        input_cfg = _as_mapping(item.get("input"))
-        if not input_cfg:
-            input_cfg = _as_mapping(item.get("source"))
-
-        input_type = str(input_cfg.get("type", "")).strip().lower() or "plugin"
-        specs.append(StreamSpec(stream_id=str(stream_id), input_type=input_type, input_cfg=input_cfg))
-
+    try:
+        specs = fleet_ops.load_stream_specs(config_path)
+    except ImportError:
+        print("Error: omegaconf is required. Run: pip install omegaconf", file=sys.stderr)
+        sys.exit(1)
     return specs
 
 
 def _resolve_stream_subset(specs: list[StreamSpec], raw_streams: str) -> list[StreamSpec]:
-    if not raw_streams:
-        return specs
-    requested = {x.strip() for x in raw_streams.split(",") if x.strip()}
-    return [spec for spec in specs if spec.stream_id in requested]
+    return fleet_ops.resolve_stream_subset(specs, raw_streams)
 
 
 def _resolve_input_plugin(spec: StreamSpec) -> str:
-    plugin = str(spec.input_cfg.get("plugin", "")).strip()
-    if plugin:
-        return plugin
-
-    if spec.input_type in _INPUT_PLUGIN_DEFAULTS:
-        return _INPUT_PLUGIN_DEFAULTS[spec.input_type]
-
-    raise ValueError(
-        f"unsupported input.type={spec.input_type} for stream={spec.stream_id}; "
-        "set input.plugin or use one of rtsp/file/webcam/plugin",
-    )
+    return fleet_ops.resolve_input_plugin(spec)
 
 
 def _stream_env(spec: StreamSpec) -> dict[str, str]:
-    plugin = _resolve_input_plugin(spec)
-
-    env = {
-        "SS_STREAM_ID": spec.stream_id,
-        "SS_INPUT_TYPE": spec.input_type,
-        "SS_INPUT_PLUGIN": plugin,
-        # Intent: keep one-cycle key compatibility for legacy graph templates/scripts.
-        "SS_CAMERA_ID": spec.stream_id,
-        "SS_SOURCE_TYPE": spec.input_type,
-        "SS_SOURCE_PLUGIN": plugin,
-    }
-
-    if spec.input_type == "rtsp":
-        url = str(spec.input_cfg.get("url", "")).strip()
-        if not url:
-            raise ValueError(f"stream={spec.stream_id} input.type=rtsp requires input.url")
-        env["SS_INPUT_URL"] = url
-        env["SS_SOURCE_URL"] = url
-
-    elif spec.input_type == "file":
-        path_raw = str(spec.input_cfg.get("path", "")).strip()
-        if not path_raw:
-            raise ValueError(f"stream={spec.stream_id} input.type=file requires input.path")
-        input_path = Path(path_raw)
-        if not input_path.is_absolute():
-            input_path = (PROJECT_ROOT / input_path).resolve()
-        env["SS_INPUT_PATH"] = str(input_path)
-        env["SS_SOURCE_PATH"] = str(input_path)
-
-    elif spec.input_type == "webcam":
-        index = int(spec.input_cfg.get("index", spec.input_cfg.get("camera_index", 0)))
-        if index < 0:
-            raise ValueError(f"stream={spec.stream_id} webcam index must be >= 0")
-        env["SS_INPUT_INDEX"] = str(index)
-        env["SS_CAMERA_INDEX"] = str(index)
-
-    elif spec.input_type == "plugin":
-        # Intent: keep plugin type open-ended; pass through common keys when present.
-        url = str(spec.input_cfg.get("url", "")).strip()
-        path_raw = str(spec.input_cfg.get("path", "")).strip()
-        index_raw = spec.input_cfg.get("index", spec.input_cfg.get("camera_index", None))
-
-        if url:
-            env["SS_INPUT_URL"] = url
-            env["SS_SOURCE_URL"] = url
-        if path_raw:
-            input_path = Path(path_raw)
-            if not input_path.is_absolute():
-                input_path = (PROJECT_ROOT / input_path).resolve()
-            env["SS_INPUT_PATH"] = str(input_path)
-            env["SS_SOURCE_PATH"] = str(input_path)
-        if index_raw is not None:
-            index = int(index_raw)
-            if index < 0:
-                raise ValueError(f"stream={spec.stream_id} input index must be >= 0")
-            env["SS_INPUT_INDEX"] = str(index)
-            env["SS_CAMERA_INDEX"] = str(index)
-
-    return env
+    return fleet_ops.build_stream_env(spec, project_root=PROJECT_ROOT)
 
 
 def cmd_start(args: argparse.Namespace) -> None:
@@ -207,39 +77,18 @@ def cmd_start(args: argparse.Namespace) -> None:
     print(f"graph_template={graph_template}")
     print(f"streams={','.join(spec.stream_id for spec in specs)}")
 
-    extra_args = shlex.split(args.extra_args, posix=not sys.platform.startswith("win")) if args.extra_args else []
-
-    for spec in specs:
-        pid_path = pid_dir / f"{spec.stream_id}.pid"
-        log_path = log_dir / f"{spec.stream_id}.log"
-
-        if pid_path.exists():
-            try:
-                pid = int(pid_path.read_text(encoding="utf-8").strip())
-                if is_process_running(pid):
-                    print(f"already running: {spec.stream_id} (pid {pid})")
-                    continue
-            except (ValueError, IOError):
-                pass
-
-        env = {
-            "PYTHONPATH": str(PROJECT_ROOT / "src"),
-            **_stream_env(spec),
-        }
-
-        cmd = [
-            sys.executable,
-            "-m",
-            "schnitzel_stream",
-            "--graph",
-            str(graph_template),
-            *extra_args,
-        ]
-
-        pid = start_process(cmd, log_path, pid_path, env)
-        print(f"started {spec.stream_id} pid={pid} input_type={spec.input_type} log={log_path}")
-
-    print("done")
+    lines = fleet_ops.start_streams(
+        specs=specs,
+        graph_template=graph_template,
+        log_dir=log_dir,
+        project_root=PROJECT_ROOT,
+        extra_args=fleet_ops.split_extra_args(str(args.extra_args)),
+        start_process_fn=start_process,
+        is_process_running_fn=is_process_running,
+        python_executable=sys.executable,
+    )
+    for line in lines:
+        print(line)
 
 
 def cmd_stop(args: argparse.Namespace) -> None:
@@ -251,17 +100,9 @@ def cmd_stop(args: argparse.Namespace) -> None:
         print(f"pid_dir not found: {pid_dir}")
         return
 
-    stopped = 0
-    for pid_file in pid_dir.glob("*.pid"):
-        stream_id = pid_file.stem
-        success, pid = stop_process(pid_file)
-        if success:
-            print(f"stopped {stream_id} pid={pid}")
-            stopped += 1
-        elif pid is not None:
-            print(f"stale pid for {stream_id} (pid {pid})")
-
-    print(f"stopped_count={stopped}")
+    _stopped, lines = fleet_ops.stop_streams(pid_dir=pid_dir, stop_process_fn=stop_process)
+    for line in lines:
+        print(line)
 
 
 def cmd_status(args: argparse.Namespace) -> None:
@@ -273,20 +114,9 @@ def cmd_status(args: argparse.Namespace) -> None:
         print(f"pid_dir not found: {pid_dir}")
         return
 
-    running = 0
-    for pid_file in pid_dir.glob("*.pid"):
-        stream_id = pid_file.stem
-        try:
-            pid = int(pid_file.read_text(encoding="utf-8").strip())
-            if is_process_running(pid):
-                print(f"running: {stream_id} (pid {pid})")
-                running += 1
-            else:
-                print(f"stopped: {stream_id} (stale pid {pid})")
-        except (ValueError, IOError):
-            print(f"invalid: {stream_id}")
-
-    print(f"running_count={running}")
+    _running, _total, lines = fleet_ops.status_streams(pid_dir=pid_dir, is_process_running_fn=is_process_running)
+    for line in lines:
+        print(line)
 
 
 def build_parser(
