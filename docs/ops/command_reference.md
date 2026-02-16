@@ -171,6 +171,10 @@ Plugin scaffold:
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
 ```
 
+Scaffold export options:
+- `--register-export` (default): update `packs/<pack>/nodes/__init__.py`
+- `--no-register-export`: skip export registration
+
 Multi-camera graph launcher:
 
 ```bash
@@ -381,6 +385,10 @@ python scripts/regression_check.py --max-events 5 --update-golden
 ```bash
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
 ```
+
+스캐폴드 export 옵션:
+- `--register-export` (기본): `packs/<pack>/nodes/__init__.py` 자동 갱신
+- `--no-register-export`: export 등록 생략
 
 멀티 카메라 그래프 런처:
 

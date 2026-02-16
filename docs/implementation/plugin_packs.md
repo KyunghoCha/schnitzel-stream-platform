@@ -32,6 +32,10 @@ Use the scaffold utility to bootstrap plugin code/test/graph files:
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
 ```
 
+Default behavior:
+- generated class is auto-registered in `src/schnitzel_stream/packs/<pack>/nodes/__init__.py`
+- use `--no-register-export` to skip auto registration
+
 Details: `docs/guides/plugin_authoring_guide.md`
 
 ## Operational Rule
@@ -72,6 +76,10 @@ When adding/changing plugins:
 ```bash
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
 ```
+
+기본 동작:
+- 생성 클래스는 `src/schnitzel_stream/packs/<pack>/nodes/__init__.py`에 자동 등록된다
+- 자동 등록을 끄려면 `--no-register-export`를 사용한다
 
 상세 가이드: `docs/guides/plugin_authoring_guide.md`
 

@@ -21,12 +21,15 @@ Optional flags:
 - `--module <module_name>`: override default module name derived from class name
 - `--input-kinds <k1,k2,...>`: set `INPUT_KINDS` for node/sink
 - `--output-kinds <k1,k2,...>`: set `OUTPUT_KINDS` for source/node
+- `--register-export` (default): register generated class in `packs/<pack>/nodes/__init__.py`
+- `--no-register-export`: skip export registration
 - `--force`: overwrite existing generated files
 
 ## Generated Files
 
 For `--pack sensor --kind node --name ThresholdNode`:
 - `src/schnitzel_stream/packs/sensor/nodes/threshold_node.py`
+- `src/schnitzel_stream/packs/sensor/nodes/__init__.py` (auto export registration)
 - `tests/unit/packs/sensor/nodes/test_threshold_node.py`
 - `configs/graphs/dev_sensor_threshold_node_v2.yaml`
 
@@ -36,6 +39,7 @@ For `--pack sensor --kind node --name ThresholdNode`:
 2. Add `Intent:` comments when behavior is deliberate/non-obvious.
 3. Replace scaffold placeholder logic before production use.
 4. Validate graph and run tests after implementation.
+5. Keep export registration idempotent (`__init__.py` should not accumulate duplicates).
 
 ## Verify
 
@@ -65,12 +69,15 @@ python scripts/scaffold_plugin.py \
 - `--module <module_name>`: 클래스명 기반 기본 모듈명을 직접 지정
 - `--input-kinds <k1,k2,...>`: node/sink의 `INPUT_KINDS` 지정
 - `--output-kinds <k1,k2,...>`: source/node의 `OUTPUT_KINDS` 지정
+- `--register-export` (기본): 생성 클래스를 `packs/<pack>/nodes/__init__.py`에 자동 등록
+- `--no-register-export`: 자동 export 등록 생략
 - `--force`: 기존 생성 파일 덮어쓰기
 
 ## 생성 파일
 
 예: `--pack sensor --kind node --name ThresholdNode`
 - `src/schnitzel_stream/packs/sensor/nodes/threshold_node.py`
+- `src/schnitzel_stream/packs/sensor/nodes/__init__.py` (자동 export 등록)
 - `tests/unit/packs/sensor/nodes/test_threshold_node.py`
 - `configs/graphs/dev_sensor_threshold_node_v2.yaml`
 
@@ -80,6 +87,7 @@ python scripts/scaffold_plugin.py \
 2. 의도적/비자명 동작에는 `Intent:` 주석을 남긴다.
 3. 스캐폴드의 placeholder 로직은 실제 구현으로 교체한다.
 4. 구현 후 그래프 검증과 테스트를 실행한다.
+5. export 등록은 idempotent하게 유지한다(`__init__.py` 중복 라인 금지).
 
 ## 검증
 
