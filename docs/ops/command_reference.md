@@ -68,12 +68,39 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_stream_template_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_camera_template_v2.yaml  # legacy template alias
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
 ```
+
+### Webcam YOLO + OpenCV Overlay
+
+Install model dependencies (one-time):
+
+```bash
+pip install -r requirements-model.txt
+pip install opencv-python
+```
+
+Run webcam detection with box overlay window:
+
+```bash
+python -m schnitzel_stream validate --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
+```
+
+Optional environment overrides:
+- `SS_CAMERA_INDEX` (default: `0`)
+- `SS_YOLO_MODEL_PATH` (default: `models/yolov8n.pt`)
+- `SS_YOLO_CONF` (default: `0.35`)
+- `SS_YOLO_IOU` (default: `0.45`)
+- `SS_YOLO_DEVICE` (examples: `cpu`, `0`)
+- `SS_WINDOW_NAME` (OpenCV window title)
+
+Exit with `q`, `Q`, or `ESC` in the OpenCV window.
 
 ### Demo Pack (Professor Showcase)
 
@@ -307,12 +334,39 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_stream_template_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_camera_template_v2.yaml  # legacy 템플릿 alias
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
 ```
+
+### 웹캠 YOLO + OpenCV 오버레이
+
+모델 의존성 설치(최초 1회):
+
+```bash
+pip install -r requirements-model.txt
+pip install opencv-python
+```
+
+웹캠 사람/객체 검출 + 박스 오버레이 창 실행:
+
+```bash
+python -m schnitzel_stream validate --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
+```
+
+선택 환경변수:
+- `SS_CAMERA_INDEX` (기본: `0`)
+- `SS_YOLO_MODEL_PATH` (기본: `models/yolov8n.pt`)
+- `SS_YOLO_CONF` (기본: `0.35`)
+- `SS_YOLO_IOU` (기본: `0.45`)
+- `SS_YOLO_DEVICE` (예: `cpu`, `0`)
+- `SS_WINDOW_NAME` (OpenCV 창 제목)
+
+OpenCV 창에서 `q`, `Q`, `ESC` 키로 종료할 수 있습니다.
 
 ### 데모 팩(교수님 시연)
 
