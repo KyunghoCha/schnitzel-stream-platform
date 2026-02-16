@@ -116,6 +116,12 @@ python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
 - Default report path: `outputs/reports/demo_pack_latest.json`
 - Manual fallback guide: `docs/guides/professor_showcase_guide.md`
 
+8. Render static report summary (no GUI required)
+
+```bash
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
+```
+
 ### Graph Spec (v2)
 
 - `plugin` format: `module:ClassName`
@@ -284,6 +290,12 @@ python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
 
 - 기본 리포트 경로: `outputs/reports/demo_pack_latest.json`
 - 수동 시연 fallback 가이드: `docs/guides/professor_showcase_guide.md`
+
+8. 정적 리포트 요약 생성(GUI 없이 확인)
+
+```bash
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
+```
 
 ### 그래프 스펙(v2)
 

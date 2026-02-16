@@ -45,6 +45,12 @@ Default report:
 - report schema: `schema_version=2`
 - failure fields (when failed): `failure_kind`, `failure_reason`
 
+Static summary rendering:
+
+```bash
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
+```
+
 Exit codes:
 - `0`: success
 - `1`: runtime failure (non-webcam)
@@ -155,6 +161,12 @@ python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
 - `outputs/reports/demo_pack_latest.json`
 - 리포트 스키마: `schema_version=2`
 - 실패 시 분류 필드: `failure_kind`, `failure_reason`
+
+정적 요약 렌더링:
+
+```bash
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
+```
 
 종료 코드:
 - `0`: 성공

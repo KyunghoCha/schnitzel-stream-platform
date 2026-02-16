@@ -94,6 +94,13 @@ Report fields:
 - `scenarios[*].failure_kind` (`validate`, `run`, `environment`)
 - `scenarios[*].failure_reason` (for example: `dependency_missing`, `webcam_runtime_failed`)
 
+Render static summary from demo report:
+
+```bash
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format html --out-dir outputs/reports
+```
+
 Manual showcase scenarios:
 
 ```bash
@@ -177,6 +184,12 @@ Process-graph validator:
 ```bash
 python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml
 python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml --report-json
+```
+
+Demo report renderer:
+
+```bash
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
 ```
 
 Runtime environment variables used per camera process:
@@ -292,6 +305,13 @@ python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
 - `scenarios[*].failure_kind` (`validate`, `run`, `environment`)
 - `scenarios[*].failure_reason` (예: `dependency_missing`, `webcam_runtime_failed`)
 
+데모 리포트 정적 요약 생성:
+
+```bash
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format html --out-dir outputs/reports
+```
+
 수동 시연 시나리오:
 
 ```bash
@@ -375,6 +395,12 @@ python scripts/multi_cam.py stop
 ```bash
 python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml
 python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml --report-json
+```
+
+데모 리포트 렌더러:
+
+```bash
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
 ```
 
 카메라별 런타임 환경변수:
