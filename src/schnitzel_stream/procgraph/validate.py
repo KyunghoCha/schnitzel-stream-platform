@@ -145,7 +145,10 @@ def validate_process_graph(
     """Validate process-graph spec and SQLite bridge contracts."""
 
     root = resolve_project_root()
-    spec = load_process_graph_spec(path)
+    try:
+        spec = load_process_graph_spec(path)
+    except Exception as exc:
+        raise ProcessGraphValidationError(f"process graph spec load failed: {path}: {exc}") from exc
     processes, channels, links = _validate_topology(spec)
 
     reg = registry or PluginRegistry()
@@ -200,4 +203,3 @@ def validate_process_graph(
         resolved_process_graphs=resolved_graph_paths,
         resolved_channel_paths=resolved_channel_paths,
     )
-
