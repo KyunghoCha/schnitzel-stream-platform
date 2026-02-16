@@ -49,6 +49,64 @@ def test_video_file_source_emits_frames_from_sample_mp4():
         src.close()
 
 
+def test_video_file_source_loops_after_eof_when_enabled(monkeypatch, tmp_path: Path):
+    sample = tmp_path / "loop.mp4"
+    sample.write_bytes(b"not-a-real-video")
+
+    frames = ["f0", "f1"]
+    opened = {"count": 0}
+
+    class _FakeCap:
+        def __init__(self, *_args, **_kwargs):
+            self._opened = True
+            self._i = 0
+            self.released = False
+
+        def isOpened(self):
+            return bool(self._opened)
+
+        def read(self):
+            if self._i >= len(frames):
+                return False, None
+            out = frames[self._i]
+            self._i += 1
+            return True, out
+
+        def get(self, _prop):
+            return float(self._i * 10.0)
+
+        def release(self):
+            self.released = True
+
+    class _FakeCv2:
+        CAP_PROP_POS_MSEC = 0
+
+        def VideoCapture(self, *_args, **_kwargs):
+            opened["count"] += 1
+            return _FakeCap()
+
+    monkeypatch.setattr(video_mod, "cv2", _FakeCv2())
+
+    src = OpenCvVideoFileSource(
+        config={
+            "path": str(sample),
+            "source_id": "loop_cam",
+            "loop": True,
+            "max_frames": 3,
+        }
+    )
+    try:
+        out = list(src.run())
+        assert len(out) == 3
+        assert [p.payload["frame_idx"] for p in out] == [0, 1, 2]
+        assert out[0].meta["idempotency_key"] == "frame:loop_cam:0"
+        assert out[2].meta["idempotency_key"] == "frame:loop_cam:2"
+        # EOF 이후 reopen 되었는지 확인.
+        assert opened["count"] >= 2
+    finally:
+        src.close()
+
+
 def test_every_nth_sampler_keeps_expected_frames():
     sampler = EveryNthFrameSamplerNode(config={"every_n": 2, "offset": 0})
     pkts = [
