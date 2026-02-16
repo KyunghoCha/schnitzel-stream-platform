@@ -102,8 +102,19 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
+```
+
+6-1. File YOLO overlay (loop + low-latency queue policy)
+
+```bash
+export SS_INPUT_PATH=data/samples/2048246-hd_1920_1080_24fps.mp4
+export SS_YOLO_MODEL_PATH=models/yolov8n.pt
+export SS_YOLO_DEVICE=cpu   # use 0 for GPU
+export SS_INPUT_LOOP=true
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
 ```
 
 7. One-command demo pack (showcase profiles)
@@ -130,8 +141,6 @@ python scripts/stream_fleet.py status
 python scripts/stream_monitor.py --once --json
 python scripts/stream_fleet.py stop
 ```
-
-- Legacy alias: `python scripts/multi_cam.py ...` (compat bridge)
 
 ### Graph Spec (v2)
 
@@ -288,8 +297,19 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
+```
+
+6-1. 파일 YOLO 오버레이(반복 재생 + 저지연 큐 정책)
+
+```bash
+export SS_INPUT_PATH=data/samples/2048246-hd_1920_1080_24fps.mp4
+export SS_YOLO_MODEL_PATH=models/yolov8n.pt
+export SS_YOLO_DEVICE=cpu   # GPU는 0 사용
+export SS_INPUT_LOOP=true
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
 ```
 
 7. 원커맨드 데모 팩(쇼케이스 프로필)
@@ -316,8 +336,6 @@ python scripts/stream_fleet.py status
 python scripts/stream_monitor.py --once --json
 python scripts/stream_fleet.py stop
 ```
-
-- 레거시 alias: `python scripts/multi_cam.py ...` (호환 브리지)
 
 ### 그래프 스펙(v2)
 

@@ -69,8 +69,8 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_stream_template_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_camera_template_v2.yaml  # legacy template alias
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
@@ -101,6 +101,22 @@ Optional environment overrides:
 - `SS_WINDOW_NAME` (OpenCV window title)
 
 Exit with `q`, `Q`, or `ESC` in the OpenCV window.
+
+### File YOLO + OpenCV Overlay (Loop + Low-Latency)
+
+```bash
+export SS_INPUT_PATH=data/samples/2048246-hd_1920_1080_24fps.mp4
+export SS_YOLO_MODEL_PATH=models/yolov8n.pt
+export SS_YOLO_DEVICE=cpu   # use 0 for GPU
+export SS_INPUT_LOOP=true
+
+python -m schnitzel_stream validate --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
+```
+
+Notes:
+- `dev_video_file_yolo_overlay_v2.yaml` sets `inbox_max=1` + `drop_oldest` on YOLO/display nodes.
+- This keeps display latency low when inference is slower than source FPS.
 
 ### Demo Pack (Professor Showcase)
 
@@ -218,14 +234,6 @@ python scripts/stream_monitor.py --log-dir /tmp/schnitzel_stream_fleet_run
 python scripts/stream_monitor.py --once --json
 ```
 
-Legacy alias (one-cycle compatibility bridge):
-
-```bash
-python scripts/multi_cam.py start --graph-template configs/graphs/dev_camera_template_v2.yaml
-python scripts/multi_cam.py status
-python scripts/multi_cam.py stop
-```
-
 Process-graph validator:
 
 ```bash
@@ -335,8 +343,8 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_stream_template_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_camera_template_v2.yaml  # legacy 템플릿 alias
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
@@ -367,6 +375,22 @@ python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yam
 - `SS_WINDOW_NAME` (OpenCV 창 제목)
 
 OpenCV 창에서 `q`, `Q`, `ESC` 키로 종료할 수 있습니다.
+
+### 파일 YOLO + OpenCV 오버레이 (반복 재생 + 저지연)
+
+```bash
+export SS_INPUT_PATH=data/samples/2048246-hd_1920_1080_24fps.mp4
+export SS_YOLO_MODEL_PATH=models/yolov8n.pt
+export SS_YOLO_DEVICE=cpu   # GPU는 0 사용
+export SS_INPUT_LOOP=true
+
+python -m schnitzel_stream validate --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
+```
+
+참고:
+- `dev_video_file_yolo_overlay_v2.yaml`은 YOLO/display 노드에 `inbox_max=1` + `drop_oldest`를 설정한다.
+- 추론이 입력 FPS보다 느릴 때 화면 지연 누적을 줄이기 위한 정책이다.
 
 ### 데모 팩(교수님 시연)
 
@@ -482,14 +506,6 @@ python scripts/stream_fleet.py stop
 ```bash
 python scripts/stream_monitor.py --log-dir /tmp/schnitzel_stream_fleet_run
 python scripts/stream_monitor.py --once --json
-```
-
-레거시 alias(1사이클 호환 브리지):
-
-```bash
-python scripts/multi_cam.py start --graph-template configs/graphs/dev_camera_template_v2.yaml
-python scripts/multi_cam.py status
-python scripts/multi_cam.py stop
 ```
 
 프로세스 그래프 검증기:

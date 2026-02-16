@@ -9,7 +9,6 @@ Last updated: 2026-02-16
 - CLI and graph selection: `python -m schnitzel_stream --graph ...`
 - Runtime configs: `configs/default.yaml`, `configs/graphs/*.yaml`
 - Utility tooling: `scripts/check_rtsp.py`, `scripts/regression_check.py`, `scripts/stream_fleet.py`, `scripts/stream_monitor.py`
-- Legacy alias: `scripts/multi_cam.py` (compat bridge to `stream_fleet`)
 - Local HTTP sink target: `python -m schnitzel_stream.tools.mock_backend`
 
 ## Packaging Lanes
@@ -31,7 +30,6 @@ Last updated: 2026-02-16
 - CLI/그래프 선택: `python -m schnitzel_stream --graph ...`
 - 런타임 설정: `configs/default.yaml`, `configs/graphs/*.yaml`
 - 유틸리티 도구: `scripts/check_rtsp.py`, `scripts/regression_check.py`, `scripts/stream_fleet.py`, `scripts/stream_monitor.py`
-- 레거시 alias: `scripts/multi_cam.py` (`stream_fleet` 호환 브리지)
 - 로컬 HTTP 싱크 타겟: `python -m schnitzel_stream.tools.mock_backend`
 
 ## 패키징 레인
