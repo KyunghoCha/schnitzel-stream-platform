@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 13 execution completion track opened (E1~E6, research-excluded)**
+Current position: **Phase 13 execution completion track complete (E1~E6 done, research gated)**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -212,7 +212,7 @@ Intent:
 - `P12.6` Add unit tests for spec/validator/script contracts. `DONE`
 - `P12.7` Record expansion hook for future `N:N` channel semantics (validator-rule relaxation, no schema break). `DONE`
 
-#### Phase 13: Execution Completion Track (E1~E6, Research-Excluded) (NOW)
+#### Phase 13: Execution Completion Track (E1~E6, Research-Excluded) (DONE)
 
 Intent:
 - Complete all implementation work that does not require new research decisions.
@@ -220,13 +220,13 @@ Intent:
 - Finish with reproducible ops/demo quality and explicit ownership boundaries.
 
 - `P13.1` Switch SSOT to execution completion track and open `E1~E6` ownership statuses. `DONE`
-- `P13.2` E1: environment/dependency recovery automation (`env_doctor`) + docs. `NOW`
-- `P13.3` E2: CI gate hardening (`env/docs/tests/procgraph/demo`). `NEXT`
-- `P13.4` E3: demo-pack report schema/failure taxonomy hardening. `NEXT`
-- `P13.5` E4: static demo report visualizer (Markdown/HTML). `NEXT`
-- `P13.6` E5: scaffold auto-export registration and DX polish. `NEXT`
-- `P13.7` E6: durable queue reliability regression expansion. `NEXT`
-- `P13.8` Final docs/mapping/status sync for release readiness. `NEXT`
+- `P13.2` E1: environment/dependency recovery automation (`env_doctor`) + docs. `DONE`
+- `P13.3` E2: CI gate hardening (`env/docs/tests/procgraph/demo`). `DONE`
+- `P13.4` E3: demo-pack report schema/failure taxonomy hardening. `DONE`
+- `P13.5` E4: static demo report visualizer (Markdown/HTML). `DONE`
+- `P13.6` E5: scaffold auto-export registration and DX polish. `DONE`
+- `P13.7` E6: durable queue reliability regression expansion. `DONE`
+- `P13.8` Final docs/mapping/status sync for release readiness. `DONE`
 
 #### Research Track (Not On Critical Path)
 
@@ -271,7 +271,7 @@ Intent:
 ### 현재 상태 한눈에 보기
 
 - current step id: `P13.1`
-- 전체 위치: **P0~P12 완료 + P13 실행 완결 트랙 시작(E1~E6, 연구 제외)**
+- 전체 위치: **P0~P13 실행 완결 트랙 완료(E1~E6), 연구 트랙 분리 유지**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -296,13 +296,13 @@ Intent:
 | Phase 10 | DONE | 품질 게이트/CLI 정리/플러그인 DX/데이터 프로파일 하드닝 |
 | Phase 11 | DONE | 교수님 시연용 데모 패키지/재현성 고정 |
 | Phase 12 | DONE | 프로세스 그래프 스펙/검증기(Validator-First, SQLite 1:1) 도입 완료 |
-| Phase 13 | NOW | 연구 제외 실행 완결 트랙(E1~E6) 진행 시작 |
+| Phase 13 | DONE | 연구 제외 실행 완결 트랙(E1~E6) 완료 |
 
 ### 현재 우선순위
 
-1. `P13` 실행 완결 트랙의 E1(환경/의존성 복구) 완료
-2. E2(CI 게이트 고정)로 pre-merge 실패 원인 분리 강화
-3. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH` 상태로 분리 유지
+1. P13 산출물 유지보수(환경 진단/시연 리포트/CI 게이트) 안정화
+2. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH` 상태로 분리 유지
+3. 연구 결정이 확정된 항목만 실행 단계(`P14+`)로 승격
 
 ### 레거시 관련 기준
 

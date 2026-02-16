@@ -25,12 +25,12 @@ Current step id: `P13.1`
 
 | Item | Status | Notes |
 |---|---|---|
-| `E1` | `READY` | environment/dependency recovery automation |
-| `E2` | `READY` | CI gate hardening for docs/tests/graph/demo |
-| `E3` | `READY` | demo-pack report/failure taxonomy hardening |
-| `E4` | `READY` | static report visualization (Markdown/HTML) |
-| `E5` | `READY` | plugin scaffold DX/auto-export improvements |
-| `E6` | `READY` | durable queue reliability regression expansion |
+| `E1` | `DONE` | `env_doctor` added and wired into docs/CI path |
+| `E2` | `DONE` | no-docker CI gate expanded (`env/docs/tests/procgraph/demo`) |
+| `E3` | `DONE` | `demo_pack` schema/failure taxonomy hardened |
+| `E4` | `DONE` | static report renderer (`demo_report_view`) added |
+| `E5` | `DONE` | scaffold auto-export registration with opt-out shipped |
+| `E6` | `DONE` | durable queue boundary/restart regression cases expanded |
 
 ### Research Track Status (`R-*`)
 
@@ -254,7 +254,7 @@ Current step id: `P13.1`
 ### Assumptions and Defaults
 
 - Base state is `P12` completion with in-proc runtime unchanged.
-- P13 execution-completion cycle is active for implementation-only items (`E1`~`E6`).
+- P13 execution-completion cycle is complete for implementation-only items (`E1`~`E6`).
 - Calendar dates are not used as hard gates; gate satisfaction order is primary.
 - Full GUI stack is out-of-scope before research gates; static visualization is preferred first.
 - No gate-blocked implementation starts before required research deliverables are accepted.
@@ -286,12 +286,12 @@ Current step id: `P13.1`
 
 | 항목 | 상태 | 메모 |
 |---|---|---|
-| `E1` | `READY` | 환경/의존성 복구 자동화 |
-| `E2` | `READY` | 문서/테스트/그래프/데모 CI 게이트 고정 |
-| `E3` | `READY` | demo-pack 리포트/실패 분류 하드닝 |
-| `E4` | `READY` | 정적 리포트 시각화(Markdown/HTML) |
-| `E5` | `READY` | 플러그인 scaffold DX/자동 export 보강 |
-| `E6` | `READY` | durable queue 신뢰성 회귀 확장 |
+| `E1` | `DONE` | `env_doctor` 추가 및 문서/CI 경로 연동 완료 |
+| `E2` | `DONE` | no-docker CI 게이트(`env/docs/tests/procgraph/demo`) 고정 |
+| `E3` | `DONE` | `demo_pack` 스키마/실패 분류 하드닝 완료 |
+| `E4` | `DONE` | 정적 리포트 렌더러(`demo_report_view`) 추가 완료 |
+| `E5` | `DONE` | scaffold 자동 export 등록 + opt-out 적용 완료 |
+| `E6` | `DONE` | durable queue 경계/재시작 회귀 케이스 확장 완료 |
 
 ### 연구 트랙 상태 (`R-*`)
 
@@ -515,7 +515,7 @@ Current step id: `P13.1`
 ### 가정/기본값
 
 - 기준 상태는 `P12` 완료, in-proc 코어 런타임 유지.
-- P13 실행 완결 사이클은 연구 제외 구현 항목(`E1`~`E6`)에 집중한다.
+- P13 실행 완결 사이클은 연구 제외 구현 항목(`E1`~`E6`) 완료 상태다.
 - 날짜 고정보다 게이트 충족 순서를 우선한다.
 - 연구 게이트 전에는 풀 GUI 대신 정적 시각화를 우선한다.
 - 게이트에 막힌 구현은 선행 연구 산출물 승인 전 착수하지 않는다.

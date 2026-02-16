@@ -55,6 +55,8 @@ Runtime baseline:
 - CLI: `src/schnitzel_stream/cli/__main__.py`
 - Plugins: `src/schnitzel_stream/plugins/registry.py`
 - Pack nodes: `src/schnitzel_stream/packs/`
+- Environment diagnostics: `scripts/env_doctor.py`
+- Showcase report renderer: `scripts/demo_report_view.py`
 
 ---
 
@@ -111,3 +113,5 @@ Runtime baseline:
 - CLI: `src/schnitzel_stream/cli/__main__.py`
 - 플러그인: `src/schnitzel_stream/plugins/registry.py`
 - 팩 노드: `src/schnitzel_stream/packs/`
+- 환경 진단: `scripts/env_doctor.py`
+- 쇼케이스 리포트 렌더러: `scripts/demo_report_view.py`

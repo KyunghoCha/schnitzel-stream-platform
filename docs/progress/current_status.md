@@ -10,7 +10,7 @@ Last updated: 2026-02-16
 - P10 hardening track (`P10.1`~`P10.5`) completed
 - P11 demo track (`P11.1`~`P11.6`) completed
 - P12 foundation track completed (`P12.1`~`P12.7`: validator-first process graph scope)
-- P13 execution completion track opened (`P13.1`: E1~E6 implementation-only lane)
+- P13 execution completion track completed (`P13.1`~`P13.8`: E1~E6 implementation-only lane done)
 - Owner split and research-gate contract: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 
 For detailed status, always refer to:
@@ -25,7 +25,7 @@ For detailed status, always refer to:
 - P10 하드닝 트랙(`P10.1`~`P10.5`) 완료
 - P11 데모 트랙(`P11.1`~`P11.6`) 완료
 - P12 foundation 트랙 완료(`P12.1`~`P12.7`: validator-first 프로세스 그래프 범위)
-- P13 실행 완결 트랙 시작(`P13.1`: 연구 제외 E1~E6 구현 레인)
+- P13 실행 완결 트랙 완료(`P13.1`~`P13.8`: 연구 제외 E1~E6 구현 레인 완료)
 - 소유권 분리/연구 게이트 계약: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 
 상세 상태는 아래를 기준으로 본다:
