@@ -10,11 +10,12 @@ Execution SSOT:
 - `docs/roadmap/execution_roadmap.md`
 
 Current status:
-- Current step id: `P13.1` (execution completion track)
+- Current step id: `P14.1` (universal UX/TUI transition track)
 - Core platform phases (`P0`~`P10`) are complete on `main`
 - Demo packaging phase (`P11`) is complete on `main`
 - Process-graph foundation phase (`P12`) is complete (`validator-first`, SQLite bridge)
 - Execution completion phase (`P13`) is completed for implementation-only items (`E1`~`E6`)
+- Universal UX/TUI transition phase (`P14`) is active (stream-first operator surfaces)
 - Legacy runtime/docs were removed from the working tree
 - Historical legacy state can be inspected via tag `pre-legacy-purge-20260216`
 
@@ -46,11 +47,12 @@ Context budget rule:
 - `docs/roadmap/execution_roadmap.md`
 
 현재 상태:
-- 현재 step id: `P13.1` (실행 완결 트랙)
+- 현재 step id: `P14.1` (범용 UX/TUI 전환 트랙)
 - 코어 플랫폼 단계(`P0`~`P10`)는 `main` 기준 완료
 - 데모 패키징 단계(`P11`) 완료
 - 프로세스 그래프 foundation 단계(`P12`) 완료(`validator-first`, SQLite 브리지)
 - 실행 완결 단계(`P13`) 완료(`E1`~`E6`, 연구 제외 구현 레인)
+- 범용 UX/TUI 전환 단계(`P14`) 진행 중(stream 중심 운영 표면)
 - 레거시 런타임/문서는 워킹 트리에서 제거됨
 - 과거 레거시 상태는 태그 `pre-legacy-purge-20260216`에서 확인
 

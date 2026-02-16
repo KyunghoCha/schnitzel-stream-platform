@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id: `P13.1`
+Current step id: `P14.1`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 13 execution completion track complete (E1~E6 done, research gated)**
+Current position: **Phase 14 universal UX/TUI transition track in progress**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -228,6 +228,19 @@ Intent:
 - `P13.7` E6: durable queue reliability regression expansion. `DONE`
 - `P13.8` Final docs/mapping/status sync for release readiness. `DONE`
 
+#### Phase 14: Universal UX/TUI Transition (NOW)
+
+Intent:
+- De-emphasize camera-centric command surfaces and present a universal stream-ops UX.
+- Keep runtime core semantics unchanged while improving operator observability.
+- Deliver a read-only Stream TUI first, then leave full GUI/editor work in backlog.
+
+- `P14.1` Switch SSOT to universal UX/TUI transition track and set current step id. `NOW`
+- `P14.2` Add `stream_fleet` generic runner and fleet config schema. `NEXT`
+- `P14.3` Add `stream_monitor` read-only TUI (log+pid based, stdlib only). `NEXT`
+- `P14.4` Keep `multi_cam` as legacy alias and shift docs/commands to stream naming. `NEXT`
+- `P14.5` Add tests and CI coverage for stream fleet/monitor compatibility. `NEXT`
+
 #### Research Track (Not On Critical Path)
 
 Intent:
@@ -270,8 +283,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P13.1`
-- 전체 위치: **P0~P13 실행 완결 트랙 완료(E1~E6), 연구 트랙 분리 유지**
+- current step id: `P14.1`
+- 전체 위치: **P14 범용 UX/TUI 전환 트랙 진행 중(코어 의미론 유지, 운영 UX 강화)**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -297,12 +310,13 @@ Intent:
 | Phase 11 | DONE | 교수님 시연용 데모 패키지/재현성 고정 |
 | Phase 12 | DONE | 프로세스 그래프 스펙/검증기(Validator-First, SQLite 1:1) 도입 완료 |
 | Phase 13 | DONE | 연구 제외 실행 완결 트랙(E1~E6) 완료 |
+| Phase 14 | NOW | 영상/레거시 뉘앙스 축소, 범용 stream fleet/monitor UX 전환 |
 
 ### 현재 우선순위
 
-1. P13 산출물 유지보수(환경 진단/시연 리포트/CI 게이트) 안정화
-2. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH` 상태로 분리 유지
-3. 연구 결정이 확정된 항목만 실행 단계(`P14+`)로 승격
+1. `stream_fleet`/`stream_monitor`를 중심으로 범용 운영 UX 표면 구축
+2. `multi_cam`는 호환 alias로 유지하고 문서/명령 주축을 stream naming으로 전환
+3. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지
 
 ### 레거시 관련 기준
 
