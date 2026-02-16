@@ -14,19 +14,20 @@ Runtime baseline:
 ## Start Here
 
 1. `docs/roadmap/execution_roadmap.md`
-2. `docs/roadmap/strategic_roadmap.md`
-3. `docs/roadmap/future_backlog.md`
-4. `docs/reference/document_inventory.md`
-5. `docs/reference/doc_code_mapping.md`
-6. `docs/progress/README.md`
-7. `docs/progress/current_status.md`
-8. `docs/contracts/stream_packet.md`
-9. `docs/contracts/observability.md`
-10. `docs/design/architecture_2.0.md`
-11. `docs/ops/command_reference.md`
-12. `docs/guides/plugin_authoring_guide.md`
-13. `docs/guides/process_graph_foundation_guide.md`
-14. `docs/guides/professor_showcase_guide.md`
+2. `docs/roadmap/owner_split_playbook.md`
+3. `docs/roadmap/strategic_roadmap.md`
+4. `docs/roadmap/future_backlog.md`
+5. `docs/reference/document_inventory.md`
+6. `docs/reference/doc_code_mapping.md`
+7. `docs/progress/README.md`
+8. `docs/progress/current_status.md`
+9. `docs/contracts/stream_packet.md`
+10. `docs/contracts/observability.md`
+11. `docs/design/architecture_2.0.md`
+12. `docs/ops/command_reference.md`
+13. `docs/guides/plugin_authoring_guide.md`
+14. `docs/guides/process_graph_foundation_guide.md`
+15. `docs/guides/professor_showcase_guide.md`
 
 ## Active Folders
 
@@ -69,19 +70,20 @@ Runtime baseline:
 ## 시작 순서
 
 1. `docs/roadmap/execution_roadmap.md`
-2. `docs/roadmap/strategic_roadmap.md`
-3. `docs/roadmap/future_backlog.md`
-4. `docs/reference/document_inventory.md`
-5. `docs/reference/doc_code_mapping.md`
-6. `docs/progress/README.md`
-7. `docs/progress/current_status.md`
-8. `docs/contracts/stream_packet.md`
-9. `docs/contracts/observability.md`
-10. `docs/design/architecture_2.0.md`
-11. `docs/ops/command_reference.md`
-12. `docs/guides/plugin_authoring_guide.md`
-13. `docs/guides/process_graph_foundation_guide.md`
-14. `docs/guides/professor_showcase_guide.md`
+2. `docs/roadmap/owner_split_playbook.md`
+3. `docs/roadmap/strategic_roadmap.md`
+4. `docs/roadmap/future_backlog.md`
+5. `docs/reference/document_inventory.md`
+6. `docs/reference/doc_code_mapping.md`
+7. `docs/progress/README.md`
+8. `docs/progress/current_status.md`
+9. `docs/contracts/stream_packet.md`
+10. `docs/contracts/observability.md`
+11. `docs/design/architecture_2.0.md`
+12. `docs/ops/command_reference.md`
+13. `docs/guides/plugin_authoring_guide.md`
+14. `docs/guides/process_graph_foundation_guide.md`
+15. `docs/guides/professor_showcase_guide.md`
 
 ## 활성 폴더
 
