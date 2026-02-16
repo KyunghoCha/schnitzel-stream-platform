@@ -27,6 +27,12 @@ Once an item gets schedule/owner/DoD, move it into `docs/roadmap/execution_roadm
 | B6 | Plugin SDK | Plugin authoring is possible but onboarding cost is non-trivial. | Templates, validation scaffolds, and compatibility test kit. |
 | B7 | Security/Governance | Mixed edge environments need stricter trust boundaries. | Plugin signing policy, secret handling conventions, audit hooks. |
 
+## Foundation Hook (Post-P12)
+
+- `P12` foundation keeps process-graph schema generic (`links[]`) while enforcing strict `1:1` channel cardinality in validator rules.
+- Planned expansion path (candidate for `P13`): relax validator cardinality to support `N:N` channels without breaking spec format.
+- Open design constraint: define ack ownership and replay dedup semantics before enabling multi-producer or multi-consumer channels.
+
 ## Promotion Criteria (Backlog -> Execution)
 
 Promote only when all conditions are met:
@@ -61,6 +67,12 @@ Promote only when all conditions are met:
 | B5 | 사용성 계층 | 그래프 작성과 실행 경험이 CLI 중심이라 진입 장벽이 있다. | 가이드형 CLI 프로필, 경량 그래프 편집 도구 검토 |
 | B6 | 플러그인 SDK | 플러그인 작성 자체는 가능하지만 초기 진입 비용이 높다. | 템플릿, 검증 스캐폴딩, 호환성 테스트 키트 제공 |
 | B7 | 보안/거버넌스 | 이기종 엣지 환경에서 신뢰 경계와 감사 체계가 약하다. | 플러그인 서명 정책, 시크릿 규약, 감사 훅 정리 |
+
+## Foundation 훅 (P12 이후)
+
+- `P12` foundation은 process-graph 스키마를 일반형(`links[]`)으로 유지하고, validator 규칙에서만 strict `1:1` 채널 cardinality를 강제한다.
+- `P13` 후보 확장 경로: 스펙 포맷을 깨지 않고 validator cardinality 규칙을 완화해 `N:N` 채널을 지원한다.
+- 선결 과제: 멀티 producer/consumer 채널에서 ack ownership과 replay dedup 의미론을 먼저 고정해야 한다.
 
 ## 승격 기준 (Backlog -> Execution)
 

@@ -54,7 +54,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 11 demo packaging complete, Phase 12 process-graph foundation started**
+Current position: **Phase 12 process-graph foundation complete (validator-first, SQLite 1:1)**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -196,20 +196,20 @@ Intent:
 - `P11.5` Add demo-pack tests + CI smoke integration (`--profile ci`). `DONE` (032752d, 1f76708)
 - `P11.6` Sync docs mapping/inventory/status for showcase assets. `DONE`
 
-#### Phase 12: Process Graph Foundation (Validator-First) (NOW)
+#### Phase 12: Process Graph Foundation (Validator-First) (DONE)
 
 Intent:
 - Keep runtime core unchanged (in-proc scheduler remains the execution baseline).
 - Productize process-graph **specification and validation** before introducing orchestration/runtime automation.
 - Pin first bridge to SQLite durable queue with strict semantics.
 
-- `P12.1` Switch SSOT step and define process-graph foundation scope. `NOW`
-- `P12.2` Add process-graph model/spec loader (`version: 1`). `NEXT`
-- `P12.3` Add process-graph validator with SQLite bridge contracts (strict `1 producer + 1 consumer`). `NEXT`
-- `P12.4` Add standalone validator command (`scripts/proc_graph_validate.py`) + exit-code contract. `NEXT`
-- `P12.5` Add sample process-graph spec + guide/ops docs sync. `NEXT`
-- `P12.6` Add unit tests for spec/validator/script contracts. `NEXT`
-- `P12.7` Record expansion hook for future `N:N` channel semantics (validator-rule relaxation, no schema break). `NEXT`
+- `P12.1` Switch SSOT step and define process-graph foundation scope. `DONE`
+- `P12.2` Add process-graph model/spec loader (`version: 1`). `DONE`
+- `P12.3` Add process-graph validator with SQLite bridge contracts (strict `1 producer + 1 consumer`). `DONE`
+- `P12.4` Add standalone validator command (`scripts/proc_graph_validate.py`) + exit-code contract. `DONE`
+- `P12.5` Add sample process-graph spec + guide/ops docs sync. `DONE`
+- `P12.6` Add unit tests for spec/validator/script contracts. `DONE`
+- `P12.7` Record expansion hook for future `N:N` channel semantics (validator-rule relaxation, no schema break). `DONE`
 
 #### Research Track (Not On Critical Path)
 
@@ -252,7 +252,7 @@ Intent:
 ### 현재 상태 한눈에 보기
 
 - current step id: `P12.1`
-- 전체 위치: **P0~P11 핵심 항목 완료, P12 프로세스 그래프 foundation 트랙 시작**
+- 전체 위치: **P0~P12 핵심 항목 완료, 프로세스 그래프 foundation(validator-first) 반영 완료**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -276,11 +276,11 @@ Intent:
 | Phase 9 | DONE | 패키징/릴리즈 규율 및 엣지 운영 규약 정리 |
 | Phase 10 | DONE | 품질 게이트/CLI 정리/플러그인 DX/데이터 프로파일 하드닝 |
 | Phase 11 | DONE | 교수님 시연용 데모 패키지/재현성 고정 |
-| Phase 12 | NOW | 프로세스 그래프 스펙/검증기(Validator-First, SQLite 1:1) 도입 |
+| Phase 12 | DONE | 프로세스 그래프 스펙/검증기(Validator-First, SQLite 1:1) 도입 완료 |
 
 ### 현재 우선순위
 
-1. `P12.1`~`P12.7`: 프로세스 그래프 foundation 스펙/검증/문서/테스트 완료
+1. `P12` 후속: `N:N` 채널 cardinality 확장(P13 후보)과 ack ownership 규칙 정립
 2. 연구 트랙(`R1~R3`)은 제품 트랙과 분리 유지
 3. `P3.3`(optional)은 foundation 완료 이후 재평가
 

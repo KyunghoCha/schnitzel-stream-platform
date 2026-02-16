@@ -18,9 +18,11 @@ Intent:
 - Platform core: `src/schnitzel_stream/`
   - CLI: `src/schnitzel_stream/cli/__main__.py`
   - Graph spec/validation: `src/schnitzel_stream/graph/`
+  - Process-graph foundation spec/validation: `src/schnitzel_stream/procgraph/`
   - Runtime scheduler: `src/schnitzel_stream/runtime/`
   - Plugin policy/registry: `src/schnitzel_stream/plugins/registry.py`
   - Contracts: `src/schnitzel_stream/packet.py`, `src/schnitzel_stream/node.py`
+- Process-graph examples: `configs/process_graphs/`
 - Plugin packs: `src/schnitzel_stream/packs/`
   - Example: vision nodes/policy/event builders
 - Historical docs are not kept in the working tree.
@@ -34,6 +36,7 @@ Intent:
 - Validation:
   - topology checks (strict DAG by default)
   - static compatibility checks (kind/transport portability)
+  - process-graph foundation checks (sqlite bridge contracts, strict 1:1 channel cardinality)
 
 ### Policy & Safety
 
@@ -46,6 +49,7 @@ Intent:
 
 - Cycle-capable runtime semantics (`R1`) and safe guardrails
 - Cross-process/distributed transport boundary design
+- Process-graph `N:N` channel semantics and ack ownership policy
 - Control-plane integration scope (`P3.3`, optional)
 
 ---
@@ -66,9 +70,11 @@ Intent:
 - 플랫폼 코어: `src/schnitzel_stream/`
   - CLI: `src/schnitzel_stream/cli/__main__.py`
   - 그래프 스펙/검증: `src/schnitzel_stream/graph/`
+  - 프로세스 그래프 foundation 스펙/검증: `src/schnitzel_stream/procgraph/`
   - 런타임 스케줄러: `src/schnitzel_stream/runtime/`
   - 플러그인 정책/레지스트리: `src/schnitzel_stream/plugins/registry.py`
   - 계약: `src/schnitzel_stream/packet.py`, `src/schnitzel_stream/node.py`
+- 프로세스 그래프 예시: `configs/process_graphs/`
 - 플러그인 팩: `src/schnitzel_stream/packs/`
   - 예: vision 노드/정책/이벤트 빌더
 - 참고용 역사 문서는 워킹 트리에 두지 않는다.
@@ -82,6 +88,7 @@ Intent:
 - 검증:
   - 토폴로지 검증(기본 strict DAG)
   - 정적 호환성 검증(kind/transport portability)
+  - 프로세스 그래프 foundation 검증(sqlite 브리지 계약, strict 1:1 채널 cardinality)
 
 ### 정책 & 안전
 
@@ -94,4 +101,5 @@ Intent:
 
 - 루프 가능 런타임 의미론(`R1`)과 안전 가드레일
 - 프로세스/분산 경계에서의 transport 설계
+- 프로세스 그래프 `N:N` 채널 의미론과 ack ownership 정책
 - 컨트롤 플레인 통합 범위(`P3.3`, optional)

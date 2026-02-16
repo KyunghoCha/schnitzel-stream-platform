@@ -100,6 +100,18 @@ python -m schnitzel_stream validate --graph configs/graphs/showcase_webcam_v2.ya
 python -m schnitzel_stream --graph configs/graphs/showcase_webcam_v2.yaml --max-events 50
 ```
 
+### Process Graph Foundation Validation
+
+```bash
+python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml
+python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml --report-json
+```
+
+Exit codes:
+- `0`: success
+- `2`: spec/compat validation failure
+- `1`: runtime/general failure
+
 ### Mock HTTP Backend (local sink test)
 
 ```bash
@@ -138,6 +150,13 @@ Multi-camera graph launcher:
 python scripts/multi_cam.py start --graph-template configs/graphs/dev_camera_template_v2.yaml
 python scripts/multi_cam.py status
 python scripts/multi_cam.py stop
+```
+
+Process-graph validator:
+
+```bash
+python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml
+python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml --report-json
 ```
 
 Runtime environment variables used per camera process:
@@ -259,6 +278,18 @@ python -m schnitzel_stream validate --graph configs/graphs/showcase_webcam_v2.ya
 python -m schnitzel_stream --graph configs/graphs/showcase_webcam_v2.yaml --max-events 50
 ```
 
+### 프로세스 그래프 Foundation 검증
+
+```bash
+python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml
+python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml --report-json
+```
+
+종료 코드:
+- `0`: 성공
+- `2`: 스펙/호환성 검증 실패
+- `1`: 런타임/일반 오류
+
 ### Mock HTTP 백엔드(로컬 싱크 테스트)
 
 ```bash
@@ -297,6 +328,13 @@ python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
 python scripts/multi_cam.py start --graph-template configs/graphs/dev_camera_template_v2.yaml
 python scripts/multi_cam.py status
 python scripts/multi_cam.py stop
+```
+
+프로세스 그래프 검증기:
+
+```bash
+python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml
+python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml --report-json
 ```
 
 카메라별 런타임 환경변수:

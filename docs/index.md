@@ -25,7 +25,8 @@ Runtime baseline:
 10. `docs/design/architecture_2.0.md`
 11. `docs/ops/command_reference.md`
 12. `docs/guides/plugin_authoring_guide.md`
-13. `docs/guides/professor_showcase_guide.md`
+13. `docs/guides/process_graph_foundation_guide.md`
+14. `docs/guides/professor_showcase_guide.md`
 
 ## Active Folders
 
@@ -49,6 +50,7 @@ Runtime baseline:
 
 - Runtime: `src/schnitzel_stream/runtime/inproc.py`
 - Graph: `src/schnitzel_stream/graph/`
+- Process graph (foundation): `src/schnitzel_stream/procgraph/`
 - CLI: `src/schnitzel_stream/cli/__main__.py`
 - Plugins: `src/schnitzel_stream/plugins/registry.py`
 - Pack nodes: `src/schnitzel_stream/packs/`
@@ -78,7 +80,8 @@ Runtime baseline:
 10. `docs/design/architecture_2.0.md`
 11. `docs/ops/command_reference.md`
 12. `docs/guides/plugin_authoring_guide.md`
-13. `docs/guides/professor_showcase_guide.md`
+13. `docs/guides/process_graph_foundation_guide.md`
+14. `docs/guides/professor_showcase_guide.md`
 
 ## 활성 폴더
 
@@ -102,6 +105,7 @@ Runtime baseline:
 
 - 런타임: `src/schnitzel_stream/runtime/inproc.py`
 - 그래프: `src/schnitzel_stream/graph/`
+- 프로세스 그래프(foundation): `src/schnitzel_stream/procgraph/`
 - CLI: `src/schnitzel_stream/cli/__main__.py`
 - 플러그인: `src/schnitzel_stream/plugins/registry.py`
 - 팩 노드: `src/schnitzel_stream/packs/`
