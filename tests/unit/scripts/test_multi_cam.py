@@ -60,7 +60,7 @@ def test_camera_env_maps_source_types():
         mod.CameraSpec(
             camera_id="cam02",
             source_type="file",
-            source={"type": "file", "path": "tests/play/2048246-hd_1920_1080_24fps.mp4"},
+            source={"type": "file", "path": "data/samples/2048246-hd_1920_1080_24fps.mp4"},
         )
     )
     assert file_env["SS_SOURCE_PLUGIN"].endswith(":OpenCvVideoFileSource")

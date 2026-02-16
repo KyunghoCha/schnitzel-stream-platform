@@ -151,7 +151,8 @@ def wait_for_count(log_dir: Path, target_count: int, timeout_sec: float = 15.0) 
 
 
 def _resolve_video() -> Path:
-    video_path = PROJECT_ROOT / "tests" / "play" / "2048246-hd_1920_1080_24fps.mp4"
+    # Intent: keep a single canonical sample-media location to avoid duplicate tracked assets.
+    video_path = PROJECT_ROOT / "data" / "samples" / "2048246-hd_1920_1080_24fps.mp4"
     if video_path.exists():
         return video_path
 
