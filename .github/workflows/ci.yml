@@ -73,6 +73,18 @@ jobs:
       - name: Environment doctor gate
         run: python scripts/env_doctor.py --strict
 
+      - name: Profile-aware environment checks
+        run: |
+          python scripts/env_doctor.py --profile yolo --json
+          python scripts/env_doctor.py --profile webcam --json
+
+      - name: Preset launcher sanity checks
+        run: |
+          python scripts/stream_run.py --list
+          python scripts/stream_run.py --list --experimental
+          python scripts/stream_run.py --preset inproc_demo --validate-only
+          python scripts/stream_run.py --preset file_yolo --experimental --validate-only
+
       - name: Validate representative v2 graphs
         env:
           PYTHONPATH: src
