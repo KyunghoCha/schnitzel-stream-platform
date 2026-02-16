@@ -42,6 +42,8 @@ python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
 
 Default report:
 - `outputs/reports/demo_pack_latest.json`
+- report schema: `schema_version=2`
+- failure fields (when failed): `failure_kind`, `failure_reason`
 
 Exit codes:
 - `0`: success
@@ -102,8 +104,10 @@ Expected output:
 1. `No module named omegaconf` or plugin import errors:
    - Run `python scripts/env_doctor.py --strict` first.
    - Install baseline dependencies again: `pip install -r requirements.txt`
+   - Confirm report field: `failure_kind=environment`, `failure_reason=dependency_missing`
 2. Webcam profile exits with code `20`:
    - Check device index (`--camera-index`), close camera-using apps, rerun.
+   - Confirm report field: `failure_reason=webcam_runtime_failed`
 3. Durable replay seems inconsistent:
    - Remove `outputs/queues/showcase_demo.sqlite3` and rerun S2.
 4. Command not found for `pytest`/`pip`:
@@ -149,6 +153,8 @@ python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
 
 기본 리포트 경로:
 - `outputs/reports/demo_pack_latest.json`
+- 리포트 스키마: `schema_version=2`
+- 실패 시 분류 필드: `failure_kind`, `failure_reason`
 
 종료 코드:
 - `0`: 성공
@@ -209,8 +215,10 @@ python -m schnitzel_stream --graph configs/graphs/showcase_webcam_v2.yaml --max-
 1. `No module named omegaconf` 또는 플러그인 import 오류:
    - 먼저 `python scripts/env_doctor.py --strict` 실행
    - `pip install -r requirements.txt` 재실행
+   - 리포트에서 `failure_kind=environment`, `failure_reason=dependency_missing` 확인
 2. professor 프로필이 코드 `20`으로 종료:
    - `--camera-index` 확인, 카메라 점유 앱 종료 후 재실행
+   - 리포트에서 `failure_reason=webcam_runtime_failed` 확인
 3. durable 재생 결과가 일관되지 않음:
    - `outputs/queues/showcase_demo.sqlite3` 삭제 후 S2 재실행
 4. `pytest`/`pip` 명령 없음:

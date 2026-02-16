@@ -89,6 +89,11 @@ Options:
 - `--max-events <int>`
 - `--report <path>` (default: `outputs/reports/demo_pack_latest.json`)
 
+Report fields:
+- `schema_version` (current: `2`)
+- `scenarios[*].failure_kind` (`validate`, `run`, `environment`)
+- `scenarios[*].failure_reason` (for example: `dependency_missing`, `webcam_runtime_failed`)
+
 Manual showcase scenarios:
 
 ```bash
@@ -281,6 +286,11 @@ python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
 - `--camera-index <int>` (professor 프로필의 웹캠 시나리오 인덱스)
 - `--max-events <int>`
 - `--report <path>` (기본: `outputs/reports/demo_pack_latest.json`)
+
+리포트 필드:
+- `schema_version` (현재: `2`)
+- `scenarios[*].failure_kind` (`validate`, `run`, `environment`)
+- `scenarios[*].failure_reason` (예: `dependency_missing`, `webcam_runtime_failed`)
 
 수동 시연 시나리오:
 
