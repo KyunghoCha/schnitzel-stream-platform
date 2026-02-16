@@ -3,7 +3,7 @@ from __future__ import annotations
 """Minimal mock backend for local sink/integration tests.
 
 Intent:
-- Provide a platform-owned replacement for the removed `ai.pipeline.mock_backend` module.
+- Provide a small platform-owned mock event receiver for local validation.
 - Keep behavior intentionally small: accept `POST /api/events`, print payload, return 200.
 """
 
