@@ -24,6 +24,7 @@ Last updated: 2026-02-16
 - Roadmap support:
   - `docs/roadmap/strategic_roadmap.md`
   - `docs/roadmap/future_backlog.md`
+  - `docs/roadmap/owner_split_playbook.md`
 - Implementation:
   - `docs/implementation/README.md`
   - `docs/implementation/runtime_core.md`
@@ -77,6 +78,7 @@ Last updated: 2026-02-16
 - 로드맵 보조:
   - `docs/roadmap/strategic_roadmap.md`
   - `docs/roadmap/future_backlog.md`
+  - `docs/roadmap/owner_split_playbook.md`
 - 구현:
   - `docs/implementation/README.md`
   - `docs/implementation/runtime_core.md`
