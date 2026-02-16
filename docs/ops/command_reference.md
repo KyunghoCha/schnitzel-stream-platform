@@ -68,7 +68,8 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_camera_template_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_stream_template_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_camera_template_v2.yaml  # legacy template alias
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
@@ -175,7 +176,22 @@ Scaffold export options:
 - `--register-export` (default): update `packs/<pack>/nodes/__init__.py`
 - `--no-register-export`: skip export registration
 
-Multi-camera graph launcher:
+Stream fleet launcher (primary):
+
+```bash
+python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template_v2.yaml
+python scripts/stream_fleet.py status
+python scripts/stream_fleet.py stop
+```
+
+Read-only stream monitor (pid/log based):
+
+```bash
+python scripts/stream_monitor.py --log-dir /tmp/schnitzel_stream_fleet_run
+python scripts/stream_monitor.py --once --json
+```
+
+Legacy alias (one-cycle compatibility bridge):
 
 ```bash
 python scripts/multi_cam.py start --graph-template configs/graphs/dev_camera_template_v2.yaml
@@ -196,13 +212,21 @@ Demo report renderer:
 python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
 ```
 
-Runtime environment variables used per camera process:
+Runtime environment variables used per stream process:
+- `SS_STREAM_ID`
+- `SS_INPUT_TYPE`
+- `SS_INPUT_PLUGIN`
+- `SS_INPUT_URL` (rtsp/plugin)
+- `SS_INPUT_PATH` (file/plugin)
+- `SS_INPUT_INDEX` (webcam/plugin)
+
+Legacy key compatibility (accepted for one cycle):
 - `SS_CAMERA_ID`
 - `SS_SOURCE_TYPE`
 - `SS_SOURCE_PLUGIN`
-- `SS_SOURCE_URL` (rtsp/plugin)
-- `SS_SOURCE_PATH` (file/plugin)
-- `SS_CAMERA_INDEX` (webcam/plugin)
+- `SS_SOURCE_URL`
+- `SS_SOURCE_PATH`
+- `SS_CAMERA_INDEX`
 
 ### Plugin Security Policy
 
@@ -283,7 +307,8 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_camera_template_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_stream_template_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_camera_template_v2.yaml  # legacy 템플릿 alias
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
@@ -390,7 +415,22 @@ python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
 - `--register-export` (기본): `packs/<pack>/nodes/__init__.py` 자동 갱신
 - `--no-register-export`: export 등록 생략
 
-멀티 카메라 그래프 런처:
+Stream fleet 실행기(주 경로):
+
+```bash
+python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template_v2.yaml
+python scripts/stream_fleet.py status
+python scripts/stream_fleet.py stop
+```
+
+읽기 전용 stream 모니터(pid/log 기반):
+
+```bash
+python scripts/stream_monitor.py --log-dir /tmp/schnitzel_stream_fleet_run
+python scripts/stream_monitor.py --once --json
+```
+
+레거시 alias(1사이클 호환 브리지):
 
 ```bash
 python scripts/multi_cam.py start --graph-template configs/graphs/dev_camera_template_v2.yaml
@@ -411,13 +451,21 @@ python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_
 python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
 ```
 
-카메라별 런타임 환경변수:
+stream별 런타임 환경변수:
+- `SS_STREAM_ID`
+- `SS_INPUT_TYPE`
+- `SS_INPUT_PLUGIN`
+- `SS_INPUT_URL` (rtsp/plugin)
+- `SS_INPUT_PATH` (file/plugin)
+- `SS_INPUT_INDEX` (webcam/plugin)
+
+레거시 키 호환(1사이클 허용):
 - `SS_CAMERA_ID`
 - `SS_SOURCE_TYPE`
 - `SS_SOURCE_PLUGIN`
-- `SS_SOURCE_URL` (rtsp/plugin)
-- `SS_SOURCE_PATH` (file/plugin)
-- `SS_CAMERA_INDEX` (webcam/plugin)
+- `SS_SOURCE_URL`
+- `SS_SOURCE_PATH`
+- `SS_CAMERA_INDEX`
 
 ### 플러그인 보안 정책
 

@@ -122,6 +122,17 @@ python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
 python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
 ```
 
+9. Stream fleet operations (universal runner + monitor)
+
+```bash
+python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template_v2.yaml
+python scripts/stream_fleet.py status
+python scripts/stream_monitor.py --once --json
+python scripts/stream_fleet.py stop
+```
+
+- Legacy alias: `python scripts/multi_cam.py ...` (compat bridge)
+
 ### Graph Spec (v2)
 
 - `plugin` format: `module:ClassName`
@@ -296,6 +307,17 @@ python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
 ```bash
 python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
 ```
+
+9. Stream fleet 운영(범용 실행기 + 모니터)
+
+```bash
+python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template_v2.yaml
+python scripts/stream_fleet.py status
+python scripts/stream_monitor.py --once --json
+python scripts/stream_fleet.py stop
+```
+
+- 레거시 alias: `python scripts/multi_cam.py ...` (호환 브리지)
 
 ### 그래프 스펙(v2)
 

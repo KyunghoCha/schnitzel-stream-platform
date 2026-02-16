@@ -37,7 +37,7 @@ This document is the active mapping between runtime code and maintained docs.
 | Runtime throttle hook | `src/schnitzel_stream/control/throttle.py` | `tests/unit/test_inproc_throttle.py` | `docs/contracts/observability.md`, `docs/implementation/runtime_core.md` |
 | Payload profile contract | `src/schnitzel_stream/contracts/payload_profile.py` | `tests/unit/test_payload_profile.py` | `docs/contracts/stream_packet.md`, `docs/implementation/runtime_core.md` |
 | Local mock backend tool | `src/schnitzel_stream/tools/mock_backend.py` | `tests/unit/nodes/test_http_nodes.py` | `docs/ops/command_reference.md` |
-| Runtime graphs/configs | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml` | graph validation and integration tests | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/professor_showcase_guide.md` |
+| Runtime graphs/configs | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml`, `configs/fleet.yaml` | graph validation and integration tests | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/professor_showcase_guide.md` |
 
 ## Script Mapping
 
@@ -46,7 +46,9 @@ This document is the active mapping between runtime code and maintained docs.
 | `scripts/env_doctor.py` | runtime environment/dependency diagnostics (`--strict`, `--json`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/check_rtsp.py` | RTSP reconnect E2E smoke on v2 graph | `docs/ops/command_reference.md` |
 | `scripts/regression_check.py` | v2 golden comparison helper | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
-| `scripts/multi_cam.py` | camera-by-camera graph launcher helper | `docs/ops/command_reference.md` |
+| `scripts/stream_fleet.py` | generic stream fleet launcher (`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
+| `scripts/stream_monitor.py` | read-only stream TUI monitor (pid/log based) | `docs/ops/command_reference.md` |
+| `scripts/multi_cam.py` | legacy alias for stream fleet launcher (one-cycle compatibility bridge) | `docs/ops/command_reference.md` |
 | `scripts/proc_graph_validate.py` | process-graph foundation validator (`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
 | `scripts/scaffold_plugin.py` | plugin code/test/graph scaffold generator | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md` |
 | `scripts/demo_pack.py` | one-command showcase runner (`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
@@ -95,7 +97,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | 런타임 스로틀 훅 | `src/schnitzel_stream/control/throttle.py` | `tests/unit/test_inproc_throttle.py` | `docs/contracts/observability.md`, `docs/implementation/runtime_core.md` |
 | payload profile 계약 | `src/schnitzel_stream/contracts/payload_profile.py` | `tests/unit/test_payload_profile.py` | `docs/contracts/stream_packet.md`, `docs/implementation/runtime_core.md` |
 | 로컬 mock backend 도구 | `src/schnitzel_stream/tools/mock_backend.py` | `tests/unit/nodes/test_http_nodes.py` | `docs/ops/command_reference.md` |
-| 런타임 그래프/설정 | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml` | 그래프 검증/통합 테스트 | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/professor_showcase_guide.md` |
+| 런타임 그래프/설정 | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml`, `configs/fleet.yaml` | 그래프 검증/통합 테스트 | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/professor_showcase_guide.md` |
 
 ## 스크립트 매핑
 
@@ -104,7 +106,9 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | `scripts/env_doctor.py` | 런타임 환경/의존성 진단(`--strict`, `--json`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/check_rtsp.py` | v2 그래프 기반 RTSP 재연결 E2E 스모크 | `docs/ops/command_reference.md` |
 | `scripts/regression_check.py` | v2 골든 비교 헬퍼 | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
-| `scripts/multi_cam.py` | 카메라별 그래프 런처 헬퍼 | `docs/ops/command_reference.md` |
+| `scripts/stream_fleet.py` | 범용 stream fleet 실행기(`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
+| `scripts/stream_monitor.py` | 읽기 전용 stream TUI 모니터(pid/log 기반) | `docs/ops/command_reference.md` |
+| `scripts/multi_cam.py` | stream fleet 실행기의 레거시 alias(1사이클 호환 브리지) | `docs/ops/command_reference.md` |
 | `scripts/proc_graph_validate.py` | 프로세스 그래프 foundation 검증기(`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
 | `scripts/scaffold_plugin.py` | 플러그인 코드/테스트/그래프 스캐폴드 생성기 | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md` |
 | `scripts/demo_pack.py` | 원커맨드 쇼케이스 실행기(`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |

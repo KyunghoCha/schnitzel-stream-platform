@@ -40,7 +40,7 @@ Last updated: 2026-02-16
   - `docs/progress/README.md`
   - `docs/progress/current_status.md`
 - Usage:
-  - `docs/ops/command_reference.md` (includes `env_doctor`, `demo_report_view` command paths)
+  - `docs/ops/command_reference.md` (includes `stream_fleet`, `stream_monitor`, `env_doctor`, `demo_report_view` command paths)
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`
@@ -95,7 +95,7 @@ Last updated: 2026-02-16
   - `docs/progress/README.md`
   - `docs/progress/current_status.md`
 - 사용:
-  - `docs/ops/command_reference.md` (`env_doctor`, `demo_report_view` 명령 경로 포함)
+  - `docs/ops/command_reference.md` (`stream_fleet`, `stream_monitor`, `env_doctor`, `demo_report_view` 명령 경로 포함)
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`

@@ -89,6 +89,11 @@ flowchart LR
   O4 -. guards .-> P4
 ```
 
+Current operator command surfaces in this direction:
+- `python scripts/stream_fleet.py ...` (primary fleet runner)
+- `python scripts/stream_monitor.py ...` (read-only stream TUI)
+- `python scripts/multi_cam.py ...` (legacy alias bridge)
+
 ## Research Gate Map
 
 ```mermaid
@@ -187,6 +192,11 @@ flowchart LR
   O4 -. 보호 게이트 .-> P2
   O4 -. 보호 게이트 .-> P4
 ```
+
+현재 운영 명령 표면은 아래 방향으로 정리한다.
+- `python scripts/stream_fleet.py ...` (주 fleet 실행기)
+- `python scripts/stream_monitor.py ...` (읽기 전용 stream TUI)
+- `python scripts/multi_cam.py ...` (레거시 alias 브리지)
 
 ## 연구 게이트 지도
 

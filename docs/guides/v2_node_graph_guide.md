@@ -12,7 +12,7 @@ The detailed walkthrough remains in Korean for now, but the normative runtime co
 
 ## 한국어
 
-현재 step id (SSOT): `P3.3` (`docs/roadmap/execution_roadmap.md` 참고)
+현재 step id (SSOT): `P14.1` (`docs/roadmap/execution_roadmap.md` 참고)
 
 ## 1) v2 노드 그래프가 뭔가
 
