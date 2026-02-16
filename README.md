@@ -75,19 +75,26 @@ pip install -r requirements.txt
 export PYTHONPATH=src
 ```
 
-3. Validate
+3. Environment doctor
+
+```bash
+python scripts/env_doctor.py
+python scripts/env_doctor.py --strict --json
+```
+
+4. Validate
 
 ```bash
 python -m schnitzel_stream validate
 ```
 
-4. Run default v2 graph
+5. Run default v2 graph
 
 ```bash
 python -m schnitzel_stream
 ```
 
-5. Useful demo graphs
+6. Useful demo graphs
 
 ```bash
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
@@ -99,7 +106,7 @@ python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 ```
 
-6. One-command demo pack (showcase profiles)
+7. One-command demo pack (showcase profiles)
 
 ```bash
 python scripts/demo_pack.py --profile ci
@@ -237,19 +244,26 @@ pip install -r requirements.txt
 export PYTHONPATH=src
 ```
 
-3. 검증
+3. 환경 진단
+
+```bash
+python scripts/env_doctor.py
+python scripts/env_doctor.py --strict --json
+```
+
+4. 검증
 
 ```bash
 python -m schnitzel_stream validate
 ```
 
-4. 기본 v2 그래프 실행
+5. 기본 v2 그래프 실행
 
 ```bash
 python -m schnitzel_stream
 ```
 
-5. 주요 데모 그래프
+6. 주요 데모 그래프
 
 ```bash
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
@@ -261,7 +275,7 @@ python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 ```
 
-6. 원커맨드 데모 팩(쇼케이스 프로필)
+7. 원커맨드 데모 팩(쇼케이스 프로필)
 
 ```bash
 python scripts/demo_pack.py --profile ci

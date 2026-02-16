@@ -16,6 +16,13 @@ Complete command reference for v2 node-graph runtime.
 export PYTHONPATH=src
 ```
 
+Environment doctor:
+
+```bash
+python scripts/env_doctor.py
+python scripts/env_doctor.py --strict --json
+```
+
 ### Entrypoint
 
 ```bash
@@ -124,6 +131,14 @@ Environment variables:
 
 ### Utility Scripts
 
+Environment doctor:
+
+```bash
+python scripts/env_doctor.py
+python scripts/env_doctor.py --strict
+python scripts/env_doctor.py --strict --json
+```
+
 RTSP reconnect E2E (v2 graph):
 
 ```bash
@@ -192,6 +207,13 @@ v2 노드 그래프 런타임 기준 명령어 레퍼런스입니다.
 ```bash
 # Linux / macOS
 export PYTHONPATH=src
+```
+
+환경 진단:
+
+```bash
+python scripts/env_doctor.py
+python scripts/env_doctor.py --strict --json
 ```
 
 ### 엔트리포인트
@@ -301,6 +323,14 @@ python -m schnitzel_stream.tools.mock_backend
 - `MOCK_BACKEND_PORT` (기본: `18080`)
 
 ### 유틸리티 스크립트
+
+환경 진단:
+
+```bash
+python scripts/env_doctor.py
+python scripts/env_doctor.py --strict
+python scripts/env_doctor.py --strict --json
+```
 
 RTSP 재연결 E2E(v2 그래프):
 

@@ -18,9 +18,11 @@ The one-command profile runner is `scripts/demo_pack.py`.
 
 1. Python 3.11 environment with dependencies installed:
    - `pip install -r requirements.txt -r requirements-dev.txt`
-2. Runtime entrypoint works:
+2. Environment doctor reports required checks as pass:
+   - `python scripts/env_doctor.py --strict`
+3. Runtime entrypoint works:
    - `python -m schnitzel_stream validate --graph configs/graphs/showcase_inproc_v2.yaml`
-3. For S3:
+4. For S3:
    - Webcam device is available.
    - OpenCV import works in the environment.
 
@@ -98,6 +100,7 @@ Expected output:
 ## Troubleshooting
 
 1. `No module named omegaconf` or plugin import errors:
+   - Run `python scripts/env_doctor.py --strict` first.
    - Install baseline dependencies again: `pip install -r requirements.txt`
 2. Webcam profile exits with code `20`:
    - Check device index (`--camera-index`), close camera-using apps, rerun.
@@ -122,9 +125,11 @@ Expected output:
 
 1. Python 3.11 환경에서 의존성 설치:
    - `pip install -r requirements.txt -r requirements-dev.txt`
-2. 런타임 엔트리포인트 검증:
+2. 환경 진단에서 필수 항목 통과 확인:
+   - `python scripts/env_doctor.py --strict`
+3. 런타임 엔트리포인트 검증:
    - `python -m schnitzel_stream validate --graph configs/graphs/showcase_inproc_v2.yaml`
-3. S3 실행 전:
+4. S3 실행 전:
    - 웹캠 장치 사용 가능
    - OpenCV import 가능
 
@@ -202,6 +207,7 @@ python -m schnitzel_stream --graph configs/graphs/showcase_webcam_v2.yaml --max-
 ## 트러블슈팅
 
 1. `No module named omegaconf` 또는 플러그인 import 오류:
+   - 먼저 `python scripts/env_doctor.py --strict` 실행
    - `pip install -r requirements.txt` 재실행
 2. professor 프로필이 코드 `20`으로 종료:
    - `--camera-index` 확인, 카메라 점유 앱 종료 후 재실행
