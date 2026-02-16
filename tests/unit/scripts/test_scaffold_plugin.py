@@ -36,10 +36,12 @@ def test_scaffold_generates_node_plugin_files(tmp_path: Path):
     plugin = tmp_path / "src" / "schnitzel_stream" / "packs" / "sensor" / "nodes" / "threshold_node.py"
     test_file = tmp_path / "tests" / "unit" / "packs" / "sensor" / "nodes" / "test_threshold_node.py"
     graph = tmp_path / "configs" / "graphs" / "dev_sensor_threshold_node_v2.yaml"
+    exports = tmp_path / "src" / "schnitzel_stream" / "packs" / "sensor" / "nodes" / "__init__.py"
 
     assert plugin.exists()
     assert test_file.exists()
     assert graph.exists()
+    assert exports.exists()
 
     plugin_text = plugin.read_text(encoding="utf-8")
     assert "class ThresholdNode" in plugin_text
@@ -47,6 +49,9 @@ def test_scaffold_generates_node_plugin_files(tmp_path: Path):
 
     graph_text = graph.read_text(encoding="utf-8")
     assert "schnitzel_stream.packs.sensor.nodes.threshold_node:ThresholdNode" in graph_text
+    exports_text = exports.read_text(encoding="utf-8")
+    assert "from .threshold_node import ThresholdNode" in exports_text
+    assert '"ThresholdNode"' in exports_text
 
 
 def test_scaffold_refuses_overwrite_without_force(tmp_path: Path):
@@ -80,7 +85,29 @@ def test_scaffold_force_overwrites_existing_files(tmp_path: Path):
     assert mod.run(args) == 0
 
     plugin = tmp_path / "src" / "schnitzel_stream" / "packs" / "robotics" / "nodes" / "telemetry_source.py"
+    exports = tmp_path / "src" / "schnitzel_stream" / "packs" / "robotics" / "nodes" / "__init__.py"
     plugin.write_text("# manual edit\n", encoding="utf-8")
 
     assert mod.run([*args, "--force"]) == 0
     assert "class TelemetrySource" in plugin.read_text(encoding="utf-8")
+    exports_text = exports.read_text(encoding="utf-8")
+    assert exports_text.count("from .telemetry_source import TelemetrySource") == 1
+    assert exports_text.count('"TelemetrySource"') == 1
+
+
+def test_scaffold_can_skip_export_registration(tmp_path: Path):
+    mod = _load_scaffold_module()
+    args = [
+        "--repo-root",
+        str(tmp_path),
+        "--pack",
+        "audio",
+        "--kind",
+        "source",
+        "--name",
+        "MicSource",
+        "--no-register-export",
+    ]
+    assert mod.run(args) == 0
+    exports = tmp_path / "src" / "schnitzel_stream" / "packs" / "audio" / "nodes" / "__init__.py"
+    assert not exports.exists()

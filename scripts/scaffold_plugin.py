@@ -37,6 +37,9 @@ class ScaffoldPaths:
     graph_file: Path
 
 
+_ALL_BLOCK_RE = re.compile(r"(?ms)^__all__\s*=\s*\[(?P<body>.*?)\]\s*$")
+
+
 def _build_paths(repo_root: Path, *, pack: str, module: str) -> ScaffoldPaths:
     plugin_file = repo_root / "src" / "schnitzel_stream" / "packs" / pack / "nodes" / f"{module}.py"
     test_file = repo_root / "tests" / "unit" / "packs" / pack / "nodes" / f"test_{module}.py"
@@ -236,6 +239,46 @@ def _write_file(path: Path, text: str, *, force: bool) -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def _format_all_block(names: list[str]) -> str:
+    rows = "".join(f'    "{name}",\n' for name in names)
+    return f"__all__ = [\n{rows}]\n"
+
+
+def _register_export(nodes_dir: Path, *, module: str, class_name: str) -> None:
+    init_file = nodes_dir / "__init__.py"
+    import_line = f"from .{module} import {class_name}"
+
+    if not init_file.exists():
+        content = (
+            "from __future__ import annotations\n\n"
+            f"{import_line}\n\n"
+            + _format_all_block([class_name])
+        )
+        init_file.write_text(content, encoding="utf-8")
+        return
+
+    text = init_file.read_text(encoding="utf-8")
+    updated = text
+    if import_line not in updated:
+        if not updated.endswith("\n"):
+            updated += "\n"
+        updated += f"\n{import_line}\n"
+
+    match = _ALL_BLOCK_RE.search(updated)
+    if match:
+        current = [x for x in re.findall(r"['\"]([^'\"]+)['\"]", match.group("body"))]
+        if class_name not in current:
+            current.append(class_name)
+        block = _format_all_block(current)
+        updated = updated[: match.start()] + block + updated[match.end() :]
+    else:
+        if not updated.endswith("\n"):
+            updated += "\n"
+        updated += "\n" + _format_all_block([class_name])
+
+    init_file.write_text(updated, encoding="utf-8")
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate plugin scaffold (code + test + graph)")
     parser.add_argument("--repo-root", default=".", help="Repository root path")
@@ -245,7 +288,21 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--module", default="", help="Module filename without .py (default: derived from class name)")
     parser.add_argument("--input-kinds", default="*", help="Comma-separated INPUT_KINDS for node/sink")
     parser.add_argument("--output-kinds", default="*", help="Comma-separated OUTPUT_KINDS for source/node")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        "--register-export",
+        dest="register_export",
+        action="store_true",
+        help="Register generated class in pack nodes/__init__.py (default: on)",
+    )
+    group.add_argument(
+        "--no-register-export",
+        dest="register_export",
+        action="store_false",
+        help="Skip nodes/__init__.py export registration",
+    )
     parser.add_argument("--force", action="store_true", help="Overwrite existing scaffold files")
+    parser.set_defaults(register_export=True)
     return parser.parse_args(argv)
 
 
@@ -278,6 +335,9 @@ def run(argv: list[str] | None = None) -> int:
             _render_graph(kind=kind, pack=pack, module=module, class_name=class_name),
             force=args.force,
         )
+        if bool(args.register_export):
+            # Intent: make generated plugin discoverable from pack namespace without manual export wiring.
+            _register_export(paths.plugin_file.parent, module=module, class_name=class_name)
     except FileExistsError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
