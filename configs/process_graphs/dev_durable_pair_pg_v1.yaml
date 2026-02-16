@@ -1,0 +1,16 @@
+version: 1
+processes:
+  - id: enqueue
+    graph: configs/graphs/dev_durable_enqueue_v2.yaml
+  - id: drain
+    graph: configs/graphs/dev_durable_drain_ack_v2.yaml
+channels:
+  - id: q_main
+    kind: sqlite_queue
+    path: outputs/queues/dev_demo.sqlite3
+    require_ack: true
+links:
+  - producer: enqueue
+    consumer: drain
+    channel: q_main
+
