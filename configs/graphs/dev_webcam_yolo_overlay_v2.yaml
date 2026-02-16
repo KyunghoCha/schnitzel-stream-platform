@@ -1,0 +1,43 @@
+version: 2
+
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.packs.vision.nodes:OpenCvWebcamSource
+    config:
+      camera_index: ${oc.env:SS_CAMERA_INDEX,0}
+      source_id: ${oc.env:SS_STREAM_ID,webcam01}
+      reconnect: true
+      reconnect_backoff_sec: 0.5
+      reconnect_backoff_max_sec: 5.0
+      reconnect_max_attempts: 0
+
+  - id: yolo
+    kind: node
+    plugin: schnitzel_stream.packs.vision.nodes:YoloV8DetectorNode
+    config:
+      model_path: ${oc.env:SS_YOLO_MODEL_PATH,models/yolov8n.pt}
+      conf: ${oc.env:SS_YOLO_CONF,0.35}
+      iou: ${oc.env:SS_YOLO_IOU,0.45}
+      max_det: ${oc.env:SS_YOLO_MAX_DET,100}
+      device: ${oc.env:SS_YOLO_DEVICE,}
+
+  - id: display
+    kind: sink
+    plugin: schnitzel_stream.packs.vision.nodes:OpenCvBboxDisplaySink
+    config:
+      window_name: ${oc.env:SS_WINDOW_NAME,Schnitzel Stream - Webcam YOLO}
+      wait_key_ms: 1
+      line_thickness: 2
+      font_scale: 0.6
+      show_stats: true
+      stop_on_quit_key: true
+      forward: false
+
+edges:
+  - from: src
+    to: yolo
+  - from: yolo
+    to: display
+
+config: {}
