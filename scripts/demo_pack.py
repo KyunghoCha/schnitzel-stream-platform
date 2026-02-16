@@ -18,6 +18,7 @@ EXIT_RUN_FAILED = 1
 EXIT_VALIDATE_FAILED = 2
 EXIT_WEBCAM_FAILED = 20
 COMMAND_TIMEOUT_SEC = 120.0
+REPORT_SCHEMA_VERSION = 2
 
 
 @dataclass(frozen=True)
@@ -126,6 +127,35 @@ def _step_payload(*, phase: str, graph: Path, cmd: list[str], result: CommandRes
     }
 
 
+def _classify_failure(
+    *,
+    phase: str,
+    result: CommandResult,
+    webcam_required: bool,
+    profile: str,
+) -> tuple[str, str]:
+    merged = f"{result.stdout}\n{result.stderr}".lower()
+    if "no module named" in merged or "modulenotfounderror" in merged:
+        return "environment", "dependency_missing"
+    if result.returncode == 124:
+        return phase, "command_timeout"
+    if phase == "validate":
+        return "validate", "validate_failed"
+    if webcam_required and profile == "professor":
+        return "run", "webcam_runtime_failed"
+    return "run", "runtime_failed"
+
+
+def _phase_status(item: dict[str, object], phase: str) -> str:
+    steps = item.get("steps", [])
+    if not isinstance(steps, list):
+        return "n/a"
+    phase_steps = [s for s in steps if isinstance(s, dict) and s.get("phase") == phase]
+    if not phase_steps:
+        return "n/a"
+    return "ok" if all(s.get("returncode") == 0 for s in phase_steps) else "failed"
+
+
 def _resolve_report_path(raw: str, *, repo_root: Path) -> Path:
     p = Path(raw)
     if not p.is_absolute():
@@ -177,6 +207,7 @@ def run(argv: list[str] | None = None) -> int:
     env["SS_DEMO_CAMERA_INDEX"] = str(int(args.camera_index))
 
     report: dict[str, object] = {
+        "schema_version": REPORT_SCHEMA_VERSION,
         "ts": datetime.now(timezone.utc).isoformat(),
         "profile": str(args.profile),
         "status": "ok",
@@ -211,6 +242,7 @@ def run(argv: list[str] | None = None) -> int:
                 scenario_report["steps"].append(_step_payload(phase="validate", graph=graph, cmd=validate_cmd, result=fail))
                 scenario_report["status"] = "failed"
                 scenario_report["failure_kind"] = "validate"
+                scenario_report["failure_reason"] = "graph_not_found"
                 exit_code = EXIT_VALIDATE_FAILED
                 break
 
@@ -220,7 +252,14 @@ def run(argv: list[str] | None = None) -> int:
             )
             if validate_result.returncode != 0:
                 scenario_report["status"] = "failed"
-                scenario_report["failure_kind"] = "validate"
+                failure_kind, failure_reason = _classify_failure(
+                    phase="validate",
+                    result=validate_result,
+                    webcam_required=scenario.webcam_required,
+                    profile=str(args.profile),
+                )
+                scenario_report["failure_kind"] = failure_kind
+                scenario_report["failure_reason"] = failure_reason
                 exit_code = EXIT_VALIDATE_FAILED
                 break
 
@@ -239,7 +278,14 @@ def run(argv: list[str] | None = None) -> int:
                 scenario_report["steps"].append(_step_payload(phase="run", graph=graph, cmd=run_cmd, result=run_result))
                 if run_result.returncode != 0:
                     scenario_report["status"] = "failed"
-                    scenario_report["failure_kind"] = "run"
+                    failure_kind, failure_reason = _classify_failure(
+                        phase="run",
+                        result=run_result,
+                        webcam_required=scenario.webcam_required,
+                        profile=str(args.profile),
+                    )
+                    scenario_report["failure_kind"] = failure_kind
+                    scenario_report["failure_reason"] = failure_reason
                     if scenario.webcam_required and str(args.profile) == "professor":
                         exit_code = EXIT_WEBCAM_FAILED
                     else:
@@ -271,7 +317,15 @@ def run(argv: list[str] | None = None) -> int:
     print(f"profile={args.profile}")
     for item in scenarios_payload:
         if isinstance(item, dict):
-            print(f"{item.get('id')} status={item.get('status')} title={item.get('title')}")
+            validate_state = _phase_status(item, "validate")
+            run_state = _phase_status(item, "run")
+            line = (
+                f"{item.get('id')} status={item.get('status')} "
+                f"validate={validate_state} run={run_state} title={item.get('title')}"
+            )
+            if item.get("status") != "ok":
+                line += f" failure_kind={item.get('failure_kind')} failure_reason={item.get('failure_reason')}"
+            print(line)
     print(f"report={report_path}")
     print(f"exit_code={exit_code}")
 

@@ -62,6 +62,7 @@ def test_run_writes_report_schema_for_ci(monkeypatch, tmp_path: Path):
     assert report_path.exists()
 
     payload = json.loads(report_path.read_text(encoding="utf-8"))
+    assert payload["schema_version"] == 2
     assert payload["profile"] == "ci"
     assert payload["status"] == "ok"
     assert payload["exit_code"] == 0
@@ -95,6 +96,7 @@ def test_run_returns_2_on_validation_failure(monkeypatch, tmp_path: Path):
     assert payload["status"] == "failed"
     assert payload["exit_code"] == 2
     assert payload["scenarios"][0]["failure_kind"] == "validate"
+    assert payload["scenarios"][0]["failure_reason"] == "validate_failed"
 
 
 def test_run_returns_20_on_professor_webcam_failure(monkeypatch, tmp_path: Path):
@@ -122,6 +124,7 @@ def test_run_returns_20_on_professor_webcam_failure(monkeypatch, tmp_path: Path)
     assert payload["summary"]["scenarios_total"] == 3
     assert payload["scenarios"][-1]["id"] == "S3"
     assert payload["scenarios"][-1]["failure_kind"] == "run"
+    assert payload["scenarios"][-1]["failure_reason"] == "webcam_runtime_failed"
 
 
 def test_run_returns_1_on_non_webcam_runtime_failure(monkeypatch, tmp_path: Path):
@@ -148,3 +151,32 @@ def test_run_returns_1_on_non_webcam_runtime_failure(monkeypatch, tmp_path: Path
     assert payload["exit_code"] == 1
     assert payload["scenarios"][-1]["id"] == "S2"
     assert payload["scenarios"][-1]["failure_kind"] == "run"
+    assert payload["scenarios"][-1]["failure_reason"] == "runtime_failed"
+
+
+def test_run_classifies_dependency_error_as_environment(monkeypatch, tmp_path: Path):
+    mod = _load_demo_pack_module()
+    _write_showcase_graphs(tmp_path)
+    monkeypatch.setattr(mod, "_repo_root", lambda: tmp_path)
+
+    def _env_fail(cmd, *, cwd, env):
+        cmd_line = " ".join(cmd)
+        if "validate" in cmd_line:
+            return mod.CommandResult(
+                returncode=1,
+                stdout="",
+                stderr="ModuleNotFoundError: No module named 'omegaconf'",
+                duration_sec=0.01,
+            )
+        return mod.CommandResult(returncode=0, stdout="ok", stderr="", duration_sec=0.01)
+
+    monkeypatch.setattr(mod, "_run_command", _env_fail)
+
+    report_path = tmp_path / "outputs" / "reports" / "env_fail.json"
+    rc = mod.run(["--profile", "ci", "--report", str(report_path)])
+    assert rc == 2
+
+    payload = json.loads(report_path.read_text(encoding="utf-8"))
+    assert payload["status"] == "failed"
+    assert payload["scenarios"][0]["failure_kind"] == "environment"
+    assert payload["scenarios"][0]["failure_reason"] == "dependency_missing"
