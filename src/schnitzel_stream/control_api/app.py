@@ -8,6 +8,7 @@ import tempfile
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 from schnitzel_stream.ops import envcheck as env_ops
 from schnitzel_stream.ops import fleet as fleet_ops
@@ -58,10 +59,28 @@ def _envelope(
     }
 
 
+def _cors_origins_from_env() -> list[str]:
+    raw = os.environ.get("SS_CONTROL_API_CORS_ORIGINS", "").strip()
+    if raw:
+        return [p.strip() for p in raw.split(",") if p.strip()]
+    # Intent: allow the default local Vite dev hosts so browser UI can call local API without manual CORS setup.
+    return [
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+    ]
+
+
 def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None) -> FastAPI:
     root = (repo_root or _repo_root()).resolve()
     logger = AuditLogger(_abs_path(root, str(audit_path or DEFAULT_AUDIT_PATH)))
     app = FastAPI(title="schnitzel stream control api", version="1")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=_cors_origins_from_env(),
+        allow_credentials=False,
+        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type"],
+    )
 
     @app.get("/api/v1/health")
     def health(request: Request) -> dict[str, Any]:

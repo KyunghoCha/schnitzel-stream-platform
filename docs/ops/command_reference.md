@@ -321,6 +321,8 @@ python scripts/stream_control_api.py --host 127.0.0.1 --port 18700 --audit-path 
 Security mode:
 - Default: local-only access (`127.0.0.1`/`localhost`) without token.
 - Optional: set `SS_CONTROL_API_TOKEN` to require `Authorization: Bearer <token>`.
+- CORS default allows local UI origins: `http://127.0.0.1:5173`, `http://localhost:5173`
+- Override CORS origins: `SS_CONTROL_API_CORS_ORIGINS="http://127.0.0.1:5173,http://localhost:5173"`
 
 API surface (v1):
 - `GET /api/v1/health`
@@ -689,6 +691,8 @@ python scripts/stream_control_api.py --host 127.0.0.1 --port 18700 --audit-path 
 보안 모드:
 - 기본: 로컬(`127.0.0.1`/`localhost`) 요청만 허용, 토큰 미필수
 - 옵션: `SS_CONTROL_API_TOKEN` 설정 시 `Authorization: Bearer <token>` 필수
+- 기본 CORS 허용 origin: `http://127.0.0.1:5173`, `http://localhost:5173`
+- CORS 커스텀: `SS_CONTROL_API_CORS_ORIGINS="http://127.0.0.1:5173,http://localhost:5173"`
 
 API 표면(v1):
 - `GET /api/v1/health`

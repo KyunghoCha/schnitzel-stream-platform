@@ -99,3 +99,18 @@ def test_env_check_endpoint_contract(monkeypatch, tmp_path: Path):
     assert payload["schema_version"] == 1
     assert payload["status"] == "ok"
     assert payload["data"]["exit_code"] == 0
+
+
+def test_cors_preflight_allows_local_vite_origin(tmp_path: Path):
+    app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
+    client = TestClient(app)
+
+    resp = client.options(
+        "/api/v1/health",
+        headers={
+            "Origin": "http://127.0.0.1:5173",
+            "Access-Control-Request-Method": "GET",
+        },
+    )
+    assert resp.status_code == 200
+    assert resp.headers.get("access-control-allow-origin") == "http://127.0.0.1:5173"
