@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id (SSOT): `P16.1` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P16.5` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -24,7 +24,7 @@ Current baseline:
 - execution completion track completed (`P13.1`~`P13.8`, implementation-only E1~E6 lane)
 - universal UX/TUI transition track completed (`P14.1`~`P14.5`)
 - UX preset onboarding track completed (`P15.1`~`P15.3`, presets + env profiles + docs sync)
-- UX console and governance minimum baseline track started (`P16.1`, shared ops service layer)
+- UX console and governance minimum baseline track completed (`P16.1`~`P16.5`, ops service layer + control API + governance minimum + web console + docs sync)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -52,7 +52,7 @@ Verification (local):
 - 실행 완결 트랙 완료(`P13.1`~`P13.8`, 연구 제외 E1~E6 구현 레인)
 - 범용 UX/TUI 전환 트랙 완료(`P14.1`~`P14.5`)
 - UX 프리셋 온보딩 트랙 완료(`P15.1`~`P15.3`, 프리셋 + env 프로필 + 문서 동기화)
-- UX 콘솔 + 거버넌스 최소선 트랙 시작(`P16.1`, 공통 ops 서비스 레이어)
+- UX 콘솔 + 거버넌스 최소선 트랙 완료(`P16.1`~`P16.5`, 공통 ops 서비스 + control API + 거버넌스 최소선 + 웹 콘솔 + 문서 동기화)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`

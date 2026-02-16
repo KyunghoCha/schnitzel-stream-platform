@@ -309,6 +309,54 @@ Legacy key compatibility (accepted for one cycle):
 - `SS_SOURCE_PATH`
 - `SS_CAMERA_INDEX`
 
+### Stream Control API (Local Operations Gateway)
+
+Run server (default `127.0.0.1:18700`):
+
+```bash
+python scripts/stream_control_api.py
+python scripts/stream_control_api.py --host 127.0.0.1 --port 18700 --audit-path outputs/audit/stream_control_audit.jsonl
+```
+
+Security mode:
+- Default: local-only access (`127.0.0.1`/`localhost`) without token.
+- Optional: set `SS_CONTROL_API_TOKEN` to require `Authorization: Bearer <token>`.
+
+API surface (v1):
+- `GET /api/v1/health`
+- `GET /api/v1/presets?experimental=<bool>`
+- `POST /api/v1/presets/{preset_id}/validate`
+- `POST /api/v1/presets/{preset_id}/run`
+- `POST /api/v1/fleet/start`
+- `POST /api/v1/fleet/stop`
+- `GET /api/v1/fleet/status`
+- `GET /api/v1/monitor/snapshot`
+- `POST /api/v1/env/check`
+- `GET /api/v1/governance/policy-snapshot`
+- `GET /api/v1/governance/audit?limit=<int>&since=<iso8601>`
+
+Quick checks:
+
+```bash
+curl -s http://127.0.0.1:18700/api/v1/health
+curl -s "http://127.0.0.1:18700/api/v1/presets?experimental=false"
+curl -s -X POST http://127.0.0.1:18700/api/v1/env/check -H "Content-Type: application/json" -d '{"profile":"base","strict":false}'
+```
+
+### Stream Console Web UI (React + Vite + TypeScript)
+
+```bash
+cd apps/stream-console
+npm install
+npm run dev
+```
+
+Other commands:
+- `npm run typecheck`
+- `npm run test`
+- `npm run build`
+- `npm run preview`
+
 ### Plugin Security Policy
 
 Default allowlist: `schnitzel_stream.*`
@@ -628,6 +676,54 @@ stream별 런타임 환경변수:
 - `SS_SOURCE_URL`
 - `SS_SOURCE_PATH`
 - `SS_CAMERA_INDEX`
+
+### Stream Control API (로컬 운영 게이트웨이)
+
+서버 실행(기본 `127.0.0.1:18700`):
+
+```bash
+python scripts/stream_control_api.py
+python scripts/stream_control_api.py --host 127.0.0.1 --port 18700 --audit-path outputs/audit/stream_control_audit.jsonl
+```
+
+보안 모드:
+- 기본: 로컬(`127.0.0.1`/`localhost`) 요청만 허용, 토큰 미필수
+- 옵션: `SS_CONTROL_API_TOKEN` 설정 시 `Authorization: Bearer <token>` 필수
+
+API 표면(v1):
+- `GET /api/v1/health`
+- `GET /api/v1/presets?experimental=<bool>`
+- `POST /api/v1/presets/{preset_id}/validate`
+- `POST /api/v1/presets/{preset_id}/run`
+- `POST /api/v1/fleet/start`
+- `POST /api/v1/fleet/stop`
+- `GET /api/v1/fleet/status`
+- `GET /api/v1/monitor/snapshot`
+- `POST /api/v1/env/check`
+- `GET /api/v1/governance/policy-snapshot`
+- `GET /api/v1/governance/audit?limit=<int>&since=<iso8601>`
+
+빠른 확인:
+
+```bash
+curl -s http://127.0.0.1:18700/api/v1/health
+curl -s "http://127.0.0.1:18700/api/v1/presets?experimental=false"
+curl -s -X POST http://127.0.0.1:18700/api/v1/env/check -H "Content-Type: application/json" -d '{"profile":"base","strict":false}'
+```
+
+### Stream Console 웹 UI (React + Vite + TypeScript)
+
+```bash
+cd apps/stream-console
+npm install
+npm run dev
+```
+
+추가 명령:
+- `npm run typecheck`
+- `npm run test`
+- `npm run build`
+- `npm run preview`
 
 ### 플러그인 보안 정책
 

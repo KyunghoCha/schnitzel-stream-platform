@@ -59,8 +59,10 @@ Runtime baseline:
 - Fleet runner: `scripts/stream_fleet.py`
 - Stream monitor: `scripts/stream_monitor.py`
 - Preset launcher: `scripts/stream_run.py`
+- Stream control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`
 - Environment diagnostics: `scripts/env_doctor.py`
 - Showcase report renderer: `scripts/demo_report_view.py`
+- Web console: `apps/stream-console/`
 
 ---
 
@@ -121,5 +123,7 @@ Runtime baseline:
 - Fleet 실행기: `scripts/stream_fleet.py`
 - Stream 모니터: `scripts/stream_monitor.py`
 - 프리셋 실행기: `scripts/stream_run.py`
+- Stream Control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`
 - 환경 진단: `scripts/env_doctor.py`
 - 쇼케이스 리포트 렌더러: `scripts/demo_report_view.py`
+- 웹 콘솔: `apps/stream-console/`

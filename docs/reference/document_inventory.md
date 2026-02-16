@@ -10,6 +10,7 @@ Last updated: 2026-02-16
 |---|---|---|
 | Documentation | `docs/**` | none (in-tree) |
 | Scripts | `scripts/**` | none (in-tree) |
+| Frontend Console | `apps/stream-console/**` | none (in-tree) |
 | Runtime source/config | `src/schnitzel_stream/**`, `configs/**` | none |
 
 ## Active Documentation Set
@@ -40,7 +41,7 @@ Last updated: 2026-02-16
   - `docs/progress/README.md`
   - `docs/progress/current_status.md`
 - Usage:
-  - `docs/ops/command_reference.md` (includes `stream_fleet`, `stream_monitor`, `stream_run`, `env_doctor` profiles, `demo_report_view` command paths)
+  - `docs/ops/command_reference.md` (includes `stream_fleet`, `stream_monitor`, `stream_run`, `stream_control_api`, `env_doctor` profiles, `demo_report_view`, web console command paths)
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`
@@ -65,6 +66,7 @@ Last updated: 2026-02-16
 |---|---|---|
 | 문서 | `docs/**` | 없음(in-tree) |
 | 스크립트 | `scripts/**` | 없음(in-tree) |
+| 프론트엔드 콘솔 | `apps/stream-console/**` | 없음(in-tree) |
 | 런타임 소스/설정 | `src/schnitzel_stream/**`, `configs/**` | 없음 |
 
 ## 활성 문서 세트
@@ -95,7 +97,7 @@ Last updated: 2026-02-16
   - `docs/progress/README.md`
   - `docs/progress/current_status.md`
 - 사용:
-  - `docs/ops/command_reference.md` (`stream_fleet`, `stream_monitor`, `stream_run`, `env_doctor` 프로필, `demo_report_view` 명령 경로 포함)
+  - `docs/ops/command_reference.md` (`stream_fleet`, `stream_monitor`, `stream_run`, `stream_control_api`, `env_doctor` 프로필, `demo_report_view`, web console 명령 경로 포함)
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`

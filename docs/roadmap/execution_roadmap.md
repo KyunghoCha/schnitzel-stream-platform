@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id: `P16.1`
+Current step id: `P16.5`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 16 UX console and governance minimum baseline in progress**
+Current position: **Phase 16 UX console and governance minimum baseline completed**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -252,18 +252,18 @@ Intent:
 - `P15.2` Add profile-aware environment doctor checks (`base`/`yolo`/`webcam`). `DONE`
 - `P15.3` Wire docs/index/mapping/status to the new preset surface. `DONE`
 
-#### Phase 16: UX Console + Governance Minimum Baseline (NOW)
+#### Phase 16: UX Console + Governance Minimum Baseline (DONE)
 
 Intent:
 - Keep UX improvements moving while freezing a stable control boundary for future governance expansion.
 - Introduce a thin web console and a local-first control API without changing core runtime semantics.
 - Add minimum governance hooks (audit trail + policy snapshot) to reduce future rework.
 
-- `P16.1` Extract shared ops service layer for presets/fleet/monitor/env checks. `NOW`
-- `P16.2` Add stream control API (`scripts/stream_control_api.py`) with local-only default and bearer option. `NEXT`
-- `P16.3` Add governance minimum baseline (audit logging + policy snapshot endpoint). `NEXT`
-- `P16.4` Add React UX console (`apps/stream-console`) for dashboard/presets/fleet/monitor/governance views. `NEXT`
-- `P16.5` Sync docs/index/mapping/status and CI for web console and API surface. `NEXT`
+- `P16.1` Extract shared ops service layer for presets/fleet/monitor/env checks. `DONE` (0bc9520)
+- `P16.2` Add stream control API (`scripts/stream_control_api.py`) with local-only default and bearer option. `DONE` (70fb300)
+- `P16.3` Add governance minimum baseline (audit logging + policy snapshot endpoint). `DONE` (1b594c1)
+- `P16.4` Add React UX console (`apps/stream-console`) for dashboard/presets/fleet/monitor/governance views. `DONE` (9889f2b)
+- `P16.5` Sync docs/index/mapping/status and CI for web console and API surface. `DONE` (d8f74fd + docs sync)
 
 #### Research Track (Not On Critical Path)
 
@@ -307,8 +307,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P16.1`
-- 전체 위치: **Phase 16 UX 콘솔 + 거버넌스 최소선 트랙 진행 중**
+- current step id: `P16.5`
+- 전체 위치: **Phase 16 UX 콘솔 + 거버넌스 최소선 트랙 완료(문서/상태 동기화 마감)**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -336,12 +336,12 @@ Intent:
 | Phase 13 | DONE | 연구 제외 실행 완결 트랙(E1~E6) 완료 |
 | Phase 14 | DONE | 영상/레거시 뉘앙스 축소, 범용 stream fleet/monitor UX 전환 완료 |
 | Phase 15 | DONE | 원커맨드 프리셋 UX + 프로필 기반 환경 진단 + 문서 동기화 완료 |
-| Phase 16 | NOW | UX 콘솔 + Control API + 거버넌스 최소선(Audit/Policy Snapshot) |
+| Phase 16 | DONE | UX 콘솔 + Control API + 거버넌스 최소선(Audit/Policy Snapshot) 완료 |
 
 ### 현재 우선순위
 
-1. `P16.1` ops 서비스 레이어를 고정해 UI/CLI/API 공통 동작 경계를 만든다
-2. 로컬 기본 + Bearer 옵션 제어 API와 감사로그 최소선을 추가한다
+1. `P16` 표면(UI/API/CLI 공용 서비스 계층)의 안정성과 문서 계약 일치를 유지한다
+2. `P17` 거버넌스 하드닝 항목(토큰 수명/감사 보존/정책 diff gate) 착수 조건을 정리한다
 3. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지
 
 ### 레거시 관련 기준

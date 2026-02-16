@@ -153,6 +153,23 @@ python scripts/stream_run.py --preset file_frames --input-path data/samples/2048
 python scripts/stream_run.py --preset file_yolo --experimental --validate-only
 ```
 
+11. Control API server (local-first, optional bearer token)
+
+```bash
+# optional: require bearer token for every API call
+export SS_CONTROL_API_TOKEN=change-me
+
+python scripts/stream_control_api.py --host 127.0.0.1 --port 18700
+```
+
+12. Thin web console (React + Vite + TypeScript)
+
+```bash
+cd apps/stream-console
+npm install
+npm run dev
+```
+
 ### Graph Spec (v2)
 
 - `plugin` format: `module:ClassName`
@@ -357,6 +374,23 @@ python scripts/stream_run.py --list
 python scripts/stream_run.py --preset inproc_demo --validate-only
 python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
 python scripts/stream_run.py --preset file_yolo --experimental --validate-only
+```
+
+11. Control API 서버(로컬 기본, 선택적 Bearer 토큰)
+
+```bash
+# 옵션: 모든 API 요청에 Bearer 토큰 강제
+export SS_CONTROL_API_TOKEN=change-me
+
+python scripts/stream_control_api.py --host 127.0.0.1 --port 18700
+```
+
+12. Thin Web 콘솔(React + Vite + TypeScript)
+
+```bash
+cd apps/stream-console
+npm install
+npm run dev
 ```
 
 ### 그래프 스펙(v2)
