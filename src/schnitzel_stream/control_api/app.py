@@ -14,12 +14,15 @@ from schnitzel_stream.ops import fleet as fleet_ops
 from schnitzel_stream.ops import monitor as monitor_ops
 from schnitzel_stream.ops import presets as preset_ops
 from schnitzel_stream.ops import process_manager as procman
+from schnitzel_stream.plugins.registry import PluginPolicy
 
+from .audit import AuditLogger
 from .auth import configured_token, request_identity, security_mode
 from .models import EnvCheckRequest, FleetStartRequest, FleetStopRequest, PresetRequest
 
 
 SCHEMA_VERSION = 1
+DEFAULT_AUDIT_PATH = Path("outputs/audit/stream_control_audit.jsonl")
 DEFAULT_LOG_DIR = Path(tempfile.gettempdir()) / "schnitzel_stream_fleet_run"
 
 
@@ -55,8 +58,9 @@ def _envelope(
     }
 
 
-def create_app(*, repo_root: Path | None = None) -> FastAPI:
+def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None) -> FastAPI:
     root = (repo_root or _repo_root()).resolve()
+    logger = AuditLogger(_abs_path(root, str(audit_path or DEFAULT_AUDIT_PATH)))
     app = FastAPI(title="schnitzel stream control api", version="1")
 
     @app.get("/api/v1/health")
@@ -69,6 +73,7 @@ def create_app(*, repo_root: Path | None = None) -> FastAPI:
                 "repo_root": str(root),
                 "security_mode": security_mode(),
                 "token_required": bool(configured_token()),
+                "audit_path": str(logger.path),
                 "actor": actor,
             },
         )
@@ -97,6 +102,8 @@ def create_app(*, repo_root: Path | None = None) -> FastAPI:
         validate_only: bool,
     ) -> dict[str, Any]:
         actor, req_id = request_identity(request)
+        action = f"preset.{ 'validate' if validate_only else 'run' }"
+        target = str(preset_id)
         try:
             table = preset_ops.build_preset_table(root)
             spec = table.get(str(preset_id))
@@ -127,6 +134,16 @@ def create_app(*, repo_root: Path | None = None) -> FastAPI:
 
             returncode = preset_ops.run_subprocess(cmd=cmd, cwd=root, env=env)
             run_ok = int(returncode) == 0
+            if not validate_only:
+                logger.append(
+                    actor=actor,
+                    action=action,
+                    target=target,
+                    status="ok" if run_ok else "error",
+                    reason="ok" if run_ok else "runtime_failed",
+                    request_id=req_id,
+                    meta={"returncode": int(returncode), "command": preset_ops.shell_cmd(cmd)},
+                )
             return _envelope(
                 request_id=req_id,
                 status="ok" if run_ok else "error",
@@ -140,6 +157,16 @@ def create_app(*, repo_root: Path | None = None) -> FastAPI:
                 error=None if run_ok else {"kind": "runtime_failed", "reason": "subprocess_nonzero"},
             )
         except HTTPException:
+            if not validate_only:
+                logger.append(
+                    actor=actor,
+                    action=action,
+                    target=target,
+                    status="error",
+                    reason="request_invalid",
+                    request_id=req_id,
+                    meta={},
+                )
             raise
 
     @app.post("/api/v1/presets/{preset_id}/validate")
@@ -152,7 +179,8 @@ def create_app(*, repo_root: Path | None = None) -> FastAPI:
 
     @app.post("/api/v1/fleet/start")
     def fleet_start(request: Request, body: FleetStartRequest) -> dict[str, Any]:
-        _actor, req_id = request_identity(request)
+        actor, req_id = request_identity(request)
+        action = "fleet.start"
         try:
             config_path = _abs_path(root, body.config)
             graph_template = _abs_path(root, body.graph_template)
@@ -176,6 +204,15 @@ def create_app(*, repo_root: Path | None = None) -> FastAPI:
                 is_process_running_fn=procman.is_process_running,
                 python_executable=sys.executable,
             )
+            logger.append(
+                actor=actor,
+                action=action,
+                target=str(log_dir),
+                status="ok",
+                reason="ok",
+                request_id=req_id,
+                meta={"streams": [s.stream_id for s in specs], "graph_template": str(graph_template)},
+            )
             return _envelope(
                 request_id=req_id,
                 data={
@@ -186,11 +223,21 @@ def create_app(*, repo_root: Path | None = None) -> FastAPI:
                 },
             )
         except HTTPException:
+            logger.append(
+                actor=actor,
+                action=action,
+                target=str(body.log_dir),
+                status="error",
+                reason="request_invalid",
+                request_id=req_id,
+                meta={},
+            )
             raise
 
     @app.post("/api/v1/fleet/stop")
     def fleet_stop(request: Request, body: FleetStopRequest) -> dict[str, Any]:
-        _actor, req_id = request_identity(request)
+        actor, req_id = request_identity(request)
+        action = "fleet.stop"
         log_dir = _abs_path(root, body.log_dir)
         pid_dir = log_dir / "pids"
         if not pid_dir.exists():
@@ -199,6 +246,15 @@ def create_app(*, repo_root: Path | None = None) -> FastAPI:
         else:
             stopped, lines = fleet_ops.stop_streams(pid_dir=pid_dir, stop_process_fn=procman.stop_process)
 
+        logger.append(
+            actor=actor,
+            action=action,
+            target=str(log_dir),
+            status="ok",
+            reason="ok",
+            request_id=req_id,
+            meta={"stopped": int(stopped)},
+        )
         return _envelope(
             request_id=req_id,
             data={"log_dir": str(log_dir), "stopped_count": int(stopped), "lines": lines},
@@ -255,6 +311,32 @@ def create_app(*, repo_root: Path | None = None) -> FastAPI:
             status="ok" if int(code) == 0 else "error",
             data=data,
             error=None if int(code) == 0 else {"kind": "env_check_failed", "reason": "required_check_failed"},
+        )
+
+    @app.get("/api/v1/governance/policy-snapshot")
+    def policy_snapshot(request: Request) -> dict[str, Any]:
+        _actor, req_id = request_identity(request)
+        policy = PluginPolicy.from_env()
+        data = {
+            "security_mode": security_mode(),
+            "token_required": bool(configured_token()),
+            "allowed_plugin_prefixes": list(policy.allowed_prefixes),
+            "allow_all_plugins": bool(policy.allow_all),
+            "audit_path": str(logger.path),
+        }
+        return _envelope(request_id=req_id, data=data)
+
+    @app.get("/api/v1/governance/audit")
+    def audit_tail(
+        request: Request,
+        limit: int = Query(default=50, ge=1, le=1000),
+        since: str = Query(default=""),
+    ) -> dict[str, Any]:
+        _actor, req_id = request_identity(request)
+        events = logger.tail(limit=int(limit), since=str(since))
+        return _envelope(
+            request_id=req_id,
+            data={"audit_path": str(logger.path), "count": len(events), "events": events},
         )
 
     return app

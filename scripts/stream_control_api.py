@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from pathlib import Path
 import sys
 
 # Add project src path for direct script execution.
@@ -15,6 +16,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run stream control API server")
     parser.add_argument("--host", default="127.0.0.1", help="Bind host (default: 127.0.0.1)")
     parser.add_argument("--port", type=int, default=18700, help="Bind port (default: 18700)")
+    parser.add_argument(
+        "--audit-path",
+        default="outputs/audit/stream_control_audit.jsonl",
+        help="Audit JSONL path",
+    )
     return parser.parse_args(argv)
 
 
@@ -33,7 +39,7 @@ def run(argv: list[str] | None = None) -> int:
 
     from schnitzel_stream.control_api import create_app
 
-    app = create_app()
+    app = create_app(audit_path=Path(str(args.audit_path)))
     # Intent: local-only default host limits accidental remote exposure unless caller opts in explicitly.
     uvicorn.run(app, host=str(args.host), port=int(args.port), log_level="info")
     return 0
