@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id (SSOT): `P11.1` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P3.3` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -19,7 +19,7 @@ Current baseline:
 - legacy runtime/docs removed from working tree
 - historical legacy references are available in git tag: `pre-legacy-purge-20260216`
 - hardening track completed (`P10.1` -> `P10.5`)
-- demo packaging track started (`P11.1`)
+- demo packaging track completed (`P11.1` -> `P11.6`)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -42,7 +42,7 @@ Verification (local):
 - 레거시 런타임/문서는 워킹 트리에서 제거됨
 - 과거 레거시 이력은 git 태그 `pre-legacy-purge-20260216`에서 조회
 - 하드닝 트랙 완료(`P10.1` -> `P10.5`)
-- 데모 패키징 트랙 시작(`P11.1`)
+- 데모 패키징 트랙 완료(`P11.1` -> `P11.6`)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`

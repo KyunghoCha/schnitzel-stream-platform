@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id: `P11.1`
+Current step id: `P3.3`
 
 ## English
 
@@ -54,7 +54,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 11 demo packaging in progress** (`P11.1` NOW; research track remains optional)
+Current position: **Phase 11 demo packaging complete** (`P3.3` remains optional research track)
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -182,19 +182,19 @@ Intent:
 - `P10.4` Plugin scaffold SDK (code/test/graph templates + guide). `DONE` (b7de1b2)
 - `P10.5` Payload profile v1 (`inproc_any`/`json_portable`/`ref_portable`) with validator bridge. `DONE` (5f1e66a)
 
-#### Phase 11: Demo Packaging & Reproducibility (NOW)
+#### Phase 11: Demo Packaging & Reproducibility (DONE)
 
 Intent:
 - Ship a reproducible professor showcase package without changing runtime core semantics.
 - Keep this cycle product-focused: demo reliability, command ergonomics, and documentation clarity.
 - Keep distributed/governance/control-plane work out of this execution track.
 
-- `P11.1` SSOT switch to demo track + scope freeze. `NOW`
-- `P11.2` Freeze 3 showcase scenarios (in-proc, durable replay, webcam). `NEXT`
-- `P11.3` Add one-command demo runner (`scripts/demo_pack.py`) with profile-based flow + report. `NEXT`
-- `P11.4` Add manual showcase guide and command docs expansion. `NEXT`
-- `P11.5` Add demo-pack tests + CI smoke integration (`--profile ci`). `NEXT`
-- `P11.6` Sync docs mapping/inventory/status for showcase assets. `NEXT`
+- `P11.1` SSOT switch to demo track + scope freeze. `DONE` (2799e5e)
+- `P11.2` Freeze 3 showcase scenarios (in-proc, durable replay, webcam). `DONE` (16b451f)
+- `P11.3` Add one-command demo runner (`scripts/demo_pack.py`) with profile-based flow + report. `DONE` (16b451f)
+- `P11.4` Add manual showcase guide and command docs expansion. `DONE` (b7712b3)
+- `P11.5` Add demo-pack tests + CI smoke integration (`--profile ci`). `DONE` (032752d, 1f76708)
+- `P11.6` Sync docs mapping/inventory/status for showcase assets. `DONE`
 
 #### Research Track (Not On Critical Path)
 
@@ -237,8 +237,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P11.1`
-- 전체 위치: **P0~P10 핵심 항목 완료, P11 데모 제품화 트랙 진행 중**
+- current step id: `P3.3`
+- 전체 위치: **P0~P11 핵심 항목 완료, P3.3은 선택 연구 트랙으로 유지**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -261,13 +261,13 @@ Intent:
 | Phase 8 | DONE | RTSP/Webcam/HTTP/JSONL 등 IO 플러그인 팩 정리 |
 | Phase 9 | DONE | 패키징/릴리즈 규율 및 엣지 운영 규약 정리 |
 | Phase 10 | DONE | 품질 게이트/CLI 정리/플러그인 DX/데이터 프로파일 하드닝 |
-| Phase 11 | NOW | 교수님 시연용 데모 패키지/재현성 고정 |
+| Phase 11 | DONE | 교수님 시연용 데모 패키지/재현성 고정 |
 
 ### 현재 우선순위
 
-1. `P11.1`: 실행 SSOT를 데모 트랙으로 전환하고 범위를 동결
-2. `P11.2`~`P11.5`: 3개 시나리오(인프로세스/내구큐/웹캠) + 원커맨드/문서형 실행 경로 완성
-3. 연구 트랙(`R1~R3`)은 실행 트랙과 분리 유지
+1. `P3.3` (optional): 사람 승인 기반 컨트롤러 계층 범위 검토
+2. 연구 트랙(`R1~R3`)은 제품 트랙과 분리 유지
+3. 데모 패키지(`showcase_*`, `scripts/demo_pack.py`)의 운영 피드백 기반 개선
 
 ### 레거시 관련 기준
 

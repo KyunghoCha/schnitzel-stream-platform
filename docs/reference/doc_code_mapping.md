@@ -33,7 +33,7 @@ This document is the active mapping between runtime code and maintained docs.
 | Runtime throttle hook | `src/schnitzel_stream/control/throttle.py` | `tests/unit/test_inproc_throttle.py` | `docs/contracts/observability.md`, `docs/implementation/runtime_core.md` |
 | Payload profile contract | `src/schnitzel_stream/contracts/payload_profile.py` | `tests/unit/test_payload_profile.py` | `docs/contracts/stream_packet.md`, `docs/implementation/runtime_core.md` |
 | Local mock backend tool | `src/schnitzel_stream/tools/mock_backend.py` | `tests/unit/nodes/test_http_nodes.py` | `docs/ops/command_reference.md` |
-| Runtime graphs/configs | `configs/graphs/*.yaml`, `configs/default.yaml` | graph validation and integration tests | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md` |
+| Runtime graphs/configs | `configs/graphs/*.yaml`, `configs/default.yaml` | graph validation and integration tests | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/professor_showcase_guide.md` |
 
 ## Script Mapping
 
@@ -43,6 +43,7 @@ This document is the active mapping between runtime code and maintained docs.
 | `scripts/regression_check.py` | v2 golden comparison helper | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/multi_cam.py` | camera-by-camera graph launcher helper | `docs/ops/command_reference.md` |
 | `scripts/scaffold_plugin.py` | plugin code/test/graph scaffold generator | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md` |
+| `scripts/demo_pack.py` | one-command showcase runner (`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/docs_hygiene.py` | docs structure/reference hygiene checker | `docs/governance/documentation_policy.md` |
 
 ## Archive Boundary
@@ -83,7 +84,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | 런타임 스로틀 훅 | `src/schnitzel_stream/control/throttle.py` | `tests/unit/test_inproc_throttle.py` | `docs/contracts/observability.md`, `docs/implementation/runtime_core.md` |
 | payload profile 계약 | `src/schnitzel_stream/contracts/payload_profile.py` | `tests/unit/test_payload_profile.py` | `docs/contracts/stream_packet.md`, `docs/implementation/runtime_core.md` |
 | 로컬 mock backend 도구 | `src/schnitzel_stream/tools/mock_backend.py` | `tests/unit/nodes/test_http_nodes.py` | `docs/ops/command_reference.md` |
-| 런타임 그래프/설정 | `configs/graphs/*.yaml`, `configs/default.yaml` | 그래프 검증/통합 테스트 | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md` |
+| 런타임 그래프/설정 | `configs/graphs/*.yaml`, `configs/default.yaml` | 그래프 검증/통합 테스트 | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/professor_showcase_guide.md` |
 
 ## 스크립트 매핑
 
@@ -93,6 +94,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | `scripts/regression_check.py` | v2 골든 비교 헬퍼 | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/multi_cam.py` | 카메라별 그래프 런처 헬퍼 | `docs/ops/command_reference.md` |
 | `scripts/scaffold_plugin.py` | 플러그인 코드/테스트/그래프 스캐폴드 생성기 | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md` |
+| `scripts/demo_pack.py` | 원커맨드 쇼케이스 실행기(`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/docs_hygiene.py` | 문서 구조/참조 무결성 검사기 | `docs/governance/documentation_policy.md` |
 
 ## 아카이브 경계

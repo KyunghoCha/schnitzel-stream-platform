@@ -25,6 +25,7 @@ Runtime baseline:
 10. `docs/design/architecture_2.0.md`
 11. `docs/ops/command_reference.md`
 12. `docs/guides/plugin_authoring_guide.md`
+13. `docs/guides/professor_showcase_guide.md`
 
 ## Active Folders
 
@@ -77,6 +78,7 @@ Runtime baseline:
 10. `docs/design/architecture_2.0.md`
 11. `docs/ops/command_reference.md`
 12. `docs/guides/plugin_authoring_guide.md`
+13. `docs/guides/professor_showcase_guide.md`
 
 ## 활성 폴더
 
