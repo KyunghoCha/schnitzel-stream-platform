@@ -12,12 +12,17 @@ from __future__ import annotations
 
 from pathlib import Path
 import sys
+import tempfile
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 import stream_fleet
+
+LEGACY_DEFAULT_CONFIG = str(SCRIPT_DIR.parent / "configs" / "cameras.yaml")
+LEGACY_DEFAULT_GRAPH_TEMPLATE = str(SCRIPT_DIR.parent / "configs" / "graphs" / "dev_camera_template_v2.yaml")
+LEGACY_DEFAULT_LOG_DIR = str(Path(tempfile.gettempdir()) / "ai_pipeline_multi_cam_run")
 
 
 def run(argv: list[str] | None = None) -> int:
@@ -26,7 +31,13 @@ def run(argv: list[str] | None = None) -> int:
         "Use `python scripts/stream_fleet.py ...` instead.",
         file=sys.stderr,
     )
-    return stream_fleet.run(argv, prog="multi_cam")
+    return stream_fleet.run(
+        argv,
+        prog="multi_cam",
+        default_config=LEGACY_DEFAULT_CONFIG,
+        default_graph_template=LEGACY_DEFAULT_GRAPH_TEMPLATE,
+        default_log_dir=LEGACY_DEFAULT_LOG_DIR,
+    )
 
 
 def main() -> None:

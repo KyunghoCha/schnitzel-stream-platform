@@ -284,7 +284,13 @@ def cmd_status(args: argparse.Namespace) -> None:
     print(f"running_count={running}")
 
 
-def build_parser(*, prog: str = "stream_fleet") -> argparse.ArgumentParser:
+def build_parser(
+    *,
+    prog: str = "stream_fleet",
+    default_config: str = DEFAULT_CONFIG,
+    default_graph_template: str = DEFAULT_GRAPH_TEMPLATE,
+    default_log_dir: str = DEFAULT_LOG_DIR,
+) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Universal stream fleet launcher (cross-platform)", prog=prog)
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -292,18 +298,18 @@ def build_parser(*, prog: str = "stream_fleet") -> argparse.ArgumentParser:
     start_parser.add_argument(
         "--config",
         "-c",
-        default=DEFAULT_CONFIG,
+        default=default_config,
         help="Path to fleet config file",
     )
     start_parser.add_argument(
         "--graph-template",
-        default=DEFAULT_GRAPH_TEMPLATE,
+        default=default_graph_template,
         help="Path to v2 graph template used for each stream process",
     )
     start_parser.add_argument(
         "--log-dir",
         "-l",
-        default=DEFAULT_LOG_DIR,
+        default=default_log_dir,
         help="Directory for logs and PID files",
     )
     start_parser.add_argument(
@@ -322,7 +328,7 @@ def build_parser(*, prog: str = "stream_fleet") -> argparse.ArgumentParser:
     stop_parser.add_argument(
         "--log-dir",
         "-l",
-        default=DEFAULT_LOG_DIR,
+        default=default_log_dir,
         help="Directory for logs and PID files",
     )
     stop_parser.set_defaults(func=cmd_stop)
@@ -331,7 +337,7 @@ def build_parser(*, prog: str = "stream_fleet") -> argparse.ArgumentParser:
     status_parser.add_argument(
         "--log-dir",
         "-l",
-        default=DEFAULT_LOG_DIR,
+        default=default_log_dir,
         help="Directory for logs and PID files",
     )
     status_parser.set_defaults(func=cmd_status)
@@ -339,8 +345,20 @@ def build_parser(*, prog: str = "stream_fleet") -> argparse.ArgumentParser:
     return parser
 
 
-def run(argv: list[str] | None = None, *, prog: str = "stream_fleet") -> int:
-    parser = build_parser(prog=prog)
+def run(
+    argv: list[str] | None = None,
+    *,
+    prog: str = "stream_fleet",
+    default_config: str = DEFAULT_CONFIG,
+    default_graph_template: str = DEFAULT_GRAPH_TEMPLATE,
+    default_log_dir: str = DEFAULT_LOG_DIR,
+) -> int:
+    parser = build_parser(
+        prog=prog,
+        default_config=default_config,
+        default_graph_template=default_graph_template,
+        default_log_dir=default_log_dir,
+    )
     args = parser.parse_args(argv)
     try:
         args.func(args)
