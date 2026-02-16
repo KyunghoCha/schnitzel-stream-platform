@@ -21,6 +21,8 @@ Environment doctor:
 ```bash
 python scripts/env_doctor.py
 python scripts/env_doctor.py --strict --json
+python scripts/env_doctor.py --profile yolo --json
+python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
 ```
 
 ### Entrypoint
@@ -58,6 +60,33 @@ python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --report-json
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --max-events 100
 ```
+
+### Preset Launcher (One-Command UX)
+
+List presets:
+
+```bash
+python scripts/stream_run.py --list
+python scripts/stream_run.py --list --experimental
+```
+
+Run presets:
+
+```bash
+python scripts/stream_run.py --preset inproc_demo --validate-only
+python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
+python scripts/stream_run.py --preset webcam_frames --camera-index 0 --max-events 30
+python scripts/stream_run.py --preset file_yolo --experimental --validate-only
+```
+
+Options:
+- `--validate-only`
+- `--max-events <int>`
+- `--input-path <path>` (file presets)
+- `--camera-index <int>` (webcam presets)
+- `--device <cpu|0|...>` (YOLO presets)
+- `--loop <true|false>` (file presets)
+- `--experimental` (required for `file_yolo`, `webcam_yolo`)
 
 ### Demo Graphs
 
@@ -193,7 +222,15 @@ Environment doctor:
 python scripts/env_doctor.py
 python scripts/env_doctor.py --strict
 python scripts/env_doctor.py --strict --json
+python scripts/env_doctor.py --profile yolo --json
+python scripts/env_doctor.py --profile yolo --model-path models/yolov8n.pt --strict --json
+python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0 --json
 ```
+
+Environment doctor profiles:
+- `base`: baseline runtime dependencies
+- `yolo`: adds `ultralytics`/`torch`, CUDA visibility summary, optional model-path check
+- `webcam`: optional camera-open probe (`--probe-webcam`)
 
 RTSP reconnect E2E (v2 graph):
 
@@ -225,6 +262,15 @@ Stream fleet launcher (primary):
 python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template_v2.yaml
 python scripts/stream_fleet.py status
 python scripts/stream_fleet.py stop
+```
+
+Preset launcher (one-command UX):
+
+```bash
+python scripts/stream_run.py --list
+python scripts/stream_run.py --preset inproc_demo --validate-only
+python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
+python scripts/stream_run.py --preset file_yolo --experimental --validate-only
 ```
 
 Read-only stream monitor (pid/log based):
@@ -295,6 +341,8 @@ export PYTHONPATH=src
 ```bash
 python scripts/env_doctor.py
 python scripts/env_doctor.py --strict --json
+python scripts/env_doctor.py --profile yolo --json
+python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
 ```
 
 ### 엔트리포인트
@@ -332,6 +380,33 @@ python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --report-json
 python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --max-events 100
 ```
+
+### 프리셋 실행기(원커맨드 UX)
+
+프리셋 목록:
+
+```bash
+python scripts/stream_run.py --list
+python scripts/stream_run.py --list --experimental
+```
+
+프리셋 실행:
+
+```bash
+python scripts/stream_run.py --preset inproc_demo --validate-only
+python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
+python scripts/stream_run.py --preset webcam_frames --camera-index 0 --max-events 30
+python scripts/stream_run.py --preset file_yolo --experimental --validate-only
+```
+
+옵션:
+- `--validate-only`
+- `--max-events <int>`
+- `--input-path <path>` (file 프리셋)
+- `--camera-index <int>` (webcam 프리셋)
+- `--device <cpu|0|...>` (YOLO 프리셋)
+- `--loop <true|false>` (file 프리셋)
+- `--experimental` (`file_yolo`, `webcam_yolo` 실행 시 필수)
 
 ### 데모 그래프
 
@@ -467,7 +542,15 @@ python -m schnitzel_stream.tools.mock_backend
 python scripts/env_doctor.py
 python scripts/env_doctor.py --strict
 python scripts/env_doctor.py --strict --json
+python scripts/env_doctor.py --profile yolo --json
+python scripts/env_doctor.py --profile yolo --model-path models/yolov8n.pt --strict --json
+python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0 --json
 ```
+
+env_doctor 프로필:
+- `base`: 기본 런타임 의존성 검사
+- `yolo`: `ultralytics`/`torch`, CUDA 가시성 요약, 모델 경로(선택) 점검
+- `webcam`: 카메라 오픈 프로브(옵션, `--probe-webcam`)
 
 RTSP 재연결 E2E(v2 그래프):
 
@@ -499,6 +582,15 @@ Stream fleet 실행기(주 경로):
 python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template_v2.yaml
 python scripts/stream_fleet.py status
 python scripts/stream_fleet.py stop
+```
+
+프리셋 실행기(원커맨드 UX):
+
+```bash
+python scripts/stream_run.py --list
+python scripts/stream_run.py --preset inproc_demo --validate-only
+python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
+python scripts/stream_run.py --preset file_yolo --experimental --validate-only
 ```
 
 읽기 전용 stream 모니터(pid/log 기반):

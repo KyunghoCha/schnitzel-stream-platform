@@ -43,12 +43,12 @@ This document is the active mapping between runtime code and maintained docs.
 
 | Script | Purpose | Docs |
 |---|---|---|
-| `scripts/env_doctor.py` | runtime environment/dependency diagnostics (`--strict`, `--json`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
+| `scripts/env_doctor.py` | runtime environment/dependency diagnostics (`--strict`, `--json`, `--profile`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/check_rtsp.py` | RTSP reconnect E2E smoke on v2 graph | `docs/ops/command_reference.md` |
 | `scripts/regression_check.py` | v2 golden comparison helper | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/stream_fleet.py` | generic stream fleet launcher (`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
 | `scripts/stream_monitor.py` | read-only stream TUI monitor (pid/log based) | `docs/ops/command_reference.md` |
-| `scripts/multi_cam.py` | legacy alias for stream fleet launcher (one-cycle compatibility bridge) | `docs/ops/command_reference.md` |
+| `scripts/stream_run.py` | one-command preset launcher (`--list`, `--preset`, `--experimental`) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/proc_graph_validate.py` | process-graph foundation validator (`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
 | `scripts/scaffold_plugin.py` | plugin code/test/graph scaffold generator | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md` |
 | `scripts/demo_pack.py` | one-command showcase runner (`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
@@ -103,12 +103,12 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 
 | 스크립트 | 목적 | 문서 |
 |---|---|---|
-| `scripts/env_doctor.py` | 런타임 환경/의존성 진단(`--strict`, `--json`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
+| `scripts/env_doctor.py` | 런타임 환경/의존성 진단(`--strict`, `--json`, `--profile`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/check_rtsp.py` | v2 그래프 기반 RTSP 재연결 E2E 스모크 | `docs/ops/command_reference.md` |
 | `scripts/regression_check.py` | v2 골든 비교 헬퍼 | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/stream_fleet.py` | 범용 stream fleet 실행기(`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
 | `scripts/stream_monitor.py` | 읽기 전용 stream TUI 모니터(pid/log 기반) | `docs/ops/command_reference.md` |
-| `scripts/multi_cam.py` | stream fleet 실행기의 레거시 alias(1사이클 호환 브리지) | `docs/ops/command_reference.md` |
+| `scripts/stream_run.py` | 원커맨드 프리셋 실행기(`--list`, `--preset`, `--experimental`) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/proc_graph_validate.py` | 프로세스 그래프 foundation 검증기(`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
 | `scripts/scaffold_plugin.py` | 플러그인 코드/테스트/그래프 스캐폴드 생성기 | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md` |
 | `scripts/demo_pack.py` | 원커맨드 쇼케이스 실행기(`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |

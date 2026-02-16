@@ -19,13 +19,13 @@ This playbook fixes decision ownership after `P12` completion.
 
 ## Execution Status Snapshot
 
-Current step id: `P15.1`
+Current step id: `P15.3`
 
 ### Agent Track Status (`E-*`)
 
 | Item | Status | Notes |
 |---|---|---|
-| `E1` | `DONE` | `env_doctor` added and wired into docs/CI path (P15 profile extension in progress) |
+| `E1` | `DONE` | `env_doctor` added and extended with profile-aware checks (`base`/`yolo`/`webcam`) |
 | `E2` | `DONE` | no-docker CI gate expanded (`env/docs/tests/procgraph/demo`) |
 | `E3` | `DONE` | `demo_pack` schema/failure taxonomy hardened |
 | `E4` | `DONE` | static report renderer (`demo_report_view`) added |
@@ -230,7 +230,7 @@ Current step id: `P15.1`
 ### Reporting Format
 
 - Each update includes:
-  - step id (`P13.1` until SSOT changes)
+  - step id (follow current SSOT step id from `docs/roadmap/execution_roadmap.md`)
   - item id (`E*` or `R*`)
   - status code (`READY`, `BLOCKED_BY_RESEARCH`, `DONE`)
   - evidence path (test log, doc path, CI run reference)
@@ -280,13 +280,13 @@ Current step id: `P15.1`
 
 ## 실행 상태 스냅샷
 
-현재 step id: `P15.1`
+현재 step id: `P15.3`
 
 ### Agent 트랙 상태 (`E-*`)
 
 | 항목 | 상태 | 메모 |
 |---|---|---|
-| `E1` | `DONE` | `env_doctor` 추가 및 문서/CI 경로 연동 완료 |
+| `E1` | `DONE` | `env_doctor` 추가 및 프로필 기반 점검(`base`/`yolo`/`webcam`) 확장 완료 |
 | `E2` | `DONE` | no-docker CI 게이트(`env/docs/tests/procgraph/demo`) 고정 |
 | `E3` | `DONE` | `demo_pack` 스키마/실패 분류 하드닝 완료 |
 | `E4` | `DONE` | 정적 리포트 렌더러(`demo_report_view`) 추가 완료 |
@@ -491,7 +491,7 @@ Current step id: `P15.1`
 ### 보고 형식
 
 - 모든 진행 보고는 다음을 포함한다:
-  - step id (`P13.1`, SSOT 변경 전까지 고정)
+  - step id (`docs/roadmap/execution_roadmap.md`의 current step id를 따름)
   - 항목 id (`E*` 또는 `R*`)
   - 상태코드 (`READY`, `BLOCKED_BY_RESEARCH`, `DONE`)
   - 증거 경로(테스트 로그/문서 경로/CI 실행 기록)

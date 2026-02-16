@@ -58,6 +58,7 @@ Runtime baseline:
 - Pack nodes: `src/schnitzel_stream/packs/`
 - Fleet runner: `scripts/stream_fleet.py`
 - Stream monitor: `scripts/stream_monitor.py`
+- Preset launcher: `scripts/stream_run.py`
 - Environment diagnostics: `scripts/env_doctor.py`
 - Showcase report renderer: `scripts/demo_report_view.py`
 
@@ -119,5 +120,6 @@ Runtime baseline:
 - 팩 노드: `src/schnitzel_stream/packs/`
 - Fleet 실행기: `scripts/stream_fleet.py`
 - Stream 모니터: `scripts/stream_monitor.py`
+- 프리셋 실행기: `scripts/stream_run.py`
 - 환경 진단: `scripts/env_doctor.py`
 - 쇼케이스 리포트 렌더러: `scripts/demo_report_view.py`

@@ -80,6 +80,8 @@ export PYTHONPATH=src
 ```bash
 python scripts/env_doctor.py
 python scripts/env_doctor.py --strict --json
+python scripts/env_doctor.py --profile yolo --json
+python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
 ```
 
 4. Validate
@@ -140,6 +142,15 @@ python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_
 python scripts/stream_fleet.py status
 python scripts/stream_monitor.py --once --json
 python scripts/stream_fleet.py stop
+```
+
+10. One-command preset launcher
+
+```bash
+python scripts/stream_run.py --list
+python scripts/stream_run.py --preset inproc_demo --validate-only
+python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
+python scripts/stream_run.py --preset file_yolo --experimental --validate-only
 ```
 
 ### Graph Spec (v2)
@@ -275,6 +286,8 @@ export PYTHONPATH=src
 ```bash
 python scripts/env_doctor.py
 python scripts/env_doctor.py --strict --json
+python scripts/env_doctor.py --profile yolo --json
+python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
 ```
 
 4. 검증
@@ -335,6 +348,15 @@ python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_
 python scripts/stream_fleet.py status
 python scripts/stream_monitor.py --once --json
 python scripts/stream_fleet.py stop
+```
+
+10. 원커맨드 프리셋 실행기
+
+```bash
+python scripts/stream_run.py --list
+python scripts/stream_run.py --preset inproc_demo --validate-only
+python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
+python scripts/stream_run.py --preset file_yolo --experimental --validate-only
 ```
 
 ### 그래프 스펙(v2)

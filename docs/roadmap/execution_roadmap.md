@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id: `P15.1`
+Current step id: `P15.3`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 15 UX preset onboarding track in progress (`P14` completed)**
+Current position: **Phase 15 UX preset onboarding track completed (`P14`~`P15` aligned)**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -241,16 +241,16 @@ Intent:
 - `P14.4` Remove `multi_cam` alias and finish stream-centric command surfaces (owner decision). `DONE`
 - `P14.5` Add tests and CI coverage for stream fleet/monitor compatibility. `DONE`
 
-#### Phase 15: UX Preset Onboarding (NOW)
+#### Phase 15: UX Preset Onboarding (DONE)
 
 Intent:
 - Provide a one-command operator experience on top of the stable v2 runtime.
 - Keep runtime core semantics unchanged while reducing command/config burden.
 - Expose advanced model presets as opt-in (`--experimental`) to keep default UX deterministic.
 
-- `P15.1` Add preset launcher (`scripts/stream_run.py`) and lock default vs experimental preset exposure. `NOW`
-- `P15.2` Add profile-aware environment doctor checks (`base`/`yolo`/`webcam`). `NEXT`
-- `P15.3` Wire docs/index/mapping/status to the new preset surface. `NEXT`
+- `P15.1` Add preset launcher (`scripts/stream_run.py`) and lock default vs experimental preset exposure. `DONE`
+- `P15.2` Add profile-aware environment doctor checks (`base`/`yolo`/`webcam`). `DONE`
+- `P15.3` Wire docs/index/mapping/status to the new preset surface. `DONE`
 
 #### Research Track (Not On Critical Path)
 
@@ -294,8 +294,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P15.1`
-- 전체 위치: **P15 UX 프리셋 온보딩 트랙 진행 중(`P14` 완료 상태)**
+- current step id: `P15.3`
+- 전체 위치: **P15 UX 프리셋 온보딩 트랙 완료(`P14`~`P15` 정합성 반영)**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -322,12 +322,12 @@ Intent:
 | Phase 12 | DONE | 프로세스 그래프 스펙/검증기(Validator-First, SQLite 1:1) 도입 완료 |
 | Phase 13 | DONE | 연구 제외 실행 완결 트랙(E1~E6) 완료 |
 | Phase 14 | DONE | 영상/레거시 뉘앙스 축소, 범용 stream fleet/monitor UX 전환 완료 |
-| Phase 15 | NOW | 원커맨드 프리셋 UX와 프로필 기반 환경 진단 진입 |
+| Phase 15 | DONE | 원커맨드 프리셋 UX + 프로필 기반 환경 진단 + 문서 동기화 완료 |
 
 ### 현재 우선순위
 
-1. `stream_run` 기반 원커맨드 프리셋 UX를 기본 진입 경로로 정착
-2. `stream_fleet`/`stream_monitor` 운영 경로와 문서/CI 정합성 고정
+1. `stream_run`/`stream_fleet`/`stream_monitor` 운영 표면의 회귀 테스트를 유지
+2. 문서-코드 매핑/인벤토리 동기화 규율을 유지해 SSOT 드리프트 방지
 3. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지
 
 ### 레거시 관련 기준
