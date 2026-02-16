@@ -51,6 +51,15 @@ def _as_mapping(raw: Any) -> dict[str, Any]:
     return dict(raw) if isinstance(raw, Mapping) else {}
 
 
+def _as_list(raw: Any) -> list[Any]:
+    if raw is None or isinstance(raw, (str, bytes, Mapping)):
+        return []
+    try:
+        return list(raw)
+    except TypeError:
+        return []
+
+
 def load_stream_specs(config_path: Path) -> list[StreamSpec]:
     """Load enabled stream specs from fleet config.
 
@@ -69,14 +78,10 @@ def load_stream_specs(config_path: Path) -> list[StreamSpec]:
         sys.exit(1)
 
     data = OmegaConf.load(config_path)
-    raw_streams = data.get("streams", [])
-    if not isinstance(raw_streams, list):
-        raw_streams = []
+    raw_streams = _as_list(data.get("streams", []))
     if not raw_streams:
         # Intent: one-cycle compatibility bridge for prior camera/source inventory files.
-        raw_streams = data.get("cameras", [])
-        if not isinstance(raw_streams, list):
-            raw_streams = []
+        raw_streams = _as_list(data.get("cameras", []))
 
     specs: list[StreamSpec] = []
     for raw in raw_streams:
