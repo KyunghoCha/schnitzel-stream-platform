@@ -81,6 +81,9 @@ jobs:
           PYTHONPATH: src
         run: python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --max-events 5
 
+      - name: Run demo pack (ci profile)
+        run: python scripts/demo_pack.py --profile ci --max-events 10
+
   required-gate:
     name: required-gate
     runs-on: ubuntu-latest
