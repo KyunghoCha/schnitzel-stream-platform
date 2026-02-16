@@ -77,3 +77,59 @@ def test_durable_queue_replay_and_ack_across_restarts(tmp_path):
     result2 = runner3.run(nodes=drain_nodes, edges=drain_edges)
     assert len(result2.outputs_by_node["src"]) == 0
 
+    q3 = SqliteQueue(db_path)
+    try:
+        assert q3.ack(seq=0) is False
+        assert q3.ack(seq=-1) is False
+        assert q3.read(limit=10) == []
+    finally:
+        q3.close()
+
+
+def test_durable_queue_delete_on_emit_clears_rows_without_ack(tmp_path):
+    db_path = tmp_path / "queue.sqlite3"
+
+    enqueue_nodes = [
+        NodeSpec(
+            node_id="src",
+            kind="source",
+            plugin="schnitzel_stream.nodes.dev:StaticSource",
+            config={
+                "packets": [
+                    {
+                        "kind": "event",
+                        "source_id": "cam01",
+                        "payload": {"x": 1},
+                        "meta": {"idempotency_key": "event-delete-on-emit"},
+                    }
+                ]
+            },
+        ),
+        NodeSpec(
+            node_id="q",
+            kind="sink",
+            plugin="schnitzel_stream.nodes.durable_sqlite:SqliteQueueSink",
+            config={"path": str(db_path), "forward": False},
+        ),
+    ]
+    enqueue_edges = [EdgeSpec(src="src", dst="q")]
+    InProcGraphRunner().run(nodes=enqueue_nodes, edges=enqueue_edges)
+
+    drain_nodes = [
+        NodeSpec(
+            node_id="src",
+            kind="source",
+            plugin="schnitzel_stream.nodes.durable_sqlite:SqliteQueueSource",
+            config={"path": str(db_path), "limit": 100, "delete_on_emit": True},
+        ),
+        NodeSpec(node_id="out", kind="sink", plugin="schnitzel_stream.nodes.dev:PrintSink", config={"prefix": "T "}),
+    ]
+    drain_edges = [EdgeSpec(src="src", dst="out")]
+    result = InProcGraphRunner().run(nodes=drain_nodes, edges=drain_edges)
+    assert len(result.outputs_by_node["src"]) == 1
+
+    q = SqliteQueue(db_path)
+    try:
+        assert q.read(limit=10) == []
+    finally:
+        q.close()
