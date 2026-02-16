@@ -17,6 +17,7 @@ EXIT_OK = 0
 EXIT_RUN_FAILED = 1
 EXIT_VALIDATE_FAILED = 2
 EXIT_WEBCAM_FAILED = 20
+COMMAND_TIMEOUT_SEC = 120.0
 
 
 @dataclass(frozen=True)
@@ -80,22 +81,33 @@ def _tail_text(text: str, *, max_lines: int = 20) -> str:
 
 def _run_command(cmd: list[str], *, cwd: Path, env: dict[str, str]) -> CommandResult:
     started = time.monotonic()
-    proc = subprocess.run(
-        cmd,
-        cwd=str(cwd),
-        env=env,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-    )
-    duration = time.monotonic() - started
-    return CommandResult(
-        returncode=int(proc.returncode),
-        stdout=str(proc.stdout),
-        stderr=str(proc.stderr),
-        duration_sec=float(duration),
-    )
+    try:
+        proc = subprocess.run(
+            cmd,
+            cwd=str(cwd),
+            env=env,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=COMMAND_TIMEOUT_SEC,
+        )
+        duration = time.monotonic() - started
+        return CommandResult(
+            returncode=int(proc.returncode),
+            stdout=str(proc.stdout),
+            stderr=str(proc.stderr),
+            duration_sec=float(duration),
+        )
+    except subprocess.TimeoutExpired as exc:
+        duration = time.monotonic() - started
+        # Intent: fail-fast instead of hanging forever when a scenario cannot make progress.
+        return CommandResult(
+            returncode=124,
+            stdout=str(exc.stdout or ""),
+            stderr=f"command timed out after {COMMAND_TIMEOUT_SEC:.0f}s",
+            duration_sec=float(duration),
+        )
 
 
 def _shell_cmd(cmd: list[str]) -> str:

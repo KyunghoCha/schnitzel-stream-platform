@@ -9,7 +9,7 @@ nodes:
       reconnect: true
       reconnect_backoff_sec: 0.5
       reconnect_backoff_max_sec: 5.0
-      reconnect_max_attempts: 0
+      reconnect_max_attempts: 5
   - id: sample
     kind: node
     plugin: schnitzel_stream.packs.vision.nodes:EveryNthFrameSamplerNode
