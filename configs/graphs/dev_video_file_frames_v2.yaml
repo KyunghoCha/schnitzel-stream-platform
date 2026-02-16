@@ -4,9 +4,10 @@ nodes:
     kind: source
     plugin: schnitzel_stream.packs.vision.nodes:OpenCvVideoFileSource
     config:
-      path: data/samples/2048246-hd_1920_1080_24fps.mp4
-      source_id: cam01
-      max_frames: 30
+      path: ${oc.env:SS_INPUT_PATH,data/samples/2048246-hd_1920_1080_24fps.mp4}
+      source_id: ${oc.env:SS_STREAM_ID,cam01}
+      max_frames: ${oc.env:SS_MAX_FRAMES,30}
+      loop: ${oc.env:SS_INPUT_LOOP,false}
 
   - id: sample
     kind: node

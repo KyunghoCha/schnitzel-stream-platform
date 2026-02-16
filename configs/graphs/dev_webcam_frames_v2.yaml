@@ -4,8 +4,8 @@ nodes:
     kind: source
     plugin: schnitzel_stream.packs.vision.nodes:OpenCvWebcamSource
     config:
-      camera_index: 0
-      source_id: cam01
+      camera_index: ${oc.env:SS_CAMERA_INDEX,0}
+      source_id: ${oc.env:SS_STREAM_ID,cam01}
       reconnect: true
       reconnect_backoff_sec: 0.5
       reconnect_backoff_max_sec: 5.0
