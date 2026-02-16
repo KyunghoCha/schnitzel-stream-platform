@@ -19,13 +19,13 @@ This playbook fixes decision ownership after `P12` completion.
 
 ## Execution Status Snapshot
 
-Current step id: `P13.1`
+Current step id: `P15.1`
 
 ### Agent Track Status (`E-*`)
 
 | Item | Status | Notes |
 |---|---|---|
-| `E1` | `DONE` | `env_doctor` added and wired into docs/CI path |
+| `E1` | `DONE` | `env_doctor` added and wired into docs/CI path (P15 profile extension in progress) |
 | `E2` | `DONE` | no-docker CI gate expanded (`env/docs/tests/procgraph/demo`) |
 | `E3` | `DONE` | `demo_pack` schema/failure taxonomy hardened |
 | `E4` | `DONE` | static report renderer (`demo_report_view`) added |
@@ -280,7 +280,7 @@ Current step id: `P13.1`
 
 ## 실행 상태 스냅샷
 
-현재 step id: `P13.1`
+현재 step id: `P15.1`
 
 ### Agent 트랙 상태 (`E-*`)
 

@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id (SSOT): `P14.1` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P15.1` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -22,7 +22,8 @@ Current baseline:
 - demo packaging track completed (`P11.1` -> `P11.6`)
 - process-graph foundation track completed (`P12.1`~`P12.7`, validator-first with SQLite bridge)
 - execution completion track completed (`P13.1`~`P13.8`, implementation-only E1~E6 lane)
-- universal UX/TUI transition track started (`P14.1`, stream-first operator UX)
+- universal UX/TUI transition track completed (`P14.1`~`P14.5`)
+- UX preset onboarding track started (`P15.1`, one-command operator presets)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -48,7 +49,8 @@ Verification (local):
 - 데모 패키징 트랙 완료(`P11.1` -> `P11.6`)
 - 프로세스 그래프 foundation 트랙 완료(`P12.1`~`P12.7`, SQLite 기반 validator-first)
 - 실행 완결 트랙 완료(`P13.1`~`P13.8`, 연구 제외 E1~E6 구현 레인)
-- 범용 UX/TUI 전환 트랙 시작(`P14.1`, stream 중심 운영 UX)
+- 범용 UX/TUI 전환 트랙 완료(`P14.1`~`P14.5`)
+- UX 프리셋 온보딩 트랙 시작(`P15.1`, 원커맨드 운영 프리셋)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`
