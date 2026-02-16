@@ -41,64 +41,57 @@ def test_load_process_graph_spec_parses_v1(tmp_path):
     assert [x.producer for x in spec.links] == ["enqueue"]
 
 
-def test_load_process_graph_spec_rejects_wrong_version(tmp_path):
+@pytest.mark.parametrize(
+    ("body", "match"),
+    [
+        (
+            """
+            version: 2
+            processes: []
+            channels: []
+            links: []
+            """,
+            "unsupported process graph spec version",
+        ),
+        (
+            """
+            version: 1
+            processes:
+              - id: p1
+                graph: g1.yaml
+              - id: p1
+                graph: g2.yaml
+            channels:
+              - id: q1
+                kind: sqlite_queue
+                path: outputs/queues/dev_demo.sqlite3
+            links:
+              - producer: p1
+                consumer: p1
+                channel: q1
+            """,
+            "duplicate process id",
+        ),
+        (
+            """
+            version: 1
+            processes:
+              - id: p1
+            channels:
+              - id: q1
+                kind: sqlite_queue
+                path: outputs/queues/dev_demo.sqlite3
+            links:
+              - producer: p1
+                consumer: p2
+                channel: q1
+            """,
+            "requires non-empty graph path",
+        ),
+    ],
+)
+def test_load_process_graph_spec_rejects_invalid_specs(tmp_path, body: str, match: str):
     p = tmp_path / "proc_graph.yaml"
-    _write(
-        p,
-        """
-        version: 2
-        processes: []
-        channels: []
-        links: []
-        """,
-    )
-    with pytest.raises(ValueError, match="unsupported process graph spec version"):
+    _write(p, body)
+    with pytest.raises(ValueError, match=match):
         load_process_graph_spec(p)
-
-
-def test_load_process_graph_spec_rejects_duplicate_ids(tmp_path):
-    p = tmp_path / "proc_graph.yaml"
-    _write(
-        p,
-        """
-        version: 1
-        processes:
-          - id: p1
-            graph: g1.yaml
-          - id: p1
-            graph: g2.yaml
-        channels:
-          - id: q1
-            kind: sqlite_queue
-            path: outputs/queues/dev_demo.sqlite3
-        links:
-          - producer: p1
-            consumer: p1
-            channel: q1
-        """,
-    )
-    with pytest.raises(ValueError, match="duplicate process id"):
-        load_process_graph_spec(p)
-
-
-def test_load_process_graph_spec_rejects_missing_required_fields(tmp_path):
-    p = tmp_path / "proc_graph.yaml"
-    _write(
-        p,
-        """
-        version: 1
-        processes:
-          - id: p1
-        channels:
-          - id: q1
-            kind: sqlite_queue
-            path: outputs/queues/dev_demo.sqlite3
-        links:
-          - producer: p1
-            consumer: p2
-            channel: q1
-        """,
-    )
-    with pytest.raises(ValueError, match="requires non-empty graph path"):
-        load_process_graph_spec(p)
-

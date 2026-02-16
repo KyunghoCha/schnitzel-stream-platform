@@ -12,8 +12,6 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from schnitzel_stream.procgraph.validate import ProcessGraphValidationError, validate_process_graph
-
 EXIT_OK = 0
 EXIT_GENERAL_ERROR = 1
 EXIT_VALIDATION_ERROR = 2
@@ -31,6 +29,12 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--spec", required=True, help="Path to process graph spec (version: 1)")
     parser.add_argument("--report-json", action="store_true", help="Print validation report as JSON")
     return parser.parse_args(argv)
+
+
+def _load_validator_api() -> tuple[type[Exception], object]:
+    from schnitzel_stream.procgraph.validate import ProcessGraphValidationError, validate_process_graph
+
+    return ProcessGraphValidationError, validate_process_graph
 
 
 def _ok_payload(report: object) -> dict[str, object]:
@@ -63,8 +67,18 @@ def run(argv: list[str] | None = None) -> int:
     spec_path = _resolve_spec_path(str(args.spec))
 
     try:
-        report = validate_process_graph(spec_path)
-    except ProcessGraphValidationError as exc:
+        validation_error_type, validate_fn = _load_validator_api()
+    except Exception as exc:
+        # Intent: dependency/import failures should return a stable general error code.
+        if args.report_json:
+            print(json.dumps(_error_payload(kind="runtime", spec=spec_path, message=str(exc)), separators=(",", ":")))
+        else:
+            print(f"Error: {exc}", file=sys.stderr)
+        return EXIT_GENERAL_ERROR
+
+    try:
+        report = validate_fn(spec_path)
+    except validation_error_type as exc:  # type: ignore[misc]
         if args.report_json:
             print(json.dumps(_error_payload(kind="validation", spec=spec_path, message=str(exc)), separators=(",", ":")))
         else:
@@ -100,4 +114,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
