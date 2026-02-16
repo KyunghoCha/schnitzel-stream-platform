@@ -23,9 +23,7 @@ Current focus:
 - plugin-based IO/policy nodes
 - durable queue primitives (SQLite/WAL)
 - edge-oriented ops conventions
-- CLI is graph-native only (legacy compatibility flags removed)
-
-Legacy v1 runtime (`ai.*`, job graph) has been removed from `main`.
+- CLI is graph-native only
 
 ### Architecture
 
@@ -123,6 +121,27 @@ edges:
 config: {}
 ```
 
+### Node Kind Model (5 kinds)
+
+```mermaid
+flowchart LR
+  I["initial<br/>bootstrap packet/state"] --> N1["node<br/>process(packet)"]
+  S["source<br/>run()"] --> N1
+  N1 --> D["delay<br/>gated pass-through"]
+  D --> N2["node<br/>process(packet)"]
+  N2 --> K["sink<br/>terminal process(packet)"]
+```
+
+- `source`: emits packets through `run()`; must not have incoming edges.
+- `node`: generic transform/router; can be used for fan-in/fan-out.
+- `sink`: terminal consumer; must not have outgoing edges.
+- `delay`: time/condition-gated pass-through kind; currently handled via plugin `process()` semantics.
+- `initial`: bootstrap kind for initial state/seed packet injection at graph start.
+
+Runtime note:
+- In the current in-proc runtime, only `source` has dedicated scheduler behavior.
+- `node`, `sink`, `delay`, `initial` are executed via `process()` once packets are enqueued.
+
 ### Plugin Policy
 
 Default allowlist is `schnitzel_stream.*`.
@@ -156,9 +175,7 @@ Default allowlist is `schnitzel_stream.*`.
 - 플러그인 기반 입출력/정책 노드
 - 내구 큐(SQLite/WAL) 빌딩블록
 - 엣지 운영 관례 정리
-- CLI는 그래프 중심 인터페이스만 지원(레거시 호환 플래그 제거)
-
-레거시 v1 런타임(`ai.*`, job graph)은 `main`에서 제거되었습니다.
+- CLI는 그래프 중심 인터페이스만 지원
 
 ### 아키텍처
 
@@ -255,6 +272,27 @@ edges:
     to: out
 config: {}
 ```
+
+### 노드 Kind 모델(5종)
+
+```mermaid
+flowchart LR
+  I["initial<br/>초기 패킷/상태 주입"] --> N1["node<br/>process(packet)"]
+  S["source<br/>run()"] --> N1
+  N1 --> D["delay<br/>조건/시간 기반 통과"]
+  D --> N2["node<br/>process(packet)"]
+  N2 --> K["sink<br/>종단 process(packet)"]
+```
+
+- `source`: `run()`으로 패킷을 생성하는 시작 노드이며 incoming edge를 가질 수 없습니다.
+- `node`: 일반 변환/라우팅 노드이며 fan-in, fan-out 구성의 중심이 됩니다.
+- `sink`: 최종 소비 노드이며 outgoing edge를 가질 수 없습니다.
+- `delay`: 시간/조건 기반으로 패킷 흐름을 제어하는 kind이며 현재는 플러그인 `process()` 의미로 동작합니다.
+- `initial`: 그래프 시작 시 초기 상태/시드 패킷을 주입할 때 쓰는 kind입니다.
+
+런타임 참고:
+- 현재 in-proc 런타임에서 스케줄러 특수 경로를 가지는 건 `source`입니다.
+- `node`, `sink`, `delay`, `initial`은 큐에 들어온 패킷을 `process()`로 처리합니다.
 
 ### 플러그인 정책
 
