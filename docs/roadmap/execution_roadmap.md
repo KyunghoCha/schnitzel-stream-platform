@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id: `P15.3`
+Current step id: `P16.1`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 15 UX preset onboarding track completed (`P14`~`P15` aligned)**
+Current position: **Phase 16 UX console and governance minimum baseline in progress**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -252,6 +252,19 @@ Intent:
 - `P15.2` Add profile-aware environment doctor checks (`base`/`yolo`/`webcam`). `DONE`
 - `P15.3` Wire docs/index/mapping/status to the new preset surface. `DONE`
 
+#### Phase 16: UX Console + Governance Minimum Baseline (NOW)
+
+Intent:
+- Keep UX improvements moving while freezing a stable control boundary for future governance expansion.
+- Introduce a thin web console and a local-first control API without changing core runtime semantics.
+- Add minimum governance hooks (audit trail + policy snapshot) to reduce future rework.
+
+- `P16.1` Extract shared ops service layer for presets/fleet/monitor/env checks. `NOW`
+- `P16.2` Add stream control API (`scripts/stream_control_api.py`) with local-only default and bearer option. `NEXT`
+- `P16.3` Add governance minimum baseline (audit logging + policy snapshot endpoint). `NEXT`
+- `P16.4` Add React UX console (`apps/stream-console`) for dashboard/presets/fleet/monitor/governance views. `NEXT`
+- `P16.5` Sync docs/index/mapping/status and CI for web console and API surface. `NEXT`
+
 #### Research Track (Not On Critical Path)
 
 Intent:
@@ -294,8 +307,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P15.3`
-- 전체 위치: **P15 UX 프리셋 온보딩 트랙 완료(`P14`~`P15` 정합성 반영)**
+- current step id: `P16.1`
+- 전체 위치: **Phase 16 UX 콘솔 + 거버넌스 최소선 트랙 진행 중**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -323,11 +336,12 @@ Intent:
 | Phase 13 | DONE | 연구 제외 실행 완결 트랙(E1~E6) 완료 |
 | Phase 14 | DONE | 영상/레거시 뉘앙스 축소, 범용 stream fleet/monitor UX 전환 완료 |
 | Phase 15 | DONE | 원커맨드 프리셋 UX + 프로필 기반 환경 진단 + 문서 동기화 완료 |
+| Phase 16 | NOW | UX 콘솔 + Control API + 거버넌스 최소선(Audit/Policy Snapshot) |
 
 ### 현재 우선순위
 
-1. `stream_run`/`stream_fleet`/`stream_monitor` 운영 표면의 회귀 테스트를 유지
-2. 문서-코드 매핑/인벤토리 동기화 규율을 유지해 SSOT 드리프트 방지
+1. `P16.1` ops 서비스 레이어를 고정해 UI/CLI/API 공통 동작 경계를 만든다
+2. 로컬 기본 + Bearer 옵션 제어 API와 감사로그 최소선을 추가한다
 3. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지
 
 ### 레거시 관련 기준
