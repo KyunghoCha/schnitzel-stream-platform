@@ -8,6 +8,7 @@ nodes:
       path: ${oc.env:SS_INPUT_PATH,data/samples/2048246-hd_1920_1080_24fps.mp4}
       source_id: ${oc.env:SS_STREAM_ID,file01}
       max_frames: ${oc.env:SS_MAX_FRAMES,0}
+      loop: ${oc.env:SS_INPUT_LOOP,true}
 
   - id: yolo
     kind: node

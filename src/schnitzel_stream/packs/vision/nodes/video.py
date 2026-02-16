@@ -37,6 +37,21 @@ def _parse_iso_dt(s: str) -> datetime:
     return dt
 
 
+def _as_bool(v: Any, *, default: bool) -> bool:
+    if isinstance(v, bool):
+        return v
+    if v is None:
+        return bool(default)
+    if isinstance(v, (int, float)):
+        return bool(v)
+    text = str(v).strip().lower()
+    if text in {"1", "true", "t", "yes", "y", "on"}:
+        return True
+    if text in {"0", "false", "f", "no", "n", "off", ""}:
+        return False
+    return bool(default)
+
+
 @dataclass
 class OpenCvVideoFileSource:
     """Read frames from a video file and emit `kind=frame` packets.
@@ -49,6 +64,7 @@ class OpenCvVideoFileSource:
     - path: str (required)
     - source_id: str (default: node_id)
     - max_frames: int (default: 0 -> no limit)
+    - loop: bool (default: false) : when EOF is reached, reopen the file and continue
     - start_ts: str (optional ISO-8601)
       - If provided, packet.ts is computed as start_ts + video_pos_msec.
       - If omitted, packet.ts is generated at emit-time (not deterministic across runs).
@@ -61,6 +77,7 @@ class OpenCvVideoFileSource:
     path: str
     source_id: str
     max_frames: int
+    loop: bool
     start_ts: datetime | None
 
     def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
@@ -86,16 +103,25 @@ class OpenCvVideoFileSource:
         if max_frames < 0:
             raise ValueError("OpenCvVideoFileSource config.max_frames must be >= 0")
         self.max_frames = max_frames
+        self.loop = _as_bool(cfg.get("loop", False), default=False)
 
         start_ts_raw = cfg.get("start_ts")
         self.start_ts = _parse_iso_dt(start_ts_raw) if isinstance(start_ts_raw, str) and start_ts_raw.strip() else None
 
         # Intent: keep the capture as instance state so runtime throttles can stop early
         # without leaking file handles (runner always calls node.close()).
-        self._cap = cv2.VideoCapture(self.path)
-        if not self._cap.isOpened():
-            raise RuntimeError(f"failed to open video file: {self.path}")
+        self._cap = self._open_capture()
         self._closed = False
+
+    def _open_capture(self) -> Any:
+        assert cv2 is not None  # for type checkers
+        cap = cv2.VideoCapture(self.path)
+        if not cap.isOpened():
+            try:
+                cap.release()
+            finally:
+                raise RuntimeError(f"failed to open video file: {self.path}")
+        return cap
 
     def run(self) -> Iterable[StreamPacket]:
         assert cv2 is not None  # for type checkers
@@ -106,7 +132,12 @@ class OpenCvVideoFileSource:
         while True:
             ok, frame = self._cap.read()
             if not ok:
-                break
+                if not self.loop:
+                    break
+                # Intent: when looping is enabled, drop EOF state and continue from the start.
+                self._cap.release()
+                self._cap = self._open_capture()
+                continue
 
             pos_msec = float(self._cap.get(cv2.CAP_PROP_POS_MSEC) or 0.0)
             if self.start_ts is not None:
