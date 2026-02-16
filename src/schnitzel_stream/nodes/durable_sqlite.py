@@ -78,8 +78,11 @@ class SqliteQueueSource:
     """
 
     OUTPUT_KINDS = {"*"}
-    REQUIRES_PORTABLE_PAYLOAD = True  # Emitted packets are JSON-only (P7.1).
-    OUTPUT_PROFILE = "json_portable"
+    REQUIRES_PORTABLE_PAYLOAD = True  # Emitted packets remain portable (JSON/ref-safe) only.
+    # Intent:
+    # - Queue rows can contain plain JSON events or portable references (e.g., bytes_ref).
+    # - `ref_portable` keeps JSON consumers compatible while allowing explicit ref consumers.
+    OUTPUT_PROFILE = "ref_portable"
 
     def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None) -> None:
         cfg = dict(config or {})

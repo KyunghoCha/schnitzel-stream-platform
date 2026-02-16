@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import argparse
+from collections.abc import Mapping
 import shlex
 import sys
 import tempfile
@@ -23,6 +24,7 @@ from typing import Any
 # Add project root to path for imports.
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
+sys.path.insert(0, str(SCRIPT_DIR))
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from process_manager import is_process_running, start_process, stop_process
@@ -48,7 +50,10 @@ _SOURCE_PLUGIN_DEFAULTS: dict[str, str] = {
 
 
 def _as_mapping(raw: Any) -> dict[str, Any]:
-    return dict(raw) if isinstance(raw, dict) else {}
+    # Intent:
+    # - OmegaConf returns DictConfig (Mapping) instead of plain dict.
+    # - Accept generic mappings so source.type/url/path/index are preserved.
+    return dict(raw) if isinstance(raw, Mapping) else {}
 
 
 def load_camera_specs(config_path: Path) -> list[CameraSpec]:
