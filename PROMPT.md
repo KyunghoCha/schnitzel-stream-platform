@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-16
 
-Current step id (SSOT): `P12.1` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P13.1` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -21,6 +21,7 @@ Current baseline:
 - hardening track completed (`P10.1` -> `P10.5`)
 - demo packaging track completed (`P11.1` -> `P11.6`)
 - process-graph foundation track completed (`P12.1`~`P12.7`, validator-first with SQLite bridge)
+- execution completion track opened (`P13.1`, implementation-only E1~E6 lane)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -45,6 +46,7 @@ Verification (local):
 - 하드닝 트랙 완료(`P10.1` -> `P10.5`)
 - 데모 패키징 트랙 완료(`P11.1` -> `P11.6`)
 - 프로세스 그래프 foundation 트랙 완료(`P12.1`~`P12.7`, SQLite 기반 validator-first)
+- 실행 완결 트랙 시작(`P13.1`, 연구 제외 E1~E6 구현 레인)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`

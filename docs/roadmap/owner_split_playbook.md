@@ -17,6 +17,41 @@ This playbook fixes decision ownership after `P12` completion.
   - immediate runtime `N:N` channel execution
   - immediate runtime cycle execution beyond current validator policy
 
+## Execution Status Snapshot
+
+Current step id: `P13.1`
+
+### Agent Track Status (`E-*`)
+
+| Item | Status | Notes |
+|---|---|---|
+| `E1` | `READY` | environment/dependency recovery automation |
+| `E2` | `READY` | CI gate hardening for docs/tests/graph/demo |
+| `E3` | `READY` | demo-pack report/failure taxonomy hardening |
+| `E4` | `READY` | static report visualization (Markdown/HTML) |
+| `E5` | `READY` | plugin scaffold DX/auto-export improvements |
+| `E6` | `READY` | durable queue reliability regression expansion |
+
+### Research Track Status (`R-*`)
+
+| Item | Status | Notes |
+|---|---|---|
+| `R1` | `BLOCKED_BY_RESEARCH` | requires thesis-grade semantics decisions |
+| `R2` | `BLOCKED_BY_RESEARCH` | ack ownership/dedup policy is unresolved |
+| `R3` | `BLOCKED_BY_RESEARCH` | runtime cycle safety model not fixed |
+| `R4` | `BLOCKED_BY_RESEARCH` | distributed orchestration model not fixed |
+| `R5` | `BLOCKED_BY_RESEARCH` | cross-host payload lifecycle model pending |
+| `R6` | `BLOCKED_BY_RESEARCH` | security/governance baseline pending |
+
+### Gate Status (`G-*`)
+
+| Gate | Status | Dependency |
+|---|---|---|
+| `G1` | `BLOCKED_BY_RESEARCH` | `R1` + `R2` |
+| `G2` | `BLOCKED_BY_RESEARCH` | `R3` |
+| `G3` | `BLOCKED_BY_RESEARCH` | `R4` |
+| `G4` | `BLOCKED_BY_RESEARCH` | `R5` + `R6` |
+
 ## Agent Build Track (`E-*`)
 
 ### `E1` CI and Environment Recovery
@@ -195,7 +230,7 @@ This playbook fixes decision ownership after `P12` completion.
 ### Reporting Format
 
 - Each update includes:
-  - step id (`P12.1` until SSOT changes)
+  - step id (`P13.1` until SSOT changes)
   - item id (`E*` or `R*`)
   - status code (`READY`, `BLOCKED_BY_RESEARCH`, `DONE`)
   - evidence path (test log, doc path, CI run reference)
@@ -219,6 +254,7 @@ This playbook fixes decision ownership after `P12` completion.
 ### Assumptions and Defaults
 
 - Base state is `P12` completion with in-proc runtime unchanged.
+- P13 execution-completion cycle is active for implementation-only items (`E1`~`E6`).
 - Calendar dates are not used as hard gates; gate satisfaction order is primary.
 - Full GUI stack is out-of-scope before research gates; static visualization is preferred first.
 - No gate-blocked implementation starts before required research deliverables are accepted.
@@ -241,6 +277,41 @@ This playbook fixes decision ownership after `P12` completion.
   - 즉시 분산 컨트롤 플레인 구현
   - 즉시 `N:N` 채널 런타임 실행
   - 현재 validator 정책을 넘는 즉시 루프 실행 허용
+
+## 실행 상태 스냅샷
+
+현재 step id: `P13.1`
+
+### Agent 트랙 상태 (`E-*`)
+
+| 항목 | 상태 | 메모 |
+|---|---|---|
+| `E1` | `READY` | 환경/의존성 복구 자동화 |
+| `E2` | `READY` | 문서/테스트/그래프/데모 CI 게이트 고정 |
+| `E3` | `READY` | demo-pack 리포트/실패 분류 하드닝 |
+| `E4` | `READY` | 정적 리포트 시각화(Markdown/HTML) |
+| `E5` | `READY` | 플러그인 scaffold DX/자동 export 보강 |
+| `E6` | `READY` | durable queue 신뢰성 회귀 확장 |
+
+### 연구 트랙 상태 (`R-*`)
+
+| 항목 | 상태 | 메모 |
+|---|---|---|
+| `R1` | `BLOCKED_BY_RESEARCH` | 의미론 결정이 연구 과제로 남아 있음 |
+| `R2` | `BLOCKED_BY_RESEARCH` | ack ownership/dedup 정책 미확정 |
+| `R3` | `BLOCKED_BY_RESEARCH` | runtime cycle 안전 모델 미확정 |
+| `R4` | `BLOCKED_BY_RESEARCH` | 분산 오케스트레이션 모델 미확정 |
+| `R5` | `BLOCKED_BY_RESEARCH` | cross-host payload lifecycle 미확정 |
+| `R6` | `BLOCKED_BY_RESEARCH` | 보안/거버넌스 기준선 미확정 |
+
+### 게이트 상태 (`G-*`)
+
+| 게이트 | 상태 | 의존 |
+|---|---|---|
+| `G1` | `BLOCKED_BY_RESEARCH` | `R1` + `R2` |
+| `G2` | `BLOCKED_BY_RESEARCH` | `R3` |
+| `G3` | `BLOCKED_BY_RESEARCH` | `R4` |
+| `G4` | `BLOCKED_BY_RESEARCH` | `R5` + `R6` |
 
 ## Agent 구현 트랙 (`E-*`)
 
@@ -420,7 +491,7 @@ This playbook fixes decision ownership after `P12` completion.
 ### 보고 형식
 
 - 모든 진행 보고는 다음을 포함한다:
-  - step id (`P12.1`, SSOT 변경 전까지 고정)
+  - step id (`P13.1`, SSOT 변경 전까지 고정)
   - 항목 id (`E*` 또는 `R*`)
   - 상태코드 (`READY`, `BLOCKED_BY_RESEARCH`, `DONE`)
   - 증거 경로(테스트 로그/문서 경로/CI 실행 기록)
@@ -444,6 +515,7 @@ This playbook fixes decision ownership after `P12` completion.
 ### 가정/기본값
 
 - 기준 상태는 `P12` 완료, in-proc 코어 런타임 유지.
+- P13 실행 완결 사이클은 연구 제외 구현 항목(`E1`~`E6`)에 집중한다.
 - 날짜 고정보다 게이트 충족 순서를 우선한다.
 - 연구 게이트 전에는 풀 GUI 대신 정적 시각화를 우선한다.
 - 게이트에 막힌 구현은 선행 연구 산출물 승인 전 착수하지 않는다.

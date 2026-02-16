@@ -6,10 +6,11 @@ Last updated: 2026-02-16
 
 - Runtime baseline: v2 node graph only
 - Legacy runtime: removed from `main` (`P4.5` complete)
-- Execution SSOT current step id: `P12.1` (process-graph foundation track)
+- Execution SSOT current step id: `P13.1` (execution completion track)
 - P10 hardening track (`P10.1`~`P10.5`) completed
 - P11 demo track (`P11.1`~`P11.6`) completed
 - P12 foundation track completed (`P12.1`~`P12.7`: validator-first process graph scope)
+- P13 execution completion track opened (`P13.1`: E1~E6 implementation-only lane)
 - Owner split and research-gate contract: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 
 For detailed status, always refer to:
@@ -20,10 +21,11 @@ For detailed status, always refer to:
 
 - 런타임 기준선: v2 노드 그래프 전용
 - 레거시 런타임: `main`에서 제거 완료 (`P4.5` 완료)
-- 실행 SSOT current step id: `P12.1` (프로세스 그래프 foundation 트랙)
+- 실행 SSOT current step id: `P13.1` (실행 완결 트랙)
 - P10 하드닝 트랙(`P10.1`~`P10.5`) 완료
 - P11 데모 트랙(`P11.1`~`P11.6`) 완료
 - P12 foundation 트랙 완료(`P12.1`~`P12.7`: validator-first 프로세스 그래프 범위)
+- P13 실행 완결 트랙 시작(`P13.1`: 연구 제외 E1~E6 구현 레인)
 - 소유권 분리/연구 게이트 계약: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 
 상세 상태는 아래를 기준으로 본다:
