@@ -26,6 +26,21 @@ Once an item gets schedule/owner/DoD, move it into `docs/roadmap/execution_roadm
 | B5 | UX Layer | Graph authoring/execution UX is still CLI-heavy. | Guided CLI profiles and/or lightweight graph editor. |
 | B6 | Plugin SDK | Plugin authoring is possible but onboarding cost is non-trivial. | Templates, validation scaffolds, and compatibility test kit. |
 | B7 | Security/Governance | Mixed edge environments need stricter trust boundaries. | Plugin signing policy, secret handling conventions, audit hooks. |
+| B8 | Graph Profiles | Operators repeatedly tune similar runtime knobs per deployment class. | Standardized run profiles (`edge_low_power`, `server_realtime`, `offline_batch`). |
+| B9 | Policy Pack | Retry/timeout/drop/backpressure behavior is fragmented across node choices. | Policy plugins that can be swapped without editing graph topology. |
+| B10 | Replay Inspector | Durable queue replay debugging is slow and manual. | Time/key/node-filtered inspector for queue trace + selective replay. |
+| B11 | Contract Diff Gate | Payload contract drift can silently break downstream nodes. | CI gate that diffs payload schema and blocks unsafe compatibility breaks. |
+| B12 | Plugin Compatibility Matrix | Users cannot quickly know plugin support by OS/Python/dependency set. | Automated compatibility report generation per pack/plugin. |
+| B13 | Reliability Chaos Kit | Failure handling paths are under-tested compared to happy path. | Fault injection pack (network cut, delayed ack, disk pressure, restart storm). |
+| B14 | SLO Report Pack | Performance quality is hard to compare over builds/releases. | Automated p95/p99 latency, drop rate, replay rate, recovery-time summaries. |
+| B15 | Dead Letter Queue Standard | Repeated poison events are mixed into normal durable flow. | Standard DLQ contract + tooling for quarantine and controlled re-drive. |
+
+## Priority Seed Pack (Thread-Excluded)
+
+For next promotion discussion, these are the highest leverage candidates:
+1. `B9` Policy Pack: maximizes operator control with minimal core-runtime change.
+2. `B10` Replay Inspector: shortens incident debugging and improves trust in durability.
+3. `B13` Reliability Chaos Kit: validates behavior under edge failures before field rollout.
 
 ## Foundation Hook (Post-P12)
 
@@ -67,6 +82,21 @@ Promote only when all conditions are met:
 | B5 | 사용성 계층 | 그래프 작성과 실행 경험이 CLI 중심이라 진입 장벽이 있다. | 가이드형 CLI 프로필, 경량 그래프 편집 도구 검토 |
 | B6 | 플러그인 SDK | 플러그인 작성 자체는 가능하지만 초기 진입 비용이 높다. | 템플릿, 검증 스캐폴딩, 호환성 테스트 키트 제공 |
 | B7 | 보안/거버넌스 | 이기종 엣지 환경에서 신뢰 경계와 감사 체계가 약하다. | 플러그인 서명 정책, 시크릿 규약, 감사 훅 정리 |
+| B8 | 그래프 프로필 | 배포 유형이 달라도 비슷한 런타임 튜닝을 매번 반복한다. | `edge_low_power`, `server_realtime`, `offline_batch` 같은 표준 실행 프로필 제공 |
+| B9 | 정책 팩 | 재시도/타임아웃/드롭/백프레셔 정책이 노드 선택에 분산되어 운영 제어가 어렵다. | 그래프 토폴로지 수정 없이 교체 가능한 정책 플러그인 도입 |
+| B10 | 리플레이 인스펙터 | durable 큐 문제를 추적/재현하는 절차가 수동이라 시간이 오래 걸린다. | 시간/키/노드 필터 기반 조회와 선택 재생 도구 제공 |
+| B11 | 계약 차이 게이트 | payload 계약이 바뀌어도 하위 호환 깨짐이 늦게 발견된다. | CI에서 스키마 차이 비교로 위험 변경을 사전 차단 |
+| B12 | 플러그인 호환성 매트릭스 | OS/Python/의존성 조합별 지원 여부를 사용자가 빠르게 확인하기 어렵다. | pack/plugin 단위 자동 호환성 리포트 생성 |
+| B13 | 신뢰성 카오스 키트 | 정상 경로 대비 장애 경로 회귀 검증이 약하다. | 네트워크 단절/ACK 지연/디스크 압박/재시작 폭주 주입 테스트 팩 |
+| B14 | SLO 리포트 팩 | 빌드/릴리즈 간 실제 성능 품질 비교가 어렵다. | p95/p99 지연, drop율, replay율, 복구 시간 자동 요약 |
+| B15 | DLQ 표준화 | 독성 이벤트가 일반 durable 흐름에 섞여 재처리 비용이 커진다. | 격리 저장(DLQ) 계약과 안전한 재투입 도구 표준화 |
+
+## 우선 검토 묶음 (스레드 제외)
+
+다음 승격 논의에서 효과가 큰 후보는 아래 3개다.
+1. `B9` 정책 팩: 코어 변경을 최소화하면서 운영 제어력을 빠르게 올릴 수 있다.
+2. `B10` 리플레이 인스펙터: 장애 분석 시간을 크게 줄이고 durable 신뢰도를 높인다.
+3. `B13` 신뢰성 카오스 키트: 실환경 배포 전 극한 상황 회귀를 자동화할 수 있다.
 
 ## Foundation 훅 (P12 이후)
 
