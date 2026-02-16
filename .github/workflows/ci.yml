@@ -106,12 +106,40 @@ jobs:
       - name: Run demo pack (ci profile)
         run: python scripts/demo_pack.py --profile ci --max-events 10
 
+  ui-console:
+    name: ui-console (node20)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/stream-console
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
   required-gate:
     name: required-gate
     runs-on: ubuntu-latest
     needs:
       - test
       - no-docker-smoke
+      - ui-console
     if: ${{ always() }}
     steps:
       - name: Fail if any matrix job failed
@@ -122,6 +150,10 @@ jobs:
           fi
           if [ "${{ needs.no-docker-smoke.result }}" != "success" ]; then
             echo "No-docker smoke job did not pass: ${{ needs.no-docker-smoke.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.ui-console.result }}" != "success" ]; then
+            echo "UI console job did not pass: ${{ needs.ui-console.result }}"
             exit 1
           fi
           echo "All matrix test jobs passed."
