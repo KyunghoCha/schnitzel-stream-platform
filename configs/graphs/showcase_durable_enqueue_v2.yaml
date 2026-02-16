@@ -1,0 +1,22 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.dev:StaticSource
+    config:
+      packets:
+        - kind: demo
+          source_id: showcase01
+          payload:
+            message: showcase durable enqueue
+            value: 1
+  - id: queue
+    kind: sink
+    plugin: schnitzel_stream.nodes.durable_sqlite:SqliteQueueSink
+    config:
+      path: ${oc.env:SS_SHOWCASE_QUEUE_PATH,outputs/queues/showcase_demo.sqlite3}
+      forward: false
+edges:
+  - from: src
+    to: queue
+config: {}

@@ -1,0 +1,26 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.durable_sqlite:SqliteQueueSource
+    config:
+      path: ${oc.env:SS_SHOWCASE_QUEUE_PATH,outputs/queues/showcase_demo.sqlite3}
+      limit: 100
+      delete_on_emit: false
+  - id: out
+    kind: node
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "SHOWCASE_DRAIN "
+      forward: true
+  - id: ack
+    kind: sink
+    plugin: schnitzel_stream.nodes.durable_sqlite:SqliteQueueAckSink
+    config:
+      path: ${oc.env:SS_SHOWCASE_QUEUE_PATH,outputs/queues/showcase_demo.sqlite3}
+edges:
+  - from: src
+    to: out
+  - from: out
+    to: ack
+config: {}

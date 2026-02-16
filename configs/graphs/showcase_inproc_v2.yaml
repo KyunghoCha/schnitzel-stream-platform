@@ -1,0 +1,22 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.dev:StaticSource
+    config:
+      packets:
+        - kind: demo
+          source_id: showcase01
+          payload:
+            message: showcase inproc
+            value: 1
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "SHOWCASE "
+      forward: false
+edges:
+  - from: src
+    to: out
+config: {}
