@@ -35,6 +35,9 @@ venv/
 ENV/
 env/
 
+# Frontend
+node_modules/
+
 # Env files (keep examples)
 .env
 .env.*
