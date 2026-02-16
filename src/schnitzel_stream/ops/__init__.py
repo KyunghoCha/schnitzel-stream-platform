@@ -4,5 +4,6 @@ __all__ = [
     "envcheck",
     "fleet",
     "monitor",
+    "process_manager",
     "presets",
 ]
