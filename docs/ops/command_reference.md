@@ -67,6 +67,39 @@ python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
 ```
 
+### Demo Pack (Professor Showcase)
+
+One-command profiles:
+
+```bash
+python scripts/demo_pack.py --profile ci
+python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
+```
+
+Options:
+- `--profile <ci|professor>`
+- `--camera-index <int>` (used for webcam showcase in professor profile)
+- `--max-events <int>`
+- `--report <path>` (default: `outputs/reports/demo_pack_latest.json`)
+
+Manual showcase scenarios:
+
+```bash
+# S1: in-proc baseline
+python -m schnitzel_stream validate --graph configs/graphs/showcase_inproc_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/showcase_inproc_v2.yaml --max-events 50
+
+# S2: durable enqueue + drain/ack
+python -m schnitzel_stream validate --graph configs/graphs/showcase_durable_enqueue_v2.yaml
+python -m schnitzel_stream validate --graph configs/graphs/showcase_durable_drain_ack_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/showcase_durable_enqueue_v2.yaml --max-events 50
+python -m schnitzel_stream --graph configs/graphs/showcase_durable_drain_ack_v2.yaml --max-events 50
+
+# S3: webcam
+python -m schnitzel_stream validate --graph configs/graphs/showcase_webcam_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/showcase_webcam_v2.yaml --max-events 50
+```
+
 ### Mock HTTP Backend (local sink test)
 
 ```bash
@@ -191,6 +224,39 @@ python -m schnitzel_stream --graph configs/graphs/dev_camera_template_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
+```
+
+### 데모 팩(교수님 시연)
+
+원커맨드 프로필:
+
+```bash
+python scripts/demo_pack.py --profile ci
+python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
+```
+
+옵션:
+- `--profile <ci|professor>`
+- `--camera-index <int>` (professor 프로필의 웹캠 시나리오 인덱스)
+- `--max-events <int>`
+- `--report <path>` (기본: `outputs/reports/demo_pack_latest.json`)
+
+수동 시연 시나리오:
+
+```bash
+# S1: in-proc 기본선
+python -m schnitzel_stream validate --graph configs/graphs/showcase_inproc_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/showcase_inproc_v2.yaml --max-events 50
+
+# S2: durable enqueue + drain/ack
+python -m schnitzel_stream validate --graph configs/graphs/showcase_durable_enqueue_v2.yaml
+python -m schnitzel_stream validate --graph configs/graphs/showcase_durable_drain_ack_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/showcase_durable_enqueue_v2.yaml --max-events 50
+python -m schnitzel_stream --graph configs/graphs/showcase_durable_drain_ack_v2.yaml --max-events 50
+
+# S3: 웹캠
+python -m schnitzel_stream validate --graph configs/graphs/showcase_webcam_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/showcase_webcam_v2.yaml --max-events 50
 ```
 
 ### Mock HTTP 백엔드(로컬 싱크 테스트)

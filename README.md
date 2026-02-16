@@ -99,6 +99,16 @@ python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 ```
 
+6. One-command demo pack (showcase profiles)
+
+```bash
+python scripts/demo_pack.py --profile ci
+python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
+```
+
+- Default report path: `outputs/reports/demo_pack_latest.json`
+- Manual fallback guide: `docs/guides/professor_showcase_guide.md`
+
 ### Graph Spec (v2)
 
 - `plugin` format: `module:ClassName`
@@ -250,6 +260,16 @@ python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
 ```
+
+6. 원커맨드 데모 팩(쇼케이스 프로필)
+
+```bash
+python scripts/demo_pack.py --profile ci
+python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
+```
+
+- 기본 리포트 경로: `outputs/reports/demo_pack_latest.json`
+- 수동 시연 fallback 가이드: `docs/guides/professor_showcase_guide.md`
 
 ### 그래프 스펙(v2)
 
