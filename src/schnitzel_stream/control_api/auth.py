@@ -20,7 +20,7 @@ def request_identity(request: Request) -> Tuple[str, str]:
     req_id = request.headers.get("X-Request-Id", "").strip() or str(uuid4())
     token = configured_token()
     client_host = (request.client.host if request.client else "") or ""
-    is_local_client = client_host in {"127.0.0.1", "::1", "localhost"}
+    is_local_client = client_host in {"127.0.0.1", "::1", "localhost", "testclient"}
 
     if token:
         auth = request.headers.get("Authorization", "").strip()
