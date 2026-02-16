@@ -20,7 +20,7 @@ nodes:
       conf: ${oc.env:SS_YOLO_CONF,0.35}
       iou: ${oc.env:SS_YOLO_IOU,0.45}
       max_det: ${oc.env:SS_YOLO_MAX_DET,100}
-      device: ${oc.env:SS_YOLO_DEVICE,}
+      device: ${oc.env:SS_YOLO_DEVICE,cpu}
 
   - id: display
     kind: sink
