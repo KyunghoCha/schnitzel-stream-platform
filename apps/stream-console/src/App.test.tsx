@@ -2,11 +2,28 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { App } from "./App";
 
+const reactFlowSpy = vi.fn();
+
 vi.mock("@xyflow/react", () => ({
-  ReactFlow: ({ children }: { children?: unknown }) => <div data-testid="react-flow">{children as any}</div>,
+  ReactFlow: (props: { children?: unknown }) => {
+    reactFlowSpy(props);
+    return <div data-testid="react-flow">{props.children as any}</div>;
+  },
   Background: () => <div data-testid="flow-bg" />,
   Controls: () => <div data-testid="flow-controls" />,
-  MiniMap: () => <div data-testid="flow-minimap" />
+  MiniMap: () => <div data-testid="flow-minimap" />,
+  addEdge: (conn: Record<string, unknown>, edges: Array<Record<string, unknown>>) => [
+    ...edges,
+    {
+      id: `${String(conn.source ?? "")}-${String(conn.target ?? "")}-${edges.length}`,
+      source: String(conn.source ?? ""),
+      target: String(conn.target ?? ""),
+      sourceHandle: conn.sourceHandle,
+      targetHandle: conn.targetHandle
+    }
+  ],
+  applyNodeChanges: (_changes: unknown, nodes: unknown) => nodes,
+  applyEdgeChanges: (_changes: unknown, edges: unknown) => edges
 }));
 
 const okEnvelope = {
@@ -22,6 +39,7 @@ describe("Stream Console App", () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
+    reactFlowSpy.mockClear();
     fetchMock = vi.fn(async (input: RequestInfo | URL) => {
       const url = String(input);
       if (url.includes("/api/v1/presets")) {
@@ -211,6 +229,7 @@ describe("Stream Console App", () => {
       const call = fetchMock.mock.calls.find((entry) => String(entry[0]).includes("/api/v1/graph/validate"));
       expect(call).toBeTruthy();
     });
+    expect(screen.getByText("Validation Summary")).toBeInTheDocument();
   });
 
   it("calls graph run endpoint from editor", async () => {
@@ -227,6 +246,32 @@ describe("Stream Console App", () => {
       const runCall = fetchMock.mock.calls.find((call) => String(call[0]).includes("/api/v1/graph/run"));
       expect(runCall).toBeTruthy();
     });
+  });
+
+  it("wires direct manipulation props for editor canvas", async () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: "Editor" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Block Editor MVP")).toBeInTheDocument();
+    });
+
+    const callCount = reactFlowSpy.mock.calls.length;
+    const lastCall = (callCount > 0 ? reactFlowSpy.mock.calls[callCount - 1][0] : null) as Record<string, unknown> | null;
+    expect(lastCall).toBeTruthy();
+    if (!lastCall) {
+      throw new Error("ReactFlow props were not captured");
+    }
+    expect(lastCall.nodesDraggable).toBe(true);
+    expect(lastCall.nodesConnectable).toBe(true);
+    expect(lastCall.elementsSelectable).toBe(true);
+    expect(typeof lastCall.onNodesChange).toBe("function");
+    expect(typeof lastCall.onEdgesChange).toBe("function");
+    expect(typeof lastCall.onConnect).toBe("function");
+    expect(screen.getByRole("button", { name: "Auto Layout" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Align Horizontal" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Align Vertical" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Fit View" })).toBeInTheDocument();
   });
 
   it("runs dashboard refresh", async () => {
