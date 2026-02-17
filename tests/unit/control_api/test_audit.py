@@ -66,3 +66,60 @@ def test_audit_tail_limit(tmp_path: Path):
     assert len(rows) == 2
     assert rows[0]["target"] == "stream3"
     assert rows[1]["target"] == "stream4"
+
+
+def test_audit_rotation_respects_max_file_cap(tmp_path: Path):
+    path = tmp_path / "audit.jsonl"
+    logger = AuditLogger(path, max_bytes=1, max_files=3)
+    for idx in range(6):
+        logger.append(
+            actor="local",
+            action="fleet.start",
+            target=f"stream{idx}",
+            status="ok",
+            reason="ok",
+            request_id=f"r{idx}",
+            meta={},
+        )
+
+    assert path.exists()
+    assert Path(f"{path}.1").exists()
+    assert Path(f"{path}.2").exists()
+    assert not Path(f"{path}.3").exists()
+
+    rows = logger.tail(limit=10)
+    assert [row["target"] for row in rows] == ["stream3", "stream4", "stream5"]
+
+
+def test_audit_since_filter_works_across_rotated_files(tmp_path: Path):
+    logger = AuditLogger(tmp_path / "audit.jsonl", max_bytes=1, max_files=6)
+    logger.append(
+        actor="local",
+        action="fleet.start",
+        target="stream0",
+        status="ok",
+        reason="ok",
+        request_id="r0",
+        meta={},
+    )
+    pivot = logger.append(
+        actor="local",
+        action="fleet.start",
+        target="stream1",
+        status="ok",
+        reason="ok",
+        request_id="r1",
+        meta={},
+    )
+    logger.append(
+        actor="local",
+        action="fleet.start",
+        target="stream2",
+        status="ok",
+        reason="ok",
+        request_id="r2",
+        meta={},
+    )
+
+    rows = logger.tail(limit=10, since=pivot.ts)
+    assert [row["request_id"] for row in rows] == ["r1", "r2"]

@@ -2,10 +2,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
+import pytest
+from starlette.requests import Request
 
-from schnitzel_stream.control_api import create_app
 from schnitzel_stream.control_api import app as app_mod
+from schnitzel_stream.control_api import auth as auth_mod
+from schnitzel_stream.control_api import create_app
 
 
 def _repo_root() -> Path:
@@ -24,7 +28,7 @@ def test_health_contract_local_mode(tmp_path: Path):
     assert payload["data"]["service"] == "stream_control_api"
 
 
-def test_token_mode_requires_bearer(monkeypatch, tmp_path: Path):
+def test_token_mode_requires_valid_bearer(monkeypatch, tmp_path: Path):
     monkeypatch.setenv("SS_CONTROL_API_TOKEN", "abc123")
     app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
     client = TestClient(app)
@@ -32,12 +36,28 @@ def test_token_mode_requires_bearer(monkeypatch, tmp_path: Path):
     no_auth = client.get("/api/v1/health")
     assert no_auth.status_code == 401
 
+    invalid = client.get("/api/v1/health", headers={"Authorization": "Bearer wrong"})
+    assert invalid.status_code == 401
+
     with_auth = client.get("/api/v1/health", headers={"Authorization": "Bearer abc123"})
     assert with_auth.status_code == 200
     assert with_auth.json()["data"]["token_required"] is True
 
 
-def test_preset_run_writes_audit(monkeypatch, tmp_path: Path):
+def test_mutating_endpoint_requires_bearer_without_override(tmp_path: Path):
+    app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
+    client = TestClient(app)
+
+    run_resp = client.post(
+        "/api/v1/presets/inproc_demo/run",
+        json={"experimental": False, "max_events": 5},
+    )
+    assert run_resp.status_code == 401
+    assert "mutating endpoint" in run_resp.text
+
+
+def test_mutating_endpoint_allowed_with_local_override(monkeypatch, tmp_path: Path):
+    monkeypatch.setenv("SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS", "true")
     app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
     client = TestClient(app)
 
@@ -57,7 +77,16 @@ def test_preset_run_writes_audit(monkeypatch, tmp_path: Path):
     assert any(event.get("action") == "preset.run" for event in events)
 
 
-def test_fleet_stop_contract_and_audit(tmp_path: Path):
+def test_fleet_stop_requires_bearer_without_override(tmp_path: Path):
+    app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
+    client = TestClient(app)
+
+    resp = client.post("/api/v1/fleet/stop", json={"log_dir": str(tmp_path / "no_pid")})
+    assert resp.status_code == 401
+
+
+def test_fleet_stop_contract_and_audit_with_local_override(monkeypatch, tmp_path: Path):
+    monkeypatch.setenv("SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS", "true")
     app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
     client = TestClient(app)
 
@@ -81,6 +110,8 @@ def test_policy_snapshot_endpoint(tmp_path: Path):
     data = resp.json()["data"]
     assert "allowed_plugin_prefixes" in data
     assert "security_mode" in data
+    assert "mutation_auth_mode" in data
+    assert "audit_retention" in data
 
 
 def test_env_check_endpoint_contract(monkeypatch, tmp_path: Path):
@@ -114,3 +145,19 @@ def test_cors_preflight_allows_local_vite_origin(tmp_path: Path):
     )
     assert resp.status_code == 200
     assert resp.headers.get("access-control-allow-origin") == "http://127.0.0.1:5173"
+
+
+def test_remote_host_is_forbidden_in_local_only_mode():
+    scope = {
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/health",
+        "headers": [],
+        "client": ("203.0.113.10", 12345),
+    }
+    req = Request(scope)
+
+    with pytest.raises(HTTPException) as exc:
+        auth_mod.request_identity(req, mode="read")
+
+    assert exc.value.status_code == 403
