@@ -281,6 +281,12 @@ td {
   background: linear-gradient(180deg, rgba(20, 33, 43, 0.96), rgba(14, 24, 32, 0.96));
   padding: 10px 12px;
   font-weight: 600;
+  cursor: grab;
+}
+
+.editor-canvas .react-flow__node.dragging .editor-kind-node,
+.editor-canvas .editor-kind-node:active {
+  cursor: grabbing;
 }
 
 .editor-canvas .editor-kind-node.source {
@@ -315,11 +321,46 @@ td {
   opacity: 0.95;
 }
 
-.editor-canvas .react-flow__handle {
-  width: 10px;
-  height: 10px;
+.editor-canvas .editor-handle {
+  width: 14px;
+  height: 14px;
   background: #e8f5ff;
   border: 2px solid #0f1a24;
+  border-radius: 999px;
+  position: relative;
+}
+
+.editor-canvas .editor-handle::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.001);
+}
+
+.editor-canvas .editor-handle:hover {
+  cursor: crosshair;
+  box-shadow: 0 0 0 8px rgba(74, 163, 255, 0.18);
+}
+
+.editor-canvas .editor-handle-source {
+  box-shadow: 0 0 0 1px rgba(21, 183, 163, 0.45);
+}
+
+.editor-canvas .editor-handle-node {
+  box-shadow: 0 0 0 1px rgba(74, 163, 255, 0.45);
+}
+
+.editor-canvas .editor-handle-sink {
+  box-shadow: 0 0 0 1px rgba(255, 159, 67, 0.45);
+}
+
+.editor-canvas .react-flow__edge-path {
+  stroke-width: 2.5px;
+}
+
+.editor-canvas .react-flow__connectionline path {
+  stroke-width: 2.5px;
 }
 
 .editor-canvas .react-flow__controls {

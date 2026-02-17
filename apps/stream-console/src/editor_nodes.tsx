@@ -34,13 +34,27 @@ const EditorNodeCard = memo(function EditorNodeCard({ data }: NodeProps) {
 
   return (
     <div className={`editor-kind-node ${kindClass}`} data-kind={kind}>
-      {hasInput ? <Handle type="target" position={Position.Left} id="in" /> : null}
+      {hasInput ? (
+        <Handle
+          type="target"
+          position={Position.Left}
+          id="in"
+          className={`editor-handle editor-handle-in editor-handle-${kindClass}`}
+        />
+      ) : null}
       <div className="editor-kind-node-main">
         <div className="editor-kind-node-title">{nodeId}</div>
         <div className="editor-kind-node-kind">{label}</div>
         <div className="editor-kind-node-plugin">{pluginShortName(plugin)}</div>
       </div>
-      {hasOutput ? <Handle type="source" position={Position.Right} id="out" /> : null}
+      {hasOutput ? (
+        <Handle
+          type="source"
+          position={Position.Right}
+          id="out"
+          className={`editor-handle editor-handle-out editor-handle-${kindClass}`}
+        />
+      ) : null}
     </div>
   );
 });
