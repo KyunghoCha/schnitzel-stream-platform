@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-17
 
-Current step id: `P23.1`
+Current step id: `P23.8`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 23 block editor usability hardening started**
+Current position: **Phase 23 block editor usability hardening completed**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -370,21 +370,21 @@ Out of this completion definition:
 - runtime `N:N` channel semantics
 - runtime loop execution semantics beyond current policy
 
-#### Phase 23: Block Editor Usability Hardening (NOW)
+#### Phase 23: Block Editor Usability Hardening (DONE)
 
 Intent:
 - Move editor UX from form-centric editing to direct manipulation on canvas.
 - Keep graph/control API contracts unchanged while improving authoring speed and clarity.
 - Keep editor changes dependency-light and deterministic for CI.
 
-- `P23.1` Open phase and align SSOT step id/state docs. `NOW`
-- `P23.2` Enable direct drag/connect interactions and graph sync guards. `NEXT`
-- `P23.3` Add kind-specific node visual semantics (`source`/`node`/`sink`). `NEXT`
-- `P23.4` Add dependency-free auto-layout and align controls. `NEXT`
-- `P23.5` Improve editor validate/run result readability. `NEXT`
-- `P23.6` Update editor docs for direct manipulation workflow. `NEXT`
-- `P23.7` Add interaction/layout regression coverage and keep quality gates green. `NEXT`
-- `P23.8` Final docs mapping/index/status sync for P23 assets. `NEXT`
+- `P23.1` Open phase and align SSOT step id/state docs. `DONE` (f8c2a16)
+- `P23.2` Enable direct drag/connect interactions and graph sync guards. `DONE` (7576bd5)
+- `P23.3` Add kind-specific node visual semantics (`source`/`node`/`sink`). `DONE` (4fe80a5)
+- `P23.4` Add dependency-free auto-layout and align controls. `DONE` (b458ebd)
+- `P23.5` Improve editor validate/run result readability. `DONE` (cbb4a6a)
+- `P23.6` Update editor docs for direct manipulation workflow. `DONE`
+- `P23.7` Add interaction/layout regression coverage and keep quality gates green. `DONE` (27b50bb)
+- `P23.8` Final docs mapping/index/status sync for P23 assets. `DONE`
 
 #### Planned Non-Research Finish Track (`P24`~`P26`) (NEXT)
 
@@ -434,8 +434,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P23.1`
-- 전체 위치: **Phase 23 블록 편집기 사용성 하드닝 시작**
+- current step id: `P23.8`
+- 전체 위치: **Phase 23 블록 편집기 사용성 하드닝 완료**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -470,7 +470,7 @@ Intent:
 | Phase 20 | DONE | 그래프 작성 UX(CLI Wizard) 도입 및 템플릿 기반 생성면 구축 완료 |
 | Phase 21 | DONE | 의존성 기준선 고정 + 블록코딩 GUI MVP 도입 |
 | Phase 22 | DONE | 온보딩/설치 경로 완결(bootstrap/doctor/up-down 명시 3단계 고정) |
-| Phase 23 | NOW | 블록 편집기 사용성 하드닝(편집/검증/실행 UX 정리) |
+| Phase 23 | DONE | 블록 편집기 사용성 하드닝(직접 조작/시각 구분/자동 정렬/결과 가독성) |
 | Phase 24 | NEXT | 운영 신뢰성 회귀 하드닝(재시작/백로그/ACK/타임아웃) |
 | Phase 25 | NEXT | 플러그인 DX 마감(스캐폴드/템플릿/가이드 완성도) |
 | Phase 26 | NEXT | 제품화 마감(릴리즈 체크리스트/명령면 고정/드리프트 0) |
@@ -487,9 +487,9 @@ Intent:
 
 ### 현재 우선순위
 
-1. `P23.2`~`P23.5`로 캔버스 직접 조작/노드 시각화/자동 정렬/결과 가독성을 구현한다
-2. `P23.6`~`P23.7`로 문서/테스트를 동기화해 회귀를 잠근다
-3. `P23.8`로 매핑/상태를 최종 동기화하고 다음 단계(`P24`)로 넘긴다
+1. `P24.1`로 운영 신뢰성 하드닝 페이즈를 오픈하고 SSOT 상태를 전환한다
+2. 재시작/백로그/ACK/타임아웃 경계 회귀를 테스트 우선으로 확장한다
+3. CI 게이트에서 신뢰성 회귀와 문서 정합성을 동시 유지한다
 
 ### 레거시 관련 기준
 

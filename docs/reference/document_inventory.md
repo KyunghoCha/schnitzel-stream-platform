@@ -41,7 +41,7 @@ Last updated: 2026-02-17
   - `docs/progress/README.md`
   - `docs/progress/current_status.md`
 - Usage:
-  - `docs/ops/command_reference.md` (includes explicit onboarding 3-step `bootstrap -> doctor -> up/down`, option-first `stream_run` presets, `graph_wizard` template generation, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` profiles, `bootstrap_env`, `demo_report_view`, `control_policy_snapshot`, block editor command paths)
+  - `docs/ops/command_reference.md` (includes explicit onboarding 3-step `bootstrap -> doctor -> up/down`, option-first `stream_run` presets, `graph_wizard` template generation, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` profiles, `bootstrap_env`, `demo_report_view`, `control_policy_snapshot`, and block editor direct-manipulation command paths)
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`
@@ -100,7 +100,7 @@ Last updated: 2026-02-17
   - `docs/progress/README.md`
   - `docs/progress/current_status.md`
 - 사용:
-  - `docs/ops/command_reference.md` (명시 온보딩 3단계 `bootstrap -> doctor -> up/down`, 옵션 중심 `stream_run` 프리셋, `graph_wizard` 템플릿 생성, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` 프로필, `bootstrap_env`, `demo_report_view`, `control_policy_snapshot`, block editor 명령 경로 포함)
+  - `docs/ops/command_reference.md` (명시 온보딩 3단계 `bootstrap -> doctor -> up/down`, 옵션 중심 `stream_run` 프리셋, `graph_wizard` 템플릿 생성, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` 프로필, `bootstrap_env`, `demo_report_view`, `control_policy_snapshot`, 블록 에디터 직접 조작 명령 경로 포함)
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`
