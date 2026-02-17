@@ -231,6 +231,51 @@ td {
   margin-bottom: 12px;
 }
 
+/* Intent: React Flow default light node/control palette clashes with the app theme.
+   Force high-contrast editor colors for readability. */
+.editor-canvas .react-flow__node {
+  color: #0f1a24;
+  font-weight: 600;
+}
+
+.editor-canvas .react-flow__node-default,
+.editor-canvas .react-flow__node-input,
+.editor-canvas .react-flow__node-output {
+  background: #f4f8fb;
+  border: 1px solid #3e5567;
+  color: #0f1a24;
+}
+
+.editor-canvas .react-flow__node.selected,
+.editor-canvas .react-flow__node-default.selected,
+.editor-canvas .react-flow__node-input.selected,
+.editor-canvas .react-flow__node-output.selected {
+  border-color: #0f1a24;
+  box-shadow: 0 0 0 2px rgba(15, 26, 36, 0.2);
+}
+
+.editor-canvas .react-flow__controls {
+  border: 1px solid #3e5567;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.editor-canvas .react-flow__controls-button {
+  background: #f4f8fb;
+  color: #0f1a24;
+  border-color: #3e5567;
+}
+
+.editor-canvas .react-flow__controls-button svg {
+  fill: #0f1a24;
+  stroke: #0f1a24;
+}
+
+.editor-canvas .react-flow__controls-button path {
+  fill: #0f1a24;
+  stroke: #0f1a24;
+}
+
 .editor-two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
