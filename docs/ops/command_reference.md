@@ -95,6 +95,35 @@ Options:
 - `--doctor` (run strict preflight checks before validate/run; exit code `3` on preflight failure)
 - `--experimental` (required for `file_yolo_view`, `file_yolo_headless`, `webcam_yolo`)
 
+### Graph Wizard (Template Profiles, Non-Interactive)
+
+List available wizard profiles:
+
+```bash
+python scripts/graph_wizard.py --list-profiles
+python scripts/graph_wizard.py --list-profiles --experimental
+```
+
+Generate + validate in one command:
+
+```bash
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
+python scripts/graph_wizard.py --profile file_frames --out configs/graphs/generated_file_frames_v2.yaml --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30 --validate-after-generate
+python scripts/graph_wizard.py --profile file_yolo_headless --experimental --out configs/graphs/generated_file_yolo_headless_v2.yaml --model-path models/yolov8n.pt --device cpu
+```
+
+Validate an existing generated graph:
+
+```bash
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
+```
+
+Exit codes:
+- `0`: success
+- `1`: runtime failure
+- `2`: usage/input error
+- `3`: precondition failure (experimental guard / validation failure)
+
 ### Demo Graphs
 
 ```bash
@@ -281,6 +310,14 @@ python scripts/stream_run.py --list
 python scripts/stream_run.py --preset inproc_demo --validate-only
 python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
 python scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
+```
+
+Graph wizard (template profile generation):
+
+```bash
+python scripts/graph_wizard.py --list-profiles
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
 ```
 
 Read-only stream monitor (pid/log based):
@@ -507,6 +544,35 @@ python scripts/stream_run.py --preset file_yolo_view --experimental --model-path
 - `--doctor` (실행 전 strict 사전 진단; preflight 실패 시 종료 코드 `3`)
 - `--experimental` (`file_yolo_view`, `file_yolo_headless`, `webcam_yolo` 실행 시 필수)
 
+### Graph Wizard(템플릿 프로필, 비상호작용)
+
+사용 가능한 wizard 프로필 목록:
+
+```bash
+python scripts/graph_wizard.py --list-profiles
+python scripts/graph_wizard.py --list-profiles --experimental
+```
+
+생성 + 검증 원커맨드:
+
+```bash
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
+python scripts/graph_wizard.py --profile file_frames --out configs/graphs/generated_file_frames_v2.yaml --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30 --validate-after-generate
+python scripts/graph_wizard.py --profile file_yolo_headless --experimental --out configs/graphs/generated_file_yolo_headless_v2.yaml --model-path models/yolov8n.pt --device cpu
+```
+
+생성된 그래프 단독 검증:
+
+```bash
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
+```
+
+종료 코드:
+- `0`: 성공
+- `1`: 런타임 실패
+- `2`: 사용법/입력 오류
+- `3`: 사전조건 실패(experimental 가드 / 검증 실패)
+
 ### 데모 그래프
 
 ```bash
@@ -693,6 +759,14 @@ python scripts/stream_run.py --list
 python scripts/stream_run.py --preset inproc_demo --validate-only
 python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
 python scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
+```
+
+Graph wizard(템플릿 프로필 생성):
+
+```bash
+python scripts/graph_wizard.py --list-profiles
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
 ```
 
 읽기 전용 stream 모니터(pid/log 기반):

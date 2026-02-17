@@ -157,6 +157,17 @@ python scripts/stream_run.py --preset file_yolo_view --experimental --model-path
 
 - Default path is option-first (no env required); env vars remain as advanced overrides.
 
+10-1. Graph wizard (template profile generation, non-interactive)
+
+```bash
+python scripts/graph_wizard.py --list-profiles
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
+```
+
+- Use `--experimental` for opt-in profiles (`file_yolo_headless`, `file_yolo_view`, `webcam_yolo`).
+- Detailed guide: `docs/guides/graph_wizard_guide.md`
+
 11. Control API server (local-first, optional bearer token)
 
 ```bash
@@ -407,6 +418,17 @@ python scripts/stream_run.py --preset file_yolo_view --experimental --model-path
 ```
 
 - 기본 경로는 옵션 중심(no env)이며, 환경변수 방식은 고급 override 용도로 유지한다.
+
+10-1. Graph wizard(템플릿 프로필 생성, 비상호작용)
+
+```bash
+python scripts/graph_wizard.py --list-profiles
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
+```
+
+- 실험 프로필(`file_yolo_headless`, `file_yolo_view`, `webcam_yolo`)은 `--experimental`로 opt-in 한다.
+- 상세 가이드: `docs/guides/graph_wizard_guide.md`
 
 11. Control API 서버(로컬 기본, 선택적 Bearer 토큰)
 
