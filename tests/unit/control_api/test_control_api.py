@@ -10,6 +10,7 @@ from starlette.requests import Request
 from schnitzel_stream.control_api import app as app_mod
 from schnitzel_stream.control_api import auth as auth_mod
 from schnitzel_stream.control_api import create_app
+from schnitzel_stream.ops import graph_editor as editor_ops
 
 
 def _repo_root() -> Path:
@@ -197,3 +198,143 @@ def test_remote_host_is_forbidden_in_local_only_mode():
         auth_mod.request_identity(req, mode="read")
 
     assert exc.value.status_code == 403
+
+
+def test_graph_profiles_endpoint_contract(monkeypatch, tmp_path: Path):
+    profile = app_mod.wizard_ops.GraphWizardProfile
+    table = {
+        "inproc_demo": profile(
+            profile_id="inproc_demo",
+            description="demo",
+            template_path=Path("configs/graphs/templates/inproc_demo_v2.template.yaml"),
+            experimental=False,
+            defaults={},
+        )
+    }
+    monkeypatch.setattr(app_mod.wizard_ops, "load_profile_table", lambda _root: table)
+    app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
+    client = TestClient(app)
+
+    resp = client.get("/api/v1/graph/profiles")
+    assert resp.status_code == 200
+    payload = resp.json()
+    assert payload["status"] == "ok"
+    assert payload["data"]["count"] == 1
+    assert payload["data"]["profiles"][0]["profile_id"] == "inproc_demo"
+
+
+def test_graph_from_profile_endpoint_returns_spec(monkeypatch, tmp_path: Path):
+    monkeypatch.setattr(
+        app_mod.editor_ops,
+        "render_profile_spec",
+        lambda **_kwargs: editor_ops.GraphProfileRenderResult(
+            profile_id="inproc_demo",
+            spec={
+                "version": 2,
+                "nodes": [
+                    {
+                        "id": "src",
+                        "kind": "source",
+                        "plugin": "schnitzel_stream.nodes.dev:StaticSource",
+                        "config": {"packets": []},
+                    },
+                    {
+                        "id": "out",
+                        "kind": "sink",
+                        "plugin": "schnitzel_stream.nodes.dev:PrintSink",
+                        "config": {},
+                    },
+                ],
+                "edges": [{"src": "src", "dst": "out"}],
+                "config": {},
+            },
+            experimental=False,
+            overrides={"MAX_EVENTS": "30"},
+            max_events=30,
+            template_path=Path("configs/graphs/templates/inproc_demo_v2.template.yaml"),
+        ),
+    )
+    monkeypatch.setattr(
+        app_mod.editor_ops,
+        "validate_graph_spec",
+        lambda _spec: editor_ops.GraphValidationResult(ok=True, error="", node_count=2, edge_count=1),
+    )
+
+    app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
+    client = TestClient(app)
+    resp = client.post(
+        "/api/v1/graph/from-profile",
+        json={
+            "profile_id": "inproc_demo",
+            "experimental": False,
+            "overrides": {},
+        },
+    )
+    assert resp.status_code == 200
+    payload = resp.json()
+    assert payload["status"] == "ok"
+    assert payload["data"]["profile_id"] == "inproc_demo"
+    assert payload["data"]["validation"]["ok"] is True
+
+
+def test_graph_validate_endpoint_reports_validation_error(monkeypatch, tmp_path: Path):
+    monkeypatch.setattr(
+        app_mod.editor_ops,
+        "validate_graph_spec",
+        lambda _spec: editor_ops.GraphValidationResult(ok=False, error="broken graph", node_count=0, edge_count=0),
+    )
+    app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
+    client = TestClient(app)
+
+    resp = client.post(
+        "/api/v1/graph/validate",
+        json={"spec": {"version": 2, "nodes": [], "edges": [], "config": {}}},
+    )
+    assert resp.status_code == 200
+    payload = resp.json()
+    assert payload["status"] == "error"
+    assert payload["error"]["kind"] == "graph_validation_failed"
+
+
+def test_graph_run_requires_bearer_without_override(tmp_path: Path):
+    app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
+    client = TestClient(app)
+
+    resp = client.post(
+        "/api/v1/graph/run",
+        json={"spec": {"version": 2, "nodes": [], "edges": [], "config": {}}, "max_events": 5},
+    )
+    assert resp.status_code == 401
+
+
+def test_graph_run_allowed_with_local_override_and_audit(monkeypatch, tmp_path: Path):
+    monkeypatch.setenv("SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS", "true")
+    monkeypatch.setattr(
+        app_mod.editor_ops,
+        "run_graph_spec",
+        lambda **_kwargs: editor_ops.GraphRunResult(
+            ok=True,
+            returncode=0,
+            command="python -m schnitzel_stream --graph outputs/tmp/editor.yaml --max-events 5",
+            temp_spec_path=tmp_path / "editor.yaml",
+            error="",
+            stdout_tail="ok",
+            stderr_tail="",
+        ),
+    )
+    app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
+    client = TestClient(app)
+
+    resp = client.post(
+        "/api/v1/graph/run",
+        json={"spec": {"version": 2, "nodes": [], "edges": [], "config": {}}, "max_events": 5},
+    )
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["status"] == "ok"
+    assert body["data"]["returncode"] == 0
+
+    audit_resp = client.get("/api/v1/governance/audit?limit=20")
+    assert audit_resp.status_code == 200
+    events = audit_resp.json()["data"]["events"]
+    assert any(event.get("action") == "graph.run" for event in events)
