@@ -29,19 +29,28 @@ describe("editor_layout", () => {
     expect(Number.isFinite(pos.c.x)).toBe(true);
   });
 
-  it("aligns positions on horizontal and vertical axes", () => {
+  it("aligns positions with non-overlap packing on horizontal and vertical axes", () => {
     const base = {
       a: { x: 10, y: 10 },
       b: { x: 20, y: 50 },
       c: { x: 30, y: 90 }
     };
+    const sizes = {
+      a: { width: 120, height: 40 },
+      b: { width: 120, height: 40 },
+      c: { width: 120, height: 40 }
+    };
 
-    const horizontal = alignNodePositions(base, ["a", "b", "c"], "horizontal");
+    const horizontal = alignNodePositions(base, ["a", "b", "c"], "horizontal", { sizes, gap: 36 });
     expect(horizontal.a.y).toBe(horizontal.b.y);
     expect(horizontal.b.y).toBe(horizontal.c.y);
+    expect(horizontal.b.x).toBeGreaterThanOrEqual(horizontal.a.x + 120 + 36);
+    expect(horizontal.c.x).toBeGreaterThanOrEqual(horizontal.b.x + 120 + 36);
 
-    const vertical = alignNodePositions(base, ["a", "b", "c"], "vertical");
+    const vertical = alignNodePositions(base, ["a", "b", "c"], "vertical", { sizes, gap: 36 });
     expect(vertical.a.x).toBe(vertical.b.x);
     expect(vertical.b.x).toBe(vertical.c.x);
+    expect(vertical.b.y).toBeGreaterThanOrEqual(vertical.a.y + 40 + 36);
+    expect(vertical.c.y).toBeGreaterThanOrEqual(vertical.b.y + 40 + 36);
   });
 });

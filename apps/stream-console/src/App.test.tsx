@@ -265,9 +265,16 @@ describe("Stream Console App", () => {
     expect(lastCall.nodesDraggable).toBe(true);
     expect(lastCall.nodesConnectable).toBe(true);
     expect(lastCall.elementsSelectable).toBe(true);
+    expect(lastCall.zoomOnDoubleClick).toBe(false);
+    expect(lastCall.connectionRadius).toBe(42);
+    expect(lastCall.connectOnClick).toBe(true);
     expect(typeof lastCall.onNodesChange).toBe("function");
     expect(typeof lastCall.onEdgesChange).toBe("function");
+    expect(typeof lastCall.onConnectStart).toBe("function");
     expect(typeof lastCall.onConnect).toBe("function");
+    expect(typeof lastCall.onConnectEnd).toBe("function");
+    expect(typeof lastCall.onNodeDragStop).toBe("function");
+    expect(typeof lastCall.onSelectionDragStop).toBe("function");
     expect(screen.getByRole("button", { name: "Auto Layout" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Align Horizontal" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Align Vertical" })).toBeInTheDocument();
