@@ -41,12 +41,13 @@ Last updated: 2026-02-17
   - `docs/progress/README.md`
   - `docs/progress/current_status.md`
 - Usage:
-  - `docs/ops/command_reference.md` (includes option-first `stream_run` presets, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` profiles, `demo_report_view`, `control_policy_snapshot`, web console command paths)
+- `docs/ops/command_reference.md` (includes option-first `stream_run` presets, `graph_wizard` template generation, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` profiles, `demo_report_view`, `control_policy_snapshot`, web console command paths)
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`
   - `docs/guides/professor_showcase_guide.md`
-  - `docs/guides/local_console_quickstart.md`
+- `docs/guides/local_console_quickstart.md`
+- `docs/guides/graph_wizard_guide.md`
   - `docs/packs/vision/README.md`
   - `docs/packs/vision/event_protocol_v0.2.md`
   - `docs/packs/vision/model_class_taxonomy.md`
@@ -98,12 +99,13 @@ Last updated: 2026-02-17
   - `docs/progress/README.md`
   - `docs/progress/current_status.md`
 - 사용:
-  - `docs/ops/command_reference.md` (옵션 중심 `stream_run` 프리셋, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` 프로필, `demo_report_view`, `control_policy_snapshot`, web console 명령 경로 포함)
+- `docs/ops/command_reference.md` (옵션 중심 `stream_run` 프리셋, `graph_wizard` 템플릿 생성, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` 프로필, `demo_report_view`, `control_policy_snapshot`, web console 명령 경로 포함)
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`
   - `docs/guides/professor_showcase_guide.md`
-  - `docs/guides/local_console_quickstart.md`
+- `docs/guides/local_console_quickstart.md`
+- `docs/guides/graph_wizard_guide.md`
   - `docs/packs/vision/README.md`
   - `docs/packs/vision/event_protocol_v0.2.md`
   - `docs/packs/vision/model_class_taxonomy.md`

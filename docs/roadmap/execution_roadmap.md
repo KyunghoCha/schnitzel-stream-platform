@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-17
 
-Current step id: `P20.1`
+Current step id: `P20.8`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 20 graph authoring UX (CLI wizard) in progress**
+Current position: **Phase 20 graph authoring UX (CLI wizard) completed**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -311,21 +311,21 @@ Intent:
 - `P19.7` Add regression coverage for new options and preset split behavior. `DONE` (ff913ed)
 - `P19.8` Final docs/index/mapping/status sync for P19 surfaces. `DONE`
 
-#### Phase 20: Graph Authoring UX (CLI Wizard) (NOW)
+#### Phase 20: Graph Authoring UX (CLI Wizard) (DONE)
 
 Intent:
 - Lower graph authoring friction with a non-interactive CLI wizard.
 - Keep template-driven generation deterministic for scripts and CI usage.
 - Keep GUI/block editor explicitly out of scope for this phase (`P21` candidate).
 
-- `P20.1` Open phase and align SSOT step id/state docs for graph authoring track. `NOW`
-- `P20.2` Add graph wizard ops service (`src/schnitzel_stream/ops/graph_wizard.py`). `NEXT`
-- `P20.3` Add `scripts/graph_wizard.py` command surface (`--list-profiles`, `--profile`, `--validate`). `NEXT`
-- `P20.4` Add wizard profile metadata + graph template assets. `NEXT`
-- `P20.5` Add docs guide and option-first command references for graph wizard. `NEXT`
-- `P20.6` Add wizard unit coverage (ops/script). `NEXT`
-- `P20.7` Add no-docker CI smoke for graph wizard generation/validation. `NEXT`
-- `P20.8` Final docs/index/mapping/status sync for P20 surfaces. `NEXT`
+- `P20.1` Open phase and align SSOT step id/state docs for graph authoring track. `DONE` (4878a67)
+- `P20.2` Add graph wizard ops service (`src/schnitzel_stream/ops/graph_wizard.py`). `DONE` (1d9432d)
+- `P20.3` Add `scripts/graph_wizard.py` command surface (`--list-profiles`, `--profile`, `--validate`). `DONE` (2dd0ed2)
+- `P20.4` Add wizard profile metadata + graph template assets. `DONE` (4d3875e)
+- `P20.5` Add docs guide and option-first command references for graph wizard. `DONE` (5856c00)
+- `P20.6` Add wizard unit coverage (ops/script). `DONE` (1fcd87f)
+- `P20.7` Add no-docker CI smoke for graph wizard generation/validation. `DONE` (356d322)
+- `P20.8` Final docs/index/mapping/status sync for P20 surfaces. `DONE`
 
 #### Research Track (Not On Critical Path)
 
@@ -369,8 +369,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P20.1`
-- 전체 위치: **Phase 20 그래프 작성 UX(CLI Wizard) 트랙 진행 중**
+- current step id: `P20.8`
+- 전체 위치: **Phase 20 그래프 작성 UX(CLI Wizard) 트랙 완료**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -402,13 +402,12 @@ Intent:
 | Phase 17 | DONE | 거버넌스 하드닝 + UX 정합성(인증/감사보존/정책드리프트/모니터 의미 명확화) 완료 |
 | Phase 18 | DONE | 온보딩 UX + API/UI 원커맨드 콘솔 부트스트랩 완료 |
 | Phase 19 | DONE | 환경변수 의존 최소화 + 원커맨드 실행 단순화 |
-| Phase 20 | NOW | 그래프 작성 UX(CLI Wizard) 도입 및 템플릿 기반 생성면 구축 |
+| Phase 20 | DONE | 그래프 작성 UX(CLI Wizard) 도입 및 템플릿 기반 생성면 구축 완료 |
 
 ### 현재 우선순위
 
-1. `P20.2` Wizard 서비스 레이어 추가와 템플릿 프로필 생성 계약을 구현한다
-2. `P20.3`~`P20.4` CLI/템플릿 자산을 연결해 무상호작용 생성-검증 루프를 완성한다
-3. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지
+1. `P21` 후보 정의: 블록코딩 GUI/그래프 편집면 범위를 연구 제외 실행 범위로 고정한다
+2. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지
 
 ### 레거시 관련 기준
 

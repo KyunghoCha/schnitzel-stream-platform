@@ -41,6 +41,7 @@ This document is the active mapping between runtime code and maintained docs.
 | Ops shared service layer (preset/fleet/monitor/env/console) | `src/schnitzel_stream/ops/*.py` | `tests/unit/scripts/test_stream_run.py`, `tests/unit/scripts/test_stream_fleet.py`, `tests/unit/scripts/test_stream_monitor.py`, `tests/unit/scripts/test_env_doctor.py`, `tests/unit/ops/test_console_ops.py` | `docs/ops/command_reference.md`, `README.md`, `docs/guides/local_console_quickstart.md` |
 | Stream control API + governance hardening | `src/schnitzel_stream/control_api/*.py`, `scripts/stream_control_api.py`, `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json` | `tests/unit/control_api/test_control_api.py`, `tests/unit/control_api/test_audit.py`, `tests/unit/scripts/test_control_policy_snapshot.py` | `docs/ops/command_reference.md`, `README.md`, `docs/roadmap/execution_roadmap.md` |
 | Stream console web UI | `apps/stream-console/src/*.tsx`, `apps/stream-console/src/*.ts` | `apps/stream-console/src/App.test.tsx` | `README.md`, `docs/ops/command_reference.md` |
+| Graph authoring wizard (template profiles) | `scripts/graph_wizard.py`, `src/schnitzel_stream/ops/graph_wizard.py`, `configs/wizard_profiles/*.yaml`, `configs/graphs/templates/*.yaml` | `tests/unit/ops/test_graph_wizard_ops.py`, `tests/unit/scripts/test_graph_wizard.py` | `docs/guides/graph_wizard_guide.md`, `docs/ops/command_reference.md`, `README.md` |
 | Runtime graphs/configs | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml`, `configs/fleet.yaml` | graph validation and integration tests | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/professor_showcase_guide.md` |
 
 ## Script Mapping
@@ -53,6 +54,7 @@ This document is the active mapping between runtime code and maintained docs.
 | `scripts/stream_fleet.py` | generic stream fleet launcher (`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
 | `scripts/stream_monitor.py` | read-only stream TUI monitor (pid/log based) | `docs/ops/command_reference.md` |
 | `scripts/stream_run.py` | one-command preset launcher (`--list`, `--preset`, `--experimental`, `--doctor`, YOLO override flags) | `docs/ops/command_reference.md`, `README.md`, `docs/guides/local_console_quickstart.md` |
+| `scripts/graph_wizard.py` | non-interactive template-profile graph generator (`--list-profiles`, `--profile --out`, `--validate --spec`) | `docs/guides/graph_wizard_guide.md`, `docs/ops/command_reference.md`, `README.md` |
 | `scripts/stream_console.py` | one-command local console bootstrap (`up`/`status`/`down`/`doctor`) | `docs/ops/command_reference.md`, `docs/guides/local_console_quickstart.md`, `README.md` |
 | `scripts/stream_control_api.py` | local-first control API server (optional bearer auth + governance endpoints) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/control_policy_snapshot.py` | control policy snapshot emit/check (`--check` drift gate) | `docs/ops/command_reference.md`, `README.md` |
@@ -108,6 +110,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | Ops 공통 서비스 레이어(preset/fleet/monitor/env/console) | `src/schnitzel_stream/ops/*.py` | `tests/unit/scripts/test_stream_run.py`, `tests/unit/scripts/test_stream_fleet.py`, `tests/unit/scripts/test_stream_monitor.py`, `tests/unit/scripts/test_env_doctor.py`, `tests/unit/ops/test_console_ops.py` | `docs/ops/command_reference.md`, `README.md`, `docs/guides/local_console_quickstart.md` |
 | Stream control API + 거버넌스 하드닝 | `src/schnitzel_stream/control_api/*.py`, `scripts/stream_control_api.py`, `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json` | `tests/unit/control_api/test_control_api.py`, `tests/unit/control_api/test_audit.py`, `tests/unit/scripts/test_control_policy_snapshot.py` | `docs/ops/command_reference.md`, `README.md`, `docs/roadmap/execution_roadmap.md` |
 | Stream console 웹 UI | `apps/stream-console/src/*.tsx`, `apps/stream-console/src/*.ts` | `apps/stream-console/src/App.test.tsx` | `README.md`, `docs/ops/command_reference.md` |
+| 그래프 작성 wizard(템플릿 프로필) | `scripts/graph_wizard.py`, `src/schnitzel_stream/ops/graph_wizard.py`, `configs/wizard_profiles/*.yaml`, `configs/graphs/templates/*.yaml` | `tests/unit/ops/test_graph_wizard_ops.py`, `tests/unit/scripts/test_graph_wizard.py` | `docs/guides/graph_wizard_guide.md`, `docs/ops/command_reference.md`, `README.md` |
 | 런타임 그래프/설정 | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml`, `configs/fleet.yaml` | 그래프 검증/통합 테스트 | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/professor_showcase_guide.md` |
 
 ## 스크립트 매핑
@@ -120,6 +123,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | `scripts/stream_fleet.py` | 범용 stream fleet 실행기(`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
 | `scripts/stream_monitor.py` | 읽기 전용 stream TUI 모니터(pid/log 기반) | `docs/ops/command_reference.md` |
 | `scripts/stream_run.py` | 원커맨드 프리셋 실행기(`--list`, `--preset`, `--experimental`, `--doctor`, YOLO override 옵션) | `docs/ops/command_reference.md`, `README.md`, `docs/guides/local_console_quickstart.md` |
+| `scripts/graph_wizard.py` | 비상호작용 템플릿 프로필 그래프 생성기(`--list-profiles`, `--profile --out`, `--validate --spec`) | `docs/guides/graph_wizard_guide.md`, `docs/ops/command_reference.md`, `README.md` |
 | `scripts/stream_console.py` | 원커맨드 로컬 콘솔 부트스트랩(`up`/`status`/`down`/`doctor`) | `docs/ops/command_reference.md`, `docs/guides/local_console_quickstart.md`, `README.md` |
 | `scripts/stream_control_api.py` | 로컬 우선 control API 서버(선택적 Bearer 인증 + 거버넌스 엔드포인트) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/control_policy_snapshot.py` | 제어 정책 스냅샷 생성/검사(`--check` 드리프트 게이트) | `docs/ops/command_reference.md`, `README.md` |

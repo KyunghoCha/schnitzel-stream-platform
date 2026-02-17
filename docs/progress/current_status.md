@@ -6,7 +6,7 @@ Last updated: 2026-02-17
 
 - Runtime baseline: v2 node graph only
 - Legacy runtime: removed from `main` (`P4.5` complete)
-- Execution SSOT current step id: `P20.1` (graph authoring UX CLI wizard phase open)
+- Execution SSOT current step id: `P20.8` (graph authoring UX CLI wizard finalized)
 - P10 hardening track (`P10.1`~`P10.5`) completed
 - P11 demo track (`P11.1`~`P11.6`) completed
 - P12 foundation track completed (`P12.1`~`P12.7`: validator-first process graph scope)
@@ -17,7 +17,7 @@ Last updated: 2026-02-17
 - P17 governance hardening + UX consistency track completed (`P17.1`~`P17.6`: mutating auth hardening + audit rotation + policy drift gate + UX semantics + docs sync)
 - P18 onboarding UX + one-command local console bootstrap track completed (`P18.1`~`P18.8`: stream_console + console env profile + lockfile CI + docs sync)
 - P19 usability closure track completed (`P19.1`~`P19.8`: stream_run doctor + YOLO override flags + view/headless preset split + API/UI/docs/test sync)
-- P20 graph authoring UX track opened (`P20.1`: CLI wizard template-profile execution lane)
+- P20 graph authoring UX track completed (`P20.1`~`P20.8`: non-interactive graph wizard + template profiles + CI/docs/test sync)
 - Owner split and research-gate contract: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 
 For detailed status, always refer to:
@@ -28,7 +28,7 @@ For detailed status, always refer to:
 
 - 런타임 기준선: v2 노드 그래프 전용
 - 레거시 런타임: `main`에서 제거 완료 (`P4.5` 완료)
-- 실행 SSOT current step id: `P20.1` (그래프 작성 UX CLI wizard 페이즈 오픈)
+- 실행 SSOT current step id: `P20.8` (그래프 작성 UX CLI wizard 페이즈 마감)
 - P10 하드닝 트랙(`P10.1`~`P10.5`) 완료
 - P11 데모 트랙(`P11.1`~`P11.6`) 완료
 - P12 foundation 트랙 완료(`P12.1`~`P12.7`: validator-first 프로세스 그래프 범위)
@@ -39,7 +39,7 @@ For detailed status, always refer to:
 - P17 거버넌스 하드닝 + UX 정합성 트랙 완료(`P17.1`~`P17.6`: mutating 인증 강화 + 감사 회전 + 정책 드리프트 게이트 + UX 의미 명확화 + 문서 동기화)
 - P18 온보딩 UX + 원커맨드 로컬 콘솔 부트스트랩 트랙 완료(`P18.1`~`P18.8`: stream_console + console env 프로필 + lockfile CI + 문서 동기화)
 - P19 사용성 마감 트랙 완료(`P19.1`~`P19.8`: stream_run doctor + YOLO override 옵션 + view/headless 프리셋 분리 + API/UI/문서/테스트 동기화)
-- P20 그래프 작성 UX 트랙 오픈(`P20.1`: CLI wizard 템플릿 프로필 실행 레인)
+- P20 그래프 작성 UX 트랙 완료(`P20.1`~`P20.8`: 비상호작용 graph wizard + 템플릿 프로필 + CI/문서/테스트 동기화)
 - 소유권 분리/연구 게이트 계약: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 
 상세 상태는 아래를 기준으로 본다:
