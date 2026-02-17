@@ -94,7 +94,7 @@ def test_run_validate_only_uses_expected_command_and_env(monkeypatch, capsys):
     assert "30" in cmd
 
     env = observed["env"]
-    assert env["SS_INPUT_PATH"].endswith("data/samples/2048246-hd_1920_1080_24fps.mp4")
+    assert env["SS_INPUT_PATH"].replace("\\", "/").endswith("data/samples/2048246-hd_1920_1080_24fps.mp4")
     assert env["SS_YOLO_DEVICE"] == "0"
     assert env["SS_INPUT_LOOP"] == "false"
     assert env["SS_CAMERA_INDEX"] == "3"

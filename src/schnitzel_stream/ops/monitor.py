@@ -17,6 +17,8 @@ class StreamRuntimeState:
     last_packet_ts: str = ""
     last_log_monotonic: float | None = None
     last_error_lines: list[str] = field(default_factory=list)
+    last_file_size: int = 0
+    last_file_mtime_ns: int = 0
 
 
 @dataclass
@@ -52,18 +54,28 @@ def read_new_lines(path: Path, state: StreamRuntimeState) -> list[str]:
         return []
 
     try:
-        size = path.stat().st_size
+        stat = path.stat()
+        size = int(stat.st_size)
+        mtime_ns = int(getattr(stat, "st_mtime_ns", 0))
     except OSError:
         return []
 
-    if int(state.offset) > int(size):
-        # Intent: log truncation/rotation must not stall incremental parsing.
+    rewritten_same_size = (
+        int(state.offset) == int(size)
+        and int(state.last_file_size) == int(size)
+        and int(state.last_file_mtime_ns) != 0
+        and int(mtime_ns) != int(state.last_file_mtime_ns)
+    )
+    if int(state.offset) > int(size) or rewritten_same_size:
+        # Intent: log truncation/rewrite/rotation must not stall incremental parsing.
         state.offset = 0
 
     with path.open("r", encoding="utf-8", errors="replace") as f:
         f.seek(int(state.offset))
         text = f.read()
         state.offset = int(f.tell())
+    state.last_file_size = int(size)
+    state.last_file_mtime_ns = int(mtime_ns)
     return text.splitlines()
 
 

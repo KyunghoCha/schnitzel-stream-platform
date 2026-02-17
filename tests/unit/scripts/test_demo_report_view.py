@@ -58,7 +58,9 @@ def test_report_view_generates_both_formats(tmp_path: Path):
     html_path = out_dir / "demo_pack_latest.summary.html"
     assert md_path.exists()
     assert html_path.exists()
-    assert "failure_reason" in md_path.read_text(encoding="utf-8")
+    md_text = md_path.read_text(encoding="utf-8")
+    assert "Failure Reason" in md_text
+    assert "dependency_missing" in md_text
     assert "dependency_missing" in html_path.read_text(encoding="utf-8")
 
 
