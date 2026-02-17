@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-17
 
-Current step id: `P20.8`
+Current step id: `P21.0`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 20 graph authoring UX (CLI wizard) completed**
+Current position: **Phase 21 dependency baseline + block editor MVP started**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -327,6 +327,23 @@ Intent:
 - `P20.7` Add no-docker CI smoke for graph wizard generation/validation. `DONE` (356d322)
 - `P20.8` Final docs/index/mapping/status sync for P20 surfaces. `DONE`
 
+#### Phase 21: Dependency Baseline + Block Editor MVP (NOW)
+
+Intent:
+- Lock deterministic dependency/onboarding baseline first (Conda + pip dual path).
+- Deliver a block-style graph editor MVP on top of existing control API/runtime semantics.
+- Keep research-track and core runtime semantics unchanged.
+
+- `P21.0` Open phase and align SSOT step id/state docs for dependency-first track. `NOW`
+- `P21.1` Add baseline environment artifact (`environment.yml`) and dependency rules. `NEXT`
+- `P21.2` Add `bootstrap_env` command and align PowerShell/Bash setup surfaces. `NEXT`
+- `P21.3` Harden `env_doctor` profile guidance to match bootstrap semantics. `NEXT`
+- `P21.4` Add graph editor ops service and profile->spec rendering reuse. `NEXT`
+- `P21.5` Extend control API for graph profiles/validate/run flows. `NEXT`
+- `P21.6` Add web block editor MVP (node/edge/property + YAML import/export + validate/run). `NEXT`
+- `P21.7` Expand CI gates for dependency/bootstrap/editor surfaces. `NEXT`
+- `P21.8` Final docs/index/mapping/status sync for P21 surfaces. `NEXT`
+
 #### Research Track (Not On Critical Path)
 
 Intent:
@@ -369,8 +386,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P20.8`
-- 전체 위치: **Phase 20 그래프 작성 UX(CLI Wizard) 트랙 완료**
+- current step id: `P21.0`
+- 전체 위치: **Phase 21 의존성 기준선 + 블록 편집기 MVP 트랙 시작**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -403,11 +420,13 @@ Intent:
 | Phase 18 | DONE | 온보딩 UX + API/UI 원커맨드 콘솔 부트스트랩 완료 |
 | Phase 19 | DONE | 환경변수 의존 최소화 + 원커맨드 실행 단순화 |
 | Phase 20 | DONE | 그래프 작성 UX(CLI Wizard) 도입 및 템플릿 기반 생성면 구축 완료 |
+| Phase 21 | NOW | 의존성 기준선 고정 + 블록코딩 GUI MVP 도입 |
 
 ### 현재 우선순위
 
-1. `P21` 후보 정의: 블록코딩 GUI/그래프 편집면 범위를 연구 제외 실행 범위로 고정한다
-2. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지
+1. `P21.1`~`P21.3`로 환경/설치 기준선(Conda+pip)을 먼저 고정한다
+2. `P21.4`~`P21.6`으로 API/UI 편집면을 코어 semantics 변경 없이 확장한다
+3. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지
 
 ### 레거시 관련 기준
 

@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-17
 
-Current step id (SSOT): `P20.8` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P21.0` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -29,6 +29,7 @@ Current baseline:
 - onboarding UX + one-command local console bootstrap track completed (`P18.1`~`P18.8`, stream_console + console env profile + lockfile CI + docs sync)
 - usability closure no-env-first track completed (`P19.1`~`P19.8`, stream_run doctor + YOLO override flags + view/headless preset split + API/UI/docs/test sync)
 - graph authoring UX track completed (`P20.1`~`P20.8`, CLI wizard template-profile lane + CI/docs/tests sync)
+- dependency baseline + block editor MVP track opened (`P21.0`, dependency-first execution lane)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -61,6 +62,7 @@ Verification (local):
 - 온보딩 UX + 원커맨드 로컬 콘솔 부트스트랩 트랙 완료(`P18.1`~`P18.8`, stream_console + console env 프로필 + lockfile CI + 문서 동기화)
 - 사용성 마감 무환경변수 우선 트랙 완료(`P19.1`~`P19.8`, stream_run doctor + YOLO override 옵션 + view/headless 프리셋 분리 + API/UI/문서/테스트 동기화)
 - 그래프 작성 UX 트랙 완료(`P20.1`~`P20.8`, CLI wizard 템플릿 프로필 레인 + CI/문서/테스트 동기화)
+- 의존성 기준선 + 블록 편집기 MVP 트랙 오픈(`P21.0`, dependency-first 실행 레인)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`
