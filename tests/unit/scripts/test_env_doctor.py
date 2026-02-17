@@ -141,3 +141,12 @@ def test_env_doctor_yolo_profile_json_includes_profile(monkeypatch, capsys):
     check_names = {item["name"] for item in payload["checks"]}
     assert "torch_cuda" in check_names
     assert "yolo_model_path" in check_names
+
+
+def test_env_doctor_console_profile_requires_node_npm(monkeypatch):
+    mod = _load_env_doctor_module()
+    monkeypatch.setattr(mod, "_python_version_info", lambda: (3, 11, 10))
+    monkeypatch.setattr(mod.importlib, "import_module", lambda _name: object())
+    monkeypatch.setattr(mod.env_ops.shutil, "which", lambda _name: None)
+    rc = mod.run(["--strict", "--profile", "console"])
+    assert rc == 1

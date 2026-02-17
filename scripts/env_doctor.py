@@ -59,18 +59,14 @@ def run_checks(
     camera_index: int,
     probe_webcam: bool,
 ) -> list[CheckResult]:
-    out = [_check_python()]
-    out.extend(_check_import(name, required=True) for name in BASE_REQUIRED_MODULES)
-    out.extend(_check_import(name, required=False) for name in BASE_OPTIONAL_MODULES)
-
-    if profile == "yolo":
-        out.extend(_check_import(name, required=True) for name in YOLO_REQUIRED_MODULES)
-        out.append(_check_torch_cuda())
-        out.append(_check_model_path(model_path))
-    elif profile == "webcam":
-        out.append(_check_webcam_probe(camera_index=int(camera_index), enabled=bool(probe_webcam)))
-
-    return out
+    env_ops.python_version_info = _python_version_info
+    env_ops.importlib = importlib
+    return env_ops.run_checks(
+        profile=str(profile),
+        model_path=Path(model_path),
+        camera_index=int(camera_index),
+        probe_webcam=bool(probe_webcam),
+    )
 
 
 def _exit_code(checks: Sequence[CheckResult], *, strict: bool) -> int:
