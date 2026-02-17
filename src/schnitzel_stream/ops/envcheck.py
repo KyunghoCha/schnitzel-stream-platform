@@ -151,6 +151,14 @@ def exit_code(checks: Sequence[CheckResult], *, strict: bool) -> int:
     return 1 if any(item.required and not item.ok for item in checks) else 0
 
 
+def suggested_fix_commands(profile: str) -> dict[str, str]:
+    profile_val = str(profile).strip() or "base"
+    return {
+        "powershell": f"python scripts/bootstrap_env.py --profile {profile_val} --manager auto",
+        "bash": f"python3 scripts/bootstrap_env.py --profile {profile_val} --manager auto",
+    }
+
+
 def summary(checks: Sequence[CheckResult]) -> dict[str, int]:
     required_total = sum(1 for item in checks if item.required)
     required_failed = sum(1 for item in checks if item.required and not item.ok)
@@ -166,11 +174,7 @@ def summary(checks: Sequence[CheckResult]) -> dict[str, int]:
 
 def payload(*, profile: str, strict: bool, checks: Sequence[CheckResult]) -> dict[str, object]:
     code = exit_code(checks, strict=bool(strict))
-    suggested_fix = (
-        f"python scripts/bootstrap_env.py --profile {profile} --manager auto"
-        if str(profile).strip()
-        else "python scripts/bootstrap_env.py --profile base --manager auto"
-    )
+    suggested_fix = suggested_fix_commands(str(profile))
     return {
         "tool": "env_doctor",
         "profile": str(profile),
