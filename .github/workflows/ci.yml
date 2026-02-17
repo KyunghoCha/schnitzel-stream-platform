@@ -73,6 +73,11 @@ jobs:
       - name: Environment doctor gate
         run: python scripts/env_doctor.py --strict
 
+      - name: Dependency bootstrap dry-run checks
+        run: |
+          python scripts/bootstrap_env.py --profile base --manager pip --dry-run
+          python scripts/bootstrap_env.py --profile console --manager pip --dry-run
+
       - name: Profile-aware environment checks
         run: |
           python scripts/env_doctor.py --profile yolo --json
@@ -92,6 +97,36 @@ jobs:
         run: |
           python scripts/graph_wizard.py --list-profiles
           python scripts/graph_wizard.py --profile inproc_demo --out outputs/wizard/generated_inproc_demo_v2.yaml --validate-after-generate
+
+      - name: Graph editor ops sanity check
+        env:
+          PYTHONPATH: src
+        run: |
+          python - <<'PY'
+          from schnitzel_stream.ops import graph_editor
+          spec = {
+              "version": 2,
+              "nodes": [
+                  {
+                      "id": "src",
+                      "kind": "source",
+                      "plugin": "schnitzel_stream.nodes.dev:StaticSource",
+                      "config": {"packets": []},
+                  },
+                  {
+                      "id": "out",
+                      "kind": "sink",
+                      "plugin": "schnitzel_stream.nodes.dev:PrintSink",
+                      "config": {},
+                  },
+              ],
+              "edges": [{"src": "src", "dst": "out"}],
+              "config": {},
+          }
+          result = graph_editor.validate_graph_spec(spec)
+          assert result.ok, result.error
+          print("graph_editor.validate_graph_spec ok")
+          PY
 
       - name: Validate representative v2 graphs
         env:

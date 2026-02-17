@@ -149,7 +149,8 @@ def run(argv: list[str] | None = None) -> int:
     print(f"env_name={args.env_name}")
     print(f"dry_run={bool(args.dry_run)}")
 
-    if manager == "pip" and _which("npm") is None and str(args.profile) == "console":
+    if manager == "pip" and _which("npm") is None and str(args.profile) == "console" and not bool(args.dry_run):
+        # Intent: dry-run should remain usable for planning in environments that do not yet have Node installed.
         print("Error: npm not found in PATH; install Node.js or use --manager conda", file=sys.stderr)
         return EXIT_RUNTIME
 
