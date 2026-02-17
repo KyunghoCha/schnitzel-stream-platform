@@ -350,6 +350,13 @@ python scripts/stream_console.py up --allow-local-mutations
 # open http://127.0.0.1:5173 -> Editor tab
 ```
 
+Editor interaction model:
+- drag nodes directly on canvas
+- connect edges via source/target handles
+- use `Auto Layout` / `Align Horizontal` / `Align Vertical` / `Fit View`
+- check validation badge (`ok/error`, node/edge count, core message) before `Run Graph`
+- manual Add Edge form remains for one cycle (compatibility path)
+
 Stream console options:
 - `up --api-host --api-port --ui-host --ui-port --log-dir --allow-local-mutations --token --api-only --ui-only`
 - `status --log-dir --json`
@@ -844,6 +851,13 @@ python scripts/stream_console.py down
 python scripts/stream_console.py up --allow-local-mutations
 # http://127.0.0.1:5173 접속 -> Editor 탭
 ```
+
+에디터 조작 모델:
+- 캔버스에서 노드를 직접 드래그
+- source/target 핸들 연결로 엣지 생성
+- `Auto Layout` / `Align Horizontal` / `Align Vertical` / `Fit View` 사용
+- `Run Graph` 전 검증 배지(`ok/error`, 노드/엣지 수, 핵심 메시지) 확인
+- 수동 Add Edge 폼은 1사이클 호환 경로로 유지
 
 stream_console 옵션:
 - `up --api-host --api-port --ui-host --ui-port --log-dir --allow-local-mutations --token --api-only --ui-only`

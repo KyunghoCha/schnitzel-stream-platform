@@ -215,6 +215,10 @@ python scripts/stream_console.py up --allow-local-mutations
 ```
 
 - Supports: node placement/link/property editing, YAML import/export, validate/run.
+- Direct manipulation: drag nodes on canvas and connect edges via handles.
+- Built-in layout actions: `Auto Layout`, `Align Horizontal`, `Align Vertical`, `Fit View`.
+- Validation view: status badge (`ok/error`), node/edge counts, readable failure summary.
+- Compatibility: manual Add Edge form is still kept for one cycle.
 - Detailed guide: `docs/guides/block_editor_quickstart.md`
 
 ### Graph Spec (v2)
@@ -485,6 +489,10 @@ python scripts/stream_console.py up --allow-local-mutations
 ```
 
 - 지원 범위: 노드 배치/연결/속성 편집, YAML import/export, validate/run
+- 직접 조작: 캔버스에서 노드를 드래그하고 핸들 연결로 엣지를 생성
+- 내장 정렬 액션: `Auto Layout`, `Align Horizontal`, `Align Vertical`, `Fit View`
+- 검증 표시: 상태 배지(`ok/error`), 노드/엣지 수, 읽기 쉬운 실패 요약
+- 호환성: 수동 Add Edge 폼은 1사이클 동안 유지
 - 상세 가이드: `docs/guides/block_editor_quickstart.md`
 
 ### 그래프 스펙(v2)
