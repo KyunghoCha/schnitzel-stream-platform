@@ -44,6 +44,10 @@ jobs:
       - name: Run test hygiene gate
         run: python scripts/test_hygiene.py --strict --max-duplicate-groups 0 --max-no-assert 0 --max-trivial-assert-true 0
 
+      - name: Windows onboarding smoke (setup_env.ps1)
+        if: runner.os == 'Windows'
+        run: ./setup_env.ps1 -Profile base -Manager pip -DryRun -SkipDoctor
+
   no-docker-smoke:
     name: no-docker-smoke (ubuntu, py3.11)
     runs-on: ubuntu-latest
@@ -75,8 +79,13 @@ jobs:
 
       - name: Dependency bootstrap dry-run checks
         run: |
-          python scripts/bootstrap_env.py --profile base --manager pip --dry-run
-          python scripts/bootstrap_env.py --profile console --manager pip --dry-run
+          python scripts/bootstrap_env.py --profile base --manager pip --dry-run --skip-doctor --json
+          python scripts/bootstrap_env.py --profile console --manager pip --dry-run --skip-doctor --json
+
+      - name: Onboarding doctor checks
+        run: |
+          python scripts/env_doctor.py --profile console --strict --json
+          python scripts/stream_console.py doctor --strict --json
 
       - name: Profile-aware environment checks
         run: |
