@@ -59,7 +59,7 @@ Runtime baseline:
 - Pack nodes: `src/schnitzel_stream/packs/`
 - Fleet runner: `scripts/stream_fleet.py`
 - Stream monitor: `scripts/stream_monitor.py`
-- Preset launcher: `scripts/stream_run.py`
+- Preset launcher (no-env-first): `scripts/stream_run.py`
 - Stream console bootstrap: `scripts/stream_console.py`
 - Stream control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`
 - Control policy snapshot gate: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`
@@ -126,7 +126,7 @@ Runtime baseline:
 - 팩 노드: `src/schnitzel_stream/packs/`
 - Fleet 실행기: `scripts/stream_fleet.py`
 - Stream 모니터: `scripts/stream_monitor.py`
-- 프리셋 실행기: `scripts/stream_run.py`
+- 프리셋 실행기(무환경변수 우선): `scripts/stream_run.py`
 - Stream 콘솔 부트스트랩: `scripts/stream_console.py`
 - Stream Control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`
 - 제어 정책 스냅샷 게이트: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`

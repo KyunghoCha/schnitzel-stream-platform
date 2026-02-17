@@ -37,6 +37,14 @@ python3 scripts/stream_console.py status --json
 python3 scripts/stream_console.py down
 ```
 
+## Option-First Preset Examples (No Env Required)
+
+```bash
+python3 scripts/stream_run.py --preset inproc_demo --validate-only
+python3 scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
+python3 scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
+```
+
 ## Secure Mode Notes
 
 - Default behavior keeps mutating endpoints blocked in local-only mode.
@@ -97,6 +105,14 @@ python3 scripts/stream_console.py doctor --strict --json
 python3 scripts/stream_console.py up --allow-local-mutations
 python3 scripts/stream_console.py status --json
 python3 scripts/stream_console.py down
+```
+
+## 옵션 중심 프리셋 예시(no env)
+
+```bash
+python3 scripts/stream_run.py --preset inproc_demo --validate-only
+python3 scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
+python3 scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
 ```
 
 ## 보안 모드 참고

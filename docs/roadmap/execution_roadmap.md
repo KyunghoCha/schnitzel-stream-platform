@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-17
 
-Current step id: `P19.1`
+Current step id: `P19.8`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 19 usability closure (no-env-first) kickoff opened**
+Current position: **Phase 19 usability closure (no-env-first) completed**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -295,21 +295,21 @@ Intent:
 - `P18.7` Harden UI reproducibility (`package-lock` tracked, CI `npm ci`). `DONE` (2e8bf82)
 - `P18.8` Final docs/index/mapping/status sync for P18 surfaces. `DONE`
 
-#### Phase 19: Usability Closure (No-Env-First) (NOW)
+#### Phase 19: Usability Closure (No-Env-First) (DONE)
 
 Intent:
 - Minimize environment-variable dependency in day-1 operator flows.
 - Keep runtime semantics unchanged while simplifying command surfaces.
 - Keep research-track (`R*`/`G*`) work out of this phase.
 
-- `P19.1` Open phase and align SSOT step id/state docs for usability closure track. `NOW`
-- `P19.2` Extend preset env override contract for no-env YOLO controls. `NEXT`
-- `P19.3` Expand `stream_run` options and add preflight doctor mode. `NEXT`
-- `P19.4` Split YOLO presets into view/headless profiles and add headless graph. `NEXT`
-- `P19.5` Align control API and web UI preset options with CLI overrides. `NEXT`
-- `P19.6` Rewrite onboarding docs to option-first execution path. `NEXT`
-- `P19.7` Add regression coverage for new options and preset split behavior. `NEXT`
-- `P19.8` Final docs/index/mapping/status sync for P19 surfaces. `NEXT`
+- `P19.1` Open phase and align SSOT step id/state docs for usability closure track. `DONE` (3502b23)
+- `P19.2` Extend preset env override contract for no-env YOLO controls. `DONE` (69e16d6)
+- `P19.3` Expand `stream_run` options and add preflight doctor mode. `DONE` (2916d86)
+- `P19.4` Split YOLO presets into view/headless profiles and add headless graph. `DONE` (87634e1)
+- `P19.5` Align control API and web UI preset options with CLI overrides. `DONE` (d4ebf41, 920d07d)
+- `P19.6` Rewrite onboarding docs to option-first execution path. `DONE`
+- `P19.7` Add regression coverage for new options and preset split behavior. `DONE` (ff913ed)
+- `P19.8` Final docs/index/mapping/status sync for P19 surfaces. `DONE`
 
 #### Research Track (Not On Critical Path)
 
@@ -353,8 +353,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P19.1`
-- 전체 위치: **Phase 19 사용성 마감(무환경변수 우선) 트랙 착수**
+- current step id: `P19.8`
+- 전체 위치: **Phase 19 사용성 마감(무환경변수 우선) 트랙 완료**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -385,11 +385,11 @@ Intent:
 | Phase 16 | DONE | UX 콘솔 + Control API + 거버넌스 최소선(Audit/Policy Snapshot) 완료 |
 | Phase 17 | DONE | 거버넌스 하드닝 + UX 정합성(인증/감사보존/정책드리프트/모니터 의미 명확화) 완료 |
 | Phase 18 | DONE | 온보딩 UX + API/UI 원커맨드 콘솔 부트스트랩 완료 |
-| Phase 19 | NOW | 환경변수 의존 최소화 + 원커맨드 실행 단순화 |
+| Phase 19 | DONE | 환경변수 의존 최소화 + 원커맨드 실행 단순화 |
 
 ### 현재 우선순위
 
-1. `P19.2`~`P19.8` 실행: 옵션 기반 실행면(no-env-first) 정착, YOLO view/headless 분리, CLI/API/UI 옵션 정합화
+1. `P20` 후보 정의: 그래프 작성 UX/편집면(연구 제외 구현 범위) 승격 여부를 확정한다
 2. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지
 
 ### 레거시 관련 기준

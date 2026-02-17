@@ -151,8 +151,11 @@ python scripts/stream_fleet.py stop
 python scripts/stream_run.py --list
 python scripts/stream_run.py --preset inproc_demo --validate-only
 python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
-python scripts/stream_run.py --preset file_yolo --experimental --validate-only
+python scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
+python scripts/stream_run.py --preset file_yolo_view --experimental --model-path models/yolov8n.pt --device cpu --max-events 60
 ```
+
+- Default path is option-first (no env required); env vars remain as advanced overrides.
 
 11. Control API server (local-first, optional bearer token)
 
@@ -399,8 +402,11 @@ python scripts/stream_fleet.py stop
 python scripts/stream_run.py --list
 python scripts/stream_run.py --preset inproc_demo --validate-only
 python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
-python scripts/stream_run.py --preset file_yolo --experimental --validate-only
+python scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
+python scripts/stream_run.py --preset file_yolo_view --experimental --model-path models/yolov8n.pt --device cpu --max-events 60
 ```
+
+- 기본 경로는 옵션 중심(no env)이며, 환경변수 방식은 고급 override 용도로 유지한다.
 
 11. Control API 서버(로컬 기본, 선택적 Bearer 토큰)
 

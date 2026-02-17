@@ -52,7 +52,7 @@ This document is the active mapping between runtime code and maintained docs.
 | `scripts/regression_check.py` | v2 golden comparison helper | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/stream_fleet.py` | generic stream fleet launcher (`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
 | `scripts/stream_monitor.py` | read-only stream TUI monitor (pid/log based) | `docs/ops/command_reference.md` |
-| `scripts/stream_run.py` | one-command preset launcher (`--list`, `--preset`, `--experimental`) | `docs/ops/command_reference.md`, `README.md` |
+| `scripts/stream_run.py` | one-command preset launcher (`--list`, `--preset`, `--experimental`, `--doctor`, YOLO override flags) | `docs/ops/command_reference.md`, `README.md`, `docs/guides/local_console_quickstart.md` |
 | `scripts/stream_console.py` | one-command local console bootstrap (`up`/`status`/`down`/`doctor`) | `docs/ops/command_reference.md`, `docs/guides/local_console_quickstart.md`, `README.md` |
 | `scripts/stream_control_api.py` | local-first control API server (optional bearer auth + governance endpoints) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/control_policy_snapshot.py` | control policy snapshot emit/check (`--check` drift gate) | `docs/ops/command_reference.md`, `README.md` |
@@ -119,7 +119,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | `scripts/regression_check.py` | v2 골든 비교 헬퍼 | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/stream_fleet.py` | 범용 stream fleet 실행기(`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
 | `scripts/stream_monitor.py` | 읽기 전용 stream TUI 모니터(pid/log 기반) | `docs/ops/command_reference.md` |
-| `scripts/stream_run.py` | 원커맨드 프리셋 실행기(`--list`, `--preset`, `--experimental`) | `docs/ops/command_reference.md`, `README.md` |
+| `scripts/stream_run.py` | 원커맨드 프리셋 실행기(`--list`, `--preset`, `--experimental`, `--doctor`, YOLO override 옵션) | `docs/ops/command_reference.md`, `README.md`, `docs/guides/local_console_quickstart.md` |
 | `scripts/stream_console.py` | 원커맨드 로컬 콘솔 부트스트랩(`up`/`status`/`down`/`doctor`) | `docs/ops/command_reference.md`, `docs/guides/local_console_quickstart.md`, `README.md` |
 | `scripts/stream_control_api.py` | 로컬 우선 control API 서버(선택적 Bearer 인증 + 거버넌스 엔드포인트) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/control_policy_snapshot.py` | 제어 정책 스냅샷 생성/검사(`--check` 드리프트 게이트) | `docs/ops/command_reference.md`, `README.md` |

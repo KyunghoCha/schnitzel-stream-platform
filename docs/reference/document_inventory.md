@@ -41,7 +41,7 @@ Last updated: 2026-02-17
   - `docs/progress/README.md`
   - `docs/progress/current_status.md`
 - Usage:
-  - `docs/ops/command_reference.md` (includes `stream_fleet`, `stream_monitor`, `stream_run`, `stream_console`, `stream_control_api`, `env_doctor` profiles, `demo_report_view`, `control_policy_snapshot`, web console command paths)
+  - `docs/ops/command_reference.md` (includes option-first `stream_run` presets, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` profiles, `demo_report_view`, `control_policy_snapshot`, web console command paths)
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`
@@ -98,7 +98,7 @@ Last updated: 2026-02-17
   - `docs/progress/README.md`
   - `docs/progress/current_status.md`
 - 사용:
-  - `docs/ops/command_reference.md` (`stream_fleet`, `stream_monitor`, `stream_run`, `stream_console`, `stream_control_api`, `env_doctor` 프로필, `demo_report_view`, `control_policy_snapshot`, web console 명령 경로 포함)
+  - `docs/ops/command_reference.md` (옵션 중심 `stream_run` 프리셋, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` 프로필, `demo_report_view`, `control_policy_snapshot`, web console 명령 경로 포함)
   - `docs/guides/v2_node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`

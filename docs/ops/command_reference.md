@@ -77,7 +77,8 @@ Run presets:
 python scripts/stream_run.py --preset inproc_demo --validate-only
 python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
 python scripts/stream_run.py --preset webcam_frames --camera-index 0 --max-events 30
-python scripts/stream_run.py --preset file_yolo --experimental --validate-only
+python scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
+python scripts/stream_run.py --preset file_yolo_view --experimental --model-path models/yolov8n.pt --device cpu --max-events 60
 ```
 
 Options:
@@ -86,8 +87,13 @@ Options:
 - `--input-path <path>` (file presets)
 - `--camera-index <int>` (webcam presets)
 - `--device <cpu|0|...>` (YOLO presets)
+- `--model-path <path>` (YOLO presets)
+- `--yolo-conf <float>` (YOLO presets)
+- `--yolo-iou <float>` (YOLO presets)
+- `--yolo-max-det <int>` (YOLO presets)
 - `--loop <true|false>` (file presets)
-- `--experimental` (required for `file_yolo`, `webcam_yolo`)
+- `--doctor` (run strict preflight checks before validate/run; exit code `3` on preflight failure)
+- `--experimental` (required for `file_yolo_view`, `file_yolo_headless`, `webcam_yolo`)
 
 ### Demo Graphs
 
@@ -99,6 +105,7 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_headless_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_stream_template_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
@@ -273,7 +280,7 @@ Preset launcher (one-command UX):
 python scripts/stream_run.py --list
 python scripts/stream_run.py --preset inproc_demo --validate-only
 python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
-python scripts/stream_run.py --preset file_yolo --experimental --validate-only
+python scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
 ```
 
 Read-only stream monitor (pid/log based):
@@ -482,7 +489,8 @@ python scripts/stream_run.py --list --experimental
 python scripts/stream_run.py --preset inproc_demo --validate-only
 python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
 python scripts/stream_run.py --preset webcam_frames --camera-index 0 --max-events 30
-python scripts/stream_run.py --preset file_yolo --experimental --validate-only
+python scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
+python scripts/stream_run.py --preset file_yolo_view --experimental --model-path models/yolov8n.pt --device cpu --max-events 60
 ```
 
 옵션:
@@ -491,8 +499,13 @@ python scripts/stream_run.py --preset file_yolo --experimental --validate-only
 - `--input-path <path>` (file 프리셋)
 - `--camera-index <int>` (webcam 프리셋)
 - `--device <cpu|0|...>` (YOLO 프리셋)
+- `--model-path <path>` (YOLO 프리셋)
+- `--yolo-conf <float>` (YOLO 프리셋)
+- `--yolo-iou <float>` (YOLO 프리셋)
+- `--yolo-max-det <int>` (YOLO 프리셋)
 - `--loop <true|false>` (file 프리셋)
-- `--experimental` (`file_yolo`, `webcam_yolo` 실행 시 필수)
+- `--doctor` (실행 전 strict 사전 진단; preflight 실패 시 종료 코드 `3`)
+- `--experimental` (`file_yolo_view`, `file_yolo_headless`, `webcam_yolo` 실행 시 필수)
 
 ### 데모 그래프
 
@@ -504,6 +517,7 @@ python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_headless_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_stream_template_v2.yaml
 python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
@@ -678,7 +692,7 @@ python scripts/stream_fleet.py stop
 python scripts/stream_run.py --list
 python scripts/stream_run.py --preset inproc_demo --validate-only
 python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
-python scripts/stream_run.py --preset file_yolo --experimental --validate-only
+python scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
 ```
 
 읽기 전용 stream 모니터(pid/log 기반):
