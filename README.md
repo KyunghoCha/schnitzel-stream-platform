@@ -330,6 +330,7 @@ python scripts/env_doctor.py
 python scripts/env_doctor.py --strict --json
 python scripts/env_doctor.py --profile yolo --json
 python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
+python scripts/env_doctor.py --profile console --strict --json
 ```
 
 4. 검증

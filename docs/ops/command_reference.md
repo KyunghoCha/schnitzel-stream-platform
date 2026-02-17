@@ -380,7 +380,7 @@ curl -s -X POST http://127.0.0.1:18700/api/v1/env/check -H "Content-Type: applic
 
 ```bash
 cd apps/stream-console
-npm install
+npm ci
 npm run dev
 ```
 
