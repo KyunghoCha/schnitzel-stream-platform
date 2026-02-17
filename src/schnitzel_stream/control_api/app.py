@@ -12,6 +12,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from schnitzel_stream.ops import envcheck as env_ops
 from schnitzel_stream.ops import fleet as fleet_ops
+from schnitzel_stream.ops import graph_editor as editor_ops
+from schnitzel_stream.ops import graph_wizard as wizard_ops
 from schnitzel_stream.ops import monitor as monitor_ops
 from schnitzel_stream.ops import presets as preset_ops
 from schnitzel_stream.ops import process_manager as procman
@@ -19,7 +21,15 @@ from schnitzel_stream.plugins.registry import PluginPolicy
 
 from .audit import AuditLogger
 from .auth import configured_token, local_mutation_override_enabled, mutation_auth_mode, request_identity, security_mode
-from .models import EnvCheckRequest, FleetStartRequest, FleetStopRequest, PresetRequest
+from .models import (
+    EnvCheckRequest,
+    FleetStartRequest,
+    FleetStopRequest,
+    GraphFromProfileRequest,
+    GraphRunRequest,
+    GraphValidateRequest,
+    PresetRequest,
+)
 
 
 SCHEMA_VERSION = 1
@@ -57,6 +67,16 @@ def _envelope(
         "data": dict(data or {}),
         "error": error,
     }
+
+
+def _model_dump(model: Any) -> dict[str, Any]:
+    if hasattr(model, "model_dump"):
+        out = model.model_dump()
+    elif hasattr(model, "dict"):
+        out = model.dict()
+    else:
+        out = {}
+    return dict(out)
 
 
 def _cors_origins_from_env() -> list[str]:
@@ -118,6 +138,126 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
             for row in rows
         ]
         return _envelope(request_id=req_id, data={"presets": presets, "count": len(presets)})
+
+    @app.get("/api/v1/graph/profiles")
+    def list_graph_profiles(request: Request, experimental: bool = Query(default=False)) -> dict[str, Any]:
+        _actor, req_id = request_identity(request, mode="read")
+        table = wizard_ops.load_profile_table(root)
+        rows = wizard_ops.list_profile_rows(table=table, include_experimental=bool(experimental))
+        profiles = [
+            {
+                "profile_id": row[0],
+                "experimental": row[1] == "yes",
+                "template": row[2],
+                "description": row[3],
+            }
+            for row in rows
+        ]
+        return _envelope(request_id=req_id, data={"profiles": profiles, "count": len(profiles)})
+
+    @app.post("/api/v1/graph/from-profile")
+    def graph_from_profile(request: Request, body: GraphFromProfileRequest) -> dict[str, Any]:
+        _actor, req_id = request_identity(request, mode="read")
+        try:
+            result = editor_ops.render_profile_spec(
+                repo_root=root,
+                profile_id=str(body.profile_id),
+                experimental=bool(body.experimental),
+                overrides=_model_dump(body.overrides),
+            )
+            validation = editor_ops.validate_graph_spec(result.spec)
+            return _envelope(
+                request_id=req_id,
+                status="ok" if validation.ok else "error",
+                data={
+                    "profile_id": result.profile_id,
+                    "experimental": bool(result.experimental),
+                    "template_path": str(result.template_path),
+                    "overrides": dict(result.overrides),
+                    "spec": result.spec,
+                    "validation": {
+                        "ok": bool(validation.ok),
+                        "error": str(validation.error),
+                        "node_count": int(validation.node_count),
+                        "edge_count": int(validation.edge_count),
+                    },
+                },
+                error=None if validation.ok else {"kind": "graph_validation_failed", "reason": str(validation.error)},
+            )
+        except editor_ops.GraphEditorUsageError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        except wizard_ops.GraphWizardUsageError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        except wizard_ops.GraphWizardPreconditionError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    @app.post("/api/v1/graph/validate")
+    def graph_validate(request: Request, body: GraphValidateRequest) -> dict[str, Any]:
+        _actor, req_id = request_identity(request, mode="read")
+        result = editor_ops.validate_graph_spec(_model_dump(body.spec))
+        return _envelope(
+            request_id=req_id,
+            status="ok" if result.ok else "error",
+            data={
+                "validation": {
+                    "ok": bool(result.ok),
+                    "error": str(result.error),
+                    "node_count": int(result.node_count),
+                    "edge_count": int(result.edge_count),
+                }
+            },
+            error=None if result.ok else {"kind": "graph_validation_failed", "reason": str(result.error)},
+        )
+
+    @app.post("/api/v1/graph/run")
+    def graph_run(request: Request, body: GraphRunRequest) -> dict[str, Any]:
+        actor, req_id = request_identity(request, mode="mutate")
+        action = "graph.run"
+        max_events = int(body.max_events or editor_ops.DEFAULT_MAX_EVENTS)
+        try:
+            run_result = editor_ops.run_graph_spec(
+                repo_root=root,
+                spec_input=_model_dump(body.spec),
+                max_events=max_events,
+                python_executable=sys.executable,
+            )
+        except editor_ops.GraphEditorUsageError as exc:
+            logger.append(
+                actor=actor,
+                action=action,
+                target="inline_spec",
+                status="error",
+                reason="request_invalid",
+                request_id=req_id,
+                meta={},
+            )
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+        logger.append(
+            actor=actor,
+            action=action,
+            target="inline_spec",
+            status="ok" if run_result.ok else "error",
+            reason="ok" if run_result.ok else str(run_result.error or "runtime_failed"),
+            request_id=req_id,
+            meta={
+                "returncode": int(run_result.returncode),
+                "command": str(run_result.command),
+                "temp_spec_path": str(run_result.temp_spec_path) if run_result.temp_spec_path else "",
+            },
+        )
+        return _envelope(
+            request_id=req_id,
+            status="ok" if run_result.ok else "error",
+            data={
+                "returncode": int(run_result.returncode),
+                "command": str(run_result.command),
+                "temp_spec_path": str(run_result.temp_spec_path) if run_result.temp_spec_path else "",
+                "stdout_tail": str(run_result.stdout_tail),
+                "stderr_tail": str(run_result.stderr_tail),
+            },
+            error=None if run_result.ok else {"kind": "graph_run_failed", "reason": str(run_result.error)},
+        )
 
     def _run_preset(
         *,

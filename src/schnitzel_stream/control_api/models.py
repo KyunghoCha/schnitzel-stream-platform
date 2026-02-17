@@ -35,11 +35,56 @@ class FleetStopRequest(BaseModel):
 
 
 class EnvCheckRequest(BaseModel):
-    profile: Literal["base", "yolo", "webcam"] = "base"
+    profile: Literal["base", "yolo", "webcam", "console"] = "base"
     strict: bool = False
     model_path: str = "models/yolov8n.pt"
     camera_index: int = 0
     probe_webcam: bool = False
+
+
+class GraphNodeInput(BaseModel):
+    id: str
+    kind: str = "node"
+    plugin: str
+    config: dict[str, object] = Field(default_factory=dict)
+
+
+class GraphEdgeInput(BaseModel):
+    src: str
+    dst: str
+    src_port: str | None = None
+    dst_port: str | None = None
+
+
+class GraphSpecInput(BaseModel):
+    version: int = 2
+    nodes: list[GraphNodeInput] = Field(default_factory=list)
+    edges: list[GraphEdgeInput] = Field(default_factory=list)
+    config: dict[str, object] = Field(default_factory=dict)
+
+
+class GraphFromProfileOverrides(BaseModel):
+    input_path: str = ""
+    camera_index: int | None = None
+    device: str = ""
+    model_path: str = ""
+    loop: Literal["", "true", "false"] = ""
+    max_events: int | None = None
+
+
+class GraphFromProfileRequest(BaseModel):
+    profile_id: str
+    experimental: bool = False
+    overrides: GraphFromProfileOverrides = Field(default_factory=GraphFromProfileOverrides)
+
+
+class GraphValidateRequest(BaseModel):
+    spec: GraphSpecInput
+
+
+class GraphRunRequest(BaseModel):
+    spec: GraphSpecInput
+    max_events: int = 30
 
 
 class Envelope(BaseModel):
