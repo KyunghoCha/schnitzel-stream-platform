@@ -15,6 +15,10 @@ class PresetRequest(BaseModel):
     input_path: str = ""
     camera_index: int | None = None
     device: str = ""
+    model_path: str = ""
+    yolo_conf: float | None = None
+    yolo_iou: float | None = None
+    yolo_max_det: int | None = None
     loop: Literal["", "true", "false"] = ""
 
 

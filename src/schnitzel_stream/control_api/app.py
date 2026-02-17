@@ -149,6 +149,10 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
                 camera_index=int(body.camera_index) if body.camera_index is not None else None,
                 device=str(body.device),
                 loop=str(body.loop),
+                model_path=str(body.model_path),
+                yolo_conf=float(body.yolo_conf) if body.yolo_conf is not None else None,
+                yolo_iou=float(body.yolo_iou) if body.yolo_iou is not None else None,
+                yolo_max_det=int(body.yolo_max_det) if body.yolo_max_det is not None else None,
             )
             if validate_only:
                 cmd = [sys.executable, "-m", "schnitzel_stream", "validate", "--graph", str(spec.graph)]
