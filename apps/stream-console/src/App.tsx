@@ -1,7 +1,17 @@
 import { FormEvent, useMemo, useState } from "react";
-import { apiRequest, defaultApiBase } from "./api";
+import { Background, Controls, MiniMap, ReactFlow } from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import YAML from "yaml";
 
-type TabId = "dashboard" | "presets" | "fleet" | "monitor" | "governance";
+import {
+  apiRequest,
+  defaultApiBase,
+  GraphFromProfileOverrides,
+  GraphSpecInput,
+  normalizeGraphSpecInput
+} from "./api";
+
+type TabId = "dashboard" | "presets" | "fleet" | "monitor" | "editor" | "governance";
 
 type PresetItem = {
   preset_id: string;
@@ -10,13 +20,123 @@ type PresetItem = {
   description: string;
 };
 
+type GraphProfileItem = {
+  profile_id: string;
+  experimental: boolean;
+  template: string;
+  description: string;
+};
+
+type NodePos = { x: number; y: number };
+
 const TABS: Array<{ id: TabId; label: string }> = [
   { id: "dashboard", label: "Dashboard" },
   { id: "presets", label: "Presets" },
   { id: "fleet", label: "Fleet" },
   { id: "monitor", label: "Monitor" },
+  { id: "editor", label: "Editor" },
   { id: "governance", label: "Governance" }
 ];
+
+function defaultPosition(index: number): NodePos {
+  return {
+    x: 100 + (index % 4) * 250,
+    y: 80 + Math.floor(index / 4) * 180
+  };
+}
+
+function defaultSpec(): GraphSpecInput {
+  return {
+    version: 2,
+    nodes: [
+      {
+        id: "src",
+        kind: "source",
+        plugin: "schnitzel_stream.nodes.dev:StaticSource",
+        config: {
+          packets: [
+            {
+              kind: "demo",
+              source_id: "editor_demo",
+              payload: { message: "hello from block editor" }
+            }
+          ]
+        }
+      },
+      {
+        id: "out",
+        kind: "sink",
+        plugin: "schnitzel_stream.nodes.dev:PrintSink",
+        config: {
+          prefix: "EDITOR "
+        }
+      }
+    ],
+    edges: [{ src: "src", dst: "out" }],
+    config: {}
+  };
+}
+
+function defaultNodeTemplate(kind: "source" | "node" | "sink", id: string) {
+  if (kind === "source") {
+    return {
+      id,
+      kind,
+      plugin: "schnitzel_stream.nodes.dev:StaticSource",
+      config: {
+        packets: [
+          {
+            kind: "demo",
+            source_id: id,
+            payload: { value: id }
+          }
+        ]
+      }
+    };
+  }
+  if (kind === "sink") {
+    return {
+      id,
+      kind,
+      plugin: "schnitzel_stream.nodes.dev:PrintSink",
+      config: { prefix: `${id.toUpperCase()} ` }
+    };
+  }
+  return {
+    id,
+    kind,
+    plugin: "schnitzel_stream.nodes.dev:Identity",
+    config: {}
+  };
+}
+
+function nextNodeId(base: string, spec: GraphSpecInput): string {
+  const normalized = base.trim() || "node";
+  if (!spec.nodes.some((node) => node.id === normalized)) {
+    return normalized;
+  }
+  let n = 2;
+  while (spec.nodes.some((node) => node.id === `${normalized}_${n}`)) {
+    n += 1;
+  }
+  return `${normalized}_${n}`;
+}
+
+function toNumber(value: string): number | undefined {
+  const txt = value.trim();
+  if (!txt) return undefined;
+  const n = Number(txt);
+  if (!Number.isFinite(n)) return undefined;
+  return n;
+}
+
+function toBoolText(value: string): "" | "true" | "false" {
+  const lower = value.trim().toLowerCase();
+  if (lower === "true" || lower === "false") {
+    return lower;
+  }
+  return "";
+}
 
 export function App() {
   const [tab, setTab] = useState<TabId>("dashboard");
@@ -52,8 +172,109 @@ export function App() {
   const [auditRows, setAuditRows] = useState<Record<string, unknown>[]>([]);
   const [presetSessionOutput, setPresetSessionOutput] = useState<string>("(no preset session output yet)");
 
+  const [editorSpec, setEditorSpec] = useState<GraphSpecInput>(() => defaultSpec());
+  const [editorPositions, setEditorPositions] = useState<Record<string, NodePos>>({
+    src: { x: 100, y: 100 },
+    out: { x: 420, y: 100 }
+  });
+  const [editorYaml, setEditorYaml] = useState<string>(() => YAML.stringify(defaultSpec()));
+  const [editorOutput, setEditorOutput] = useState<string>("(no editor action yet)");
+  const [editorProfiles, setEditorProfiles] = useState<GraphProfileItem[]>([]);
+  const [editorProfileId, setEditorProfileId] = useState<string>("inproc_demo");
+  const [editorAllowExperimental, setEditorAllowExperimental] = useState<boolean>(false);
+  const [editorInputPath, setEditorInputPath] = useState<string>("");
+  const [editorCameraIndex, setEditorCameraIndex] = useState<string>("");
+  const [editorDevice, setEditorDevice] = useState<string>("cpu");
+  const [editorModelPath, setEditorModelPath] = useState<string>("");
+  const [editorLoop, setEditorLoop] = useState<string>("");
+  const [editorMaxEvents, setEditorMaxEvents] = useState<string>("30");
+  const [editorSelectedNode, setEditorSelectedNode] = useState<string>("src");
+  const [editorNodeId, setEditorNodeId] = useState<string>("src");
+  const [editorNodeKind, setEditorNodeKind] = useState<string>("source");
+  const [editorNodePlugin, setEditorNodePlugin] = useState<string>("schnitzel_stream.nodes.dev:StaticSource");
+  const [editorNodeConfig, setEditorNodeConfig] = useState<string>(
+    JSON.stringify(defaultSpec().nodes[0].config, null, 2)
+  );
+  const [editorNodePosX, setEditorNodePosX] = useState<string>("100");
+  const [editorNodePosY, setEditorNodePosY] = useState<string>("100");
+  const [editorEdgeSrc, setEditorEdgeSrc] = useState<string>("src");
+  const [editorEdgeDst, setEditorEdgeDst] = useState<string>("out");
+
   const [output, setOutput] = useState<string>("Ready");
   const currentPreset = useMemo(() => presets.find((x) => x.preset_id === presetId), [presets, presetId]);
+  const currentEditorProfile = useMemo(
+    () => editorProfiles.find((item) => item.profile_id === editorProfileId),
+    [editorProfiles, editorProfileId]
+  );
+
+  const flowNodes = useMemo(() => {
+    return editorSpec.nodes.map((node, idx) => {
+      const pos = editorPositions[node.id] ?? defaultPosition(idx);
+      return {
+        id: node.id,
+        position: { x: pos.x, y: pos.y },
+        data: { label: `${node.id} (${node.kind})` }
+      };
+    });
+  }, [editorPositions, editorSpec.nodes]);
+
+  const flowEdges = useMemo(() => {
+    return editorSpec.edges.map((edge, idx) => ({
+      id: `e_${idx}_${edge.src}_${edge.dst}`,
+      source: edge.src,
+      target: edge.dst,
+      label: edge.src_port || edge.dst_port ? `${edge.src_port ?? "*"} -> ${edge.dst_port ?? "*"}` : undefined
+    }));
+  }, [editorSpec.edges]);
+
+  function syncEditorYaml(spec: GraphSpecInput) {
+    setEditorYaml(YAML.stringify(spec));
+  }
+
+  function selectEditorNode(nodeId: string, spec: GraphSpecInput = editorSpec, positions: Record<string, NodePos> = editorPositions) {
+    const node = spec.nodes.find((item) => item.id === nodeId);
+    if (!node) {
+      return;
+    }
+    setEditorSelectedNode(node.id);
+    setEditorNodeId(node.id);
+    setEditorNodeKind(node.kind);
+    setEditorNodePlugin(node.plugin);
+    setEditorNodeConfig(JSON.stringify(node.config ?? {}, null, 2));
+    const idx = spec.nodes.findIndex((item) => item.id === node.id);
+    const pos = positions[node.id] ?? defaultPosition(Math.max(0, idx));
+    setEditorNodePosX(String(Math.round(pos.x)));
+    setEditorNodePosY(String(Math.round(pos.y)));
+  }
+
+  function applyEditorSpec(spec: GraphSpecInput, positions: Record<string, NodePos>) {
+    setEditorSpec(spec);
+    setEditorPositions(positions);
+    syncEditorYaml(spec);
+
+    if (!spec.nodes.length) {
+      setEditorSelectedNode("");
+      setEditorNodeId("");
+      setEditorNodeKind("node");
+      setEditorNodePlugin("schnitzel_stream.nodes.dev:Identity");
+      setEditorNodeConfig("{}");
+      setEditorNodePosX("0");
+      setEditorNodePosY("0");
+      setEditorEdgeSrc("");
+      setEditorEdgeDst("");
+      return;
+    }
+
+    const selected =
+      spec.nodes.find((node) => node.id === editorSelectedNode)?.id ??
+      spec.nodes[0].id;
+    const src = spec.nodes.find((node) => node.id === editorEdgeSrc)?.id ?? spec.nodes[0].id;
+    const dst = spec.nodes.find((node) => node.id === editorEdgeDst)?.id ?? spec.nodes[Math.min(1, spec.nodes.length - 1)].id;
+
+    setEditorEdgeSrc(src);
+    setEditorEdgeDst(dst);
+    selectEditorNode(selected, spec, positions);
+  }
 
   async function runAction(label: string, fn: () => Promise<void>) {
     setBusy(true);
@@ -190,12 +411,290 @@ export function App() {
     });
   }
 
+  async function loadEditorProfiles() {
+    await runAction("graph.profiles", async () => {
+      const resp = await apiRequest<{ profiles?: GraphProfileItem[] }>(
+        `/api/v1/graph/profiles?experimental=${editorAllowExperimental ? "true" : "false"}`,
+        { baseUrl: apiBase, token }
+      );
+      const rows = Array.isArray(resp.data.profiles) ? resp.data.profiles : [];
+      setEditorProfiles(rows);
+      if (rows.length > 0 && !rows.some((row) => row.profile_id === editorProfileId)) {
+        setEditorProfileId(rows[0].profile_id);
+      }
+      setEditorOutput(JSON.stringify(resp, null, 2));
+    });
+  }
+
+  function buildProfileOverrides(): GraphFromProfileOverrides {
+    const ov: GraphFromProfileOverrides = {};
+    if (editorInputPath.trim()) ov.input_path = editorInputPath.trim();
+    const camera = toNumber(editorCameraIndex);
+    if (camera !== undefined) ov.camera_index = camera;
+    if (editorDevice.trim()) ov.device = editorDevice.trim();
+    if (editorModelPath.trim()) ov.model_path = editorModelPath.trim();
+    const loop = toBoolText(editorLoop);
+    if (loop) ov.loop = loop;
+    const maxEvents = toNumber(editorMaxEvents);
+    if (maxEvents !== undefined && maxEvents > 0) ov.max_events = maxEvents;
+    return ov;
+  }
+
+  async function editorLoadFromProfile() {
+    await runAction("graph.from_profile", async () => {
+      if (!editorProfileId.trim()) {
+        throw new Error("profile_id is required");
+      }
+      const resp = await apiRequest<{ spec?: unknown; profile_id?: string; overrides?: Record<string, string> }>(
+        "/api/v1/graph/from-profile",
+        {
+          baseUrl: apiBase,
+          token,
+          method: "POST",
+          body: {
+            profile_id: editorProfileId.trim(),
+            experimental: editorAllowExperimental,
+            overrides: buildProfileOverrides()
+          }
+        }
+      );
+      const spec = normalizeGraphSpecInput(resp.data.spec ?? {});
+      const positions: Record<string, NodePos> = {};
+      spec.nodes.forEach((node, idx) => {
+        positions[node.id] = defaultPosition(idx);
+      });
+      applyEditorSpec(spec, positions);
+      setEditorOutput(JSON.stringify(resp, null, 2));
+    });
+  }
+
+  async function editorValidate() {
+    await runAction("graph.validate", async () => {
+      const resp = await apiRequest<{ validation?: Record<string, unknown> }>("/api/v1/graph/validate", {
+        baseUrl: apiBase,
+        token,
+        method: "POST",
+        body: {
+          spec: editorSpec
+        }
+      });
+      setEditorOutput(JSON.stringify(resp, null, 2));
+    });
+  }
+
+  async function editorRun() {
+    await runAction("graph.run", async () => {
+      const maxEvents = toNumber(editorMaxEvents) ?? 30;
+      const resp = await apiRequest<{ returncode?: number; command?: string; temp_spec_path?: string }>(
+        "/api/v1/graph/run",
+        {
+          baseUrl: apiBase,
+          token,
+          method: "POST",
+          body: {
+            spec: editorSpec,
+            max_events: maxEvents
+          }
+        }
+      );
+      setEditorOutput(JSON.stringify(resp, null, 2));
+    });
+  }
+
+  function addEditorNode(kind: "source" | "node" | "sink") {
+    const base = kind === "source" ? "source" : kind === "sink" ? "sink" : "node";
+    const nodeId = nextNodeId(base, editorSpec);
+    const nextNode = defaultNodeTemplate(kind, nodeId);
+    const nextSpec: GraphSpecInput = {
+      ...editorSpec,
+      nodes: [...editorSpec.nodes, nextNode]
+    };
+    const nextPositions = {
+      ...editorPositions,
+      [nodeId]: defaultPosition(nextSpec.nodes.length - 1)
+    };
+    applyEditorSpec(nextSpec, nextPositions);
+  }
+
+  function saveSelectedNode() {
+    if (!editorSelectedNode.trim()) return;
+
+    let config: Record<string, unknown> = {};
+    try {
+      const parsed = JSON.parse(editorNodeConfig || "{}");
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        throw new Error("node config must be JSON object");
+      }
+      config = parsed as Record<string, unknown>;
+    } catch (err) {
+      setOutput(`[ERROR] editor.node.save: invalid node config json (${String(err)})`);
+      return;
+    }
+
+    const targetId = editorSelectedNode.trim();
+    const nextIdRaw = editorNodeId.trim();
+    if (!nextIdRaw) {
+      setOutput("[ERROR] editor.node.save: node id is required");
+      return;
+    }
+    if (nextIdRaw !== targetId && editorSpec.nodes.some((node) => node.id === nextIdRaw)) {
+      setOutput(`[ERROR] editor.node.save: node id already exists (${nextIdRaw})`);
+      return;
+    }
+    const nextX = toNumber(editorNodePosX);
+    const nextY = toNumber(editorNodePosY);
+    if (nextX === undefined || nextY === undefined) {
+      setOutput("[ERROR] editor.node.save: x/y must be valid numbers");
+      return;
+    }
+
+    const nextNodes = editorSpec.nodes.map((node) => {
+      if (node.id !== targetId) return node;
+      return {
+        ...node,
+        id: nextIdRaw,
+        kind: editorNodeKind.trim() || "node",
+        plugin: editorNodePlugin.trim(),
+        config
+      };
+    });
+    const nextEdges = editorSpec.edges.map((edge) => ({
+      ...edge,
+      src: edge.src === targetId ? nextIdRaw : edge.src,
+      dst: edge.dst === targetId ? nextIdRaw : edge.dst
+    }));
+    const nextPositions = { ...editorPositions };
+    const oldPos = nextPositions[targetId] ?? { x: nextX, y: nextY };
+    delete nextPositions[targetId];
+    nextPositions[nextIdRaw] = { x: nextX, y: nextY };
+
+    applyEditorSpec(
+      {
+        ...editorSpec,
+        nodes: nextNodes,
+        edges: nextEdges
+      },
+      {
+        ...nextPositions,
+        [nextIdRaw]: { x: nextX, y: nextY },
+        ...(nextIdRaw === targetId ? { [nextIdRaw]: { x: nextX, y: nextY } } : {})
+      }
+    );
+    setEditorSelectedNode(nextIdRaw);
+    setEditorEdgeSrc((prev) => (prev === targetId ? nextIdRaw : prev));
+    setEditorEdgeDst((prev) => (prev === targetId ? nextIdRaw : prev));
+    setEditorOutput(
+      JSON.stringify(
+        {
+          action: "editor.node.save",
+          node_id: nextIdRaw,
+          position: { x: nextX, y: nextY },
+          previous_position: oldPos
+        },
+        null,
+        2
+      )
+    );
+  }
+
+  function removeSelectedNode() {
+    const target = editorSelectedNode.trim();
+    if (!target) return;
+    const nextNodes = editorSpec.nodes.filter((node) => node.id !== target);
+    const nextEdges = editorSpec.edges.filter((edge) => edge.src !== target && edge.dst !== target);
+    const nextPositions = { ...editorPositions };
+    delete nextPositions[target];
+    applyEditorSpec({ ...editorSpec, nodes: nextNodes, edges: nextEdges }, nextPositions);
+    setEditorOutput(JSON.stringify({ action: "editor.node.remove", node_id: target }, null, 2));
+  }
+
+  function addEditorEdge() {
+    const src = editorEdgeSrc.trim();
+    const dst = editorEdgeDst.trim();
+    if (!src || !dst) {
+      setOutput("[ERROR] editor.edge.add: src and dst are required");
+      return;
+    }
+    if (!editorSpec.nodes.some((node) => node.id === src) || !editorSpec.nodes.some((node) => node.id === dst)) {
+      setOutput("[ERROR] editor.edge.add: src/dst must refer to existing nodes");
+      return;
+    }
+    if (editorSpec.edges.some((edge) => edge.src === src && edge.dst === dst)) {
+      setOutput("[ERROR] editor.edge.add: duplicate edge");
+      return;
+    }
+    const nextSpec: GraphSpecInput = {
+      ...editorSpec,
+      edges: [...editorSpec.edges, { src, dst }]
+    };
+    applyEditorSpec(nextSpec, editorPositions);
+    setEditorOutput(JSON.stringify({ action: "editor.edge.add", src, dst }, null, 2));
+  }
+
+  function removeEditorEdge(index: number) {
+    if (index < 0 || index >= editorSpec.edges.length) return;
+    const removed = editorSpec.edges[index];
+    const nextEdges = editorSpec.edges.filter((_, idx) => idx !== index);
+    applyEditorSpec({ ...editorSpec, edges: nextEdges }, editorPositions);
+    setEditorOutput(
+      JSON.stringify(
+        {
+          action: "editor.edge.remove",
+          edge: removed
+        },
+        null,
+        2
+      )
+    );
+  }
+
+  function exportYaml() {
+    syncEditorYaml(editorSpec);
+    setEditorOutput(
+      JSON.stringify(
+        {
+          action: "editor.yaml.export",
+          nodes: editorSpec.nodes.length,
+          edges: editorSpec.edges.length
+        },
+        null,
+        2
+      )
+    );
+  }
+
+  function importYaml() {
+    try {
+      const raw = YAML.parse(editorYaml);
+      const normalized = normalizeGraphSpecInput(raw);
+      const nextPositions: Record<string, NodePos> = {};
+      normalized.nodes.forEach((node, idx) => {
+        nextPositions[node.id] = editorPositions[node.id] ?? defaultPosition(idx);
+      });
+      applyEditorSpec(normalized, nextPositions);
+      setEditorOutput(
+        JSON.stringify(
+          {
+            action: "editor.yaml.import",
+            nodes: normalized.nodes.length,
+            edges: normalized.edges.length
+          },
+          null,
+          2
+        )
+      );
+    } catch (err) {
+      setOutput(`[ERROR] editor.yaml.import: ${String(err)}`);
+    }
+  }
+
   function handleTabClick(nextTab: TabId) {
     setTab(nextTab);
     if (nextTab === "dashboard") void loadDashboard();
     if (nextTab === "presets") void loadPresets();
     if (nextTab === "fleet") void fleetQueryStatus();
     if (nextTab === "monitor") void monitorQuerySnapshot();
+    if (nextTab === "editor") void loadEditorProfiles();
     if (nextTab === "governance") void loadGovernance();
   }
 
@@ -380,6 +879,196 @@ export function App() {
     );
   }
 
+  function renderEditor() {
+    return (
+      <section className="panel-grid">
+        <article className="card wide">
+          <div className="row between wrap">
+            <h3>Block Editor MVP</h3>
+            <p className="hint">Graph run is a one-shot session action and not part of Fleet monitor rows.</p>
+          </div>
+
+          <div className="row wrap">
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={editorAllowExperimental}
+                onChange={(e) => {
+                  setEditorAllowExperimental(e.target.checked);
+                  void loadEditorProfiles();
+                }}
+              />
+              experimental profiles
+            </label>
+            <button disabled={busy} onClick={() => void loadEditorProfiles()}>
+              Reload Profiles
+            </button>
+            <select value={editorProfileId} onChange={(e) => setEditorProfileId(e.target.value)}>
+              {editorProfiles.map((item) => (
+                <option key={item.profile_id} value={item.profile_id}>
+                  {item.profile_id}
+                </option>
+              ))}
+            </select>
+            <button disabled={busy} onClick={() => void editorLoadFromProfile()}>
+              Load Profile
+            </button>
+            <span className="hint">
+              selected: {currentEditorProfile?.profile_id ?? "-"}
+              {currentEditorProfile?.experimental ? " (experimental)" : ""}
+            </span>
+          </div>
+
+          <div className="row wrap">
+            <input value={editorInputPath} onChange={(e) => setEditorInputPath(e.target.value)} placeholder="override input path" />
+            <input
+              value={editorCameraIndex}
+              onChange={(e) => setEditorCameraIndex(e.target.value)}
+              placeholder="override camera index"
+            />
+            <input value={editorDevice} onChange={(e) => setEditorDevice(e.target.value)} placeholder="override device" />
+            <input value={editorModelPath} onChange={(e) => setEditorModelPath(e.target.value)} placeholder="override model path" />
+            <input value={editorLoop} onChange={(e) => setEditorLoop(e.target.value)} placeholder="override loop true|false" />
+            <input value={editorMaxEvents} onChange={(e) => setEditorMaxEvents(e.target.value)} placeholder="max events" />
+          </div>
+
+          <div className="row wrap">
+            <button disabled={busy} onClick={() => addEditorNode("source")}>
+              Add Source
+            </button>
+            <button disabled={busy} onClick={() => addEditorNode("node")}>
+              Add Node
+            </button>
+            <button disabled={busy} onClick={() => addEditorNode("sink")}>
+              Add Sink
+            </button>
+            <select value={editorEdgeSrc} onChange={(e) => setEditorEdgeSrc(e.target.value)}>
+              {editorSpec.nodes.map((node) => (
+                <option key={`src-${node.id}`} value={node.id}>
+                  {node.id}
+                </option>
+              ))}
+            </select>
+            <select value={editorEdgeDst} onChange={(e) => setEditorEdgeDst(e.target.value)}>
+              {editorSpec.nodes.map((node) => (
+                <option key={`dst-${node.id}`} value={node.id}>
+                  {node.id}
+                </option>
+              ))}
+            </select>
+            <button disabled={busy} onClick={() => addEditorEdge()}>
+              Add Edge
+            </button>
+          </div>
+
+          <div className="editor-canvas" data-testid="editor-canvas">
+            <ReactFlow nodes={flowNodes} edges={flowEdges} fitView nodesDraggable={false} nodesConnectable={false}>
+              <MiniMap />
+              <Controls />
+              <Background />
+            </ReactFlow>
+          </div>
+
+          <div className="editor-two-col">
+            <section>
+              <h4>Selected Node</h4>
+              <div className="row wrap">
+                <select
+                  value={editorSelectedNode}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setEditorSelectedNode(next);
+                    selectEditorNode(next);
+                  }}
+                >
+                  {editorSpec.nodes.map((node) => (
+                    <option key={`node-${node.id}`} value={node.id}>
+                      {node.id}
+                    </option>
+                  ))}
+                </select>
+                <input value={editorNodeId} onChange={(e) => setEditorNodeId(e.target.value)} placeholder="node id" />
+                <input value={editorNodeKind} onChange={(e) => setEditorNodeKind(e.target.value)} placeholder="kind" />
+                <input value={editorNodePlugin} onChange={(e) => setEditorNodePlugin(e.target.value)} placeholder="plugin" />
+                <input value={editorNodePosX} onChange={(e) => setEditorNodePosX(e.target.value)} placeholder="x" />
+                <input value={editorNodePosY} onChange={(e) => setEditorNodePosY(e.target.value)} placeholder="y" />
+                <button disabled={busy} onClick={() => saveSelectedNode()}>
+                  Save Node
+                </button>
+                <button disabled={busy} onClick={() => removeSelectedNode()}>
+                  Remove Node
+                </button>
+              </div>
+              <textarea
+                value={editorNodeConfig}
+                onChange={(e) => setEditorNodeConfig(e.target.value)}
+                rows={10}
+                className="code-area"
+              />
+            </section>
+            <section>
+              <h4>Edges</h4>
+              <div className="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>src</th>
+                      <th>dst</th>
+                      <th>src_port</th>
+                      <th>dst_port</th>
+                      <th>action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {editorSpec.edges.map((edge, idx) => (
+                      <tr key={`edge-${idx}-${edge.src}-${edge.dst}`}>
+                        <td>{edge.src}</td>
+                        <td>{edge.dst}</td>
+                        <td>{edge.src_port ?? ""}</td>
+                        <td>{edge.dst_port ?? ""}</td>
+                        <td>
+                          <button disabled={busy} onClick={() => removeEditorEdge(idx)}>
+                            remove
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <h4>YAML Import / Export</h4>
+          <div className="row wrap">
+            <button disabled={busy} onClick={() => exportYaml()}>
+              Export YAML
+            </button>
+            <button disabled={busy} onClick={() => importYaml()}>
+              Import YAML
+            </button>
+            <button disabled={busy} onClick={() => void editorValidate()}>
+              Validate Graph
+            </button>
+            <button disabled={busy} onClick={() => void editorRun()}>
+              Run Graph
+            </button>
+          </div>
+          <textarea
+            value={editorYaml}
+            onChange={(e) => setEditorYaml(e.target.value)}
+            rows={14}
+            className="code-area"
+            placeholder="version: 2"
+          />
+
+          <h4>Editor API Output</h4>
+          <pre>{editorOutput}</pre>
+        </article>
+      </section>
+    );
+  }
+
   function renderGovernance() {
     return (
       <section className="panel-grid">
@@ -444,6 +1133,7 @@ export function App() {
         {tab === "presets" && renderPresets()}
         {tab === "fleet" && renderFleet()}
         {tab === "monitor" && renderMonitor()}
+        {tab === "editor" && renderEditor()}
         {tab === "governance" && renderGovernance()}
       </main>
     </div>
