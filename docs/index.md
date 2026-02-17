@@ -31,6 +31,7 @@ Runtime baseline:
 16. `docs/guides/professor_showcase_guide.md`
 17. `docs/guides/local_console_quickstart.md`
 18. `docs/guides/graph_wizard_guide.md`
+19. `docs/guides/block_editor_quickstart.md`
 
 ## Active Folders
 
@@ -62,8 +63,10 @@ Runtime baseline:
 - Stream monitor: `scripts/stream_monitor.py`
 - Preset launcher (no-env-first): `scripts/stream_run.py`
 - Graph wizard (template-profile graph generator): `scripts/graph_wizard.py`
+- Dependency bootstrap helper: `scripts/bootstrap_env.py`, `environment.yml`
 - Stream console bootstrap: `scripts/stream_console.py`
 - Stream control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`
+- Graph editor ops service: `src/schnitzel_stream/ops/graph_editor.py`
 - Control policy snapshot gate: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`
 - Environment diagnostics: `scripts/env_doctor.py`
 - Showcase report renderer: `scripts/demo_report_view.py`
@@ -100,6 +103,7 @@ Runtime baseline:
 16. `docs/guides/professor_showcase_guide.md`
 17. `docs/guides/local_console_quickstart.md`
 18. `docs/guides/graph_wizard_guide.md`
+19. `docs/guides/block_editor_quickstart.md`
 
 ## 활성 폴더
 
@@ -131,8 +135,10 @@ Runtime baseline:
 - Stream 모니터: `scripts/stream_monitor.py`
 - 프리셋 실행기(무환경변수 우선): `scripts/stream_run.py`
 - Graph wizard(템플릿 프로필 그래프 생성기): `scripts/graph_wizard.py`
+- 의존성 부트스트랩 헬퍼: `scripts/bootstrap_env.py`, `environment.yml`
 - Stream 콘솔 부트스트랩: `scripts/stream_console.py`
 - Stream Control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`
+- 그래프 편집 ops 서비스: `src/schnitzel_stream/ops/graph_editor.py`
 - 제어 정책 스냅샷 게이트: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`
 - 환경 진단: `scripts/env_doctor.py`
 - 쇼케이스 리포트 렌더러: `scripts/demo_report_view.py`
