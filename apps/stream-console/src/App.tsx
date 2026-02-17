@@ -11,6 +11,7 @@ import {
   MiniMap,
   Node,
   NodeChange,
+  ReactFlowInstance,
   ReactFlow
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
@@ -23,6 +24,7 @@ import {
   GraphSpecInput,
   normalizeGraphSpecInput
 } from "./api";
+import { alignNodePositions, computeAutoLayout } from "./editor_layout";
 import { editorNodeTypes, EditorNodeKind } from "./editor_nodes";
 
 type TabId = "dashboard" | "presets" | "fleet" | "monitor" | "editor" | "governance";
@@ -226,6 +228,7 @@ export function App() {
   const [editorEdgeDst, setEditorEdgeDst] = useState<string>("out");
 
   const [output, setOutput] = useState<string>("Ready");
+  const [flowInstance, setFlowInstance] = useState<ReactFlowInstance<any, any> | null>(null);
   const currentPreset = useMemo(() => presets.find((x) => x.preset_id === presetId), [presets, presetId]);
   const currentEditorProfile = useMemo(
     () => editorProfiles.find((item) => item.profile_id === editorProfileId),
@@ -349,13 +352,9 @@ export function App() {
         return;
       }
 
-      setEditorPositions(nextPositions);
-      if (editorSelectedNode && nextPositions[editorSelectedNode]) {
-        setEditorNodePosX(String(Math.round(nextPositions[editorSelectedNode].x)));
-        setEditorNodePosY(String(Math.round(nextPositions[editorSelectedNode].y)));
-      }
+      applyEditorPositions(nextPositions);
     },
-    [editorSelectedNode, editorSpec, flowNodes]
+    [editorSpec, flowNodes]
   );
 
   const onFlowEdgesChange = useCallback(
@@ -476,6 +475,51 @@ export function App() {
     },
     [editorPositions, editorSpec, flowEdges]
   );
+
+  function applyEditorPositions(nextPositions: Record<string, NodePos>): void {
+    setEditorPositions(nextPositions);
+    if (editorSelectedNode && nextPositions[editorSelectedNode]) {
+      setEditorNodePosX(String(Math.round(nextPositions[editorSelectedNode].x)));
+      setEditorNodePosY(String(Math.round(nextPositions[editorSelectedNode].y)));
+    }
+  }
+
+  function autoLayoutEditor(): void {
+    const nextPositions = computeAutoLayout(editorSpec.nodes, editorSpec.edges);
+    applyEditorPositions(nextPositions);
+    setEditorOutput(
+      JSON.stringify(
+        {
+          action: "editor.layout.auto",
+          nodes: editorSpec.nodes.length
+        },
+        null,
+        2
+      )
+    );
+    flowInstance?.fitView({ padding: 0.2, duration: 250 });
+  }
+
+  function alignEditor(axis: "horizontal" | "vertical"): void {
+    const nodeIds = editorSpec.nodes.map((node) => node.id);
+    const nextPositions = alignNodePositions(editorPositions, nodeIds, axis);
+    applyEditorPositions(nextPositions);
+    setEditorOutput(
+      JSON.stringify(
+        {
+          action: `editor.layout.align.${axis}`,
+          nodes: nodeIds.length
+        },
+        null,
+        2
+      )
+    );
+    flowInstance?.fitView({ padding: 0.2, duration: 250 });
+  }
+
+  function fitEditorView(): void {
+    flowInstance?.fitView({ padding: 0.2, duration: 250 });
+  }
 
   async function runAction(label: string, fn: () => Promise<void>) {
     setBusy(true);
@@ -1160,6 +1204,18 @@ export function App() {
             <button disabled={busy} onClick={() => addEditorEdge()}>
               Add Edge
             </button>
+            <button disabled={busy} onClick={() => autoLayoutEditor()}>
+              Auto Layout
+            </button>
+            <button disabled={busy} onClick={() => alignEditor("horizontal")}>
+              Align Horizontal
+            </button>
+            <button disabled={busy} onClick={() => alignEditor("vertical")}>
+              Align Vertical
+            </button>
+            <button disabled={busy} onClick={() => fitEditorView()}>
+              Fit View
+            </button>
           </div>
 
           <div className="editor-canvas" data-testid="editor-canvas">
@@ -1174,6 +1230,7 @@ export function App() {
               onNodesChange={onFlowNodesChange}
               onEdgesChange={onFlowEdgesChange}
               onConnect={onFlowConnect}
+              onInit={(instance) => setFlowInstance(instance)}
             >
               <MiniMap />
               <Controls />
