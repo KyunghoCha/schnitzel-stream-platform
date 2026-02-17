@@ -1,6 +1,5 @@
 import { FormEvent, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  addEdge,
   applyEdgeChanges,
   applyNodeChanges,
   Background,
@@ -25,6 +24,7 @@ import {
   GraphSpecInput,
   normalizeGraphSpecInput
 } from "./api";
+import { findSnapTargetInput, isConnectionAllowedHybrid, type SnapNodeInput } from "./editor_connect";
 import { alignNodePositions, computeAutoLayout } from "./editor_layout";
 import { editorNodeTypes, EditorNodeKind } from "./editor_nodes";
 
@@ -188,6 +188,39 @@ function toBoolText(value: string): "" | "true" | "false" {
   return "";
 }
 
+function connectionErrorMessage(reason: string): string {
+  if (reason === "sink_outgoing_blocked") {
+    return "sink cannot have outgoing edges";
+  }
+  if (reason === "source_incoming_blocked") {
+    return "source cannot have incoming edges";
+  }
+  if (reason === "self_loop_blocked") {
+    return "self-loop is blocked in editor";
+  }
+  if (reason === "duplicate_edge_blocked") {
+    return "duplicate edge";
+  }
+  return reason;
+}
+
+function eventClientPoint(evt: MouseEvent | TouchEvent): { x: number; y: number } | null {
+  if ("clientX" in evt && typeof evt.clientX === "number") {
+    return {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+  }
+  const touch = "changedTouches" in evt ? evt.changedTouches?.[0] ?? evt.touches?.[0] : null;
+  if (!touch) {
+    return null;
+  }
+  return {
+    x: touch.clientX,
+    y: touch.clientY
+  };
+}
+
 type EditorCanvasProps = {
   nodes: Node[];
   edges: Edge[];
@@ -214,6 +247,8 @@ const EditorCanvas = memo(function EditorCanvas({
   const [localNodes, setLocalNodes] = useState<Node[]>(nodes);
   const localNodesRef = useRef<Node[]>(nodes);
   const flowRef = useRef<ReactFlowInstance<any, any> | null>(null);
+  const connectStartRef = useRef<{ sourceId: string; sourceHandle: string } | null>(null);
+  const didConnectRef = useRef(false);
 
   useEffect(() => {
     setLocalNodes(nodes);
@@ -253,6 +288,64 @@ const EditorCanvas = memo(function EditorCanvas({
     [onNodeSelect]
   );
 
+  const onLocalConnectStart = useCallback((_event: unknown, params: { nodeId?: string | null; handleId?: string | null }) => {
+    didConnectRef.current = false;
+    const sourceId = String(params?.nodeId ?? "").trim();
+    if (!sourceId) {
+      connectStartRef.current = null;
+      return;
+    }
+    const sourceHandle = String(params?.handleId ?? "out");
+    connectStartRef.current = { sourceId, sourceHandle };
+  }, []);
+
+  const onLocalConnect = useCallback(
+    (connection: Connection) => {
+      didConnectRef.current = true;
+      onConnect(connection);
+    },
+    [onConnect]
+  );
+
+  const onLocalConnectEnd = useCallback(
+    (event: MouseEvent | TouchEvent) => {
+      const started = connectStartRef.current;
+      connectStartRef.current = null;
+
+      if (!started || didConnectRef.current) {
+        return;
+      }
+
+      const flow = flowRef.current;
+      if (!flow) {
+        return;
+      }
+      const point = eventClientPoint(event);
+      if (!point) {
+        return;
+      }
+      const flowPoint = flow.screenToFlowPosition(point);
+      const zoom = typeof flow.getZoom === "function" ? flow.getZoom() : 1;
+      const thresholdFlow = 42 / Math.max(zoom, 0.001);
+      const target = findSnapTargetInput({
+        flowPoint,
+        nodes: flow.getNodes() as unknown as SnapNodeInput[],
+        sourceNodeId: started.sourceId,
+        thresholdFlow
+      });
+      if (!target) {
+        return;
+      }
+      onConnect({
+        source: started.sourceId,
+        sourceHandle: started.sourceHandle || "out",
+        target: target.nodeId,
+        targetHandle: target.handleId
+      });
+    },
+    [onConnect]
+  );
+
   return (
     <ReactFlow
       nodes={localNodes}
@@ -267,7 +360,9 @@ const EditorCanvas = memo(function EditorCanvas({
       connectOnClick
       onNodesChange={onLocalNodesChange}
       onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
+      onConnectStart={onLocalConnectStart}
+      onConnect={onLocalConnect}
+      onConnectEnd={onLocalConnectEnd}
       onNodeClick={onNodeClick}
       onNodeDragStop={commitPositions}
       onSelectionDragStop={commitPositions}
@@ -542,47 +637,34 @@ export function App() {
         setOutput("[ERROR] editor.edge.connect: source/target must refer to existing nodes");
         return;
       }
-      if (normalizeKind(srcNode.kind) === "sink") {
-        setOutput("[ERROR] editor.edge.connect: sink cannot have outgoing edges");
-        return;
-      }
-      if (normalizeKind(dstNode.kind) === "source") {
-        setOutput("[ERROR] editor.edge.connect: source cannot have incoming edges");
-        return;
-      }
 
-      const nextFlowEdges = addEdge(
-        {
-          source: src,
-          target: dst,
-          sourceHandle: connection.sourceHandle ?? null,
-          targetHandle: connection.targetHandle ?? null
-        },
-        flowEdges as Edge[]
-      );
-      const nextEdges = nextFlowEdges.map((edge) => {
-        const out: GraphSpecInput["edges"][number] = { src: edge.source, dst: edge.target };
-        if (edge.sourceHandle) out.src_port = edge.sourceHandle;
-        if (edge.targetHandle) out.dst_port = edge.targetHandle;
-        return out;
+      const candidate: GraphSpecInput["edges"][number] = {
+        src,
+        dst
+      };
+      if (connection.sourceHandle) {
+        candidate.src_port = connection.sourceHandle;
+      }
+      if (connection.targetHandle) {
+        candidate.dst_port = connection.targetHandle;
+      }
+      const gate = isConnectionAllowedHybrid({
+        sourceId: src,
+        targetId: dst,
+        sourceKind: srcNode.kind,
+        targetKind: dstNode.kind,
+        existingEdges: editorSpec.edges,
+        candidate
       });
-
-      const duplicateCount = nextEdges.filter(
-        (edge) =>
-          edge.src === src &&
-          edge.dst === dst &&
-          (edge.src_port ?? "") === (connection.sourceHandle ?? "") &&
-          (edge.dst_port ?? "") === (connection.targetHandle ?? "")
-      ).length;
-      if (duplicateCount > 1) {
-        setOutput("[ERROR] editor.edge.connect: duplicate edge");
+      if (!gate.ok) {
+        setOutput(`[ERROR] editor.edge.connect: ${connectionErrorMessage(gate.reason)}`);
         return;
       }
 
       applyEditorSpec(
         {
           ...editorSpec,
-          edges: nextEdges
+          edges: [...editorSpec.edges, candidate]
         },
         editorPositions
       );
@@ -590,11 +672,11 @@ export function App() {
         action: "editor.edge.connect.canvas",
         src,
         dst,
-        src_port: connection.sourceHandle ?? "",
-        dst_port: connection.targetHandle ?? ""
+        src_port: candidate.src_port ?? "",
+        dst_port: candidate.dst_port ?? ""
       });
     },
-    [editorPositions, editorSpec, flowEdges]
+    [editorPositions, editorSpec]
   );
 
   function applyEditorPositions(nextPositions: Record<string, NodePos>): void {
@@ -966,17 +1048,28 @@ export function App() {
       setOutput("[ERROR] editor.edge.add: src and dst are required");
       return;
     }
-    if (!editorSpec.nodes.some((node) => node.id === src) || !editorSpec.nodes.some((node) => node.id === dst)) {
+    const srcNode = editorSpec.nodes.find((node) => node.id === src);
+    const dstNode = editorSpec.nodes.find((node) => node.id === dst);
+    if (!srcNode || !dstNode) {
       setOutput("[ERROR] editor.edge.add: src/dst must refer to existing nodes");
       return;
     }
-    if (editorSpec.edges.some((edge) => edge.src === src && edge.dst === dst)) {
-      setOutput("[ERROR] editor.edge.add: duplicate edge");
+    const candidate: GraphSpecInput["edges"][number] = { src, dst };
+    const gate = isConnectionAllowedHybrid({
+      sourceId: src,
+      targetId: dst,
+      sourceKind: srcNode.kind,
+      targetKind: dstNode.kind,
+      existingEdges: editorSpec.edges,
+      candidate
+    });
+    if (!gate.ok) {
+      setOutput(`[ERROR] editor.edge.add: ${connectionErrorMessage(gate.reason)}`);
       return;
     }
     const nextSpec: GraphSpecInput = {
       ...editorSpec,
-      edges: [...editorSpec.edges, { src, dst }]
+      edges: [...editorSpec.edges, candidate]
     };
     applyEditorSpec(nextSpec, editorPositions);
     writeEditorAction({ action: "editor.edge.add", src, dst });
