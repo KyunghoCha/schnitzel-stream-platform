@@ -1,5 +1,18 @@
-import { FormEvent, useMemo, useState } from "react";
-import { Background, Controls, MiniMap, ReactFlow } from "@xyflow/react";
+import { FormEvent, useCallback, useMemo, useState } from "react";
+import {
+  addEdge,
+  applyEdgeChanges,
+  applyNodeChanges,
+  Background,
+  Connection,
+  Controls,
+  Edge,
+  EdgeChange,
+  MiniMap,
+  Node,
+  NodeChange,
+  ReactFlow
+} from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import YAML from "yaml";
 
@@ -122,6 +135,17 @@ function nextNodeId(base: string, spec: GraphSpecInput): string {
   return `${normalized}_${n}`;
 }
 
+function normalizeKind(kind: string): "source" | "node" | "sink" {
+  const raw = kind.trim().toLowerCase();
+  if (raw === "source") return "source";
+  if (raw === "sink") return "sink";
+  return "node";
+}
+
+function edgeIdentity(edge: { src: string; dst: string; src_port?: string; dst_port?: string }, index: number): string {
+  return `${edge.src}|${edge.dst}|${edge.src_port ?? "*"}|${edge.dst_port ?? "*"}|${index}`;
+}
+
 function toNumber(value: string): number | undefined {
   const txt = value.trim();
   if (!txt) return undefined;
@@ -213,16 +237,18 @@ export function App() {
       return {
         id: node.id,
         position: { x: pos.x, y: pos.y },
-        data: { label: `${node.id} (${node.kind})` }
+        data: { label: `${node.id} (${normalizeKind(node.kind)})` }
       };
     });
   }, [editorPositions, editorSpec.nodes]);
 
   const flowEdges = useMemo(() => {
     return editorSpec.edges.map((edge, idx) => ({
-      id: `e_${idx}_${edge.src}_${edge.dst}`,
+      id: edgeIdentity(edge, idx),
       source: edge.src,
       target: edge.dst,
+      sourceHandle: edge.src_port,
+      targetHandle: edge.dst_port,
       label: edge.src_port || edge.dst_port ? `${edge.src_port ?? "*"} -> ${edge.dst_port ?? "*"}` : undefined
     }));
   }, [editorSpec.edges]);
@@ -275,6 +301,173 @@ export function App() {
     setEditorEdgeDst(dst);
     selectEditorNode(selected, spec, positions);
   }
+
+  const onFlowNodesChange = useCallback(
+    (changes: NodeChange[]) => {
+      const nextFlowNodes = applyNodeChanges(changes, flowNodes as Node[]);
+      const nextIds = new Set(nextFlowNodes.map((node) => node.id));
+      const removedNodeIds = editorSpec.nodes.filter((node) => !nextIds.has(node.id)).map((node) => node.id);
+
+      const nextPositions: Record<string, NodePos> = {};
+      for (const node of nextFlowNodes) {
+        nextPositions[node.id] = {
+          x: Number(node.position.x ?? 0),
+          y: Number(node.position.y ?? 0)
+        };
+      }
+
+      if (removedNodeIds.length > 0) {
+        const nextNodes = editorSpec.nodes.filter((node) => !removedNodeIds.includes(node.id));
+        const removedSet = new Set(removedNodeIds);
+        const nextEdges = editorSpec.edges.filter((edge) => !removedSet.has(edge.src) && !removedSet.has(edge.dst));
+        applyEditorSpec(
+          {
+            ...editorSpec,
+            nodes: nextNodes,
+            edges: nextEdges
+          },
+          nextPositions
+        );
+        setEditorOutput(
+          JSON.stringify(
+            {
+              action: "editor.node.remove.canvas",
+              node_ids: removedNodeIds
+            },
+            null,
+            2
+          )
+        );
+        return;
+      }
+
+      setEditorPositions(nextPositions);
+      if (editorSelectedNode && nextPositions[editorSelectedNode]) {
+        setEditorNodePosX(String(Math.round(nextPositions[editorSelectedNode].x)));
+        setEditorNodePosY(String(Math.round(nextPositions[editorSelectedNode].y)));
+      }
+    },
+    [editorSelectedNode, editorSpec, flowNodes]
+  );
+
+  const onFlowEdgesChange = useCallback(
+    (changes: EdgeChange[]) => {
+      const nextFlowEdges = applyEdgeChanges(changes, flowEdges as Edge[]);
+      const nextEdges = nextFlowEdges.map((edge) => {
+        const out: GraphSpecInput["edges"][number] = {
+          src: edge.source,
+          dst: edge.target
+        };
+        if (edge.sourceHandle) out.src_port = edge.sourceHandle;
+        if (edge.targetHandle) out.dst_port = edge.targetHandle;
+        return out;
+      });
+
+      const currentSignatures = editorSpec.edges.map((edge, idx) => edgeIdentity(edge, idx));
+      const nextSignatures = nextEdges.map((edge, idx) => edgeIdentity(edge, idx));
+      const structuralChange =
+        currentSignatures.length !== nextSignatures.length ||
+        currentSignatures.some((sig, idx) => sig !== nextSignatures[idx]);
+      if (!structuralChange) {
+        return;
+      }
+
+      applyEditorSpec(
+        {
+          ...editorSpec,
+          edges: nextEdges
+        },
+        editorPositions
+      );
+      setEditorOutput(
+        JSON.stringify(
+          {
+            action: "editor.edge.sync.canvas",
+            edges: nextEdges.length
+          },
+          null,
+          2
+        )
+      );
+    },
+    [editorPositions, editorSpec, flowEdges]
+  );
+
+  const onFlowConnect = useCallback(
+    (connection: Connection) => {
+      const src = String(connection.source ?? "").trim();
+      const dst = String(connection.target ?? "").trim();
+      if (!src || !dst) {
+        setOutput("[ERROR] editor.edge.connect: source/target are required");
+        return;
+      }
+
+      const srcNode = editorSpec.nodes.find((node) => node.id === src);
+      const dstNode = editorSpec.nodes.find((node) => node.id === dst);
+      if (!srcNode || !dstNode) {
+        setOutput("[ERROR] editor.edge.connect: source/target must refer to existing nodes");
+        return;
+      }
+      if (normalizeKind(srcNode.kind) === "sink") {
+        setOutput("[ERROR] editor.edge.connect: sink cannot have outgoing edges");
+        return;
+      }
+      if (normalizeKind(dstNode.kind) === "source") {
+        setOutput("[ERROR] editor.edge.connect: source cannot have incoming edges");
+        return;
+      }
+
+      const nextFlowEdges = addEdge(
+        {
+          source: src,
+          target: dst,
+          sourceHandle: connection.sourceHandle ?? null,
+          targetHandle: connection.targetHandle ?? null
+        },
+        flowEdges as Edge[]
+      );
+      const nextEdges = nextFlowEdges.map((edge) => {
+        const out: GraphSpecInput["edges"][number] = { src: edge.source, dst: edge.target };
+        if (edge.sourceHandle) out.src_port = edge.sourceHandle;
+        if (edge.targetHandle) out.dst_port = edge.targetHandle;
+        return out;
+      });
+
+      const duplicateCount = nextEdges.filter(
+        (edge) =>
+          edge.src === src &&
+          edge.dst === dst &&
+          (edge.src_port ?? "") === (connection.sourceHandle ?? "") &&
+          (edge.dst_port ?? "") === (connection.targetHandle ?? "")
+      ).length;
+      if (duplicateCount > 1) {
+        setOutput("[ERROR] editor.edge.connect: duplicate edge");
+        return;
+      }
+
+      applyEditorSpec(
+        {
+          ...editorSpec,
+          edges: nextEdges
+        },
+        editorPositions
+      );
+      setEditorOutput(
+        JSON.stringify(
+          {
+            action: "editor.edge.connect.canvas",
+            src,
+            dst,
+            src_port: connection.sourceHandle ?? "",
+            dst_port: connection.targetHandle ?? ""
+          },
+          null,
+          2
+        )
+      );
+    },
+    [editorPositions, editorSpec, flowEdges]
+  );
 
   async function runAction(label: string, fn: () => Promise<void>) {
     setBusy(true);
@@ -962,7 +1155,17 @@ export function App() {
           </div>
 
           <div className="editor-canvas" data-testid="editor-canvas">
-            <ReactFlow nodes={flowNodes} edges={flowEdges} fitView nodesDraggable={false} nodesConnectable={false}>
+            <ReactFlow
+              nodes={flowNodes}
+              edges={flowEdges}
+              fitView
+              elementsSelectable
+              nodesDraggable
+              nodesConnectable
+              onNodesChange={onFlowNodesChange}
+              onEdgesChange={onFlowEdgesChange}
+              onConnect={onFlowConnect}
+            >
               <MiniMap />
               <Controls />
               <Background />
