@@ -51,9 +51,9 @@ def build_preset_table(repo_root: Path) -> dict[str, PresetSpec]:
             graph=graphs / "dev_webcam_frames_v2.yaml",
             env_defaults={"SS_CAMERA_INDEX": "0"},
         ),
-        "file_yolo": PresetSpec(
-            preset_id="file_yolo",
-            description="Video-file YOLO overlay (loop + low-latency queue policy)",
+        "file_yolo_view": PresetSpec(
+            preset_id="file_yolo_view",
+            description="Video-file YOLO overlay with OpenCV window (GUI required)",
             graph=graphs / "dev_video_file_yolo_overlay_v2.yaml",
             experimental=True,
             env_defaults={
@@ -61,6 +61,19 @@ def build_preset_table(repo_root: Path) -> dict[str, PresetSpec]:
                 "SS_YOLO_MODEL_PATH": str((repo_root / "models" / "yolov8n.pt").resolve()),
                 "SS_YOLO_DEVICE": "cpu",
                 "SS_INPUT_LOOP": "true",
+            },
+        ),
+        "file_yolo_headless": PresetSpec(
+            preset_id="file_yolo_headless",
+            description="Video-file YOLO headless run (no OpenCV GUI required)",
+            graph=graphs / "dev_video_file_yolo_headless_v2.yaml",
+            experimental=True,
+            env_defaults={
+                "SS_INPUT_PATH": str((repo_root / "data" / "samples" / "2048246-hd_1920_1080_24fps.mp4").resolve()),
+                "SS_YOLO_MODEL_PATH": str((repo_root / "models" / "yolov8n.pt").resolve()),
+                "SS_YOLO_DEVICE": "cpu",
+                # Intent: default to bounded batch behavior for headless preset to avoid indefinite runs.
+                "SS_INPUT_LOOP": "false",
             },
         ),
         "webcam_yolo": PresetSpec(
