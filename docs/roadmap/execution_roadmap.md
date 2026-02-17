@@ -344,6 +344,24 @@ Intent:
 - `P21.7` Expand CI gates for dependency/bootstrap/editor surfaces. `DONE`
 - `P21.8` Final docs/index/mapping/status sync for P21 surfaces. `DONE`
 
+#### Completion Definition (Engineering Scope Only)
+
+If the planned non-research phases `P22`~`P26` are completed in order, this roadmap is considered **complete for implementable engineering scope**.
+
+Out of this completion definition:
+- research-gated items (`R*`, `G*`)
+- distributed control-plane runtime
+- runtime `N:N` channel semantics
+- runtime loop execution semantics beyond current policy
+
+#### Planned Non-Research Finish Track (`P22`~`P26`) (NEXT)
+
+- `P22` Onboarding closure: deterministic install/bootstrap/doctor/run path across PowerShell/Bash.
+- `P23` Block editor usability hardening: node/edge editing UX, YAML round-trip robustness, clearer validate/run results.
+- `P24` Reliability hardening: restart/backlog/ack/timeout regression expansion with deterministic CI coverage.
+- `P25` Plugin DX closure: scaffold/template quality, authoring flow reduction, stricter mapping checks.
+- `P26` Productization closure: release checklist, command surface freeze, docs/code/CI drift=0 target.
+
 #### Research Track (Not On Critical Path)
 
 Intent:
@@ -421,6 +439,21 @@ Intent:
 | Phase 19 | DONE | 환경변수 의존 최소화 + 원커맨드 실행 단순화 |
 | Phase 20 | DONE | 그래프 작성 UX(CLI Wizard) 도입 및 템플릿 기반 생성면 구축 완료 |
 | Phase 21 | DONE | 의존성 기준선 고정 + 블록코딩 GUI MVP 도입 |
+| Phase 22 | NEXT | 온보딩/설치 경로 완결(bootstrap/doctor/run 일치화) |
+| Phase 23 | NEXT | 블록 편집기 사용성 하드닝(편집/검증/실행 UX 정리) |
+| Phase 24 | NEXT | 운영 신뢰성 회귀 하드닝(재시작/백로그/ACK/타임아웃) |
+| Phase 25 | NEXT | 플러그인 DX 마감(스캐폴드/템플릿/가이드 완성도) |
+| Phase 26 | NEXT | 제품화 마감(릴리즈 체크리스트/명령면 고정/드리프트 0) |
+
+### 완성 기준(구현 범위 한정)
+
+`P22`~`P26`을 순서대로 완료하면 이 로드맵은 **연구 제외 구현 범위에서 완성**으로 본다.
+
+완성 범위에서 제외:
+- 연구 게이트 항목(`R*`, `G*`)
+- 분산 컨트롤플레인 런타임
+- `N:N` 채널 런타임 의미론
+- 현재 정책을 넘는 루프 런타임 의미론
 
 ### 현재 우선순위
 
