@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-17
 
-Current step id (SSOT): `P23.8` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P23.9` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -31,7 +31,8 @@ Current baseline:
 - graph authoring UX track completed (`P20.1`~`P20.8`, CLI wizard template-profile lane + CI/docs/tests sync)
 - dependency baseline + block editor MVP track completed (`P21.0`~`P21.8`, dependency-first execution lane)
 - onboarding closure track completed (`P22.1`~`P22.8`, explicit 3-step onboarding closure + Win/Linux parity gates)
-- block editor hardening track completed (`P23.1`~`P23.8`, direct manipulation UX hardening finished)
+- block editor hardening baseline completed (`P23.1`~`P23.8`, direct manipulation UX hardening finished)
+- P23.9 interaction hotfix opened (drag smoothness + snap connect + overlap-safe align)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -66,7 +67,8 @@ Verification (local):
 - 그래프 작성 UX 트랙 완료(`P20.1`~`P20.8`, CLI wizard 템플릿 프로필 레인 + CI/문서/테스트 동기화)
 - 의존성 기준선 + 블록 편집기 MVP 트랙 완료(`P21.0`~`P21.8`, dependency-first 실행 레인)
 - 온보딩 완결 트랙 완료(`P22.1`~`P22.8`, 명시 3단계 온보딩 완결 + Win/Linux 동급 게이트)
-- 블록 편집기 하드닝 트랙 완료(`P23.1`~`P23.8`, 직접 조작 UX 하드닝 완료)
+- 블록 편집기 하드닝 기준선 완료(`P23.1`~`P23.8`, 직접 조작 UX 하드닝 완료)
+- P23.9 상호작용 핫픽스 오픈(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`
