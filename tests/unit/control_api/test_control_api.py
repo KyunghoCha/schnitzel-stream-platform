@@ -77,6 +77,42 @@ def test_mutating_endpoint_allowed_with_local_override(monkeypatch, tmp_path: Pa
     assert any(event.get("action") == "preset.run" for event in events)
 
 
+def test_preset_run_forwards_yolo_override_fields(monkeypatch, tmp_path: Path):
+    monkeypatch.setenv("SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS", "true")
+    observed: dict[str, object] = {}
+
+    def _fake_run_subprocess(*, cmd, cwd, env):
+        observed["cmd"] = list(cmd)
+        observed["cwd"] = str(cwd)
+        observed["env"] = dict(env)
+        return 0
+
+    monkeypatch.setattr(app_mod.preset_ops, "run_subprocess", _fake_run_subprocess)
+
+    app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
+    client = TestClient(app)
+    run_resp = client.post(
+        "/api/v1/presets/file_yolo_headless/run",
+        json={
+            "experimental": True,
+            "max_events": 5,
+            "model_path": "models/yolov8n.pt",
+            "device": "cpu",
+            "yolo_conf": 0.41,
+            "yolo_iou": 0.52,
+            "yolo_max_det": 88,
+        },
+    )
+    assert run_resp.status_code == 200
+
+    env = observed["env"]
+    assert env["SS_YOLO_MODEL_PATH"].replace("\\", "/").endswith("models/yolov8n.pt")
+    assert env["SS_YOLO_DEVICE"] == "cpu"
+    assert env["SS_YOLO_CONF"] == "0.41"
+    assert env["SS_YOLO_IOU"] == "0.52"
+    assert env["SS_YOLO_MAX_DET"] == "88"
+
+
 def test_fleet_stop_requires_bearer_without_override(tmp_path: Path):
     app = create_app(repo_root=_repo_root(), audit_path=tmp_path / "audit.jsonl")
     client = TestClient(app)

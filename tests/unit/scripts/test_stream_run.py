@@ -25,7 +25,8 @@ def test_list_hides_experimental_by_default(capsys):
     assert "inproc_demo" in out
     assert "file_frames" in out
     assert "webcam_frames" in out
-    assert "file_yolo" not in out
+    assert "file_yolo_view" not in out
+    assert "file_yolo_headless" not in out
     assert "webcam_yolo" not in out
 
 
@@ -34,13 +35,14 @@ def test_list_shows_experimental_with_flag(capsys):
     code = mod.run(["--list", "--experimental"])
     assert code == mod.EXIT_OK
     out = capsys.readouterr().out
-    assert "file_yolo" in out
+    assert "file_yolo_view" in out
+    assert "file_yolo_headless" in out
     assert "webcam_yolo" in out
 
 
 def test_experimental_preset_requires_opt_in(capsys):
     mod = _load_stream_run_module()
-    code = mod.run(["--preset", "file_yolo", "--validate-only"])
+    code = mod.run(["--preset", "file_yolo_headless", "--validate-only"])
     assert code == mod.EXIT_USAGE
     err = capsys.readouterr().err
     assert "experimental" in err.lower()
@@ -69,13 +71,21 @@ def test_run_validate_only_uses_expected_command_and_env(monkeypatch, capsys):
     code = mod.run(
         [
             "--preset",
-            "file_yolo",
+            "file_yolo_headless",
             "--experimental",
             "--validate-only",
             "--input-path",
             "data/samples/2048246-hd_1920_1080_24fps.mp4",
             "--device",
             "0",
+            "--model-path",
+            "models/yolov8n.pt",
+            "--yolo-conf",
+            "0.4",
+            "--yolo-iou",
+            "0.5",
+            "--yolo-max-det",
+            "77",
             "--loop",
             "false",
             "--camera-index",
@@ -96,13 +106,55 @@ def test_run_validate_only_uses_expected_command_and_env(monkeypatch, capsys):
     env = observed["env"]
     assert env["SS_INPUT_PATH"].replace("\\", "/").endswith("data/samples/2048246-hd_1920_1080_24fps.mp4")
     assert env["SS_YOLO_DEVICE"] == "0"
+    assert env["SS_YOLO_MODEL_PATH"].replace("\\", "/").endswith("models/yolov8n.pt")
+    assert env["SS_YOLO_CONF"] == "0.4"
+    assert env["SS_YOLO_IOU"] == "0.5"
+    assert env["SS_YOLO_MAX_DET"] == "77"
     assert env["SS_INPUT_LOOP"] == "false"
     assert env["SS_CAMERA_INDEX"] == "3"
     assert "PYTHONPATH" in env
 
     out = capsys.readouterr().out
-    assert "preset=file_yolo" in out
+    assert "preset=file_yolo_headless" in out
     assert "validate_only=True" in out
+
+
+def test_run_doctor_failure_returns_prefail_and_skips_subprocess(monkeypatch):
+    mod = _load_stream_run_module()
+    called = {"subprocess": False}
+
+    def _fake_run(*, cmd, cwd, env):
+        called["subprocess"] = True
+        return 0
+
+    def _fake_checks(**_kwargs):
+        return [mod.env_ops.CheckResult(name="python", required=True, ok=False, detail="missing")]
+
+    monkeypatch.setattr(mod, "_run_subprocess", _fake_run)
+    monkeypatch.setattr(mod.env_ops, "run_checks", _fake_checks)
+
+    code = mod.run(["--preset", "inproc_demo", "--doctor", "--validate-only"])
+    assert code == mod.EXIT_PREFLIGHT_FAILED
+    assert called["subprocess"] is False
+
+
+def test_run_doctor_success_calls_subprocess(monkeypatch):
+    mod = _load_stream_run_module()
+    called = {"subprocess": False}
+
+    def _fake_run(*, cmd, cwd, env):
+        called["subprocess"] = True
+        return 0
+
+    def _fake_checks(**_kwargs):
+        return [mod.env_ops.CheckResult(name="python", required=True, ok=True, detail="ok")]
+
+    monkeypatch.setattr(mod, "_run_subprocess", _fake_run)
+    monkeypatch.setattr(mod.env_ops, "run_checks", _fake_checks)
+
+    code = mod.run(["--preset", "inproc_demo", "--doctor", "--validate-only"])
+    assert code == mod.EXIT_OK
+    assert called["subprocess"] is True
 
 
 def test_run_returns_run_failed_on_nonzero_subprocess(monkeypatch):
@@ -118,3 +170,11 @@ def test_run_rejects_invalid_max_events(capsys):
     assert code == mod.EXIT_USAGE
     err = capsys.readouterr().err
     assert "max-events" in err
+
+
+def test_run_rejects_invalid_yolo_conf(capsys):
+    mod = _load_stream_run_module()
+    code = mod.run(["--preset", "file_yolo_view", "--experimental", "--yolo-conf", "2.0"])
+    assert code == mod.EXIT_USAGE
+    err = capsys.readouterr().err
+    assert "yolo-conf" in err.lower()
