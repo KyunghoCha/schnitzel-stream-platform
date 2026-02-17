@@ -62,6 +62,9 @@ def test_env_doctor_json_payload(monkeypatch, capsys):
     assert payload["status"] == "ok"
     assert payload["summary"]["required_failed"] == 0
     assert payload["summary"]["optional_failed"] == 1
+    assert isinstance(payload["suggested_fix"], dict)
+    assert "powershell" in payload["suggested_fix"]
+    assert "bash" in payload["suggested_fix"]
 
 
 def test_env_doctor_fails_for_low_python_in_strict(monkeypatch):

@@ -100,3 +100,33 @@ def test_up_returns_usage_for_invalid_port():
     mod = _load_stream_console_module()
     rc = mod.run(["up", "--api-port", "0"])
     assert rc == mod.EXIT_USAGE
+
+
+def test_up_failure_reports_dependency_guidance(monkeypatch, capsys):
+    mod = _load_stream_console_module()
+    monkeypatch.setattr(
+        mod.console_ops,
+        "start_selected_services",
+        lambda **_kwargs: [{"service": "api", "action": "started", "pid": 123}],
+    )
+    monkeypatch.setattr(
+        mod,
+        "_wait_for_ready",
+        lambda **_kwargs: {
+            "schema_version": 1,
+            "ready": False,
+            "log_dir": "x",
+            "state": {"api": {"enabled": True}, "ui": {"enabled": False}},
+            "api": {"status": "stale", "running": False, "port_open": False, "health": {"reason": "n/a", "status_code": None}},
+            "ui": {"status": "not_found", "running": False, "port_open": False},
+        },
+    )
+    check = mod.env_ops.CheckResult(name="fastapi", required=True, ok=False, detail="missing")
+    monkeypatch.setattr(mod.env_ops, "run_checks", lambda **_kwargs: [check])
+
+    rc = mod.run(["up", "--api-only"])
+    assert rc == mod.EXIT_RUNTIME
+    err = capsys.readouterr().err
+    assert "failure_kind=dependency_missing" in err
+    assert "recover_powershell=" in err
+    assert "recover_bash=" in err
