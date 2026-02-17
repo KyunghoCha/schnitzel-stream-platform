@@ -1,0 +1,21 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.dev:StaticSource
+    config:
+      packets:
+        - kind: demo
+          source_id: demo01
+          payload:
+            message: "${DEMO_MESSAGE}"
+            value: ${DEMO_VALUE}
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "DEV "
+edges:
+  - from: src
+    to: out
+config: {}

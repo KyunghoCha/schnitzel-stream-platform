@@ -1,0 +1,27 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.packs.vision.nodes:OpenCvVideoFileSource
+    config:
+      path: "${INPUT_PATH}"
+      source_id: "${STREAM_ID}"
+      max_frames: ${MAX_FRAMES}
+      loop: ${INPUT_LOOP}
+  - id: sample
+    kind: node
+    plugin: schnitzel_stream.packs.vision.nodes:EveryNthFrameSamplerNode
+    config:
+      every_n: 10
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "FRAME "
+      forward: false
+edges:
+  - from: src
+    to: sample
+  - from: sample
+    to: out
+config: {}

@@ -1,0 +1,7 @@
+id: webcam_frames
+description: Webcam source + frame sampler + print sink
+template: configs/graphs/templates/webcam_frames_v2.template.yaml
+experimental: false
+defaults:
+  CAMERA_INDEX: "0"
+  STREAM_ID: stream01

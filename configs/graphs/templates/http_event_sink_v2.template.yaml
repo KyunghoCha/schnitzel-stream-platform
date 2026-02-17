@@ -1,0 +1,40 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.dev:StaticSource
+    config:
+      packets:
+        - kind: event
+          source_id: "${EVENT_CAMERA_ID}"
+          ts: "${EVENT_TS}"
+          payload:
+            event_id: "${EVENT_ID}"
+            site_id: "${EVENT_SITE_ID}"
+            camera_id: "${EVENT_CAMERA_ID}"
+            event_type: "${EVENT_TYPE}"
+            object_type: "${EVENT_OBJECT}"
+            severity: "${EVENT_SEVERITY}"
+            confidence: ${EVENT_CONFIDENCE}
+            bbox:
+              x1: 10
+              y1: 20
+              x2: 70
+              y2: 120
+          meta:
+            idempotency_key: "event:${EVENT_SITE_ID}:${EVENT_CAMERA_ID}:${EVENT_ID}"
+  - id: http
+    kind: sink
+    plugin: schnitzel_stream.nodes.http:HttpJsonSink
+    config:
+      url: "${HTTP_URL}"
+      method: POST
+      body: payload
+      timeout_sec: 3.0
+      retry_max_attempts: 3
+      retry_backoff_sec: 0.5
+      retry_backoff_max_sec: 5.0
+edges:
+  - from: src
+    to: http
+config: {}

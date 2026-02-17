@@ -1,0 +1,26 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.durable_sqlite:SqliteQueueSource
+    config:
+      path: "${QUEUE_PATH}"
+      limit: ${DRAIN_LIMIT}
+      delete_on_emit: false
+  - id: out
+    kind: node
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "${DRAIN_PREFIX}"
+      forward: true
+  - id: ack
+    kind: sink
+    plugin: schnitzel_stream.nodes.durable_sqlite:SqliteQueueAckSink
+    config:
+      path: "${QUEUE_PATH}"
+edges:
+  - from: src
+    to: out
+  - from: out
+    to: ack
+config: {}

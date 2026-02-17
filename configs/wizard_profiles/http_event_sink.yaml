@@ -1,0 +1,14 @@
+id: http_event_sink
+description: Static event payload to HTTP sink
+template: configs/graphs/templates/http_event_sink_v2.template.yaml
+experimental: false
+defaults:
+  HTTP_URL: http://127.0.0.1:18080/api/events
+  EVENT_TS: "2026-02-15T00:00:00Z"
+  EVENT_ID: evt-0001
+  EVENT_SITE_ID: S001
+  EVENT_CAMERA_ID: cam01
+  EVENT_TYPE: ZONE_INTRUSION
+  EVENT_OBJECT: PERSON
+  EVENT_SEVERITY: LOW
+  EVENT_CONFIDENCE: "0.91"

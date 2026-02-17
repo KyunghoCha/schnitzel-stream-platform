@@ -1,0 +1,9 @@
+id: file_frames
+description: Video-file source + frame sampler + print sink
+template: configs/graphs/templates/file_frames_v2.template.yaml
+experimental: false
+defaults:
+  INPUT_PATH: data/samples/2048246-hd_1920_1080_24fps.mp4
+  STREAM_ID: stream01
+  MAX_FRAMES: "30"
+  INPUT_LOOP: "false"

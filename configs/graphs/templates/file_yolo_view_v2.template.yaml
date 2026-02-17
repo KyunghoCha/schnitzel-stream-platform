@@ -1,0 +1,42 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.packs.vision.nodes:OpenCvVideoFileSource
+    config:
+      path: "${INPUT_PATH}"
+      source_id: "${STREAM_ID}"
+      max_frames: ${MAX_FRAMES}
+      loop: ${INPUT_LOOP}
+  - id: yolo
+    kind: node
+    plugin: schnitzel_stream.packs.vision.nodes:YoloV8DetectorNode
+    config:
+      __runtime__:
+        inbox_max: 1
+        inbox_overflow: drop_oldest
+      model_path: "${YOLO_MODEL_PATH}"
+      conf: ${YOLO_CONF}
+      iou: ${YOLO_IOU}
+      max_det: ${YOLO_MAX_DET}
+      device: "${YOLO_DEVICE}"
+  - id: display
+    kind: sink
+    plugin: schnitzel_stream.packs.vision.nodes:OpenCvBboxDisplaySink
+    config:
+      __runtime__:
+        inbox_max: 1
+        inbox_overflow: drop_oldest
+      window_name: "${WINDOW_NAME}"
+      wait_key_ms: 1
+      line_thickness: 2
+      font_scale: 0.6
+      show_stats: true
+      stop_on_quit_key: true
+      forward: false
+edges:
+  - from: src
+    to: yolo
+  - from: yolo
+    to: display
+config: {}

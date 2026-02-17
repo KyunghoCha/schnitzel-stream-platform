@@ -1,0 +1,14 @@
+id: file_yolo_headless
+description: Video-file YOLO headless run (no OpenCV GUI required)
+template: configs/graphs/templates/file_yolo_headless_v2.template.yaml
+experimental: true
+defaults:
+  INPUT_PATH: data/samples/2048246-hd_1920_1080_24fps.mp4
+  STREAM_ID: file01
+  MAX_FRAMES: "30"
+  INPUT_LOOP: "false"
+  YOLO_MODEL_PATH: models/yolov8n.pt
+  YOLO_CONF: "0.35"
+  YOLO_IOU: "0.45"
+  YOLO_MAX_DET: "100"
+  YOLO_DEVICE: cpu

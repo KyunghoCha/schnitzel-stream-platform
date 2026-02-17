@@ -1,0 +1,29 @@
+version: 2
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.packs.vision.nodes:OpenCvWebcamSource
+    config:
+      camera_index: ${CAMERA_INDEX}
+      source_id: "${STREAM_ID}"
+      reconnect: true
+      reconnect_backoff_sec: 0.5
+      reconnect_backoff_max_sec: 5.0
+      reconnect_max_attempts: 0
+  - id: sample
+    kind: node
+    plugin: schnitzel_stream.packs.vision.nodes:EveryNthFrameSamplerNode
+    config:
+      every_n: 10
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+    config:
+      prefix: "WEBCAM "
+      forward: false
+edges:
+  - from: src
+    to: sample
+  - from: sample
+    to: out
+config: {}

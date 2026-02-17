@@ -1,0 +1,8 @@
+id: durable_drain_ack
+description: Durable queue drain + ack graph
+template: configs/graphs/templates/durable_drain_ack_v2.template.yaml
+experimental: false
+defaults:
+  QUEUE_PATH: outputs/queues/dev_demo.sqlite3
+  DRAIN_LIMIT: "100"
+  DRAIN_PREFIX: "DRAIN "
