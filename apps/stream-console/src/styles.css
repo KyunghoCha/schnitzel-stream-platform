@@ -234,24 +234,65 @@ td {
 /* Intent: React Flow default light node/control palette clashes with the app theme.
    Force high-contrast editor colors for readability. */
 .editor-canvas .react-flow__node {
-  color: #0f1a24;
-  font-weight: 600;
-}
-
-.editor-canvas .react-flow__node-default,
-.editor-canvas .react-flow__node-input,
-.editor-canvas .react-flow__node-output {
-  background: #f4f8fb;
-  border: 1px solid #3e5567;
-  color: #0f1a24;
+  background: transparent;
+  border: none;
+  color: #dbeaf6;
+  box-shadow: none;
 }
 
 .editor-canvas .react-flow__node.selected,
 .editor-canvas .react-flow__node-default.selected,
 .editor-canvas .react-flow__node-input.selected,
 .editor-canvas .react-flow__node-output.selected {
-  border-color: #0f1a24;
-  box-shadow: 0 0 0 2px rgba(15, 26, 36, 0.2);
+  box-shadow: 0 0 0 2px rgba(74, 163, 255, 0.35);
+}
+
+.editor-canvas .editor-kind-node {
+  min-width: 180px;
+  border-radius: 14px;
+  border: 1px solid #3a596f;
+  background: linear-gradient(180deg, rgba(20, 33, 43, 0.96), rgba(14, 24, 32, 0.96));
+  padding: 10px 12px;
+  font-weight: 600;
+}
+
+.editor-canvas .editor-kind-node.source {
+  border-left: 6px solid #15b7a3;
+}
+
+.editor-canvas .editor-kind-node.node {
+  border-left: 6px solid #4aa3ff;
+}
+
+.editor-canvas .editor-kind-node.sink {
+  border-left: 6px solid #ff9f43;
+}
+
+.editor-canvas .editor-kind-node-title {
+  color: #f4fbff;
+  font-size: 0.9rem;
+}
+
+.editor-canvas .editor-kind-node-kind {
+  color: #9cc3dd;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.editor-canvas .editor-kind-node-plugin {
+  margin-top: 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  color: #c4dae9;
+  opacity: 0.95;
+}
+
+.editor-canvas .react-flow__handle {
+  width: 10px;
+  height: 10px;
+  background: #e8f5ff;
+  border: 2px solid #0f1a24;
 }
 
 .editor-canvas .react-flow__controls {

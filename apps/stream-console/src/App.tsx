@@ -23,6 +23,7 @@ import {
   GraphSpecInput,
   normalizeGraphSpecInput
 } from "./api";
+import { editorNodeTypes, EditorNodeKind } from "./editor_nodes";
 
 type TabId = "dashboard" | "presets" | "fleet" | "monitor" | "editor" | "governance";
 
@@ -135,7 +136,7 @@ function nextNodeId(base: string, spec: GraphSpecInput): string {
   return `${normalized}_${n}`;
 }
 
-function normalizeKind(kind: string): "source" | "node" | "sink" {
+function normalizeKind(kind: string): EditorNodeKind {
   const raw = kind.trim().toLowerCase();
   if (raw === "source") return "source";
   if (raw === "sink") return "sink";
@@ -233,11 +234,18 @@ export function App() {
 
   const flowNodes = useMemo(() => {
     return editorSpec.nodes.map((node, idx) => {
+      const kind = normalizeKind(node.kind);
       const pos = editorPositions[node.id] ?? defaultPosition(idx);
       return {
         id: node.id,
+        type: kind,
         position: { x: pos.x, y: pos.y },
-        data: { label: `${node.id} (${normalizeKind(node.kind)})` }
+        data: {
+          id: node.id,
+          kind,
+          plugin: node.plugin,
+          label: kind
+        }
       };
     });
   }, [editorPositions, editorSpec.nodes]);
@@ -1158,6 +1166,7 @@ export function App() {
             <ReactFlow
               nodes={flowNodes}
               edges={flowEdges}
+              nodeTypes={editorNodeTypes}
               fitView
               elementsSelectable
               nodesDraggable
