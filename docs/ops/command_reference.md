@@ -23,6 +23,7 @@ python scripts/env_doctor.py
 python scripts/env_doctor.py --strict --json
 python scripts/env_doctor.py --profile yolo --json
 python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
+python scripts/env_doctor.py --profile console --strict --json
 ```
 
 ### Entrypoint
@@ -225,12 +226,14 @@ python scripts/env_doctor.py --strict --json
 python scripts/env_doctor.py --profile yolo --json
 python scripts/env_doctor.py --profile yolo --model-path models/yolov8n.pt --strict --json
 python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0 --json
+python scripts/env_doctor.py --profile console --strict --json
 ```
 
 Environment doctor profiles:
 - `base`: baseline runtime dependencies
 - `yolo`: adds `ultralytics`/`torch`, CUDA visibility summary, optional model-path check
 - `webcam`: optional camera-open probe (`--probe-webcam`)
+- `console`: adds `fastapi`/`uvicorn` imports and `node`/`npm` executable checks
 
 RTSP reconnect E2E (v2 graph):
 
@@ -279,6 +282,21 @@ Read-only stream monitor (pid/log based):
 python scripts/stream_monitor.py --log-dir /tmp/schnitzel_stream_fleet_run
 python scripts/stream_monitor.py --once --json
 ```
+
+One-command local console bootstrap:
+
+```bash
+python scripts/stream_console.py doctor --strict --json
+python scripts/stream_console.py up --allow-local-mutations
+python scripts/stream_console.py status --json
+python scripts/stream_console.py down
+```
+
+Stream console options:
+- `up --api-host --api-port --ui-host --ui-port --log-dir --allow-local-mutations --token --api-only --ui-only`
+- `status --log-dir --json`
+- `down --log-dir`
+- `doctor --strict --json`
 
 Process-graph validator:
 
@@ -410,6 +428,7 @@ python scripts/env_doctor.py
 python scripts/env_doctor.py --strict --json
 python scripts/env_doctor.py --profile yolo --json
 python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
+python scripts/env_doctor.py --profile console --strict --json
 ```
 
 ### 엔트리포인트
@@ -612,12 +631,14 @@ python scripts/env_doctor.py --strict --json
 python scripts/env_doctor.py --profile yolo --json
 python scripts/env_doctor.py --profile yolo --model-path models/yolov8n.pt --strict --json
 python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0 --json
+python scripts/env_doctor.py --profile console --strict --json
 ```
 
 env_doctor 프로필:
 - `base`: 기본 런타임 의존성 검사
 - `yolo`: `ultralytics`/`torch`, CUDA 가시성 요약, 모델 경로(선택) 점검
 - `webcam`: 카메라 오픈 프로브(옵션, `--probe-webcam`)
+- `console`: `fastapi`/`uvicorn` import와 `node`/`npm` 실행파일 점검
 
 RTSP 재연결 E2E(v2 그래프):
 
@@ -666,6 +687,21 @@ python scripts/stream_run.py --preset file_yolo --experimental --validate-only
 python scripts/stream_monitor.py --log-dir /tmp/schnitzel_stream_fleet_run
 python scripts/stream_monitor.py --once --json
 ```
+
+원커맨드 로컬 콘솔 부트스트랩:
+
+```bash
+python scripts/stream_console.py doctor --strict --json
+python scripts/stream_console.py up --allow-local-mutations
+python scripts/stream_console.py status --json
+python scripts/stream_console.py down
+```
+
+stream_console 옵션:
+- `up --api-host --api-port --ui-host --ui-port --log-dir --allow-local-mutations --token --api-only --ui-only`
+- `status --log-dir --json`
+- `down --log-dir`
+- `doctor --strict --json`
 
 프로세스 그래프 검증기:
 
@@ -742,7 +778,7 @@ curl -s -X POST http://127.0.0.1:18700/api/v1/env/check -H "Content-Type: applic
 
 ```bash
 cd apps/stream-console
-npm install
+npm ci
 npm run dev
 ```
 

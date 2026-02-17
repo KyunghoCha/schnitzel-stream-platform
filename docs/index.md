@@ -29,6 +29,7 @@ Runtime baseline:
 14. `docs/guides/plugin_authoring_guide.md`
 15. `docs/guides/process_graph_foundation_guide.md`
 16. `docs/guides/professor_showcase_guide.md`
+17. `docs/guides/local_console_quickstart.md`
 
 ## Active Folders
 
@@ -59,6 +60,7 @@ Runtime baseline:
 - Fleet runner: `scripts/stream_fleet.py`
 - Stream monitor: `scripts/stream_monitor.py`
 - Preset launcher: `scripts/stream_run.py`
+- Stream console bootstrap: `scripts/stream_console.py`
 - Stream control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`
 - Control policy snapshot gate: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`
 - Environment diagnostics: `scripts/env_doctor.py`
@@ -94,6 +96,7 @@ Runtime baseline:
 14. `docs/guides/plugin_authoring_guide.md`
 15. `docs/guides/process_graph_foundation_guide.md`
 16. `docs/guides/professor_showcase_guide.md`
+17. `docs/guides/local_console_quickstart.md`
 
 ## 활성 폴더
 
@@ -124,6 +127,7 @@ Runtime baseline:
 - Fleet 실행기: `scripts/stream_fleet.py`
 - Stream 모니터: `scripts/stream_monitor.py`
 - 프리셋 실행기: `scripts/stream_run.py`
+- Stream 콘솔 부트스트랩: `scripts/stream_console.py`
 - Stream Control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`
 - 제어 정책 스냅샷 게이트: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`
 - 환경 진단: `scripts/env_doctor.py`

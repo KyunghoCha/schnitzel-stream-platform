@@ -82,6 +82,7 @@ python scripts/env_doctor.py
 python scripts/env_doctor.py --strict --json
 python scripts/env_doctor.py --profile yolo --json
 python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
+python scripts/env_doctor.py --profile console --strict --json
 ```
 
 4. Validate
@@ -174,12 +175,25 @@ python scripts/stream_control_api.py --host 127.0.0.1 --port 18700
 
 ```bash
 cd apps/stream-console
-npm install
+npm ci
 npm run dev
 ```
 
 - Monitor tab is fleet-only telemetry (PID/log based).
 - Preset run output is session output and is not counted as fleet monitor stream rows.
+
+13. One-command local console bootstrap (doctor -> up -> status -> down)
+
+```bash
+python scripts/stream_console.py doctor --strict --json
+python scripts/stream_console.py up --allow-local-mutations
+python scripts/stream_console.py status --json
+python scripts/stream_console.py down
+```
+
+- `--allow-local-mutations` is explicit local-lab opt-in for mutating endpoints.
+- Use `--token <value>` on `up` to set API bearer mode from bootstrap command.
+- Detailed guide: `docs/guides/local_console_quickstart.md`
 
 ### Graph Spec (v2)
 
@@ -408,12 +422,25 @@ python scripts/stream_control_api.py --host 127.0.0.1 --port 18700
 
 ```bash
 cd apps/stream-console
-npm install
+npm ci
 npm run dev
 ```
 
 - Monitor 탭은 fleet 로그/PID 기반 telemetry만 보여준다.
 - Preset run 결과는 session output이며 fleet monitor stream row로 집계되지 않는다.
+
+13. 원커맨드 로컬 콘솔 부트스트랩(doctor -> up -> status -> down)
+
+```bash
+python scripts/stream_console.py doctor --strict --json
+python scripts/stream_console.py up --allow-local-mutations
+python scripts/stream_console.py status --json
+python scripts/stream_console.py down
+```
+
+- `--allow-local-mutations`는 로컬 실습 환경에서만 mutating endpoint를 명시적으로 여는 옵션이다.
+- `up`에서 `--token <value>`를 주면 API를 bearer 모드로 바로 띄울 수 있다.
+- 상세 가이드: `docs/guides/local_console_quickstart.md`
 
 ### 그래프 스펙(v2)
 
