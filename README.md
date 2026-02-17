@@ -57,42 +57,33 @@ flowchart LR
 
 ### Quickstart
 
-1. Dependency-first bootstrap
-
-```bash
-python scripts/bootstrap_env.py --profile base --manager pip
-python scripts/bootstrap_env.py --profile console --manager pip
-```
-
-Conda baseline:
-
-```bash
-conda env create -f environment.yml
-```
-
-2. Environment
+1. Bootstrap (zero-env-first)
 
 ```powershell
-# Windows
-./setup_env.ps1
+# Windows PowerShell
+./setup_env.ps1 -Profile console -Manager pip -SkipDoctor
 ```
 
 ```bash
 # Linux/macOS
-export PYTHONPATH=src
+./setup_env.sh --profile console --manager pip --skip-doctor
 ```
 
-3. Environment doctor
+2. Doctor
 
 ```bash
-python scripts/env_doctor.py
-python scripts/env_doctor.py --strict --json
-python scripts/env_doctor.py --profile yolo --json
-python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
-python scripts/env_doctor.py --profile console --strict --json
+python scripts/stream_console.py doctor --strict --json
 ```
 
-4. Validate
+3. Up / Down
+
+```bash
+python scripts/stream_console.py up --allow-local-mutations
+python scripts/stream_console.py status --json
+python scripts/stream_console.py down
+```
+
+4. Validate runtime graph
 
 ```bash
 python -m schnitzel_stream validate
@@ -336,42 +327,33 @@ flowchart LR
 
 ### 빠른 시작
 
-1. 의존성 기준선 부트스트랩
-
-```bash
-python scripts/bootstrap_env.py --profile base --manager pip
-python scripts/bootstrap_env.py --profile console --manager pip
-```
-
-Conda 기준선:
-
-```bash
-conda env create -f environment.yml
-```
-
-2. 환경 설정
+1. Bootstrap (무환경변수 우선)
 
 ```powershell
-# Windows
-./setup_env.ps1
+# Windows PowerShell
+./setup_env.ps1 -Profile console -Manager pip -SkipDoctor
 ```
 
 ```bash
 # Linux/macOS
-export PYTHONPATH=src
+./setup_env.sh --profile console --manager pip --skip-doctor
 ```
 
-3. 환경 진단
+2. Doctor
 
 ```bash
-python scripts/env_doctor.py
-python scripts/env_doctor.py --strict --json
-python scripts/env_doctor.py --profile yolo --json
-python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
-python scripts/env_doctor.py --profile console --strict --json
+python scripts/stream_console.py doctor --strict --json
 ```
 
-4. 검증
+3. Up / Down
+
+```bash
+python scripts/stream_console.py up --allow-local-mutations
+python scripts/stream_console.py status --json
+python scripts/stream_console.py down
+```
+
+4. 런타임 그래프 검증
 
 ```bash
 python -m schnitzel_stream validate

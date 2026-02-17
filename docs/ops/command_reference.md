@@ -6,32 +6,31 @@ Complete command reference for v2 node-graph runtime.
 
 ### Prerequisites
 
-Dependency bootstrap (recommended):
-
-```bash
-python scripts/bootstrap_env.py --profile base --manager pip
-python scripts/bootstrap_env.py --profile console --manager pip
-python scripts/bootstrap_env.py --profile yolo --manager pip
-```
+Canonical onboarding (explicit 3-step):
 
 ```powershell
-# Windows
-./setup_env.ps1
+# Windows PowerShell
+./setup_env.ps1 -Profile console -Manager pip -SkipDoctor
+python scripts/stream_console.py doctor --strict --json
+python scripts/stream_console.py up --allow-local-mutations
+python scripts/stream_console.py down
 ```
 
 ```bash
 # Linux / macOS
-export PYTHONPATH=src
+./setup_env.sh --profile console --manager pip --skip-doctor
+python3 scripts/stream_console.py doctor --strict --json
+python3 scripts/stream_console.py up --allow-local-mutations
+python3 scripts/stream_console.py down
 ```
 
-Environment doctor:
+Advanced dependency diagnostics:
 
 ```bash
-python scripts/env_doctor.py
-python scripts/env_doctor.py --strict --json
-python scripts/env_doctor.py --profile yolo --json
-python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
+python scripts/env_doctor.py --profile base --strict --json
 python scripts/env_doctor.py --profile console --strict --json
+python scripts/env_doctor.py --profile yolo --strict --json
+python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0 --json
 ```
 
 ### Entrypoint
@@ -357,6 +356,15 @@ Stream console options:
 - `down --log-dir`
 - `doctor --strict --json`
 
+`doctor --json` output keys:
+- `profile`, `status`, `summary`, `suggested_fix`
+
+`up` failure taxonomy (stderr):
+- `dependency_missing`
+- `port_conflict`
+- `api_health_failed`
+- `startup_timeout`
+
 Process-graph validator:
 
 ```bash
@@ -383,13 +391,17 @@ Environment bootstrap helper:
 python scripts/bootstrap_env.py --profile base --manager auto
 python scripts/bootstrap_env.py --profile console --manager auto
 python scripts/bootstrap_env.py --profile yolo --manager auto
-python scripts/bootstrap_env.py --profile console --manager pip --dry-run
+python scripts/bootstrap_env.py --profile console --manager pip --dry-run --skip-doctor --json
 ```
 
 Bootstrap profiles:
 - `base`: runtime + dev Python dependencies
 - `console`: base + API/UI runtime checks (`fastapi`, `uvicorn`, `node`, `npm`)
 - `yolo`: base + model stack opt-in (`requirements-model.txt`)
+
+Bootstrap options:
+- `--skip-doctor`: skip doctor execution during bootstrap
+- `--json`: emit machine-readable envelope (`schema_version`, `status`, `steps`, `next_action`)
 
 Runtime environment variables used per stream process:
 - `SS_STREAM_ID`
@@ -489,32 +501,31 @@ v2 노드 그래프 런타임 기준 명령어 레퍼런스입니다.
 
 ### 사전 준비
 
-의존성 부트스트랩(권장):
-
-```bash
-python scripts/bootstrap_env.py --profile base --manager pip
-python scripts/bootstrap_env.py --profile console --manager pip
-python scripts/bootstrap_env.py --profile yolo --manager pip
-```
+표준 온보딩(명시 3단계):
 
 ```powershell
-# Windows
-./setup_env.ps1
+# Windows PowerShell
+./setup_env.ps1 -Profile console -Manager pip -SkipDoctor
+python scripts/stream_console.py doctor --strict --json
+python scripts/stream_console.py up --allow-local-mutations
+python scripts/stream_console.py down
 ```
 
 ```bash
 # Linux / macOS
-export PYTHONPATH=src
+./setup_env.sh --profile console --manager pip --skip-doctor
+python3 scripts/stream_console.py doctor --strict --json
+python3 scripts/stream_console.py up --allow-local-mutations
+python3 scripts/stream_console.py down
 ```
 
-환경 진단:
+고급 환경 진단:
 
 ```bash
-python scripts/env_doctor.py
-python scripts/env_doctor.py --strict --json
-python scripts/env_doctor.py --profile yolo --json
-python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0
+python scripts/env_doctor.py --profile base --strict --json
 python scripts/env_doctor.py --profile console --strict --json
+python scripts/env_doctor.py --profile yolo --strict --json
+python scripts/env_doctor.py --profile webcam --probe-webcam --camera-index 0 --json
 ```
 
 ### 엔트리포인트
@@ -840,6 +851,15 @@ stream_console 옵션:
 - `down --log-dir`
 - `doctor --strict --json`
 
+`doctor --json` 출력 핵심 키:
+- `profile`, `status`, `summary`, `suggested_fix`
+
+`up` 실패 taxonomy(stderr):
+- `dependency_missing`
+- `port_conflict`
+- `api_health_failed`
+- `startup_timeout`
+
 프로세스 그래프 검증기:
 
 ```bash
@@ -859,13 +879,17 @@ python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.jso
 python scripts/bootstrap_env.py --profile base --manager auto
 python scripts/bootstrap_env.py --profile console --manager auto
 python scripts/bootstrap_env.py --profile yolo --manager auto
-python scripts/bootstrap_env.py --profile console --manager pip --dry-run
+python scripts/bootstrap_env.py --profile console --manager pip --dry-run --skip-doctor --json
 ```
 
 bootstrap 프로필:
 - `base`: 기본 런타임 + 개발용 Python 의존성
 - `console`: base + API/UI 실행 필수 검사(`fastapi`, `uvicorn`, `node`, `npm`)
 - `yolo`: base + 모델 스택 opt-in(`requirements-model.txt`)
+
+bootstrap 옵션:
+- `--skip-doctor`: bootstrap 단계에서 doctor 실행 생략
+- `--json`: 기계 파싱 가능한 envelope 출력(`schema_version`, `status`, `steps`, `next_action`)
 
 stream별 런타임 환경변수:
 - `SS_STREAM_ID`

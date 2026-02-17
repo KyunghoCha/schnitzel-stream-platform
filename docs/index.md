@@ -33,6 +33,10 @@ Runtime baseline:
 18. `docs/guides/graph_wizard_guide.md`
 19. `docs/guides/block_editor_quickstart.md`
 
+Onboarding standard path:
+- `bootstrap -> doctor -> up/down`
+- `docs/guides/local_console_quickstart.md`
+
 ## Active Folders
 
 - `docs/governance/`: documentation policy and lifecycle rules
@@ -104,6 +108,10 @@ Runtime baseline:
 17. `docs/guides/local_console_quickstart.md`
 18. `docs/guides/graph_wizard_guide.md`
 19. `docs/guides/block_editor_quickstart.md`
+
+온보딩 표준 경로:
+- `bootstrap -> doctor -> up/down`
+- `docs/guides/local_console_quickstart.md`
 
 ## 활성 폴더
 

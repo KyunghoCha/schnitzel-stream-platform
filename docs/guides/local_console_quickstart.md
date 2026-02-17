@@ -4,23 +4,21 @@ Last updated: 2026-02-17
 
 ## English
 
-This guide starts the local control API + web console stack with one command surface.
+This guide is the canonical onboarding path for the local console stack.
 
-## 3-Step Quick Path
+## Standard 3-Step Path
 
-1. `bootstrap_env`
+1. `bootstrap`
 2. `doctor`
-3. `up`/`down`
+3. `up` / `down`
 
 ## Windows PowerShell
 
 ```powershell
 cd C:\Projects\schnitzel-stream-platform
 conda activate schnitzel-stream
-$env:PYTHONPATH = "src"
 
-python scripts/bootstrap_env.py --profile console --manager pip
-python scripts/env_doctor.py --profile console --strict --json
+./setup_env.ps1 -Profile console -Manager pip -SkipDoctor
 python scripts/stream_console.py doctor --strict --json
 python scripts/stream_console.py up --allow-local-mutations
 python scripts/stream_console.py status --json
@@ -31,31 +29,21 @@ python scripts/stream_console.py down
 
 ```bash
 cd /mnt/c/Projects/schnitzel-stream-platform
-export PYTHONPATH=src
 
-python3 scripts/bootstrap_env.py --profile console --manager pip
-python3 scripts/env_doctor.py --profile console --strict --json
+./setup_env.sh --profile console --manager pip --skip-doctor
 python3 scripts/stream_console.py doctor --strict --json
 python3 scripts/stream_console.py up --allow-local-mutations
 python3 scripts/stream_console.py status --json
 python3 scripts/stream_console.py down
 ```
 
-## Option-First Preset Examples (No Env Required)
+## Notes
 
-```bash
-python3 scripts/stream_run.py --preset inproc_demo --validate-only
-python3 scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
-python3 scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
-```
+- `up` runs in secure mode by default.
+- `--allow-local-mutations` is a local-lab opt-in for mutating endpoints.
+- If doctor fails, follow `suggested_fix` (PowerShell/Bash command pair).
 
-## Secure Mode Notes
-
-- Default behavior keeps mutating endpoints blocked in local-only mode.
-- `--allow-local-mutations` is explicit local-lab opt-in for mutating endpoints.
-- Use `--token <value>` on `up` to set `SS_CONTROL_API_TOKEN` in API process env.
-
-## Common Commands
+## Advanced (Optional)
 
 ```bash
 # API only
@@ -68,40 +56,30 @@ python scripts/stream_console.py up --ui-only
 python scripts/stream_console.py up --api-port 18710 --ui-port 5180 --log-dir outputs/console_run_custom
 ```
 
-Block editor path:
-
-```bash
-python scripts/stream_console.py up --allow-local-mutations
-# open http://127.0.0.1:5173 -> Editor tab
-```
-
-## Output Paths
-
-- API log: `outputs/console_run/control_api.log`
-- UI log: `outputs/console_run/stream_console_ui.log`
-- API pid: `outputs/console_run/pids/control_api.pid`
-- UI pid: `outputs/console_run/pids/stream_console_ui.pid`
-- state file: `outputs/console_run/console_state.json`
+Output paths:
+- `outputs/console_run/control_api.log`
+- `outputs/console_run/stream_console_ui.log`
+- `outputs/console_run/pids/control_api.pid`
+- `outputs/console_run/pids/stream_console_ui.pid`
+- `outputs/console_run/console_state.json`
 
 ## 한국어
 
-이 가이드는 로컬 Control API + 웹 콘솔 스택을 단일 명령면으로 실행하는 빠른 시작 문서다.
+이 문서는 로컬 콘솔 스택 온보딩의 표준 경로다.
 
-## 3단계 빠른 경로
+## 표준 3단계 경로
 
-1. `bootstrap_env`
+1. `bootstrap`
 2. `doctor`
-3. `up`/`down`
+3. `up` / `down`
 
 ## Windows PowerShell
 
 ```powershell
 cd C:\Projects\schnitzel-stream-platform
 conda activate schnitzel-stream
-$env:PYTHONPATH = "src"
 
-python scripts/bootstrap_env.py --profile console --manager pip
-python scripts/env_doctor.py --profile console --strict --json
+./setup_env.ps1 -Profile console -Manager pip -SkipDoctor
 python scripts/stream_console.py doctor --strict --json
 python scripts/stream_console.py up --allow-local-mutations
 python scripts/stream_console.py status --json
@@ -112,31 +90,21 @@ python scripts/stream_console.py down
 
 ```bash
 cd /mnt/c/Projects/schnitzel-stream-platform
-export PYTHONPATH=src
 
-python3 scripts/bootstrap_env.py --profile console --manager pip
-python3 scripts/env_doctor.py --profile console --strict --json
+./setup_env.sh --profile console --manager pip --skip-doctor
 python3 scripts/stream_console.py doctor --strict --json
 python3 scripts/stream_console.py up --allow-local-mutations
 python3 scripts/stream_console.py status --json
 python3 scripts/stream_console.py down
 ```
 
-## 옵션 중심 프리셋 예시(no env)
+## 참고
 
-```bash
-python3 scripts/stream_run.py --preset inproc_demo --validate-only
-python3 scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
-python3 scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
-```
+- `up`은 기본적으로 secure mode로 실행된다.
+- `--allow-local-mutations`는 로컬 실습에서만 mutating endpoint를 여는 명시적 옵션이다.
+- doctor 실패 시 `suggested_fix`에 출력되는 PowerShell/Bash 명령을 그대로 실행하면 된다.
 
-## 보안 모드 참고
-
-- 기본 동작은 로컬 모드에서 mutating endpoint를 차단한다.
-- `--allow-local-mutations`는 로컬 실습용 명시적 opt-in 옵션이다.
-- `up`에서 `--token <value>`를 주면 API 프로세스 env에 `SS_CONTROL_API_TOKEN`이 설정된다.
-
-## 자주 쓰는 명령
+## 고급 경로(선택)
 
 ```bash
 # API만 실행
@@ -149,17 +117,9 @@ python scripts/stream_console.py up --ui-only
 python scripts/stream_console.py up --api-port 18710 --ui-port 5180 --log-dir outputs/console_run_custom
 ```
 
-블록 에디터 경로:
-
-```bash
-python scripts/stream_console.py up --allow-local-mutations
-# http://127.0.0.1:5173 접속 후 Editor 탭
-```
-
-## 출력 경로
-
-- API 로그: `outputs/console_run/control_api.log`
-- UI 로그: `outputs/console_run/stream_console_ui.log`
-- API pid: `outputs/console_run/pids/control_api.pid`
-- UI pid: `outputs/console_run/pids/stream_console_ui.pid`
-- 상태 파일: `outputs/console_run/console_state.json`
+출력 경로:
+- `outputs/console_run/control_api.log`
+- `outputs/console_run/stream_console_ui.log`
+- `outputs/console_run/pids/control_api.pid`
+- `outputs/console_run/pids/stream_console_ui.pid`
+- `outputs/console_run/console_state.json`
