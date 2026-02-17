@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-17
 
-Current step id: `P17.6`
+Current step id: `P18.1`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 17 governance hardening and UX consistency completed**
+Current position: **Phase 18 onboarding UX and one-command local console bootstrap in progress**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -279,6 +279,22 @@ Intent:
 - `P17.5` Clarify fleet-only monitor semantics in stream console UX copy. `DONE` (bed8e2b)
 - `P17.6` Finalize docs/index/mapping/status sync for P17 surfaces. `DONE`
 
+#### Phase 18: Onboarding UX + One-Command Console Bootstrap (NOW)
+
+Intent:
+- Reduce local onboarding friction by adding a single command surface for API+UI lifecycle.
+- Keep control API security defaults while enabling explicit local-lab opt-in for mutations.
+- Improve CI/UI reproducibility and document a deterministic quickstart path.
+
+- `P18.1` Open phase and align SSOT step id/state docs for onboarding track. `NOW`
+- `P18.2` Add console ops service layer (`src/schnitzel_stream/ops/console.py`). `NEXT`
+- `P18.3` Add `scripts/stream_console.py` (`up/status/down/doctor`) command surface. `NEXT`
+- `P18.4` Extend `env_doctor` with `console` profile checks (`fastapi`, `uvicorn`, `node`, `npm`). `NEXT`
+- `P18.5` Add local-console quickstart guide and simplify onboarding docs. `NEXT`
+- `P18.6` Add unit tests for console ops/script and env profile coverage. `NEXT`
+- `P18.7` Harden UI reproducibility (`package-lock` tracked, CI `npm ci`). `NEXT`
+- `P18.8` Final docs/index/mapping/status sync for P18 surfaces. `NEXT`
+
 #### Research Track (Not On Critical Path)
 
 Intent:
@@ -321,8 +337,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P17.6`
-- 전체 위치: **Phase 17 거버넌스 하드닝 + UX 정합성 트랙 완료(문서/상태 동기화 마감)**
+- current step id: `P18.1`
+- 전체 위치: **Phase 18 온보딩 UX + 원커맨드 콘솔 부트스트랩 트랙 진행 중**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -352,11 +368,12 @@ Intent:
 | Phase 15 | DONE | 원커맨드 프리셋 UX + 프로필 기반 환경 진단 + 문서 동기화 완료 |
 | Phase 16 | DONE | UX 콘솔 + Control API + 거버넌스 최소선(Audit/Policy Snapshot) 완료 |
 | Phase 17 | DONE | 거버넌스 하드닝 + UX 정합성(인증/감사보존/정책드리프트/모니터 의미 명확화) 완료 |
+| Phase 18 | NOW | 온보딩 UX + API/UI 원커맨드 콘솔 부트스트랩 진행 |
 
 ### 현재 우선순위
 
-1. `P17` 보안/정책/UX 계약이 CI와 문서에서 동일하게 유지되는지 지속 점검한다
-2. `P18` 토큰 수명/회전, 감사 보존 고도화, 정책 diff gate 강화 항목을 준비한다
+1. `P18.2~P18.4` 콘솔 실행면(ops 서비스 + script + env profile)을 우선 고정한다
+2. `P18.5~P18.7` 온보딩 문서/테스트/CI 재현성 강화 항목을 완료한다
 3. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지
 
 ### 레거시 관련 기준

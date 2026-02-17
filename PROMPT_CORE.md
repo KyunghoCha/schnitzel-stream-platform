@@ -10,7 +10,7 @@ Execution SSOT:
 - `docs/roadmap/execution_roadmap.md`
 
 Current status:
-- Current step id: `P17.6` (governance hardening and UX consistency docs-sync closure)
+- Current step id: `P18.1` (onboarding UX and one-command local console bootstrap phase open)
 - Core platform phases (`P0`~`P10`) are complete on `main`
 - Demo packaging phase (`P11`) is complete on `main`
 - Process-graph foundation phase (`P12`) is complete (`validator-first`, SQLite bridge)
@@ -19,6 +19,7 @@ Current status:
 - UX preset onboarding phase (`P15`) is complete (preset surface + profile-aware env checks)
 - UX console and governance minimum baseline phase (`P16`) is complete
 - Governance hardening and UX consistency phase (`P17`) is complete
+- Onboarding UX and one-command local console bootstrap phase (`P18`) is active
 - Legacy runtime/docs were removed from the working tree
 - Historical legacy state can be inspected via tag `pre-legacy-purge-20260216`
 
@@ -50,7 +51,7 @@ Context budget rule:
 - `docs/roadmap/execution_roadmap.md`
 
 현재 상태:
-- 현재 step id: `P17.6` (거버넌스 하드닝 + UX 정합성 문서 동기화 마감)
+- 현재 step id: `P18.1` (온보딩 UX + 원커맨드 로컬 콘솔 부트스트랩 단계 오픈)
 - 코어 플랫폼 단계(`P0`~`P10`)는 `main` 기준 완료
 - 데모 패키징 단계(`P11`) 완료
 - 프로세스 그래프 foundation 단계(`P12`) 완료(`validator-first`, SQLite 브리지)
@@ -59,6 +60,7 @@ Context budget rule:
 - UX 프리셋 온보딩 단계(`P15`) 완료(프리셋 실행기 + 프로필 기반 환경 진단)
 - UX 콘솔 + 거버넌스 최소선 단계(`P16`) 완료
 - 거버넌스 하드닝 + UX 정합성 단계(`P17`) 완료
+- 온보딩 UX + 원커맨드 로컬 콘솔 부트스트랩 단계(`P18`) 진행 중
 - 레거시 런타임/문서는 워킹 트리에서 제거됨
 - 과거 레거시 상태는 태그 `pre-legacy-purge-20260216`에서 확인
 
