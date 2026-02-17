@@ -34,6 +34,10 @@ export function App() {
   const [presetInputPath, setPresetInputPath] = useState<string>("");
   const [presetCameraIndex, setPresetCameraIndex] = useState<string>("0");
   const [presetDevice, setPresetDevice] = useState<string>("cpu");
+  const [presetModelPath, setPresetModelPath] = useState<string>("");
+  const [presetYoloConf, setPresetYoloConf] = useState<string>("");
+  const [presetYoloIou, setPresetYoloIou] = useState<string>("");
+  const [presetYoloMaxDet, setPresetYoloMaxDet] = useState<string>("");
   const [presetLoop, setPresetLoop] = useState<string>("");
   const [presetMaxEvents, setPresetMaxEvents] = useState<string>("");
 
@@ -100,6 +104,10 @@ export function App() {
       if (presetLoop.trim()) body.loop = presetLoop.trim();
       if (presetCameraIndex.trim()) body.camera_index = Number(presetCameraIndex);
       if (presetMaxEvents.trim()) body.max_events = Number(presetMaxEvents);
+      if (presetModelPath.trim()) body.model_path = presetModelPath.trim();
+      if (presetYoloConf.trim()) body.yolo_conf = Number(presetYoloConf);
+      if (presetYoloIou.trim()) body.yolo_iou = Number(presetYoloIou);
+      if (presetYoloMaxDet.trim()) body.yolo_max_det = Number(presetYoloMaxDet);
 
       const route = validateOnly ? `/api/v1/presets/${presetId}/validate` : `/api/v1/presets/${presetId}/run`;
       const resp = await apiRequest<{ [k: string]: unknown }>(route, {
@@ -257,6 +265,10 @@ export function App() {
             <input value={presetInputPath} onChange={(e) => setPresetInputPath(e.target.value)} placeholder="input path" />
             <input value={presetCameraIndex} onChange={(e) => setPresetCameraIndex(e.target.value)} placeholder="camera index" />
             <input value={presetDevice} onChange={(e) => setPresetDevice(e.target.value)} placeholder="device (cpu|0)" />
+            <input value={presetModelPath} onChange={(e) => setPresetModelPath(e.target.value)} placeholder="model path" />
+            <input value={presetYoloConf} onChange={(e) => setPresetYoloConf(e.target.value)} placeholder="yolo conf (0..1)" />
+            <input value={presetYoloIou} onChange={(e) => setPresetYoloIou(e.target.value)} placeholder="yolo iou (0..1)" />
+            <input value={presetYoloMaxDet} onChange={(e) => setPresetYoloMaxDet(e.target.value)} placeholder="yolo max det" />
             <input value={presetLoop} onChange={(e) => setPresetLoop(e.target.value)} placeholder="loop true|false" />
             <input value={presetMaxEvents} onChange={(e) => setPresetMaxEvents(e.target.value)} placeholder="max events" />
             <button disabled={busy} onClick={() => void runPreset(true)}>
