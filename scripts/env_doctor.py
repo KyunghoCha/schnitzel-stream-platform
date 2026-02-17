@@ -87,9 +87,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--json", action="store_true", help="Print checks as JSON only")
     parser.add_argument(
         "--profile",
-        choices=("base", "yolo", "webcam"),
+        choices=("base", "yolo", "webcam", "console"),
         default="base",
-        help="Check profile (base runtime / yolo stack / webcam readiness)",
+        help="Check profile (base runtime / yolo stack / webcam readiness / console stack)",
     )
     parser.add_argument(
         "--model-path",

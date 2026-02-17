@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 import importlib
 from pathlib import Path
+import shutil
 import sys
 from typing import Sequence
 
@@ -11,6 +12,7 @@ MIN_PYTHON = (3, 11)
 BASE_REQUIRED_MODULES = ("omegaconf", "numpy", "pandas", "requests")
 BASE_OPTIONAL_MODULES = ("cv2",)
 YOLO_REQUIRED_MODULES = ("ultralytics", "torch")
+CONSOLE_REQUIRED_MODULES = ("fastapi", "uvicorn")
 
 
 @dataclass(frozen=True)
@@ -66,6 +68,14 @@ def check_model_path(path: Path) -> CheckResult:
     return CheckResult(name="yolo_model_path", required=False, ok=ok, detail=detail)
 
 
+def check_executable(name: str, *, required: bool, install_hint: str = "") -> CheckResult:
+    path = shutil.which(name)
+    if path:
+        return CheckResult(name=f"exe:{name}", required=required, ok=True, detail=f"found at {path}")
+    hint = f" not found; {install_hint}".strip() if install_hint else " not found"
+    return CheckResult(name=f"exe:{name}", required=required, ok=False, detail=hint)
+
+
 def check_webcam_probe(*, camera_index: int, enabled: bool) -> CheckResult:
     if not enabled:
         return CheckResult(
@@ -113,6 +123,22 @@ def run_checks(
         out.extend(check_import(name, required=True) for name in YOLO_REQUIRED_MODULES)
         out.append(check_torch_cuda())
         out.append(check_model_path(model_path))
+    elif profile == "console":
+        out.extend(check_import(name, required=True) for name in CONSOLE_REQUIRED_MODULES)
+        out.append(
+            check_executable(
+                "node",
+                required=True,
+                install_hint="install Node.js LTS from https://nodejs.org/",
+            )
+        )
+        out.append(
+            check_executable(
+                "npm",
+                required=True,
+                install_hint="install Node.js (npm is bundled) and reopen your terminal",
+            )
+        )
     elif profile == "webcam":
         out.append(check_webcam_probe(camera_index=int(camera_index), enabled=bool(probe_webcam)))
 
