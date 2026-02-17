@@ -18,7 +18,7 @@ from schnitzel_stream.ops import process_manager as procman
 from schnitzel_stream.plugins.registry import PluginPolicy
 
 from .audit import AuditLogger
-from .auth import configured_token, request_identity, security_mode
+from .auth import configured_token, local_mutation_override_enabled, mutation_auth_mode, request_identity, security_mode
 from .models import EnvCheckRequest, FleetStartRequest, FleetStopRequest, PresetRequest
 
 
@@ -84,7 +84,7 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
 
     @app.get("/api/v1/health")
     def health(request: Request) -> dict[str, Any]:
-        actor, req_id = request_identity(request)
+        actor, req_id = request_identity(request, mode="read")
         return _envelope(
             request_id=req_id,
             data={
@@ -92,6 +92,8 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
                 "repo_root": str(root),
                 "security_mode": security_mode(),
                 "token_required": bool(configured_token()),
+                "mutation_auth_mode": mutation_auth_mode(),
+                "local_mutation_override_enabled": bool(local_mutation_override_enabled()),
                 "audit_path": str(logger.path),
                 "actor": actor,
             },
@@ -99,7 +101,7 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
 
     @app.get("/api/v1/presets")
     def list_presets(request: Request, experimental: bool = Query(default=False)) -> dict[str, Any]:
-        _actor, req_id = request_identity(request)
+        _actor, req_id = request_identity(request, mode="read")
         table = preset_ops.build_preset_table(root)
         rows = preset_ops.list_presets_rows(table=table, include_experimental=bool(experimental))
         presets = [
@@ -120,7 +122,7 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
         body: PresetRequest,
         validate_only: bool,
     ) -> dict[str, Any]:
-        actor, req_id = request_identity(request)
+        actor, req_id = request_identity(request, mode="read" if validate_only else "mutate")
         action = f"preset.{ 'validate' if validate_only else 'run' }"
         target = str(preset_id)
         try:
@@ -198,7 +200,7 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
 
     @app.post("/api/v1/fleet/start")
     def fleet_start(request: Request, body: FleetStartRequest) -> dict[str, Any]:
-        actor, req_id = request_identity(request)
+        actor, req_id = request_identity(request, mode="mutate")
         action = "fleet.start"
         try:
             config_path = _abs_path(root, body.config)
@@ -255,7 +257,7 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
 
     @app.post("/api/v1/fleet/stop")
     def fleet_stop(request: Request, body: FleetStopRequest) -> dict[str, Any]:
-        actor, req_id = request_identity(request)
+        actor, req_id = request_identity(request, mode="mutate")
         action = "fleet.stop"
         log_dir = _abs_path(root, body.log_dir)
         pid_dir = log_dir / "pids"
@@ -281,7 +283,7 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
 
     @app.get("/api/v1/fleet/status")
     def fleet_status(request: Request, log_dir: str = Query(default=str(DEFAULT_LOG_DIR))) -> dict[str, Any]:
-        _actor, req_id = request_identity(request)
+        _actor, req_id = request_identity(request, mode="read")
         log_dir_path = _abs_path(root, log_dir)
         pid_dir = log_dir_path / "pids"
         if not pid_dir.exists():
@@ -302,7 +304,7 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
         window_sec: int = Query(default=10, ge=1),
         tail_lines: int = Query(default=2, ge=1),
     ) -> dict[str, Any]:
-        _actor, req_id = request_identity(request)
+        _actor, req_id = request_identity(request, mode="read")
         snapshot = monitor_ops.collect_snapshot(
             _abs_path(root, log_dir),
             monitor_ops.MonitorState(),
@@ -314,7 +316,7 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
 
     @app.post("/api/v1/env/check")
     def env_check(request: Request, body: EnvCheckRequest) -> dict[str, Any]:
-        _actor, req_id = request_identity(request)
+        _actor, req_id = request_identity(request, mode="read")
         checks = env_ops.run_checks(
             profile=str(body.profile),
             model_path=_abs_path(root, body.model_path),
@@ -334,11 +336,13 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
 
     @app.get("/api/v1/governance/policy-snapshot")
     def policy_snapshot(request: Request) -> dict[str, Any]:
-        _actor, req_id = request_identity(request)
+        _actor, req_id = request_identity(request, mode="read")
         policy = PluginPolicy.from_env()
         data = {
             "security_mode": security_mode(),
             "token_required": bool(configured_token()),
+            "mutation_auth_mode": mutation_auth_mode(),
+            "local_mutation_override_enabled": bool(local_mutation_override_enabled()),
             "allowed_plugin_prefixes": list(policy.allowed_prefixes),
             "allow_all_plugins": bool(policy.allow_all),
             "audit_path": str(logger.path),
@@ -351,7 +355,7 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
         limit: int = Query(default=50, ge=1, le=1000),
         since: str = Query(default=""),
     ) -> dict[str, Any]:
-        _actor, req_id = request_identity(request)
+        _actor, req_id = request_identity(request, mode="read")
         events = logger.tail(limit=int(limit), since=str(since))
         return _envelope(
             request_id=req_id,
