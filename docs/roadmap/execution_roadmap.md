@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-17
 
-Current step id: `P21.8`
+Current step id: `P22.1`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 21 dependency baseline + block editor MVP completed**
+Current position: **Phase 22 onboarding closure started**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -344,6 +344,22 @@ Intent:
 - `P21.7` Expand CI gates for dependency/bootstrap/editor surfaces. `DONE`
 - `P21.8` Final docs/index/mapping/status sync for P21 surfaces. `DONE`
 
+#### Phase 22: Onboarding Closure (Explicit 3-Step) (NOW)
+
+Intent:
+- Finalize the install/start entry surface as an explicit 3-step flow (`bootstrap -> doctor -> up/down`).
+- Keep Zero-Env-first operator path stable across PowerShell and Bash.
+- Preserve one-cycle compatibility for existing setup surfaces while converging on one standard path.
+
+- `P22.1` Open phase and align SSOT step id/state docs. `NOW`
+- `P22.2` Harden `bootstrap_env` contract (`--skip-doctor`, `--json`, deterministic next-action output). `NEXT`
+- `P22.3` Align `setup_env.ps1`/`setup_env.sh` option surfaces + one-cycle positional compatibility policy. `NEXT`
+- `P22.4` Normalize `env_doctor` and `stream_console` failure taxonomy and recovery guidance. `NEXT`
+- `P22.5` Add onboarding smoke regression coverage (`bootstrap`/`setup`/`console`). `NEXT`
+- `P22.6` Extend CI onboarding smoke gates for Linux + Windows parity. `NEXT`
+- `P22.7` Rewrite onboarding docs to one canonical explicit 3-step path. `NEXT`
+- `P22.8` Final mapping/index/status sync for P22 assets. `NEXT`
+
 #### Completion Definition (Engineering Scope Only)
 
 If the planned non-research phases `P22`~`P26` are completed in order, this roadmap is considered **complete for implementable engineering scope**.
@@ -354,9 +370,8 @@ Out of this completion definition:
 - runtime `N:N` channel semantics
 - runtime loop execution semantics beyond current policy
 
-#### Planned Non-Research Finish Track (`P22`~`P26`) (NEXT)
+#### Planned Non-Research Finish Track (`P23`~`P26`) (NEXT)
 
-- `P22` Onboarding closure: deterministic install/bootstrap/doctor/run path across PowerShell/Bash.
 - `P23` Block editor usability hardening: node/edge editing UX, YAML round-trip robustness, clearer validate/run results.
 - `P24` Reliability hardening: restart/backlog/ack/timeout regression expansion with deterministic CI coverage.
 - `P25` Plugin DX closure: scaffold/template quality, authoring flow reduction, stricter mapping checks.
@@ -404,8 +419,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P21.8`
-- 전체 위치: **Phase 21 의존성 기준선 + 블록 편집기 MVP 트랙 완료**
+- current step id: `P22.1`
+- 전체 위치: **Phase 22 온보딩 완결 트랙 시작**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -439,7 +454,7 @@ Intent:
 | Phase 19 | DONE | 환경변수 의존 최소화 + 원커맨드 실행 단순화 |
 | Phase 20 | DONE | 그래프 작성 UX(CLI Wizard) 도입 및 템플릿 기반 생성면 구축 완료 |
 | Phase 21 | DONE | 의존성 기준선 고정 + 블록코딩 GUI MVP 도입 |
-| Phase 22 | NEXT | 온보딩/설치 경로 완결(bootstrap/doctor/run 일치화) |
+| Phase 22 | NOW | 온보딩/설치 경로 완결(bootstrap/doctor/up-down 명시 3단계 고정) |
 | Phase 23 | NEXT | 블록 편집기 사용성 하드닝(편집/검증/실행 UX 정리) |
 | Phase 24 | NEXT | 운영 신뢰성 회귀 하드닝(재시작/백로그/ACK/타임아웃) |
 | Phase 25 | NEXT | 플러그인 DX 마감(스캐폴드/템플릿/가이드 완성도) |
@@ -457,9 +472,9 @@ Intent:
 
 ### 현재 우선순위
 
-1. `P21.1`~`P21.8` 구현/검증/문서 동기화를 완료했고 상태를 SSOT에 반영했다
-2. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지한다
-3. 다음 phase는 P22 후보(후속 UX/확장 범위 확정 후 오픈)로 관리한다
+1. `P22.2`~`P22.4`로 bootstrap/doctor/console 계약을 명시 3단계로 고정한다
+2. `P22.5`~`P22.6`으로 Linux+Windows 온보딩 회귀/CI 게이트를 동급으로 잠근다
+3. `P22.7`~`P22.8`로 문서 단일 경로화와 매핑 동기화를 마무리한다
 
 ### 레거시 관련 기준
 

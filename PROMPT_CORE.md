@@ -10,7 +10,7 @@ Execution SSOT:
 - `docs/roadmap/execution_roadmap.md`
 
 Current status:
-- Current step id: `P21.8` (dependency baseline + block editor MVP completed)
+- Current step id: `P22.1` (onboarding closure phase opened; explicit 3-step flow lock-in)
 - Core platform phases (`P0`~`P10`) are complete on `main`
 - Demo packaging phase (`P11`) is complete on `main`
 - Process-graph foundation phase (`P12`) is complete (`validator-first`, SQLite bridge)
@@ -23,6 +23,7 @@ Current status:
 - Usability closure no-env-first phase (`P19`) is complete
 - Graph authoring UX phase (`P20`) is complete (CLI wizard template-profile lane)
 - Dependency baseline + block editor MVP phase (`P21`) is complete
+- Onboarding closure phase (`P22`) is open (`P22.1`: explicit `bootstrap -> doctor -> up/down`, Win+Linux parity)
 - Legacy runtime/docs were removed from the working tree
 - Historical legacy state can be inspected via tag `pre-legacy-purge-20260216`
 
@@ -54,7 +55,7 @@ Context budget rule:
 - `docs/roadmap/execution_roadmap.md`
 
 현재 상태:
-- 현재 step id: `P21.8` (의존성 기준선 + 블록 편집기 MVP 완료)
+- 현재 step id: `P22.1` (온보딩 완결 페이즈 오픈, 명시 3단계 흐름 고정)
 - 코어 플랫폼 단계(`P0`~`P10`)는 `main` 기준 완료
 - 데모 패키징 단계(`P11`) 완료
 - 프로세스 그래프 foundation 단계(`P12`) 완료(`validator-first`, SQLite 브리지)
@@ -67,6 +68,7 @@ Context budget rule:
 - 사용성 마감 무환경변수 우선 단계(`P19`) 완료
 - 그래프 작성 UX 단계(`P20`) 완료(CLI wizard 템플릿 프로필 레인)
 - 의존성 기준선 + 블록 편집기 MVP 단계(`P21`) 완료
+- 온보딩 완결 단계(`P22`) 오픈(`P22.1`: `bootstrap -> doctor -> up/down` 명시 3단계, Win+Linux 동급)
 - 레거시 런타임/문서는 워킹 트리에서 제거됨
 - 과거 레거시 상태는 태그 `pre-legacy-purge-20260216`에서 확인
 
