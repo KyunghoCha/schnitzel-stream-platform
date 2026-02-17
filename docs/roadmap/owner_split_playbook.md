@@ -19,7 +19,7 @@ This playbook fixes decision ownership after `P12` completion.
 
 ## Execution Status Snapshot
 
-Current step id: `P16.5`
+Current step id: `P17.1`
 
 ### Agent Track Status (`E-*`)
 
@@ -280,7 +280,7 @@ Current step id: `P16.5`
 
 ## 실행 상태 스냅샷
 
-현재 step id: `P16.5`
+현재 step id: `P17.1`
 
 ### Agent 트랙 상태 (`E-*`)
 
