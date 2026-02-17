@@ -72,7 +72,7 @@ def check_executable(name: str, *, required: bool, install_hint: str = "") -> Ch
     path = shutil.which(name)
     if path:
         return CheckResult(name=f"exe:{name}", required=required, ok=True, detail=f"found at {path}")
-    hint = f" not found; {install_hint}".strip() if install_hint else " not found"
+    hint = f"not found; {install_hint}" if install_hint else "not found"
     return CheckResult(name=f"exe:{name}", required=required, ok=False, detail=hint)
 
 
@@ -166,11 +166,17 @@ def summary(checks: Sequence[CheckResult]) -> dict[str, int]:
 
 def payload(*, profile: str, strict: bool, checks: Sequence[CheckResult]) -> dict[str, object]:
     code = exit_code(checks, strict=bool(strict))
+    suggested_fix = (
+        f"python scripts/bootstrap_env.py --profile {profile} --manager auto"
+        if str(profile).strip()
+        else "python scripts/bootstrap_env.py --profile base --manager auto"
+    )
     return {
         "tool": "env_doctor",
         "profile": str(profile),
         "strict": bool(strict),
         "status": "ok" if code == 0 else "failed",
+        "suggested_fix": suggested_fix,
         "summary": summary(checks),
         "checks": [asdict(item) for item in checks],
     }

@@ -130,9 +130,14 @@ def run(argv: list[str] | None = None) -> int:
         f"required_failed={summary['required_failed']}/{summary['required_total']} "
         f"optional_failed={summary['optional_failed']}/{summary['optional_total']}"
     )
+    print(f"fix_hint: python scripts/bootstrap_env.py --profile {args.profile} --manager auto")
     if code != 0:
         # Intent: strict mode is used by CI gates to fail early on missing runtime dependencies.
         print("strict check failed: one or more required checks did not pass", file=sys.stderr)
+        print(
+            f"next: run `python scripts/bootstrap_env.py --profile {args.profile} --manager auto`",
+            file=sys.stderr,
+        )
     return int(code)
 
 

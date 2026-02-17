@@ -1,25 +1,41 @@
 # setup_env.ps1
-# Windows PowerShell 개발 환경 설정 스크립트
+# Docs: docs/ops/command_reference.md, docs/guides/local_console_quickstart.md
+# Windows PowerShell bootstrap helper (dependency-first)
 
-Write-Host "Setting up environment for schnitzel-stream-platform..." -ForegroundColor Cyan
+param(
+    [ValidateSet("base", "console", "yolo")]
+    [string]$Profile = "base",
+    [ValidateSet("auto", "conda", "pip")]
+    [string]$Manager = "auto",
+    [switch]$DryRun
+)
 
-# 1. PYTHONPATH 설정 (src 디렉토리 포함)
-$currentDir = Get-Location
-$srcPath = Join-Path $currentDir "src"
+$ErrorActionPreference = "Stop"
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location $scriptDir
 
-if (Test-Path $srcPath) {
-    $env:PYTHONPATH = $srcPath
-    Write-Host "[SUCCESS] PYTHONPATH set to: $srcPath" -ForegroundColor Green
-} else {
-    Write-Host "[ERROR] 'src' directory not found. Please run this script in the project root." -ForegroundColor Red
+Write-Host "== schnitzel-stream setup ==" -ForegroundColor Cyan
+Write-Host "profile=$Profile manager=$Manager dry_run=$DryRun"
+
+$srcPath = Join-Path $scriptDir "src"
+if (-Not (Test-Path $srcPath)) {
+    Write-Host "[ERROR] src directory not found. Run this script from project root." -ForegroundColor Red
     exit 1
 }
+$env:PYTHONPATH = $srcPath
+Write-Host "[OK] PYTHONPATH=$srcPath" -ForegroundColor Green
 
-# 2. 가상환경 체크 (선택 사항)
-if ($null -eq $env:VIRTUAL_ENV) {
-    Write-Host "[WARNING] No virtual environment (venv) detected. It's recommended to use one." -ForegroundColor Yellow
-} else {
-    Write-Host "[INFO] Active virtual environment: $env:VIRTUAL_ENV" -ForegroundColor Cyan
+$cmd = @("python", "scripts/bootstrap_env.py", "--profile", $Profile, "--manager", $Manager)
+if ($DryRun) {
+    $cmd += "--dry-run"
 }
 
-Write-Host "`nReady to run! Try: python -m schnitzel_stream validate" -ForegroundColor Magenta
+Write-Host ("[RUN] " + ($cmd -join " ")) -ForegroundColor Yellow
+& $cmd[0] $cmd[1..($cmd.Length - 1)]
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[ERROR] bootstrap_env failed." -ForegroundColor Red
+    exit $LASTEXITCODE
+}
+
+Write-Host "[OK] Environment bootstrap complete." -ForegroundColor Green
+Write-Host "Try: python scripts/env_doctor.py --profile $Profile --strict --json" -ForegroundColor Magenta
