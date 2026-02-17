@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-17
 
-Current step id (SSOT): `P22.8` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P23.1` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -31,6 +31,7 @@ Current baseline:
 - graph authoring UX track completed (`P20.1`~`P20.8`, CLI wizard template-profile lane + CI/docs/tests sync)
 - dependency baseline + block editor MVP track completed (`P21.0`~`P21.8`, dependency-first execution lane)
 - onboarding closure track completed (`P22.1`~`P22.8`, explicit 3-step onboarding closure + Win/Linux parity gates)
+- block editor hardening track opened (`P23.1`, direct manipulation UX hardening kickoff)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -65,6 +66,7 @@ Verification (local):
 - 그래프 작성 UX 트랙 완료(`P20.1`~`P20.8`, CLI wizard 템플릿 프로필 레인 + CI/문서/테스트 동기화)
 - 의존성 기준선 + 블록 편집기 MVP 트랙 완료(`P21.0`~`P21.8`, dependency-first 실행 레인)
 - 온보딩 완결 트랙 완료(`P22.1`~`P22.8`, 명시 3단계 온보딩 완결 + Win/Linux 동급 게이트)
+- 블록 편집기 하드닝 트랙 오픈(`P23.1`, 직접 조작 UX 하드닝 시작)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`
