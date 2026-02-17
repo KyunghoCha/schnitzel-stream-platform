@@ -9,6 +9,13 @@ vi.mock("@xyflow/react", () => ({
     reactFlowSpy(props);
     return <div data-testid="react-flow">{props.children as any}</div>;
   },
+  ConnectionLineType: {
+    SmoothStep: "smoothstep",
+    Step: "step"
+  },
+  MarkerType: {
+    ArrowClosed: "arrowclosed"
+  },
   Background: () => <div data-testid="flow-bg" />,
   Controls: () => <div data-testid="flow-controls" />,
   MiniMap: () => <div data-testid="flow-minimap" />,
@@ -268,6 +275,9 @@ describe("Stream Console App", () => {
     expect(lastCall.zoomOnDoubleClick).toBe(false);
     expect(lastCall.connectionRadius).toBe(42);
     expect(lastCall.connectOnClick).toBe(true);
+    expect(lastCall.connectionLineType).toBe("step");
+    expect(lastCall.defaultEdgeOptions).toBeTruthy();
+    expect((lastCall.defaultEdgeOptions as Record<string, unknown>).type).toBe("step");
     expect(typeof lastCall.onNodesChange).toBe("function");
     expect(typeof lastCall.onEdgesChange).toBe("function");
     expect(typeof lastCall.onConnectStart).toBe("function");

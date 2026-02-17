@@ -1,19 +1,5 @@
-import { FormEvent, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  applyEdgeChanges,
-  applyNodeChanges,
-  Background,
-  Connection,
-  Controls,
-  Edge,
-  EdgeChange,
-  MiniMap,
-  Node,
-  NodeChange,
-  NodeTypes,
-  ReactFlowInstance,
-  ReactFlow
-} from "@xyflow/react";
+import { useCallback, useMemo, useState } from "react";
+import { applyEdgeChanges, Connection, Edge, EdgeChange, ReactFlowInstance } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import YAML from "yaml";
 
@@ -24,34 +10,29 @@ import {
   GraphSpecInput,
   normalizeGraphSpecInput
 } from "./api";
-import { findSnapTargetInput, isConnectionAllowedHybrid, type SnapNodeInput } from "./editor_connect";
+import { EditorValidationSummary, GraphProfileItem, NodePos, PresetItem, TabId } from "./app_types";
+import { isConnectionAllowedHybrid } from "./editor_connect";
 import { alignNodePositions, computeAutoLayout, type LayoutSize } from "./editor_layout";
-import { editorNodeTypes, EditorNodeKind } from "./editor_nodes";
-
-type TabId = "dashboard" | "presets" | "fleet" | "monitor" | "editor" | "governance";
-
-type PresetItem = {
-  preset_id: string;
-  experimental: boolean;
-  graph: string;
-  description: string;
-};
-
-type GraphProfileItem = {
-  profile_id: string;
-  experimental: boolean;
-  template: string;
-  description: string;
-};
-
-type NodePos = { x: number; y: number };
-
-type EditorValidationSummary = {
-  status: "ok" | "error";
-  nodeCount: number;
-  edgeCount: number;
-  message: string;
-};
+import {
+  connectionErrorMessage,
+  defaultNodeTemplate,
+  defaultPosition,
+  defaultSpec,
+  edgeIdentity,
+  nextNodeId,
+  normalizeKind,
+  parseEditorValidationSummary,
+  toBoolText,
+  toNumber
+} from "./editor_utils";
+import { EditorTab } from "./components/editor/EditorTab";
+import {
+  DashboardSection,
+  FleetSection,
+  GovernanceSection,
+  MonitorSection,
+  PresetsSection
+} from "./components/sections";
 
 const TABS: Array<{ id: TabId; label: string }> = [
   { id: "dashboard", label: "Dashboard" },
@@ -61,322 +42,6 @@ const TABS: Array<{ id: TabId; label: string }> = [
   { id: "editor", label: "Editor" },
   { id: "governance", label: "Governance" }
 ];
-
-function defaultPosition(index: number): NodePos {
-  return {
-    x: 100 + (index % 4) * 250,
-    y: 80 + Math.floor(index / 4) * 180
-  };
-}
-
-function defaultSpec(): GraphSpecInput {
-  return {
-    version: 2,
-    nodes: [
-      {
-        id: "src",
-        kind: "source",
-        plugin: "schnitzel_stream.nodes.dev:StaticSource",
-        config: {
-          packets: [
-            {
-              kind: "demo",
-              source_id: "editor_demo",
-              payload: { message: "hello from block editor" }
-            }
-          ]
-        }
-      },
-      {
-        id: "out",
-        kind: "sink",
-        plugin: "schnitzel_stream.nodes.dev:PrintSink",
-        config: {
-          prefix: "EDITOR "
-        }
-      }
-    ],
-    edges: [{ src: "src", dst: "out" }],
-    config: {}
-  };
-}
-
-function defaultNodeTemplate(kind: "source" | "node" | "sink", id: string) {
-  if (kind === "source") {
-    return {
-      id,
-      kind,
-      plugin: "schnitzel_stream.nodes.dev:StaticSource",
-      config: {
-        packets: [
-          {
-            kind: "demo",
-            source_id: id,
-            payload: { value: id }
-          }
-        ]
-      }
-    };
-  }
-  if (kind === "sink") {
-    return {
-      id,
-      kind,
-      plugin: "schnitzel_stream.nodes.dev:PrintSink",
-      config: { prefix: `${id.toUpperCase()} ` }
-    };
-  }
-  return {
-    id,
-    kind,
-    plugin: "schnitzel_stream.nodes.dev:Identity",
-    config: {}
-  };
-}
-
-function nextNodeId(base: string, spec: GraphSpecInput): string {
-  const normalized = base.trim() || "node";
-  if (!spec.nodes.some((node) => node.id === normalized)) {
-    return normalized;
-  }
-  let n = 2;
-  while (spec.nodes.some((node) => node.id === `${normalized}_${n}`)) {
-    n += 1;
-  }
-  return `${normalized}_${n}`;
-}
-
-function normalizeKind(kind: string): EditorNodeKind {
-  const raw = kind.trim().toLowerCase();
-  if (raw === "source") return "source";
-  if (raw === "sink") return "sink";
-  return "node";
-}
-
-function edgeIdentity(edge: { src: string; dst: string; src_port?: string; dst_port?: string }, index: number): string {
-  return `${edge.src}|${edge.dst}|${edge.src_port ?? "*"}|${edge.dst_port ?? "*"}|${index}`;
-}
-
-function parseEditorValidationSummary(raw: unknown): EditorValidationSummary | null {
-  if (!raw || typeof raw !== "object") return null;
-  const row = raw as Record<string, unknown>;
-  const ok = Boolean(row.ok);
-  const nodeCount = Number(row.node_count ?? row.nodeCount ?? 0);
-  const edgeCount = Number(row.edge_count ?? row.edgeCount ?? 0);
-  const errorText = String(row.error ?? row.reason ?? "").trim();
-  return {
-    status: ok ? "ok" : "error",
-    nodeCount: Number.isFinite(nodeCount) ? nodeCount : 0,
-    edgeCount: Number.isFinite(edgeCount) ? edgeCount : 0,
-    message: ok ? "graph validation passed" : errorText || "graph validation failed"
-  };
-}
-
-function toNumber(value: string): number | undefined {
-  const txt = value.trim();
-  if (!txt) return undefined;
-  const n = Number(txt);
-  if (!Number.isFinite(n)) return undefined;
-  return n;
-}
-
-function toBoolText(value: string): "" | "true" | "false" {
-  const lower = value.trim().toLowerCase();
-  if (lower === "true" || lower === "false") {
-    return lower;
-  }
-  return "";
-}
-
-function connectionErrorMessage(reason: string): string {
-  if (reason === "sink_outgoing_blocked") {
-    return "sink cannot have outgoing edges";
-  }
-  if (reason === "source_incoming_blocked") {
-    return "source cannot have incoming edges";
-  }
-  if (reason === "self_loop_blocked") {
-    return "self-loop is blocked in editor";
-  }
-  if (reason === "duplicate_edge_blocked") {
-    return "duplicate edge";
-  }
-  return reason;
-}
-
-function eventClientPoint(evt: MouseEvent | TouchEvent): { x: number; y: number } | null {
-  if ("clientX" in evt && typeof evt.clientX === "number") {
-    return {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-  }
-  const touch = "changedTouches" in evt ? evt.changedTouches?.[0] ?? evt.touches?.[0] : null;
-  if (!touch) {
-    return null;
-  }
-  return {
-    x: touch.clientX,
-    y: touch.clientY
-  };
-}
-
-type EditorCanvasProps = {
-  nodes: Node[];
-  edges: Edge[];
-  nodeTypes: NodeTypes;
-  onEdgesChange: (changes: EdgeChange[]) => void;
-  onConnect: (connection: Connection) => void;
-  onInit: (instance: ReactFlowInstance<any, any>) => void;
-  onNodeSelect: (nodeId: string) => void;
-  onNodesRemoved: (nodeIds: string[]) => void;
-  onPositionsCommit: (positions: Record<string, NodePos>) => void;
-};
-
-const EditorCanvas = memo(function EditorCanvas({
-  nodes,
-  edges,
-  nodeTypes,
-  onEdgesChange,
-  onConnect,
-  onInit,
-  onNodeSelect,
-  onNodesRemoved,
-  onPositionsCommit
-}: EditorCanvasProps) {
-  const [localNodes, setLocalNodes] = useState<Node[]>(nodes);
-  const localNodesRef = useRef<Node[]>(nodes);
-  const flowRef = useRef<ReactFlowInstance<any, any> | null>(null);
-  const connectStartRef = useRef<{ sourceId: string; sourceHandle: string } | null>(null);
-  const didConnectRef = useRef(false);
-
-  useEffect(() => {
-    setLocalNodes(nodes);
-  }, [nodes]);
-
-  useEffect(() => {
-    localNodesRef.current = localNodes;
-  }, [localNodes]);
-
-  const commitPositions = useCallback(() => {
-    const currentNodes = flowRef.current?.getNodes?.() ?? localNodesRef.current;
-    const nextPositions: Record<string, NodePos> = {};
-    for (const row of currentNodes) {
-      nextPositions[String(row.id)] = {
-        x: Number(row.position?.x ?? 0),
-        y: Number(row.position?.y ?? 0)
-      };
-    }
-    onPositionsCommit(nextPositions);
-  }, [onPositionsCommit]);
-
-  const onLocalNodesChange = useCallback(
-    (changes: NodeChange[]) => {
-      setLocalNodes((prev) => applyNodeChanges(changes, prev as Node[]));
-      const removed = changes.filter((change) => change.type === "remove").map((change) => String(change.id));
-      if (removed.length > 0) {
-        onNodesRemoved(removed);
-      }
-    },
-    [onNodesRemoved]
-  );
-
-  const onNodeClick = useCallback(
-    (_evt: unknown, node: Node) => {
-      onNodeSelect(String(node.id));
-    },
-    [onNodeSelect]
-  );
-
-  const onLocalConnectStart = useCallback((_event: unknown, params: { nodeId?: string | null; handleId?: string | null }) => {
-    didConnectRef.current = false;
-    const sourceId = String(params?.nodeId ?? "").trim();
-    if (!sourceId) {
-      connectStartRef.current = null;
-      return;
-    }
-    const sourceHandle = String(params?.handleId ?? "out");
-    connectStartRef.current = { sourceId, sourceHandle };
-  }, []);
-
-  const onLocalConnect = useCallback(
-    (connection: Connection) => {
-      didConnectRef.current = true;
-      onConnect(connection);
-    },
-    [onConnect]
-  );
-
-  const onLocalConnectEnd = useCallback(
-    (event: MouseEvent | TouchEvent) => {
-      const started = connectStartRef.current;
-      connectStartRef.current = null;
-
-      if (!started || didConnectRef.current) {
-        return;
-      }
-
-      const flow = flowRef.current;
-      if (!flow) {
-        return;
-      }
-      const point = eventClientPoint(event);
-      if (!point) {
-        return;
-      }
-      const flowPoint = flow.screenToFlowPosition(point);
-      const zoom = typeof flow.getZoom === "function" ? flow.getZoom() : 1;
-      const thresholdFlow = 42 / Math.max(zoom, 0.001);
-      const target = findSnapTargetInput({
-        flowPoint,
-        nodes: flow.getNodes() as unknown as SnapNodeInput[],
-        sourceNodeId: started.sourceId,
-        thresholdFlow
-      });
-      if (!target) {
-        return;
-      }
-      onConnect({
-        source: started.sourceId,
-        sourceHandle: started.sourceHandle || "out",
-        target: target.nodeId,
-        targetHandle: target.handleId
-      });
-    },
-    [onConnect]
-  );
-
-  return (
-    <ReactFlow
-      nodes={localNodes}
-      edges={edges}
-      nodeTypes={nodeTypes}
-      fitView
-      elementsSelectable
-      nodesDraggable
-      nodesConnectable
-      zoomOnDoubleClick={false}
-      connectionRadius={42}
-      connectOnClick
-      onNodesChange={onLocalNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnectStart={onLocalConnectStart}
-      onConnect={onLocalConnect}
-      onConnectEnd={onLocalConnectEnd}
-      onNodeClick={onNodeClick}
-      onNodeDragStop={commitPositions}
-      onSelectionDragStop={commitPositions}
-      onInit={(instance) => {
-        flowRef.current = instance;
-        onInit(instance);
-      }}
-    >
-      <MiniMap />
-      <Controls />
-      <Background />
-    </ReactFlow>
-  );
-});
 
 export function App() {
   const [tab, setTab] = useState<TabId>("dashboard");
@@ -444,6 +109,7 @@ export function App() {
 
   const [output, setOutput] = useState<string>("Ready");
   const [flowInstance, setFlowInstance] = useState<ReactFlowInstance<any, any> | null>(null);
+
   const currentPreset = useMemo(() => presets.find((x) => x.preset_id === presetId), [presets, presetId]);
   const currentEditorProfile = useMemo(
     () => editorProfiles.find((item) => item.profile_id === editorProfileId),
@@ -484,7 +150,11 @@ export function App() {
     setEditorYaml(YAML.stringify(spec));
   }
 
-  function selectEditorNode(nodeId: string, spec: GraphSpecInput = editorSpec, positions: Record<string, NodePos> = editorPositions) {
+  function selectEditorNode(
+    nodeId: string,
+    spec: GraphSpecInput = editorSpec,
+    positions: Record<string, NodePos> = editorPositions
+  ) {
     const node = spec.nodes.find((item) => item.id === nodeId);
     if (!node) {
       return;
@@ -519,11 +189,10 @@ export function App() {
       return;
     }
 
-    const selected =
-      spec.nodes.find((node) => node.id === editorSelectedNode)?.id ??
-      spec.nodes[0].id;
+    const selected = spec.nodes.find((node) => node.id === editorSelectedNode)?.id ?? spec.nodes[0].id;
     const src = spec.nodes.find((node) => node.id === editorEdgeSrc)?.id ?? spec.nodes[0].id;
-    const dst = spec.nodes.find((node) => node.id === editorEdgeDst)?.id ?? spec.nodes[Math.min(1, spec.nodes.length - 1)].id;
+    const dst =
+      spec.nodes.find((node) => node.id === editorEdgeDst)?.id ?? spec.nodes[Math.min(1, spec.nodes.length - 1)].id;
 
     setEditorEdgeSrc(src);
     setEditorEdgeDst(dst);
@@ -838,7 +507,9 @@ export function App() {
 
   async function fleetQueryStatus() {
     await runAction("fleet.status", async () => {
-      const path = fleetLogDir.trim() ? `/api/v1/fleet/status?log_dir=${encodeURIComponent(fleetLogDir.trim())}` : "/api/v1/fleet/status";
+      const path = fleetLogDir.trim()
+        ? `/api/v1/fleet/status?log_dir=${encodeURIComponent(fleetLogDir.trim())}`
+        : "/api/v1/fleet/status";
       const resp = await apiRequest<{ [k: string]: unknown }>(path, { baseUrl: apiBase, token });
       setFleetStatus(resp.data);
       setOutput(JSON.stringify(resp, null, 2));
@@ -1149,434 +820,6 @@ export function App() {
     if (nextTab === "governance") void loadGovernance();
   }
 
-  function renderDashboard() {
-    const runningCount = Number(fleetStatus?.running ?? 0);
-    const streamTotal = Number((monitorSnapshot?.snapshot as Record<string, unknown> | undefined)?.streams_total ?? 0);
-    return (
-      <section className="panel-grid">
-        <article className="card accent-a">
-          <h3>Service Health</h3>
-          <p className="metric">{String(health?.service ?? "-")}</p>
-          <p className="hint">security: {String(health?.security_mode ?? "-")}</p>
-        </article>
-        <article className="card accent-b">
-          <h3>Fleet Running</h3>
-          <p className="metric">{runningCount}</p>
-          <p className="hint">active worker processes</p>
-        </article>
-        <article className="card accent-c">
-          <h3>Monitor Streams</h3>
-          <p className="metric">{streamTotal}</p>
-          <p className="hint">discovered pid/log streams</p>
-        </article>
-        <article className="card wide">
-          <div className="row between">
-            <h3>Quick Actions</h3>
-            <button disabled={busy} onClick={() => void loadDashboard()}>
-              Refresh
-            </button>
-          </div>
-          <p className="hint">Monitor shows fleet log/PID streams only. Preset run output is a one-shot session result.</p>
-          <pre>{JSON.stringify({ health, fleetStatus, monitorSnapshot }, null, 2)}</pre>
-        </article>
-      </section>
-    );
-  }
-
-  function renderPresets() {
-    return (
-      <section className="panel-grid">
-        <article className="card wide">
-          <div className="row between wrap">
-            <h3>Preset Catalog</h3>
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={showExperimental}
-                onChange={(e) => {
-                  setShowExperimental(e.target.checked);
-                  void loadPresets();
-                }}
-              />
-              experimental
-            </label>
-          </div>
-          <div className="row wrap">
-            <button disabled={busy} onClick={() => void loadPresets()}>
-              Reload Presets
-            </button>
-            <select value={presetId} onChange={(e) => setPresetId(e.target.value)}>
-              {presets.map((preset) => (
-                <option key={preset.preset_id} value={preset.preset_id}>
-                  {preset.preset_id}
-                </option>
-              ))}
-            </select>
-            <input value={presetInputPath} onChange={(e) => setPresetInputPath(e.target.value)} placeholder="input path" />
-            <input value={presetCameraIndex} onChange={(e) => setPresetCameraIndex(e.target.value)} placeholder="camera index" />
-            <input value={presetDevice} onChange={(e) => setPresetDevice(e.target.value)} placeholder="device (cpu|0)" />
-            <input value={presetModelPath} onChange={(e) => setPresetModelPath(e.target.value)} placeholder="model path" />
-            <input value={presetYoloConf} onChange={(e) => setPresetYoloConf(e.target.value)} placeholder="yolo conf (0..1)" />
-            <input value={presetYoloIou} onChange={(e) => setPresetYoloIou(e.target.value)} placeholder="yolo iou (0..1)" />
-            <input value={presetYoloMaxDet} onChange={(e) => setPresetYoloMaxDet(e.target.value)} placeholder="yolo max det" />
-            <input value={presetLoop} onChange={(e) => setPresetLoop(e.target.value)} placeholder="loop true|false" />
-            <input value={presetMaxEvents} onChange={(e) => setPresetMaxEvents(e.target.value)} placeholder="max events" />
-            <button disabled={busy} onClick={() => void runPreset(true)}>
-              Validate
-            </button>
-            <button disabled={busy} onClick={() => void runPreset(false)}>
-              Run
-            </button>
-          </div>
-          <p className="hint">
-            selected: {currentPreset?.preset_id ?? "-"} {currentPreset?.experimental ? "(experimental)" : ""}
-          </p>
-          <h4>Preset Session Output (One-shot)</h4>
-          <p className="hint">This output is not a fleet monitor stream.</p>
-          <pre>{presetSessionOutput}</pre>
-          <h4>Preset Catalog Payload</h4>
-          <pre>{JSON.stringify(presets, null, 2)}</pre>
-        </article>
-      </section>
-    );
-  }
-
-  function renderFleet() {
-    return (
-      <section className="panel-grid">
-        <article className="card wide">
-          <h3>Fleet Control</h3>
-          <form
-            className="column"
-            onSubmit={(e: FormEvent) => {
-              e.preventDefault();
-              void fleetStart();
-            }}
-          >
-            <div className="row wrap">
-              <input value={fleetConfig} onChange={(e) => setFleetConfig(e.target.value)} placeholder="config path" />
-              <input
-                value={fleetGraphTemplate}
-                onChange={(e) => setFleetGraphTemplate(e.target.value)}
-                placeholder="graph template"
-              />
-              <input value={fleetLogDir} onChange={(e) => setFleetLogDir(e.target.value)} placeholder="log dir (optional)" />
-              <input value={fleetStreams} onChange={(e) => setFleetStreams(e.target.value)} placeholder="stream ids csv" />
-              <input value={fleetExtraArgs} onChange={(e) => setFleetExtraArgs(e.target.value)} placeholder="extra args" />
-            </div>
-            <div className="row wrap">
-              <button type="submit" disabled={busy}>
-                Start
-              </button>
-              <button type="button" disabled={busy} onClick={() => void fleetStop()}>
-                Stop
-              </button>
-              <button type="button" disabled={busy} onClick={() => void fleetQueryStatus()}>
-                Status
-              </button>
-            </div>
-          </form>
-          <pre>{JSON.stringify(fleetStatus, null, 2)}</pre>
-        </article>
-      </section>
-    );
-  }
-
-  function renderMonitor() {
-    const rows =
-      (monitorSnapshot?.snapshot as Record<string, unknown> | undefined)?.streams &&
-      Array.isArray((monitorSnapshot?.snapshot as Record<string, unknown>).streams)
-        ? ((monitorSnapshot?.snapshot as Record<string, unknown>).streams as Record<string, unknown>[])
-        : [];
-
-    return (
-      <section className="panel-grid">
-        <article className="card wide">
-          <div className="row between">
-            <h3>Monitor Snapshot</h3>
-            <button disabled={busy} onClick={() => void monitorQuerySnapshot()}>
-              Refresh
-            </button>
-          </div>
-          <p className="hint">Monitor tracks fleet logs/PIDs only. Use Fleet Start to populate stream rows.</p>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>stream_id</th>
-                  <th>status</th>
-                  <th>pid</th>
-                  <th>events_total</th>
-                  <th>eps_window</th>
-                  <th>last_error_tail</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, index) => (
-                  <tr key={`${String(row.stream_id)}-${index}`}>
-                    <td>{String(row.stream_id ?? "-")}</td>
-                    <td>{String(row.status ?? "-")}</td>
-                    <td>{String(row.pid ?? "-")}</td>
-                    <td>{String(row.events_total ?? "-")}</td>
-                    <td>{String(row.eps_window ?? "-")}</td>
-                    <td>{String(row.last_error_tail ?? "-")}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
-      </section>
-    );
-  }
-
-  function renderEditor() {
-    return (
-      <section className="panel-grid">
-        <article className="card wide">
-          <div className="row between wrap">
-            <h3>Block Editor MVP</h3>
-            <p className="hint">Graph run is a one-shot session action and not part of Fleet monitor rows.</p>
-          </div>
-
-          <div className="row wrap">
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={editorAllowExperimental}
-                onChange={(e) => {
-                  setEditorAllowExperimental(e.target.checked);
-                  void loadEditorProfiles();
-                }}
-              />
-              experimental profiles
-            </label>
-            <button disabled={busy} onClick={() => void loadEditorProfiles()}>
-              Reload Profiles
-            </button>
-            <select value={editorProfileId} onChange={(e) => setEditorProfileId(e.target.value)}>
-              {editorProfiles.map((item) => (
-                <option key={item.profile_id} value={item.profile_id}>
-                  {item.profile_id}
-                </option>
-              ))}
-            </select>
-            <button disabled={busy} onClick={() => void editorLoadFromProfile()}>
-              Load Profile
-            </button>
-            <span className="hint">
-              selected: {currentEditorProfile?.profile_id ?? "-"}
-              {currentEditorProfile?.experimental ? " (experimental)" : ""}
-            </span>
-          </div>
-
-          <div className="row wrap">
-            <input value={editorInputPath} onChange={(e) => setEditorInputPath(e.target.value)} placeholder="override input path" />
-            <input
-              value={editorCameraIndex}
-              onChange={(e) => setEditorCameraIndex(e.target.value)}
-              placeholder="override camera index"
-            />
-            <input value={editorDevice} onChange={(e) => setEditorDevice(e.target.value)} placeholder="override device" />
-            <input value={editorModelPath} onChange={(e) => setEditorModelPath(e.target.value)} placeholder="override model path" />
-            <input value={editorLoop} onChange={(e) => setEditorLoop(e.target.value)} placeholder="override loop true|false" />
-            <input value={editorMaxEvents} onChange={(e) => setEditorMaxEvents(e.target.value)} placeholder="max events" />
-          </div>
-
-          <div className="row wrap">
-            <button disabled={busy} onClick={() => addEditorNode("source")}>
-              Add Source
-            </button>
-            <button disabled={busy} onClick={() => addEditorNode("node")}>
-              Add Node
-            </button>
-            <button disabled={busy} onClick={() => addEditorNode("sink")}>
-              Add Sink
-            </button>
-            <select value={editorEdgeSrc} onChange={(e) => setEditorEdgeSrc(e.target.value)}>
-              {editorSpec.nodes.map((node) => (
-                <option key={`src-${node.id}`} value={node.id}>
-                  {node.id}
-                </option>
-              ))}
-            </select>
-            <select value={editorEdgeDst} onChange={(e) => setEditorEdgeDst(e.target.value)}>
-              {editorSpec.nodes.map((node) => (
-                <option key={`dst-${node.id}`} value={node.id}>
-                  {node.id}
-                </option>
-              ))}
-            </select>
-            <button disabled={busy} onClick={() => addEditorEdge()}>
-              Add Edge
-            </button>
-            <button disabled={busy} onClick={() => autoLayoutEditor()}>
-              Auto Layout
-            </button>
-            <button disabled={busy} onClick={() => alignEditor("horizontal")}>
-              Align Horizontal
-            </button>
-            <button disabled={busy} onClick={() => alignEditor("vertical")}>
-              Align Vertical
-            </button>
-            <button disabled={busy} onClick={() => fitEditorView()}>
-              Fit View
-            </button>
-          </div>
-
-          <div className="editor-canvas" data-testid="editor-canvas">
-            <EditorCanvas
-              nodes={flowNodes}
-              edges={flowEdges}
-              nodeTypes={editorNodeTypes}
-              onNodesRemoved={onCanvasNodesRemoved}
-              onPositionsCommit={onCanvasPositionsCommit}
-              onEdgesChange={onFlowEdgesChange}
-              onConnect={onFlowConnect}
-              onInit={(instance) => setFlowInstance(instance)}
-              onNodeSelect={onCanvasNodeSelect}
-            />
-          </div>
-
-          <div className="editor-two-col">
-            <section>
-              <h4>Selected Node</h4>
-              <div className="row wrap">
-                <select
-                  value={editorSelectedNode}
-                  onChange={(e) => {
-                    const next = e.target.value;
-                    setEditorSelectedNode(next);
-                    selectEditorNode(next);
-                  }}
-                >
-                  {editorSpec.nodes.map((node) => (
-                    <option key={`node-${node.id}`} value={node.id}>
-                      {node.id}
-                    </option>
-                  ))}
-                </select>
-                <input value={editorNodeId} onChange={(e) => setEditorNodeId(e.target.value)} placeholder="node id" />
-                <input value={editorNodeKind} onChange={(e) => setEditorNodeKind(e.target.value)} placeholder="kind" />
-                <input value={editorNodePlugin} onChange={(e) => setEditorNodePlugin(e.target.value)} placeholder="plugin" />
-                <input value={editorNodePosX} onChange={(e) => setEditorNodePosX(e.target.value)} placeholder="x" />
-                <input value={editorNodePosY} onChange={(e) => setEditorNodePosY(e.target.value)} placeholder="y" />
-                <button disabled={busy} onClick={() => saveSelectedNode()}>
-                  Save Node
-                </button>
-                <button disabled={busy} onClick={() => removeSelectedNode()}>
-                  Remove Node
-                </button>
-              </div>
-              <textarea
-                value={editorNodeConfig}
-                onChange={(e) => setEditorNodeConfig(e.target.value)}
-                rows={10}
-                className="code-area"
-              />
-            </section>
-            <section>
-              <h4>Edges</h4>
-              <div className="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>src</th>
-                      <th>dst</th>
-                      <th>src_port</th>
-                      <th>dst_port</th>
-                      <th>action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {editorSpec.edges.map((edge, idx) => (
-                      <tr key={`edge-${idx}-${edge.src}-${edge.dst}`}>
-                        <td>{edge.src}</td>
-                        <td>{edge.dst}</td>
-                        <td>{edge.src_port ?? ""}</td>
-                        <td>{edge.dst_port ?? ""}</td>
-                        <td>
-                          <button disabled={busy} onClick={() => removeEditorEdge(idx)}>
-                            remove
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          </div>
-
-          <h4>YAML Import / Export</h4>
-          <div className="row wrap">
-            <button disabled={busy} onClick={() => exportYaml()}>
-              Export YAML
-            </button>
-            <button disabled={busy} onClick={() => importYaml()}>
-              Import YAML
-            </button>
-            <button disabled={busy} onClick={() => void editorValidate()}>
-              Validate Graph
-            </button>
-            <button disabled={busy} onClick={() => void editorRun()}>
-              Run Graph
-            </button>
-          </div>
-          <textarea
-            value={editorYaml}
-            onChange={(e) => setEditorYaml(e.target.value)}
-            rows={14}
-            className="code-area"
-            placeholder="version: 2"
-          />
-
-          <h4>Validation Summary</h4>
-          <div className={`validation-badge ${editorValidationSummary?.status ?? "idle"}`}>
-            {editorValidationSummary ? (
-              <>
-                <strong>{editorValidationSummary.status.toUpperCase()}</strong>
-                <span>nodes={editorValidationSummary.nodeCount}</span>
-                <span>edges={editorValidationSummary.edgeCount}</span>
-                <span>{editorValidationSummary.message}</span>
-              </>
-            ) : (
-              <span>No validation run yet.</span>
-            )}
-          </div>
-
-          <h4>Editor Action Log</h4>
-          <pre>{editorActionLog}</pre>
-
-          <h4>Editor API Output</h4>
-          <pre>{editorApiOutput}</pre>
-        </article>
-      </section>
-    );
-  }
-
-  function renderGovernance() {
-    return (
-      <section className="panel-grid">
-        <article className="card wide">
-          <div className="row wrap between">
-            <h3>Governance Snapshot</h3>
-            <div className="row wrap">
-              <input value={auditLimit} onChange={(e) => setAuditLimit(e.target.value)} placeholder="audit limit" />
-              <button disabled={busy} onClick={() => void loadGovernance()}>
-                Refresh
-              </button>
-            </div>
-          </div>
-          <h4>Policy Snapshot</h4>
-          <pre>{JSON.stringify(policySnapshot, null, 2)}</pre>
-          <h4>Audit Tail</h4>
-          <pre>{JSON.stringify(auditRows, null, 2)}</pre>
-        </article>
-      </section>
-    );
-  }
-
   return (
     <div className="shell">
       <header className="topbar">
@@ -1603,24 +846,173 @@ export function App() {
 
       <nav className="tabs" aria-label="primary tabs">
         {TABS.map((item) => (
-          <button
-            key={item.id}
-            className={tab === item.id ? "active" : ""}
-            onClick={() => handleTabClick(item.id)}
-            disabled={busy}
-          >
+          <button key={item.id} className={tab === item.id ? "active" : ""} onClick={() => handleTabClick(item.id)} disabled={busy}>
             {item.label}
           </button>
         ))}
       </nav>
 
       <main>
-        {tab === "dashboard" && renderDashboard()}
-        {tab === "presets" && renderPresets()}
-        {tab === "fleet" && renderFleet()}
-        {tab === "monitor" && renderMonitor()}
-        {tab === "editor" && renderEditor()}
-        {tab === "governance" && renderGovernance()}
+        {tab === "dashboard" && (
+          <DashboardSection
+            busy={busy}
+            health={health}
+            fleetStatus={fleetStatus}
+            monitorSnapshot={monitorSnapshot}
+            onRefresh={() => void loadDashboard()}
+          />
+        )}
+
+        {tab === "presets" && (
+          <PresetsSection
+            busy={busy}
+            showExperimental={showExperimental}
+            onToggleExperimental={(value) => {
+              setShowExperimental(value);
+              void loadPresets();
+            }}
+            onReload={() => void loadPresets()}
+            presetId={presetId}
+            onPresetIdChange={setPresetId}
+            presets={presets}
+            presetInputPath={presetInputPath}
+            onPresetInputPathChange={setPresetInputPath}
+            presetCameraIndex={presetCameraIndex}
+            onPresetCameraIndexChange={setPresetCameraIndex}
+            presetDevice={presetDevice}
+            onPresetDeviceChange={setPresetDevice}
+            presetModelPath={presetModelPath}
+            onPresetModelPathChange={setPresetModelPath}
+            presetYoloConf={presetYoloConf}
+            onPresetYoloConfChange={setPresetYoloConf}
+            presetYoloIou={presetYoloIou}
+            onPresetYoloIouChange={setPresetYoloIou}
+            presetYoloMaxDet={presetYoloMaxDet}
+            onPresetYoloMaxDetChange={setPresetYoloMaxDet}
+            presetLoop={presetLoop}
+            onPresetLoopChange={setPresetLoop}
+            presetMaxEvents={presetMaxEvents}
+            onPresetMaxEventsChange={setPresetMaxEvents}
+            onValidate={() => void runPreset(true)}
+            onRun={() => void runPreset(false)}
+            currentPreset={currentPreset}
+            presetSessionOutput={presetSessionOutput}
+          />
+        )}
+
+        {tab === "fleet" && (
+          <FleetSection
+            busy={busy}
+            fleetConfig={fleetConfig}
+            onFleetConfigChange={setFleetConfig}
+            fleetGraphTemplate={fleetGraphTemplate}
+            onFleetGraphTemplateChange={setFleetGraphTemplate}
+            fleetLogDir={fleetLogDir}
+            onFleetLogDirChange={setFleetLogDir}
+            fleetStreams={fleetStreams}
+            onFleetStreamsChange={setFleetStreams}
+            fleetExtraArgs={fleetExtraArgs}
+            onFleetExtraArgsChange={setFleetExtraArgs}
+            onStart={() => void fleetStart()}
+            onStop={() => void fleetStop()}
+            onStatus={() => void fleetQueryStatus()}
+            fleetStatus={fleetStatus}
+          />
+        )}
+
+        {tab === "monitor" && (
+          <MonitorSection
+            busy={busy}
+            monitorSnapshot={monitorSnapshot}
+            onRefresh={() => void monitorQuerySnapshot()}
+          />
+        )}
+
+        {tab === "editor" && (
+          <EditorTab
+            busy={busy}
+            editorAllowExperimental={editorAllowExperimental}
+            onEditorAllowExperimentalChange={(value) => {
+              setEditorAllowExperimental(value);
+              void loadEditorProfiles();
+            }}
+            onReloadProfiles={() => void loadEditorProfiles()}
+            editorProfileId={editorProfileId}
+            onEditorProfileIdChange={setEditorProfileId}
+            editorProfiles={editorProfiles}
+            onLoadProfile={() => void editorLoadFromProfile()}
+            currentEditorProfile={currentEditorProfile}
+            editorInputPath={editorInputPath}
+            onEditorInputPathChange={setEditorInputPath}
+            editorCameraIndex={editorCameraIndex}
+            onEditorCameraIndexChange={setEditorCameraIndex}
+            editorDevice={editorDevice}
+            onEditorDeviceChange={setEditorDevice}
+            editorModelPath={editorModelPath}
+            onEditorModelPathChange={setEditorModelPath}
+            editorLoop={editorLoop}
+            onEditorLoopChange={setEditorLoop}
+            editorMaxEvents={editorMaxEvents}
+            onEditorMaxEventsChange={setEditorMaxEvents}
+            onAddNode={addEditorNode}
+            editorEdgeSrc={editorEdgeSrc}
+            onEditorEdgeSrcChange={setEditorEdgeSrc}
+            editorEdgeDst={editorEdgeDst}
+            onEditorEdgeDstChange={setEditorEdgeDst}
+            onAddEdge={addEditorEdge}
+            onAutoLayout={autoLayoutEditor}
+            onAlignHorizontal={() => alignEditor("horizontal")}
+            onAlignVertical={() => alignEditor("vertical")}
+            onFitView={fitEditorView}
+            flowNodes={flowNodes}
+            flowEdges={flowEdges}
+            onCanvasNodesRemoved={onCanvasNodesRemoved}
+            onCanvasPositionsCommit={onCanvasPositionsCommit}
+            onFlowEdgesChange={onFlowEdgesChange}
+            onFlowConnect={onFlowConnect}
+            onFlowInit={(instance) => setFlowInstance(instance)}
+            onCanvasNodeSelect={onCanvasNodeSelect}
+            editorSpec={editorSpec}
+            editorSelectedNode={editorSelectedNode}
+            onEditorSelectedNodeChange={setEditorSelectedNode}
+            onSelectEditorNode={selectEditorNode}
+            editorNodeId={editorNodeId}
+            onEditorNodeIdChange={setEditorNodeId}
+            editorNodeKind={editorNodeKind}
+            onEditorNodeKindChange={setEditorNodeKind}
+            editorNodePlugin={editorNodePlugin}
+            onEditorNodePluginChange={setEditorNodePlugin}
+            editorNodePosX={editorNodePosX}
+            onEditorNodePosXChange={setEditorNodePosX}
+            editorNodePosY={editorNodePosY}
+            onEditorNodePosYChange={setEditorNodePosY}
+            onSaveNode={saveSelectedNode}
+            onRemoveNode={removeSelectedNode}
+            editorNodeConfig={editorNodeConfig}
+            onEditorNodeConfigChange={setEditorNodeConfig}
+            onRemoveEditorEdge={removeEditorEdge}
+            onExportYaml={exportYaml}
+            onImportYaml={importYaml}
+            onValidateGraph={() => void editorValidate()}
+            onRunGraph={() => void editorRun()}
+            editorYaml={editorYaml}
+            onEditorYamlChange={setEditorYaml}
+            editorValidationSummary={editorValidationSummary}
+            editorActionLog={editorActionLog}
+            editorApiOutput={editorApiOutput}
+          />
+        )}
+
+        {tab === "governance" && (
+          <GovernanceSection
+            busy={busy}
+            auditLimit={auditLimit}
+            onAuditLimitChange={setAuditLimit}
+            onRefresh={() => void loadGovernance()}
+            policySnapshot={policySnapshot}
+            auditRows={auditRows}
+          />
+        )}
       </main>
     </div>
   );
