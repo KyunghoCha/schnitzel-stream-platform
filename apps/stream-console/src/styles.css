@@ -207,6 +207,33 @@ textarea.code-area {
   overflow: auto;
 }
 
+.validation-badge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  font-size: 0.82rem;
+}
+
+.validation-badge.ok {
+  border-color: rgba(21, 183, 163, 0.55);
+  background: rgba(21, 183, 163, 0.12);
+}
+
+.validation-badge.error {
+  border-color: rgba(255, 92, 116, 0.55);
+  background: rgba(255, 92, 116, 0.12);
+}
+
+.validation-badge.idle {
+  border-color: rgba(156, 179, 197, 0.45);
+  background: rgba(156, 179, 197, 0.08);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

@@ -45,6 +45,13 @@ type GraphProfileItem = {
 
 type NodePos = { x: number; y: number };
 
+type EditorValidationSummary = {
+  status: "ok" | "error";
+  nodeCount: number;
+  edgeCount: number;
+  message: string;
+};
+
 const TABS: Array<{ id: TabId; label: string }> = [
   { id: "dashboard", label: "Dashboard" },
   { id: "presets", label: "Presets" },
@@ -149,6 +156,21 @@ function edgeIdentity(edge: { src: string; dst: string; src_port?: string; dst_p
   return `${edge.src}|${edge.dst}|${edge.src_port ?? "*"}|${edge.dst_port ?? "*"}|${index}`;
 }
 
+function parseEditorValidationSummary(raw: unknown): EditorValidationSummary | null {
+  if (!raw || typeof raw !== "object") return null;
+  const row = raw as Record<string, unknown>;
+  const ok = Boolean(row.ok);
+  const nodeCount = Number(row.node_count ?? row.nodeCount ?? 0);
+  const edgeCount = Number(row.edge_count ?? row.edgeCount ?? 0);
+  const errorText = String(row.error ?? row.reason ?? "").trim();
+  return {
+    status: ok ? "ok" : "error",
+    nodeCount: Number.isFinite(nodeCount) ? nodeCount : 0,
+    edgeCount: Number.isFinite(edgeCount) ? edgeCount : 0,
+    message: ok ? "graph validation passed" : errorText || "graph validation failed"
+  };
+}
+
 function toNumber(value: string): number | undefined {
   const txt = value.trim();
   if (!txt) return undefined;
@@ -205,7 +227,9 @@ export function App() {
     out: { x: 420, y: 100 }
   });
   const [editorYaml, setEditorYaml] = useState<string>(() => YAML.stringify(defaultSpec()));
-  const [editorOutput, setEditorOutput] = useState<string>("(no editor action yet)");
+  const [editorActionLog, setEditorActionLog] = useState<string>("(no local editor action yet)");
+  const [editorApiOutput, setEditorApiOutput] = useState<string>("(no editor API output yet)");
+  const [editorValidationSummary, setEditorValidationSummary] = useState<EditorValidationSummary | null>(null);
   const [editorProfiles, setEditorProfiles] = useState<GraphProfileItem[]>([]);
   const [editorProfileId, setEditorProfileId] = useState<string>("inproc_demo");
   const [editorAllowExperimental, setEditorAllowExperimental] = useState<boolean>(false);
@@ -288,6 +312,7 @@ export function App() {
     setEditorSpec(spec);
     setEditorPositions(positions);
     syncEditorYaml(spec);
+    setEditorValidationSummary(null);
 
     if (!spec.nodes.length) {
       setEditorSelectedNode("");
@@ -311,6 +336,14 @@ export function App() {
     setEditorEdgeSrc(src);
     setEditorEdgeDst(dst);
     selectEditorNode(selected, spec, positions);
+  }
+
+  function writeEditorAction(payload: unknown): void {
+    setEditorActionLog(JSON.stringify(payload, null, 2));
+  }
+
+  function writeEditorApi(payload: unknown): void {
+    setEditorApiOutput(JSON.stringify(payload, null, 2));
   }
 
   const onFlowNodesChange = useCallback(
@@ -339,16 +372,10 @@ export function App() {
           },
           nextPositions
         );
-        setEditorOutput(
-          JSON.stringify(
-            {
-              action: "editor.node.remove.canvas",
-              node_ids: removedNodeIds
-            },
-            null,
-            2
-          )
-        );
+        writeEditorAction({
+          action: "editor.node.remove.canvas",
+          node_ids: removedNodeIds
+        });
         return;
       }
 
@@ -386,16 +413,10 @@ export function App() {
         },
         editorPositions
       );
-      setEditorOutput(
-        JSON.stringify(
-          {
-            action: "editor.edge.sync.canvas",
-            edges: nextEdges.length
-          },
-          null,
-          2
-        )
-      );
+      writeEditorAction({
+        action: "editor.edge.sync.canvas",
+        edges: nextEdges.length
+      });
     },
     [editorPositions, editorSpec, flowEdges]
   );
@@ -459,19 +480,13 @@ export function App() {
         },
         editorPositions
       );
-      setEditorOutput(
-        JSON.stringify(
-          {
-            action: "editor.edge.connect.canvas",
-            src,
-            dst,
-            src_port: connection.sourceHandle ?? "",
-            dst_port: connection.targetHandle ?? ""
-          },
-          null,
-          2
-        )
-      );
+      writeEditorAction({
+        action: "editor.edge.connect.canvas",
+        src,
+        dst,
+        src_port: connection.sourceHandle ?? "",
+        dst_port: connection.targetHandle ?? ""
+      });
     },
     [editorPositions, editorSpec, flowEdges]
   );
@@ -487,16 +502,10 @@ export function App() {
   function autoLayoutEditor(): void {
     const nextPositions = computeAutoLayout(editorSpec.nodes, editorSpec.edges);
     applyEditorPositions(nextPositions);
-    setEditorOutput(
-      JSON.stringify(
-        {
-          action: "editor.layout.auto",
-          nodes: editorSpec.nodes.length
-        },
-        null,
-        2
-      )
-    );
+    writeEditorAction({
+      action: "editor.layout.auto",
+      nodes: editorSpec.nodes.length
+    });
     flowInstance?.fitView({ padding: 0.2, duration: 250 });
   }
 
@@ -504,16 +513,10 @@ export function App() {
     const nodeIds = editorSpec.nodes.map((node) => node.id);
     const nextPositions = alignNodePositions(editorPositions, nodeIds, axis);
     applyEditorPositions(nextPositions);
-    setEditorOutput(
-      JSON.stringify(
-        {
-          action: `editor.layout.align.${axis}`,
-          nodes: nodeIds.length
-        },
-        null,
-        2
-      )
-    );
+    writeEditorAction({
+      action: `editor.layout.align.${axis}`,
+      nodes: nodeIds.length
+    });
     flowInstance?.fitView({ padding: 0.2, duration: 250 });
   }
 
@@ -667,7 +670,8 @@ export function App() {
       if (rows.length > 0 && !rows.some((row) => row.profile_id === editorProfileId)) {
         setEditorProfileId(rows[0].profile_id);
       }
-      setEditorOutput(JSON.stringify(resp, null, 2));
+      writeEditorApi(resp);
+      setEditorValidationSummary(null);
     });
   }
 
@@ -709,7 +713,8 @@ export function App() {
         positions[node.id] = defaultPosition(idx);
       });
       applyEditorSpec(spec, positions);
-      setEditorOutput(JSON.stringify(resp, null, 2));
+      writeEditorApi(resp);
+      setEditorValidationSummary(parseEditorValidationSummary((resp.data as Record<string, unknown>).validation));
     });
   }
 
@@ -723,7 +728,8 @@ export function App() {
           spec: editorSpec
         }
       });
-      setEditorOutput(JSON.stringify(resp, null, 2));
+      writeEditorApi(resp);
+      setEditorValidationSummary(parseEditorValidationSummary(resp.data.validation));
     });
   }
 
@@ -742,7 +748,7 @@ export function App() {
           }
         }
       );
-      setEditorOutput(JSON.stringify(resp, null, 2));
+      writeEditorApi(resp);
     });
   }
 
@@ -828,18 +834,12 @@ export function App() {
     setEditorSelectedNode(nextIdRaw);
     setEditorEdgeSrc((prev) => (prev === targetId ? nextIdRaw : prev));
     setEditorEdgeDst((prev) => (prev === targetId ? nextIdRaw : prev));
-    setEditorOutput(
-      JSON.stringify(
-        {
-          action: "editor.node.save",
-          node_id: nextIdRaw,
-          position: { x: nextX, y: nextY },
-          previous_position: oldPos
-        },
-        null,
-        2
-      )
-    );
+    writeEditorAction({
+      action: "editor.node.save",
+      node_id: nextIdRaw,
+      position: { x: nextX, y: nextY },
+      previous_position: oldPos
+    });
   }
 
   function removeSelectedNode() {
@@ -850,7 +850,7 @@ export function App() {
     const nextPositions = { ...editorPositions };
     delete nextPositions[target];
     applyEditorSpec({ ...editorSpec, nodes: nextNodes, edges: nextEdges }, nextPositions);
-    setEditorOutput(JSON.stringify({ action: "editor.node.remove", node_id: target }, null, 2));
+    writeEditorAction({ action: "editor.node.remove", node_id: target });
   }
 
   function addEditorEdge() {
@@ -873,7 +873,7 @@ export function App() {
       edges: [...editorSpec.edges, { src, dst }]
     };
     applyEditorSpec(nextSpec, editorPositions);
-    setEditorOutput(JSON.stringify({ action: "editor.edge.add", src, dst }, null, 2));
+    writeEditorAction({ action: "editor.edge.add", src, dst });
   }
 
   function removeEditorEdge(index: number) {
@@ -881,31 +881,19 @@ export function App() {
     const removed = editorSpec.edges[index];
     const nextEdges = editorSpec.edges.filter((_, idx) => idx !== index);
     applyEditorSpec({ ...editorSpec, edges: nextEdges }, editorPositions);
-    setEditorOutput(
-      JSON.stringify(
-        {
-          action: "editor.edge.remove",
-          edge: removed
-        },
-        null,
-        2
-      )
-    );
+    writeEditorAction({
+      action: "editor.edge.remove",
+      edge: removed
+    });
   }
 
   function exportYaml() {
     syncEditorYaml(editorSpec);
-    setEditorOutput(
-      JSON.stringify(
-        {
-          action: "editor.yaml.export",
-          nodes: editorSpec.nodes.length,
-          edges: editorSpec.edges.length
-        },
-        null,
-        2
-      )
-    );
+    writeEditorAction({
+      action: "editor.yaml.export",
+      nodes: editorSpec.nodes.length,
+      edges: editorSpec.edges.length
+    });
   }
 
   function importYaml() {
@@ -917,17 +905,11 @@ export function App() {
         nextPositions[node.id] = editorPositions[node.id] ?? defaultPosition(idx);
       });
       applyEditorSpec(normalized, nextPositions);
-      setEditorOutput(
-        JSON.stringify(
-          {
-            action: "editor.yaml.import",
-            nodes: normalized.nodes.length,
-            edges: normalized.edges.length
-          },
-          null,
-          2
-        )
-      );
+      writeEditorAction({
+        action: "editor.yaml.import",
+        nodes: normalized.nodes.length,
+        edges: normalized.edges.length
+      });
     } catch (err) {
       setOutput(`[ERROR] editor.yaml.import: ${String(err)}`);
     }
@@ -1331,8 +1313,25 @@ export function App() {
             placeholder="version: 2"
           />
 
+          <h4>Validation Summary</h4>
+          <div className={`validation-badge ${editorValidationSummary?.status ?? "idle"}`}>
+            {editorValidationSummary ? (
+              <>
+                <strong>{editorValidationSummary.status.toUpperCase()}</strong>
+                <span>nodes={editorValidationSummary.nodeCount}</span>
+                <span>edges={editorValidationSummary.edgeCount}</span>
+                <span>{editorValidationSummary.message}</span>
+              </>
+            ) : (
+              <span>No validation run yet.</span>
+            )}
+          </div>
+
+          <h4>Editor Action Log</h4>
+          <pre>{editorActionLog}</pre>
+
           <h4>Editor API Output</h4>
-          <pre>{editorOutput}</pre>
+          <pre>{editorApiOutput}</pre>
         </article>
       </section>
     );
