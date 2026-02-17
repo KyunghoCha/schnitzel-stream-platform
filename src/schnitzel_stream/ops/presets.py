@@ -97,6 +97,10 @@ def build_preset_env(
     camera_index: int | None = None,
     device: str = "",
     loop: str = "",
+    model_path: str = "",
+    yolo_conf: float | None = None,
+    yolo_iou: float | None = None,
+    yolo_max_det: int | None = None,
 ) -> dict[str, str]:
     env = dict(existing_env or os.environ)
     py_path = str((repo_root / "src").resolve())
@@ -114,6 +118,14 @@ def build_preset_env(
         env["SS_YOLO_DEVICE"] = str(device)
     if loop:
         env["SS_INPUT_LOOP"] = str(loop)
+    if model_path:
+        env["SS_YOLO_MODEL_PATH"] = resolve_input_path(str(model_path), repo_root=repo_root)
+    if yolo_conf is not None:
+        env["SS_YOLO_CONF"] = str(float(yolo_conf))
+    if yolo_iou is not None:
+        env["SS_YOLO_IOU"] = str(float(yolo_iou))
+    if yolo_max_det is not None:
+        env["SS_YOLO_MAX_DET"] = str(int(yolo_max_det))
 
     return env
 
