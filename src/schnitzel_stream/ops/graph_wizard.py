@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import re
 from string import Template
-from typing import Mapping
+from typing import Any, Mapping
 
 from omegaconf import OmegaConf
 
@@ -47,6 +47,16 @@ class GraphWizardGeneration:
     experimental: bool
     overrides: Mapping[str, str]
     max_events: int | None
+
+
+@dataclass(frozen=True)
+class GraphWizardRendered:
+    profile_id: str
+    template_path: Path
+    experimental: bool
+    overrides: Mapping[str, str]
+    max_events: int | None
+    yaml_text: str
 
 
 @dataclass(frozen=True)
@@ -218,6 +228,90 @@ def _build_header(*, profile: GraphWizardProfile, overrides: Mapping[str, str]) 
     )
 
 
+def _resolve_profile(
+    *,
+    table: Mapping[str, GraphWizardProfile],
+    profile_id: str,
+    allow_experimental: bool,
+) -> GraphWizardProfile:
+    profile = table.get(str(profile_id).strip())
+    if profile is None:
+        raise GraphWizardUsageError(f"unknown profile: {profile_id}")
+    if profile.experimental and not allow_experimental:
+        # Intent: expensive/optional dependency profiles stay opt-in to keep default flows deterministic.
+        raise GraphWizardPreconditionError(
+            f"profile '{profile.profile_id}' is experimental. Re-run with --experimental.",
+        )
+    return profile
+
+
+def render_profile_yaml(
+    *,
+    repo_root: Path,
+    table: Mapping[str, GraphWizardProfile],
+    profile_id: str,
+    allow_experimental: bool,
+    input_path: str = "",
+    camera_index: int | None = None,
+    device: str = "",
+    model_path: str = "",
+    loop: str = "",
+    max_events: int | None = None,
+) -> GraphWizardRendered:
+    profile = _resolve_profile(table=table, profile_id=profile_id, allow_experimental=allow_experimental)
+
+    context, overrides = _build_context(
+        repo_root=repo_root,
+        profile=profile,
+        input_path=input_path,
+        camera_index=camera_index,
+        device=device,
+        model_path=model_path,
+        loop=loop,
+        max_events=max_events,
+    )
+    rendered = _render_template(template_path=profile.template_path, context=context)
+    return GraphWizardRendered(
+        profile_id=profile.profile_id,
+        template_path=profile.template_path,
+        experimental=profile.experimental,
+        overrides=overrides,
+        max_events=max_events,
+        yaml_text=rendered,
+    )
+
+
+def render_profile_spec(
+    *,
+    repo_root: Path,
+    table: Mapping[str, GraphWizardProfile],
+    profile_id: str,
+    allow_experimental: bool,
+    input_path: str = "",
+    camera_index: int | None = None,
+    device: str = "",
+    model_path: str = "",
+    loop: str = "",
+    max_events: int | None = None,
+) -> tuple[dict[str, Any], GraphWizardRendered]:
+    rendered = render_profile_yaml(
+        repo_root=repo_root,
+        table=table,
+        profile_id=profile_id,
+        allow_experimental=allow_experimental,
+        input_path=input_path,
+        camera_index=camera_index,
+        device=device,
+        model_path=model_path,
+        loop=loop,
+        max_events=max_events,
+    )
+    raw = OmegaConf.to_container(OmegaConf.create(rendered.yaml_text), resolve=True)
+    if not isinstance(raw, dict):
+        raise GraphWizardPreconditionError("rendered profile must produce a mapping graph spec")
+    return dict(raw), rendered
+
+
 def generate_graph(
     *,
     repo_root: Path,
@@ -232,23 +326,16 @@ def generate_graph(
     loop: str = "",
     max_events: int | None = None,
 ) -> GraphWizardGeneration:
-    profile = table.get(str(profile_id).strip())
-    if profile is None:
-        raise GraphWizardUsageError(f"unknown profile: {profile_id}")
-    if profile.experimental and not allow_experimental:
-        # Intent: expensive/optional dependency profiles stay opt-in to keep default flows deterministic.
-        raise GraphWizardPreconditionError(
-            f"profile '{profile.profile_id}' is experimental. Re-run with --experimental.",
-        )
     if not str(out_path).strip():
         raise GraphWizardUsageError("--out is required when --profile is used")
-
     output = _normalize_graph_path(Path(out_path), repo_root=repo_root)
     output.parent.mkdir(parents=True, exist_ok=True)
 
-    context, overrides = _build_context(
+    _spec, rendered = render_profile_spec(
         repo_root=repo_root,
-        profile=profile,
+        table=table,
+        profile_id=profile_id,
+        allow_experimental=allow_experimental,
         input_path=input_path,
         camera_index=camera_index,
         device=device,
@@ -256,16 +343,16 @@ def generate_graph(
         loop=loop,
         max_events=max_events,
     )
-    rendered = _render_template(template_path=profile.template_path, context=context)
-    header = _build_header(profile=profile, overrides=overrides)
-    output.write_text(header + rendered, encoding="utf-8")
+    profile = _resolve_profile(table=table, profile_id=profile_id, allow_experimental=allow_experimental)
+    header = _build_header(profile=profile, overrides=rendered.overrides)
+    output.write_text(header + rendered.yaml_text, encoding="utf-8")
 
     return GraphWizardGeneration(
         profile_id=profile.profile_id,
         output_path=output,
         template_path=profile.template_path,
         experimental=profile.experimental,
-        overrides=overrides,
+        overrides=rendered.overrides,
         max_events=max_events,
     )
 

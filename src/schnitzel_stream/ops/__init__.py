@@ -4,6 +4,7 @@ __all__ = [
     "console",
     "envcheck",
     "fleet",
+    "graph_editor",
     "graph_wizard",
     "monitor",
     "process_manager",
