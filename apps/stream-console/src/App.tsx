@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useMemo, useState } from "react";
+import { FormEvent, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   addEdge,
   applyEdgeChanges,
@@ -11,6 +11,7 @@ import {
   MiniMap,
   Node,
   NodeChange,
+  NodeTypes,
   ReactFlowInstance,
   ReactFlow
 } from "@xyflow/react";
@@ -187,6 +188,101 @@ function toBoolText(value: string): "" | "true" | "false" {
   return "";
 }
 
+type EditorCanvasProps = {
+  nodes: Node[];
+  edges: Edge[];
+  nodeTypes: NodeTypes;
+  onEdgesChange: (changes: EdgeChange[]) => void;
+  onConnect: (connection: Connection) => void;
+  onInit: (instance: ReactFlowInstance<any, any>) => void;
+  onNodeSelect: (nodeId: string) => void;
+  onNodesRemoved: (nodeIds: string[]) => void;
+  onPositionsCommit: (positions: Record<string, NodePos>) => void;
+};
+
+const EditorCanvas = memo(function EditorCanvas({
+  nodes,
+  edges,
+  nodeTypes,
+  onEdgesChange,
+  onConnect,
+  onInit,
+  onNodeSelect,
+  onNodesRemoved,
+  onPositionsCommit
+}: EditorCanvasProps) {
+  const [localNodes, setLocalNodes] = useState<Node[]>(nodes);
+  const localNodesRef = useRef<Node[]>(nodes);
+  const flowRef = useRef<ReactFlowInstance<any, any> | null>(null);
+
+  useEffect(() => {
+    setLocalNodes(nodes);
+  }, [nodes]);
+
+  useEffect(() => {
+    localNodesRef.current = localNodes;
+  }, [localNodes]);
+
+  const commitPositions = useCallback(() => {
+    const currentNodes = flowRef.current?.getNodes?.() ?? localNodesRef.current;
+    const nextPositions: Record<string, NodePos> = {};
+    for (const row of currentNodes) {
+      nextPositions[String(row.id)] = {
+        x: Number(row.position?.x ?? 0),
+        y: Number(row.position?.y ?? 0)
+      };
+    }
+    onPositionsCommit(nextPositions);
+  }, [onPositionsCommit]);
+
+  const onLocalNodesChange = useCallback(
+    (changes: NodeChange[]) => {
+      setLocalNodes((prev) => applyNodeChanges(changes, prev as Node[]));
+      const removed = changes.filter((change) => change.type === "remove").map((change) => String(change.id));
+      if (removed.length > 0) {
+        onNodesRemoved(removed);
+      }
+    },
+    [onNodesRemoved]
+  );
+
+  const onNodeClick = useCallback(
+    (_evt: unknown, node: Node) => {
+      onNodeSelect(String(node.id));
+    },
+    [onNodeSelect]
+  );
+
+  return (
+    <ReactFlow
+      nodes={localNodes}
+      edges={edges}
+      nodeTypes={nodeTypes}
+      fitView
+      elementsSelectable
+      nodesDraggable
+      nodesConnectable
+      zoomOnDoubleClick={false}
+      connectionRadius={42}
+      connectOnClick
+      onNodesChange={onLocalNodesChange}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      onNodeClick={onNodeClick}
+      onNodeDragStop={commitPositions}
+      onSelectionDragStop={commitPositions}
+      onInit={(instance) => {
+        flowRef.current = instance;
+        onInit(instance);
+      }}
+    >
+      <MiniMap />
+      <Controls />
+      <Background />
+    </ReactFlow>
+  );
+});
+
 export function App() {
   const [tab, setTab] = useState<TabId>("dashboard");
   const [apiBase, setApiBase] = useState<string>(defaultApiBase());
@@ -267,6 +363,7 @@ export function App() {
         id: node.id,
         type: kind,
         position: { x: pos.x, y: pos.y },
+        selected: node.id === editorSelectedNode,
         data: {
           id: node.id,
           kind,
@@ -275,7 +372,7 @@ export function App() {
         }
       };
     });
-  }, [editorPositions, editorSpec.nodes]);
+  }, [editorPositions, editorSelectedNode, editorSpec.nodes]);
 
   const flowEdges = useMemo(() => {
     return editorSpec.edges.map((edge, idx) => ({
@@ -346,44 +443,6 @@ export function App() {
     setEditorApiOutput(JSON.stringify(payload, null, 2));
   }
 
-  const onFlowNodesChange = useCallback(
-    (changes: NodeChange[]) => {
-      const nextFlowNodes = applyNodeChanges(changes, flowNodes as Node[]);
-      const nextIds = new Set(nextFlowNodes.map((node) => node.id));
-      const removedNodeIds = editorSpec.nodes.filter((node) => !nextIds.has(node.id)).map((node) => node.id);
-
-      const nextPositions: Record<string, NodePos> = {};
-      for (const node of nextFlowNodes) {
-        nextPositions[node.id] = {
-          x: Number(node.position.x ?? 0),
-          y: Number(node.position.y ?? 0)
-        };
-      }
-
-      if (removedNodeIds.length > 0) {
-        const nextNodes = editorSpec.nodes.filter((node) => !removedNodeIds.includes(node.id));
-        const removedSet = new Set(removedNodeIds);
-        const nextEdges = editorSpec.edges.filter((edge) => !removedSet.has(edge.src) && !removedSet.has(edge.dst));
-        applyEditorSpec(
-          {
-            ...editorSpec,
-            nodes: nextNodes,
-            edges: nextEdges
-          },
-          nextPositions
-        );
-        writeEditorAction({
-          action: "editor.node.remove.canvas",
-          node_ids: removedNodeIds
-        });
-        return;
-      }
-
-      applyEditorPositions(nextPositions);
-    },
-    [editorSpec, flowNodes]
-  );
-
   const onFlowEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       const nextFlowEdges = applyEdgeChanges(changes, flowEdges as Edge[]);
@@ -419,6 +478,53 @@ export function App() {
       });
     },
     [editorPositions, editorSpec, flowEdges]
+  );
+
+  const onCanvasNodesRemoved = useCallback(
+    (nodeIds: string[]) => {
+      if (nodeIds.length === 0) {
+        return;
+      }
+      const removedSet = new Set(nodeIds);
+      const nextNodes = editorSpec.nodes.filter((node) => !removedSet.has(node.id));
+      const nextEdges = editorSpec.edges.filter((edge) => !removedSet.has(edge.src) && !removedSet.has(edge.dst));
+      const nextPositions = { ...editorPositions };
+      for (const id of nodeIds) {
+        delete nextPositions[id];
+      }
+      applyEditorSpec(
+        {
+          ...editorSpec,
+          nodes: nextNodes,
+          edges: nextEdges
+        },
+        nextPositions
+      );
+      writeEditorAction({
+        action: "editor.node.remove.canvas",
+        node_ids: nodeIds
+      });
+    },
+    [editorPositions, editorSpec]
+  );
+
+  const onCanvasPositionsCommit = useCallback(
+    (nextPositions: Record<string, NodePos>) => {
+      applyEditorPositions(nextPositions);
+      writeEditorAction({
+        action: "editor.node.position.commit",
+        nodes: Object.keys(nextPositions).length
+      });
+    },
+    [editorSelectedNode]
+  );
+
+  const onCanvasNodeSelect = useCallback(
+    (nodeId: string) => {
+      setEditorSelectedNode(nodeId);
+      selectEditorNode(nodeId);
+    },
+    [editorPositions, editorSpec]
   );
 
   const onFlowConnect = useCallback(
@@ -1201,23 +1307,17 @@ export function App() {
           </div>
 
           <div className="editor-canvas" data-testid="editor-canvas">
-            <ReactFlow
+            <EditorCanvas
               nodes={flowNodes}
               edges={flowEdges}
               nodeTypes={editorNodeTypes}
-              fitView
-              elementsSelectable
-              nodesDraggable
-              nodesConnectable
-              onNodesChange={onFlowNodesChange}
+              onNodesRemoved={onCanvasNodesRemoved}
+              onPositionsCommit={onCanvasPositionsCommit}
               onEdgesChange={onFlowEdgesChange}
               onConnect={onFlowConnect}
               onInit={(instance) => setFlowInstance(instance)}
-            >
-              <MiniMap />
-              <Controls />
-              <Background />
-            </ReactFlow>
+              onNodeSelect={onCanvasNodeSelect}
+            />
           </div>
 
           <div className="editor-two-col">
