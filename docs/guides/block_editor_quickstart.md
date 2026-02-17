@@ -52,10 +52,12 @@ Open:
 2. Click `Reload Profiles`, choose a profile, then click `Load Profile`.
 3. Drag nodes on the canvas (position is reflected into the editor state).
 4. Create edges by connecting node handles directly on canvas.
+   - If you drop near/on a target node body, editor snaps to nearest input handle.
+   - Hybrid guard blocks `sink -> *`, `* -> source`, self-loop, and exact duplicate edges.
 5. Use toolbar actions:
    - `Auto Layout`: deterministic DAG-layer layout (cycle-safe fallback)
-   - `Align Horizontal`
-   - `Align Vertical`
+   - `Align Horizontal`: selected-first if 2+ nodes are selected, otherwise whole graph
+   - `Align Vertical`: selected-first if 2+ nodes are selected, otherwise whole graph
    - `Fit View`
 6. Select a node and edit properties (`id`, `kind`, `plugin`, `config`) then click `Save Node`.
 7. Run `Validate Graph` and check the validation badge (`ok/error`, node/edge counts, message).
@@ -135,10 +137,12 @@ python3 scripts/stream_console.py up --allow-local-mutations
 2. `Reload Profiles`로 목록을 갱신하고 프로필을 선택한 뒤 `Load Profile`을 누른다.
 3. 캔버스에서 노드를 드래그해 위치를 조정한다.
 4. 노드 핸들을 직접 연결해 엣지를 생성한다.
+   - 타깃 노드 본체/근처에 드롭하면 가장 가까운 입력 핸들로 스냅 연결된다.
+   - 하이브리드 가드로 `sink -> *`, `* -> source`, self-loop, 완전 중복 엣지는 차단된다.
 5. 툴바 액션을 사용한다.
    - `Auto Layout`: DAG 레이어 기반 자동 배치(사이클 포함 그래프도 안전 fallback)
-   - `Align Horizontal`
-   - `Align Vertical`
+   - `Align Horizontal`: 선택 노드 2개 이상이면 선택 우선, 아니면 전체 정렬
+   - `Align Vertical`: 선택 노드 2개 이상이면 선택 우선, 아니면 전체 정렬
    - `Fit View`
 6. 노드를 선택해 `id`, `kind`, `plugin`, `config`를 수정하고 `Save Node`를 누른다.
 7. `Validate Graph` 실행 후 검증 배지(`ok/error`, 노드/엣지 수, 핵심 메시지)를 확인한다.

@@ -216,7 +216,10 @@ python scripts/stream_console.py up --allow-local-mutations
 
 - Supports: node placement/link/property editing, YAML import/export, validate/run.
 - Direct manipulation: drag nodes on canvas and connect edges via handles.
+- Snap connect: dropping near/on a node body snaps to nearest input handle.
+- Hybrid edge guard: blocks `sink -> *`, `* -> source`, self-loop, and exact duplicates.
 - Built-in layout actions: `Auto Layout`, `Align Horizontal`, `Align Vertical`, `Fit View`.
+- Align policy: selected-first (if 2+ selected nodes) with overlap-safe packing.
 - Validation view: status badge (`ok/error`), node/edge counts, readable failure summary.
 - Compatibility: manual Add Edge form is still kept for one cycle.
 - Detailed guide: `docs/guides/block_editor_quickstart.md`
@@ -490,7 +493,10 @@ python scripts/stream_console.py up --allow-local-mutations
 
 - 지원 범위: 노드 배치/연결/속성 편집, YAML import/export, validate/run
 - 직접 조작: 캔버스에서 노드를 드래그하고 핸들 연결로 엣지를 생성
+- 스냅 연결: 노드 본체/근처에 드롭하면 가장 가까운 입력 핸들로 자동 연결
+- 하이브리드 연결 가드: `sink -> *`, `* -> source`, self-loop, 완전 중복 엣지 차단
 - 내장 정렬 액션: `Auto Layout`, `Align Horizontal`, `Align Vertical`, `Fit View`
+- 정렬 정책: 선택 노드가 2개 이상이면 선택 우선 정렬 + 겹침 방지 패킹
 - 검증 표시: 상태 배지(`ok/error`), 노드/엣지 수, 읽기 쉬운 실패 요약
 - 호환성: 수동 Add Edge 폼은 1사이클 동안 유지
 - 상세 가이드: `docs/guides/block_editor_quickstart.md`

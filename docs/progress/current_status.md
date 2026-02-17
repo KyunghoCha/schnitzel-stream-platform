@@ -6,7 +6,7 @@ Last updated: 2026-02-17
 
 - Runtime baseline: v2 node graph only
 - Legacy runtime: removed from `main` (`P4.5` complete)
-- Execution SSOT current step id: `P23.9` (block editor interaction hotfix in progress)
+- Execution SSOT current step id: `P23.9` (block editor interaction hotfix completed)
 - P10 hardening track (`P10.1`~`P10.5`) completed
 - P11 demo track (`P11.1`~`P11.6`) completed
 - P12 foundation track completed (`P12.1`~`P12.7`: validator-first process graph scope)
@@ -21,7 +21,7 @@ Last updated: 2026-02-17
 - P21 dependency-first track completed (`P21.0`~`P21.8`: dependency baseline + bootstrap/env doctor alignment + graph editor ops/API/UI + CI/docs sync)
 - P22 onboarding closure track completed (`P22.1`~`P22.8`: bootstrap contract hardening + setup parity + doctor/console guidance + onboarding CI/docs sync)
 - P23 block editor hardening baseline completed (`P23.1`~`P23.8`: direct manipulation + kind visuals + built-in layout + readability + docs/tests sync)
-- P23.9 interaction hotfix opened (drag smoothness + snap connect + overlap-safe align)
+- P23.9 interaction hotfix completed (drag smoothness + snap connect + overlap-safe align)
 - Non-research completion rule recorded: roadmap is implementation-complete when `P22`~`P26` are done in order (`R*`/`G*` remain out-of-scope)
 - Owner split and research-gate contract: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 
@@ -33,7 +33,7 @@ For detailed status, always refer to:
 
 - 런타임 기준선: v2 노드 그래프 전용
 - 레거시 런타임: `main`에서 제거 완료 (`P4.5` 완료)
-- 실행 SSOT current step id: `P23.9` (블록 편집기 상호작용 핫픽스 진행 중)
+- 실행 SSOT current step id: `P23.9` (블록 편집기 상호작용 핫픽스 완료)
 - P10 하드닝 트랙(`P10.1`~`P10.5`) 완료
 - P11 데모 트랙(`P11.1`~`P11.6`) 완료
 - P12 foundation 트랙 완료(`P12.1`~`P12.7`: validator-first 프로세스 그래프 범위)
@@ -48,7 +48,7 @@ For detailed status, always refer to:
 - P21 의존성 우선 트랙 완료(`P21.0`~`P21.8`: 의존성 기준선 + bootstrap/env doctor 정렬 + 그래프 편집 ops/API/UI + CI/문서 동기화)
 - P22 온보딩 완결 트랙 완료(`P22.1`~`P22.8`: bootstrap 계약 하드닝 + setup 동급 정렬 + doctor/console 가이드 + 온보딩 CI/문서 동기화)
 - P23 블록 편집기 하드닝 기준선 완료(`P23.1`~`P23.8`: 직접 조작 + kind 시각화 + 내장 정렬 + 결과 가독성 + 문서/테스트 동기화)
-- P23.9 상호작용 핫픽스 오픈(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)
+- P23.9 상호작용 핫픽스 완료(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)
 - 연구 제외 완성 기준 반영: `P22`~`P26`을 순차 완료하면 구현 범위 완성으로 간주(`R*`/`G*`는 비범위 유지)
 - 소유권 분리/연구 게이트 계약: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 

@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 23.9 block editor interaction hotfix in progress**
+Current position: **Phase 23.9 block editor interaction hotfix completed**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -370,7 +370,7 @@ Out of this completion definition:
 - runtime `N:N` channel semantics
 - runtime loop execution semantics beyond current policy
 
-#### Phase 23: Block Editor Usability Hardening (NOW)
+#### Phase 23: Block Editor Usability Hardening (DONE)
 
 Intent:
 - Move editor UX from form-centric editing to direct manipulation on canvas.
@@ -385,14 +385,14 @@ Intent:
 - `P23.6` Update editor docs for direct manipulation workflow. `DONE`
 - `P23.7` Add interaction/layout regression coverage and keep quality gates green. `DONE` (27b50bb)
 - `P23.8` Final docs mapping/index/status sync for P23 assets. `DONE`
-- `P23.9` Editor interaction hotfix (drag smoothness, snap-connect, overlap-safe align). `NOW`
-  - `P23.9.1` Open SSOT micro step and sync status docs. `NOW`
-  - `P23.9.2` Isolate canvas interaction state for smooth drag and stop-commit sync. `NEXT`
-  - `P23.9.3` Add hybrid connection guards and node-body snap connect flow. `NEXT`
-  - `P23.9.4` Enlarge handle hit area and improve cursor/edge visual affordance. `NEXT`
-  - `P23.9.5` Replace align logic with non-overlap packing and selected-first policy. `NEXT`
-  - `P23.9.6` Expand interaction/layout/connect regression tests. `NEXT`
-  - `P23.9.7` Final docs/mapping/status sync for P23.9 assets. `NEXT`
+- `P23.9` Editor interaction hotfix (drag smoothness, snap-connect, overlap-safe align). `DONE`
+  - `P23.9.1` Open SSOT micro step and sync status docs. `DONE` (e1c1544)
+  - `P23.9.2` Isolate canvas interaction state for smooth drag and stop-commit sync. `DONE` (79b4436)
+  - `P23.9.3` Add hybrid connection guards and node-body snap connect flow. `DONE` (3ae7de4)
+  - `P23.9.4` Enlarge handle hit area and improve cursor/edge visual affordance. `DONE` (ebcf716)
+  - `P23.9.5` Replace align logic with non-overlap packing and selected-first policy. `DONE` (0effb3e)
+  - `P23.9.6` Expand interaction/layout/connect regression tests. `DONE` (6c6603d)
+  - `P23.9.7` Final docs/mapping/status sync for P23.9 assets. `DONE`
 
 #### Planned Non-Research Finish Track (`P24`~`P26`) (NEXT)
 
@@ -443,7 +443,7 @@ Intent:
 ### 현재 상태 한눈에 보기
 
 - current step id: `P23.9`
-- 전체 위치: **Phase 23.9 블록 편집기 상호작용 핫픽스 진행 중**
+- 전체 위치: **Phase 23.9 블록 편집기 상호작용 핫픽스 완료**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -478,7 +478,7 @@ Intent:
 | Phase 20 | DONE | 그래프 작성 UX(CLI Wizard) 도입 및 템플릿 기반 생성면 구축 완료 |
 | Phase 21 | DONE | 의존성 기준선 고정 + 블록코딩 GUI MVP 도입 |
 | Phase 22 | DONE | 온보딩/설치 경로 완결(bootstrap/doctor/up-down 명시 3단계 고정) |
-| Phase 23 | NOW | 블록 편집기 상호작용 핫픽스(P23.9: 드래그 반응/스냅 연결/겹침 없는 정렬) |
+| Phase 23 | DONE | 블록 편집기 상호작용 핫픽스(P23.9: 드래그 반응/스냅 연결/겹침 없는 정렬) |
 | Phase 24 | NEXT | 운영 신뢰성 회귀 하드닝(재시작/백로그/ACK/타임아웃) |
 | Phase 25 | NEXT | 플러그인 DX 마감(스캐폴드/템플릿/가이드 완성도) |
 | Phase 26 | NEXT | 제품화 마감(릴리즈 체크리스트/명령면 고정/드리프트 0) |
@@ -495,9 +495,9 @@ Intent:
 
 ### 현재 우선순위
 
-1. `P23.9.2`~`P23.9.5`로 드래그 성능/연결 UX/정렬 겹침 문제를 먼저 해소한다
-2. `P23.9.6`로 상호작용 회귀 테스트를 강화해 UX 안정성을 잠근다
-3. `P23.9.7`로 문서/매핑/상태를 마감하고 `P24.1`로 전환한다
+1. `P24.1`로 운영 신뢰성 하드닝 페이즈를 오픈하고 SSOT 상태를 전환한다
+2. 재시작/백로그/ACK/타임아웃 경계 회귀를 테스트 우선으로 확장한다
+3. CI 게이트에서 신뢰성 회귀와 문서 정합성을 동시 유지한다
 
 ### 레거시 관련 기준
 

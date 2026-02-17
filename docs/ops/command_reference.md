@@ -352,8 +352,9 @@ python scripts/stream_console.py up --allow-local-mutations
 
 Editor interaction model:
 - drag nodes directly on canvas
-- connect edges via source/target handles
-- use `Auto Layout` / `Align Horizontal` / `Align Vertical` / `Fit View`
+- connect edges via source/target handles (node-body/near-drop snap enabled)
+- hybrid edge guard blocks `sink -> *`, `* -> source`, self-loop, exact duplicates
+- use `Auto Layout` / `Align Horizontal` / `Align Vertical` / `Fit View` (align is selected-first if 2+ selected)
 - check validation badge (`ok/error`, node/edge count, core message) before `Run Graph`
 - manual Add Edge form remains for one cycle (compatibility path)
 
@@ -854,8 +855,9 @@ python scripts/stream_console.py up --allow-local-mutations
 
 에디터 조작 모델:
 - 캔버스에서 노드를 직접 드래그
-- source/target 핸들 연결로 엣지 생성
-- `Auto Layout` / `Align Horizontal` / `Align Vertical` / `Fit View` 사용
+- source/target 핸들 연결로 엣지 생성(노드 본체/근처 드롭 스냅 지원)
+- 하이브리드 연결 가드로 `sink -> *`, `* -> source`, self-loop, 완전 중복 엣지 차단
+- `Auto Layout` / `Align Horizontal` / `Align Vertical` / `Fit View` 사용(정렬은 선택 노드 2개 이상이면 선택 우선)
 - `Run Graph` 전 검증 배지(`ok/error`, 노드/엣지 수, 핵심 메시지) 확인
 - 수동 Add Edge 폼은 1사이클 호환 경로로 유지
 
