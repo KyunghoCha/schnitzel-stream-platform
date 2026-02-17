@@ -25,7 +25,7 @@ import {
   normalizeGraphSpecInput
 } from "./api";
 import { findSnapTargetInput, isConnectionAllowedHybrid, type SnapNodeInput } from "./editor_connect";
-import { alignNodePositions, computeAutoLayout } from "./editor_layout";
+import { alignNodePositions, computeAutoLayout, type LayoutSize } from "./editor_layout";
 import { editorNodeTypes, EditorNodeKind } from "./editor_nodes";
 
 type TabId = "dashboard" | "presets" | "fleet" | "monitor" | "editor" | "governance";
@@ -697,9 +697,34 @@ export function App() {
     flowInstance?.fitView({ padding: 0.2, duration: 250 });
   }
 
+  function alignTargetNodeIds(): string[] {
+    const selected = flowInstance?.getNodes?.().filter((node) => node.selected).map((node) => String(node.id)) ?? [];
+    if (selected.length >= 2) {
+      return selected;
+    }
+    return editorSpec.nodes.map((node) => node.id);
+  }
+
+  function measuredNodeSizes(): Record<string, LayoutSize> {
+    const rows = flowInstance?.getNodes?.() ?? [];
+    const out: Record<string, LayoutSize> = {};
+    for (const node of rows) {
+      const width = Number(node.measured?.width ?? node.width ?? 200);
+      const height = Number(node.measured?.height ?? node.height ?? 90);
+      out[String(node.id)] = {
+        width: Number.isFinite(width) ? Math.max(20, width) : 200,
+        height: Number.isFinite(height) ? Math.max(20, height) : 90
+      };
+    }
+    return out;
+  }
+
   function alignEditor(axis: "horizontal" | "vertical"): void {
-    const nodeIds = editorSpec.nodes.map((node) => node.id);
-    const nextPositions = alignNodePositions(editorPositions, nodeIds, axis);
+    const nodeIds = alignTargetNodeIds();
+    const nextPositions = alignNodePositions(editorPositions, nodeIds, axis, {
+      sizes: measuredNodeSizes(),
+      gap: 36
+    });
     applyEditorPositions(nextPositions);
     writeEditorAction({
       action: `editor.layout.align.${axis}`,

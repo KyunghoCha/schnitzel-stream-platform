@@ -12,9 +12,23 @@ export type LayoutPos = {
   y: number;
 };
 
+export type LayoutSize = {
+  width: number;
+  height: number;
+};
+
 function insertSorted(queue: string[], value: string): void {
   queue.push(value);
   queue.sort((a, b) => a.localeCompare(b));
+}
+
+function sizeForNode(id: string, sizes?: Record<string, LayoutSize | undefined>): LayoutSize {
+  const width = Number(sizes?.[id]?.width ?? 200);
+  const height = Number(sizes?.[id]?.height ?? 90);
+  return {
+    width: Number.isFinite(width) ? Math.max(20, width) : 200,
+    height: Number.isFinite(height) ? Math.max(20, height) : 90
+  };
 }
 
 // Intent: keep layout dependency-free and deterministic to avoid adding a heavy graph-layout package in P23.
@@ -30,8 +44,8 @@ export function computeAutoLayout(
 ): Record<string, LayoutPos> {
   const marginX = Number(opts?.marginX ?? 80);
   const marginY = Number(opts?.marginY ?? 80);
-  const gapX = Number(opts?.gapX ?? 300);
-  const gapY = Number(opts?.gapY ?? 150);
+  const gapX = Number(opts?.gapX ?? 340);
+  const gapY = Number(opts?.gapY ?? 180);
 
   const nodeIds = Array.from(new Set(nodes.map((node) => String(node.id).trim()).filter(Boolean))).sort((a, b) =>
     a.localeCompare(b)
@@ -115,25 +129,44 @@ export function computeAutoLayout(
 export function alignNodePositions(
   positions: Record<string, LayoutPos>,
   nodeIds: ReadonlyArray<string>,
-  axis: "horizontal" | "vertical"
+  axis: "horizontal" | "vertical",
+  opts?: {
+    sizes?: Record<string, LayoutSize | undefined>;
+    gap?: number;
+  }
 ): Record<string, LayoutPos> {
   const ids = nodeIds.map((id) => String(id).trim()).filter((id) => !!positions[id]);
   if (ids.length === 0) {
     return { ...positions };
   }
 
+  const gap = Number(opts?.gap ?? 36);
   const out: Record<string, LayoutPos> = { ...positions };
   if (axis === "horizontal") {
     const y = Math.min(...ids.map((id) => out[id].y));
-    for (const id of ids) {
-      out[id] = { ...out[id], y };
+    const ordered = ids
+      .map((id) => ({ id, x: out[id].x, size: sizeForNode(id, opts?.sizes) }))
+      .sort((a, b) => a.x - b.x || a.id.localeCompare(b.id));
+    let cursor = ordered[0].x;
+    for (let idx = 0; idx < ordered.length; idx += 1) {
+      const row = ordered[idx];
+      const x = idx === 0 ? row.x : Math.max(row.x, cursor);
+      out[row.id] = { x, y };
+      cursor = x + row.size.width + gap;
     }
     return out;
   }
 
   const x = Math.min(...ids.map((id) => out[id].x));
-  for (const id of ids) {
-    out[id] = { ...out[id], x };
+  const ordered = ids
+    .map((id) => ({ id, y: out[id].y, size: sizeForNode(id, opts?.sizes) }))
+    .sort((a, b) => a.y - b.y || a.id.localeCompare(b.id));
+  let cursor = ordered[0].y;
+  for (let idx = 0; idx < ordered.length; idx += 1) {
+    const row = ordered[idx];
+    const y = idx === 0 ? row.y : Math.max(row.y, cursor);
+    out[row.id] = { x, y };
+    cursor = y + row.size.height + gap;
   }
   return out;
 }
