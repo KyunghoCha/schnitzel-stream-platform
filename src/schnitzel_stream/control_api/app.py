@@ -95,6 +95,10 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
                 "mutation_auth_mode": mutation_auth_mode(),
                 "local_mutation_override_enabled": bool(local_mutation_override_enabled()),
                 "audit_path": str(logger.path),
+                "audit_retention": {
+                    "max_bytes": int(logger.max_bytes),
+                    "max_files": int(logger.max_files),
+                },
                 "actor": actor,
             },
         )
@@ -346,6 +350,10 @@ def create_app(*, repo_root: Path | None = None, audit_path: Path | None = None)
             "allowed_plugin_prefixes": list(policy.allowed_prefixes),
             "allow_all_plugins": bool(policy.allow_all),
             "audit_path": str(logger.path),
+            "audit_retention": {
+                "max_bytes": int(logger.max_bytes),
+                "max_files": int(logger.max_files),
+            },
         }
         return _envelope(request_id=req_id, data=data)
 
