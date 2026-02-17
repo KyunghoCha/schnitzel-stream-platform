@@ -1,6 +1,6 @@
 # Schnitzel Stream Docs Index
 
-Last updated: 2026-02-16
+Last updated: 2026-02-17
 
 ## English
 
@@ -60,6 +60,7 @@ Runtime baseline:
 - Stream monitor: `scripts/stream_monitor.py`
 - Preset launcher: `scripts/stream_run.py`
 - Stream control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`
+- Control policy snapshot gate: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`
 - Environment diagnostics: `scripts/env_doctor.py`
 - Showcase report renderer: `scripts/demo_report_view.py`
 - Web console: `apps/stream-console/`
@@ -124,6 +125,7 @@ Runtime baseline:
 - Stream 모니터: `scripts/stream_monitor.py`
 - 프리셋 실행기: `scripts/stream_run.py`
 - Stream Control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`
+- 제어 정책 스냅샷 게이트: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`
 - 환경 진단: `scripts/env_doctor.py`
 - 쇼케이스 리포트 렌더러: `scripts/demo_report_view.py`
 - 웹 콘솔: `apps/stream-console/`

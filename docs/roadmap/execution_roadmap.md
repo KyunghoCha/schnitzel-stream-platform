@@ -1,8 +1,8 @@
 # Execution Roadmap (Platform Pivot SSOT)
 
-Last updated: 2026-02-16
+Last updated: 2026-02-17
 
-Current step id: `P17.1`
+Current step id: `P17.6`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 17 governance hardening and UX consistency in progress**
+Current position: **Phase 17 governance hardening and UX consistency completed**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -265,19 +265,19 @@ Intent:
 - `P16.4` Add React UX console (`apps/stream-console`) for dashboard/presets/fleet/monitor/governance views. `DONE` (9889f2b)
 - `P16.5` Sync docs/index/mapping/status and CI for web console and API surface. `DONE` (d8f74fd + docs sync)
 
-#### Phase 17: Governance Hardening + UX Consistency (NOW)
+#### Phase 17: Governance Hardening + UX Consistency (DONE)
 
 Intent:
 - Harden control API governance defaults without changing core runtime semantics.
 - Remove UX ambiguity between preset execution output and fleet monitor telemetry.
 - Add policy snapshot drift detection in CI to prevent silent governance regression.
 
-- `P17.1` Open phase and align SSOT state/docs. `NOW`
-- `P17.2` Enforce bearer for mutating endpoints by default with one-cycle local override switch. `NEXT`
-- `P17.3` Add audit retention rotation (`size+count`) and expose retention policy in governance snapshots. `NEXT`
-- `P17.4` Add control policy snapshot generator + CI drift gate. `NEXT`
-- `P17.5` Clarify fleet-only monitor semantics in stream console UX copy. `NEXT`
-- `P17.6` Finalize docs/index/mapping/status sync for P17 surfaces. `NEXT`
+- `P17.1` Open phase and align SSOT state/docs. `DONE` (a75340f)
+- `P17.2` Enforce bearer for mutating endpoints by default with one-cycle local override switch. `DONE` (714e70c)
+- `P17.3` Add audit retention rotation (`size+count`) and expose retention policy in governance snapshots. `DONE` (d07313b)
+- `P17.4` Add control policy snapshot generator + CI drift gate. `DONE` (cd0a5f0)
+- `P17.5` Clarify fleet-only monitor semantics in stream console UX copy. `DONE` (bed8e2b)
+- `P17.6` Finalize docs/index/mapping/status sync for P17 surfaces. `DONE`
 
 #### Research Track (Not On Critical Path)
 
@@ -321,8 +321,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P17.1`
-- 전체 위치: **Phase 17 거버넌스 하드닝 + UX 정합성 트랙 진행 중**
+- current step id: `P17.6`
+- 전체 위치: **Phase 17 거버넌스 하드닝 + UX 정합성 트랙 완료(문서/상태 동기화 마감)**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -351,12 +351,12 @@ Intent:
 | Phase 14 | DONE | 영상/레거시 뉘앙스 축소, 범용 stream fleet/monitor UX 전환 완료 |
 | Phase 15 | DONE | 원커맨드 프리셋 UX + 프로필 기반 환경 진단 + 문서 동기화 완료 |
 | Phase 16 | DONE | UX 콘솔 + Control API + 거버넌스 최소선(Audit/Policy Snapshot) 완료 |
-| Phase 17 | NOW | 거버넌스 하드닝 + UX 정합성(인증/감사보존/정책드리프트/모니터 의미 명확화) |
+| Phase 17 | DONE | 거버넌스 하드닝 + UX 정합성(인증/감사보존/정책드리프트/모니터 의미 명확화) 완료 |
 
 ### 현재 우선순위
 
-1. `P17.1` SSOT 전환과 실행 상태를 문서에 우선 고정한다
-2. `P17.2~P17.4` 인증/감사보존/정책드리프트 게이트를 순차 적용한다
+1. `P17` 보안/정책/UX 계약이 CI와 문서에서 동일하게 유지되는지 지속 점검한다
+2. `P18` 토큰 수명/회전, 감사 보존 고도화, 정책 diff gate 강화 항목을 준비한다
 3. 연구 트랙(`R1~R3`)은 `BLOCKED_BY_RESEARCH`로 분리 유지
 
 ### 레거시 관련 기준

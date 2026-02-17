@@ -1,6 +1,6 @@
 # Doc-Code Mapping
 
-Last updated: 2026-02-16
+Last updated: 2026-02-17
 
 ## English
 
@@ -26,7 +26,7 @@ This document is the active mapping between runtime code and maintained docs.
 | Graph spec loading (v2) | `src/schnitzel_stream/graph/spec.py` | `tests/unit/test_node_graph_spec.py` | `docs/implementation/runtime_core.md` |
 | Process-graph spec loading (v1 foundation) | `src/schnitzel_stream/procgraph/spec.py`, `src/schnitzel_stream/procgraph/model.py` | `tests/unit/procgraph/test_proc_graph_spec.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/implementation/runtime_core.md` |
 | Graph validation (topology + compat) | `src/schnitzel_stream/graph/validate.py`, `src/schnitzel_stream/graph/compat.py` | `tests/unit/test_graph_validate.py`, `tests/unit/test_graph_compat.py`, `tests/unit/test_payload_profile.py` | `docs/contracts/stream_packet.md`, `docs/implementation/runtime_core.md` |
-| Process-graph validation (sqlite bridge, strict 1:1) | `src/schnitzel_stream/procgraph/validate.py` | `tests/unit/procgraph/test_proc_graph_validate.py`, `tests/unit/scripts/test_proc_graph_validate.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/design/architecture_2.0.md` |
+| Process-graph validation (sqlite bridge, strict 1:1) | `src/schnitzel_stream/procgraph/validate.py` | `tests/unit/procgraph/test_proc_graph_validate.py`, `tests/unit/scripts/test_proc_graph_validate_script.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/design/architecture_2.0.md` |
 | In-proc scheduler/runtime | `src/schnitzel_stream/runtime/inproc.py` | `tests/unit/test_inproc_*.py` | `docs/implementation/runtime_core.md` |
 | Plugin loading policy | `src/schnitzel_stream/plugins/registry.py` | `tests/unit/test_graph_compat.py` | `docs/implementation/plugin_packs.md` |
 | Packet contract | `src/schnitzel_stream/packet.py` | `tests/unit/test_payload_ref_roundtrip.py` | `docs/contracts/stream_packet.md` |
@@ -39,7 +39,7 @@ This document is the active mapping between runtime code and maintained docs.
 | Payload profile contract | `src/schnitzel_stream/contracts/payload_profile.py` | `tests/unit/test_payload_profile.py` | `docs/contracts/stream_packet.md`, `docs/implementation/runtime_core.md` |
 | Local mock backend tool | `src/schnitzel_stream/tools/mock_backend.py` | `tests/unit/nodes/test_http_nodes.py` | `docs/ops/command_reference.md` |
 | Ops shared service layer (preset/fleet/monitor/env) | `src/schnitzel_stream/ops/*.py` | `tests/unit/scripts/test_stream_run.py`, `tests/unit/scripts/test_stream_fleet.py`, `tests/unit/scripts/test_stream_monitor.py`, `tests/unit/scripts/test_env_doctor.py` | `docs/ops/command_reference.md`, `README.md` |
-| Stream control API + governance minimum | `src/schnitzel_stream/control_api/*.py`, `scripts/stream_control_api.py` | `tests/unit/control_api/test_control_api.py`, `tests/unit/control_api/test_audit.py` | `docs/ops/command_reference.md`, `README.md`, `docs/roadmap/execution_roadmap.md` |
+| Stream control API + governance hardening | `src/schnitzel_stream/control_api/*.py`, `scripts/stream_control_api.py`, `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json` | `tests/unit/control_api/test_control_api.py`, `tests/unit/control_api/test_audit.py`, `tests/unit/scripts/test_control_policy_snapshot.py` | `docs/ops/command_reference.md`, `README.md`, `docs/roadmap/execution_roadmap.md` |
 | Stream console web UI | `apps/stream-console/src/*.tsx`, `apps/stream-console/src/*.ts` | `apps/stream-console/src/App.test.tsx` | `README.md`, `docs/ops/command_reference.md` |
 | Runtime graphs/configs | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml`, `configs/fleet.yaml` | graph validation and integration tests | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/professor_showcase_guide.md` |
 
@@ -54,6 +54,7 @@ This document is the active mapping between runtime code and maintained docs.
 | `scripts/stream_monitor.py` | read-only stream TUI monitor (pid/log based) | `docs/ops/command_reference.md` |
 | `scripts/stream_run.py` | one-command preset launcher (`--list`, `--preset`, `--experimental`) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/stream_control_api.py` | local-first control API server (optional bearer auth + governance endpoints) | `docs/ops/command_reference.md`, `README.md` |
+| `scripts/control_policy_snapshot.py` | control policy snapshot emit/check (`--check` drift gate) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/proc_graph_validate.py` | process-graph foundation validator (`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
 | `scripts/scaffold_plugin.py` | plugin code/test/graph scaffold generator | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md` |
 | `scripts/demo_pack.py` | one-command showcase runner (`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
@@ -91,7 +92,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | 그래프 스펙 로딩(v2) | `src/schnitzel_stream/graph/spec.py` | `tests/unit/test_node_graph_spec.py` | `docs/implementation/runtime_core.md` |
 | 프로세스 그래프 스펙 로딩(v1 foundation) | `src/schnitzel_stream/procgraph/spec.py`, `src/schnitzel_stream/procgraph/model.py` | `tests/unit/procgraph/test_proc_graph_spec.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/implementation/runtime_core.md` |
 | 그래프 검증(토폴로지 + 호환성) | `src/schnitzel_stream/graph/validate.py`, `src/schnitzel_stream/graph/compat.py` | `tests/unit/test_graph_validate.py`, `tests/unit/test_graph_compat.py`, `tests/unit/test_payload_profile.py` | `docs/contracts/stream_packet.md`, `docs/implementation/runtime_core.md` |
-| 프로세스 그래프 검증(SQLite 브리지, strict 1:1) | `src/schnitzel_stream/procgraph/validate.py` | `tests/unit/procgraph/test_proc_graph_validate.py`, `tests/unit/scripts/test_proc_graph_validate.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/design/architecture_2.0.md` |
+| 프로세스 그래프 검증(SQLite 브리지, strict 1:1) | `src/schnitzel_stream/procgraph/validate.py` | `tests/unit/procgraph/test_proc_graph_validate.py`, `tests/unit/scripts/test_proc_graph_validate_script.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/design/architecture_2.0.md` |
 | 인프로세스 런타임 스케줄러 | `src/schnitzel_stream/runtime/inproc.py` | `tests/unit/test_inproc_*.py` | `docs/implementation/runtime_core.md` |
 | 플러그인 로딩 정책 | `src/schnitzel_stream/plugins/registry.py` | `tests/unit/test_graph_compat.py` | `docs/implementation/plugin_packs.md` |
 | 패킷 계약 | `src/schnitzel_stream/packet.py` | `tests/unit/test_payload_ref_roundtrip.py` | `docs/contracts/stream_packet.md` |
@@ -104,7 +105,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | payload profile 계약 | `src/schnitzel_stream/contracts/payload_profile.py` | `tests/unit/test_payload_profile.py` | `docs/contracts/stream_packet.md`, `docs/implementation/runtime_core.md` |
 | 로컬 mock backend 도구 | `src/schnitzel_stream/tools/mock_backend.py` | `tests/unit/nodes/test_http_nodes.py` | `docs/ops/command_reference.md` |
 | Ops 공통 서비스 레이어(preset/fleet/monitor/env) | `src/schnitzel_stream/ops/*.py` | `tests/unit/scripts/test_stream_run.py`, `tests/unit/scripts/test_stream_fleet.py`, `tests/unit/scripts/test_stream_monitor.py`, `tests/unit/scripts/test_env_doctor.py` | `docs/ops/command_reference.md`, `README.md` |
-| Stream control API + 거버넌스 최소선 | `src/schnitzel_stream/control_api/*.py`, `scripts/stream_control_api.py` | `tests/unit/control_api/test_control_api.py`, `tests/unit/control_api/test_audit.py` | `docs/ops/command_reference.md`, `README.md`, `docs/roadmap/execution_roadmap.md` |
+| Stream control API + 거버넌스 하드닝 | `src/schnitzel_stream/control_api/*.py`, `scripts/stream_control_api.py`, `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json` | `tests/unit/control_api/test_control_api.py`, `tests/unit/control_api/test_audit.py`, `tests/unit/scripts/test_control_policy_snapshot.py` | `docs/ops/command_reference.md`, `README.md`, `docs/roadmap/execution_roadmap.md` |
 | Stream console 웹 UI | `apps/stream-console/src/*.tsx`, `apps/stream-console/src/*.ts` | `apps/stream-console/src/App.test.tsx` | `README.md`, `docs/ops/command_reference.md` |
 | 런타임 그래프/설정 | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml`, `configs/fleet.yaml` | 그래프 검증/통합 테스트 | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/professor_showcase_guide.md` |
 
@@ -119,6 +120,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | `scripts/stream_monitor.py` | 읽기 전용 stream TUI 모니터(pid/log 기반) | `docs/ops/command_reference.md` |
 | `scripts/stream_run.py` | 원커맨드 프리셋 실행기(`--list`, `--preset`, `--experimental`) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/stream_control_api.py` | 로컬 우선 control API 서버(선택적 Bearer 인증 + 거버넌스 엔드포인트) | `docs/ops/command_reference.md`, `README.md` |
+| `scripts/control_policy_snapshot.py` | 제어 정책 스냅샷 생성/검사(`--check` 드리프트 게이트) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/proc_graph_validate.py` | 프로세스 그래프 foundation 검증기(`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
 | `scripts/scaffold_plugin.py` | 플러그인 코드/테스트/그래프 스캐폴드 생성기 | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md` |
 | `scripts/demo_pack.py` | 원커맨드 쇼케이스 실행기(`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |

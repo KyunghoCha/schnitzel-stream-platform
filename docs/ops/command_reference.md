@@ -293,6 +293,13 @@ Demo report renderer:
 python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
 ```
 
+Control policy snapshot drift checker:
+
+```bash
+python scripts/control_policy_snapshot.py
+python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json
+```
+
 Runtime environment variables used per stream process:
 - `SS_STREAM_ID`
 - `SS_INPUT_TYPE`
@@ -319,8 +326,14 @@ python scripts/stream_control_api.py --host 127.0.0.1 --port 18700 --audit-path 
 ```
 
 Security mode:
-- Default: local-only access (`127.0.0.1`/`localhost`) without token.
-- Optional: set `SS_CONTROL_API_TOKEN` to require `Authorization: Bearer <token>`.
+- Default without token: local-only read access (`127.0.0.1`/`localhost`).
+- Mutating endpoints require bearer by default in no-token mode:
+  - `POST /api/v1/presets/{preset_id}/run`
+  - `POST /api/v1/fleet/start`
+  - `POST /api/v1/fleet/stop`
+- Optional: set `SS_CONTROL_API_TOKEN` to require `Authorization: Bearer <token>` globally.
+- One-cycle local override for mutating endpoints: `SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS=true`
+- Audit retention defaults: `SS_AUDIT_MAX_BYTES=10485760`, `SS_AUDIT_MAX_FILES=5`
 - CORS default allows local UI origins: `http://127.0.0.1:5173`, `http://localhost:5173`
 - Override CORS origins: `SS_CONTROL_API_CORS_ORIGINS="http://127.0.0.1:5173,http://localhost:5173"`
 
@@ -358,6 +371,10 @@ Other commands:
 - `npm run test`
 - `npm run build`
 - `npm run preview`
+
+Semantics:
+- Monitor tab data is fleet telemetry from pid/log streams.
+- Preset run output is session-level result and does not create fleet monitor stream rows.
 
 ### Plugin Security Policy
 
@@ -689,8 +706,14 @@ python scripts/stream_control_api.py --host 127.0.0.1 --port 18700 --audit-path 
 ```
 
 보안 모드:
-- 기본: 로컬(`127.0.0.1`/`localhost`) 요청만 허용, 토큰 미필수
-- 옵션: `SS_CONTROL_API_TOKEN` 설정 시 `Authorization: Bearer <token>` 필수
+- 토큰이 없으면 기본은 로컬 read-only 접근(`127.0.0.1`/`localhost`)
+- no-token 모드에서 mutating endpoint는 기본적으로 Bearer 필요:
+  - `POST /api/v1/presets/{preset_id}/run`
+  - `POST /api/v1/fleet/start`
+  - `POST /api/v1/fleet/stop`
+- 옵션: `SS_CONTROL_API_TOKEN` 설정 시 전체 endpoint에 `Authorization: Bearer <token>` 필수
+- 1사이클 임시 로컬 완화: `SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS=true`
+- 감사 보존 기본값: `SS_AUDIT_MAX_BYTES=10485760`, `SS_AUDIT_MAX_FILES=5`
 - 기본 CORS 허용 origin: `http://127.0.0.1:5173`, `http://localhost:5173`
 - CORS 커스텀: `SS_CONTROL_API_CORS_ORIGINS="http://127.0.0.1:5173,http://localhost:5173"`
 
@@ -728,6 +751,10 @@ npm run dev
 - `npm run test`
 - `npm run build`
 - `npm run preview`
+
+의미:
+- Monitor 탭 데이터는 fleet pid/log 기반 telemetry다.
+- Preset run 결과는 session 단위 출력이며 fleet monitor stream row를 만들지 않는다.
 
 ### 플러그인 보안 정책
 

@@ -1,8 +1,8 @@
 # Handoff Prompt (schnitzel-stream-platform)
 
-Last updated: 2026-02-16
+Last updated: 2026-02-17
 
-Current step id (SSOT): `P17.1` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P17.6` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -25,7 +25,7 @@ Current baseline:
 - universal UX/TUI transition track completed (`P14.1`~`P14.5`)
 - UX preset onboarding track completed (`P15.1`~`P15.3`, presets + env profiles + docs sync)
 - UX console and governance minimum baseline track completed (`P16.1`~`P16.5`, ops service layer + control API + governance minimum + web console + docs sync)
-- governance hardening + UX consistency track started (`P17.1`, SSOT phase open)
+- governance hardening + UX consistency track completed (`P17.1`~`P17.6`, mutating auth hardening + audit retention rotation + policy drift gate + UX semantics sync)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -54,7 +54,7 @@ Verification (local):
 - 범용 UX/TUI 전환 트랙 완료(`P14.1`~`P14.5`)
 - UX 프리셋 온보딩 트랙 완료(`P15.1`~`P15.3`, 프리셋 + env 프로필 + 문서 동기화)
 - UX 콘솔 + 거버넌스 최소선 트랙 완료(`P16.1`~`P16.5`, 공통 ops 서비스 + control API + 거버넌스 최소선 + 웹 콘솔 + 문서 동기화)
-- 거버넌스 하드닝 + UX 정합성 트랙 시작(`P17.1`, SSOT 단계 오픈)
+- 거버넌스 하드닝 + UX 정합성 트랙 완료(`P17.1`~`P17.6`, mutating 인증 강화 + 감사 보존 회전 + 정책 드리프트 게이트 + UX 의미 정합화)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`

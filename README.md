@@ -156,11 +156,19 @@ python scripts/stream_run.py --preset file_yolo --experimental --validate-only
 11. Control API server (local-first, optional bearer token)
 
 ```bash
-# optional: require bearer token for every API call
+# recommended: set bearer token for all control calls
 export SS_CONTROL_API_TOKEN=change-me
 
 python scripts/stream_control_api.py --host 127.0.0.1 --port 18700
 ```
+
+- In local-only mode without token, mutating endpoints are blocked by default:
+  - `POST /api/v1/presets/{preset_id}/run`
+  - `POST /api/v1/fleet/start`
+  - `POST /api/v1/fleet/stop`
+- Temporary one-cycle local override: `SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS=true`
+- Audit retention defaults: `SS_AUDIT_MAX_BYTES=10485760`, `SS_AUDIT_MAX_FILES=5`
+- Policy snapshot drift gate: `python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json`
 
 12. Thin web console (React + Vite + TypeScript)
 
@@ -169,6 +177,9 @@ cd apps/stream-console
 npm install
 npm run dev
 ```
+
+- Monitor tab is fleet-only telemetry (PID/log based).
+- Preset run output is session output and is not counted as fleet monitor stream rows.
 
 ### Graph Spec (v2)
 
@@ -379,11 +390,19 @@ python scripts/stream_run.py --preset file_yolo --experimental --validate-only
 11. Control API 서버(로컬 기본, 선택적 Bearer 토큰)
 
 ```bash
-# 옵션: 모든 API 요청에 Bearer 토큰 강제
+# 권장: 제어 호출 전체에 Bearer 토큰 사용
 export SS_CONTROL_API_TOKEN=change-me
 
 python scripts/stream_control_api.py --host 127.0.0.1 --port 18700
 ```
+
+- 토큰 없이 local-only 모드일 때 mutating endpoint는 기본 차단:
+  - `POST /api/v1/presets/{preset_id}/run`
+  - `POST /api/v1/fleet/start`
+  - `POST /api/v1/fleet/stop`
+- 임시(1사이클) 로컬 완화: `SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS=true`
+- 감사 보존 기본값: `SS_AUDIT_MAX_BYTES=10485760`, `SS_AUDIT_MAX_FILES=5`
+- 정책 스냅샷 드리프트 게이트: `python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json`
 
 12. Thin Web 콘솔(React + Vite + TypeScript)
 
@@ -392,6 +411,9 @@ cd apps/stream-console
 npm install
 npm run dev
 ```
+
+- Monitor 탭은 fleet 로그/PID 기반 telemetry만 보여준다.
+- Preset run 결과는 session output이며 fleet monitor stream row로 집계되지 않는다.
 
 ### 그래프 스펙(v2)
 
