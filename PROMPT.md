@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-17
 
-Current step id (SSOT): `P18.8` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P19.1` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -27,6 +27,7 @@ Current baseline:
 - UX console and governance minimum baseline track completed (`P16.1`~`P16.5`, ops service layer + control API + governance minimum + web console + docs sync)
 - governance hardening + UX consistency track completed (`P17.1`~`P17.6`, mutating auth hardening + audit retention rotation + policy drift gate + UX semantics sync)
 - onboarding UX + one-command local console bootstrap track completed (`P18.1`~`P18.8`, stream_console + console env profile + lockfile CI + docs sync)
+- usability closure no-env-first track opened (`P19.1`, option-first execution simplification kickoff)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -57,6 +58,7 @@ Verification (local):
 - UX 콘솔 + 거버넌스 최소선 트랙 완료(`P16.1`~`P16.5`, 공통 ops 서비스 + control API + 거버넌스 최소선 + 웹 콘솔 + 문서 동기화)
 - 거버넌스 하드닝 + UX 정합성 트랙 완료(`P17.1`~`P17.6`, mutating 인증 강화 + 감사 보존 회전 + 정책 드리프트 게이트 + UX 의미 정합화)
 - 온보딩 UX + 원커맨드 로컬 콘솔 부트스트랩 트랙 완료(`P18.1`~`P18.8`, stream_console + console env 프로필 + lockfile CI + 문서 동기화)
+- 사용성 마감 무환경변수 우선 트랙 오픈(`P19.1`, 옵션 중심 실행 단순화 착수)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`
