@@ -16,11 +16,13 @@ PROJECT_ROOT = SCRIPT_DIR.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from schnitzel_stream.ops import presets as preset_ops
+from schnitzel_stream.ops import envcheck as env_ops
 
 
 EXIT_OK = 0
 EXIT_RUN_FAILED = 1
 EXIT_USAGE = 2
+EXIT_PREFLIGHT_FAILED = 3
 
 
 def _repo_root() -> Path:
@@ -39,6 +41,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--input-path", default="", help="Override file input path for file-based presets")
     parser.add_argument("--camera-index", type=int, default=None, help="Override camera index for webcam presets")
     parser.add_argument("--device", default="", help="YOLO device override (for example: cpu, 0)")
+    parser.add_argument("--model-path", default="", help="YOLO model path override")
+    parser.add_argument("--yolo-conf", type=float, default=None, help="YOLO confidence threshold override [0.0, 1.0]")
+    parser.add_argument("--yolo-iou", type=float, default=None, help="YOLO IoU threshold override [0.0, 1.0]")
+    parser.add_argument("--yolo-max-det", type=int, default=None, help="YOLO max detections override (>0)")
+    parser.add_argument("--doctor", action="store_true", help="Run strict preflight checks before validate/run")
     parser.add_argument(
         "--loop",
         choices=("true", "false"),
@@ -66,6 +73,10 @@ def _build_env(*, repo_root: Path, spec: preset_ops.PresetSpec, args: argparse.N
         camera_index=int(args.camera_index) if args.camera_index is not None else None,
         device=str(args.device),
         loop=str(args.loop),
+        model_path=str(args.model_path),
+        yolo_conf=float(args.yolo_conf) if args.yolo_conf is not None else None,
+        yolo_iou=float(args.yolo_iou) if args.yolo_iou is not None else None,
+        yolo_max_det=int(args.yolo_max_det) if args.yolo_max_det is not None else None,
     )
 
 
@@ -75,6 +86,54 @@ def _shell_cmd(cmd: list[str]) -> str:
 
 def _run_subprocess(*, cmd: list[str], cwd: Path, env: dict[str, str]) -> int:
     return preset_ops.run_subprocess(cmd=cmd, cwd=cwd, env=env)
+
+
+def _doctor_profile(preset_id: str) -> str:
+    pid = str(preset_id).lower()
+    if "yolo" in pid:
+        return "yolo"
+    if "webcam" in pid:
+        return "webcam"
+    return "base"
+
+
+def _doctor_model_path(*, repo_root: Path, spec: preset_ops.PresetSpec, args: argparse.Namespace) -> Path:
+    raw = str(args.model_path or "").strip()
+    if not raw:
+        raw = str((spec.env_defaults or {}).get("SS_YOLO_MODEL_PATH", "models/yolov8n.pt")).strip()
+    p = Path(raw)
+    if not p.is_absolute():
+        p = (repo_root / p).resolve()
+    return p
+
+
+def _print_doctor_summary(checks: list[env_ops.CheckResult], *, profile: str) -> None:
+    stat = env_ops.summary(checks)
+    print(
+        "doctor: "
+        f"profile={profile} "
+        f"required_failed={stat['required_failed']}/{stat['required_total']} "
+        f"optional_failed={stat['optional_failed']}/{stat['optional_total']}"
+    )
+    for item in checks:
+        if item.ok:
+            continue
+        level = "ERROR" if item.required else "WARN"
+        print(f"doctor[{level}] {item.name}: {item.detail}", file=sys.stderr if item.required else sys.stdout)
+
+
+def _validate_args(args: argparse.Namespace) -> str | None:
+    if args.max_events is not None and int(args.max_events) <= 0:
+        return "--max-events must be > 0"
+    if args.camera_index is not None and int(args.camera_index) < 0:
+        return "--camera-index must be >= 0"
+    if args.yolo_max_det is not None and int(args.yolo_max_det) <= 0:
+        return "--yolo-max-det must be > 0"
+    if args.yolo_conf is not None and not (0.0 <= float(args.yolo_conf) <= 1.0):
+        return "--yolo-conf must be between 0.0 and 1.0"
+    if args.yolo_iou is not None and not (0.0 <= float(args.yolo_iou) <= 1.0):
+        return "--yolo-iou must be between 0.0 and 1.0"
+    return None
 
 
 def run(argv: list[str] | None = None) -> int:
@@ -101,6 +160,23 @@ def run(argv: list[str] | None = None) -> int:
     if not spec.graph.exists():
         print(f"Error: graph not found for preset '{preset_id}': {spec.graph}", file=sys.stderr)
         return EXIT_USAGE
+    validation_error = _validate_args(args)
+    if validation_error:
+        print(f"Error: {validation_error}", file=sys.stderr)
+        return EXIT_USAGE
+
+    if bool(args.doctor):
+        profile = _doctor_profile(preset_id)
+        checks = env_ops.run_checks(
+            profile=profile,
+            model_path=_doctor_model_path(repo_root=repo_root, spec=spec, args=args),
+            camera_index=int(args.camera_index) if args.camera_index is not None else 0,
+            probe_webcam=(profile == "webcam"),
+        )
+        _print_doctor_summary(checks, profile=profile)
+        if env_ops.exit_code(checks, strict=True) != 0:
+            # Intent: separate preflight readiness failures from runtime failures so operators can auto-triage.
+            return EXIT_PREFLIGHT_FAILED
 
     env = _build_env(repo_root=repo_root, spec=spec, args=args)
 
@@ -110,9 +186,6 @@ def run(argv: list[str] | None = None) -> int:
         cmd = [sys.executable, "-m", "schnitzel_stream", "--graph", str(spec.graph)]
 
     if args.max_events is not None:
-        if int(args.max_events) <= 0:
-            print("Error: --max-events must be > 0", file=sys.stderr)
-            return EXIT_USAGE
         cmd.extend(["--max-events", str(int(args.max_events))])
 
     print(f"preset={preset_id}")
