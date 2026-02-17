@@ -48,7 +48,7 @@ def test_start_selected_services_builds_commands_and_env(tmp_path: Path):
     assert len(calls) == 2
 
     api_call = next(item for item in calls if "stream_control_api.py" in " ".join(item["cmd"]))
-    ui_call = next(item for item in calls if item["cmd"][0] == "npm")
+    ui_call = next(item for item in calls if "npm" in str(item["cmd"][0]).lower())
 
     assert "--port" in api_call["cmd"]
     assert "18700" in api_call["cmd"]
@@ -56,7 +56,8 @@ def test_start_selected_services_builds_commands_and_env(tmp_path: Path):
     assert api_call["env"]["SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS"] == "true"
     assert api_call["env"]["SS_CONTROL_API_TOKEN"] == "secret-token"
 
-    assert ui_call["cmd"][:2] == ["npm", "--prefix"]
+    assert str(ui_call["cmd"][0]).lower().endswith(("npm", "npm.cmd", "npm.exe"))
+    assert ui_call["cmd"][1] == "--prefix"
     assert "run" in ui_call["cmd"]
     assert "dev" in ui_call["cmd"]
 

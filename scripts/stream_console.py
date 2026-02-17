@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 import sys
+import time
 
 # Add script and src paths for direct execution.
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -90,6 +91,15 @@ def _doctor_result(*, strict: bool, json_out: bool) -> int:
     return code
 
 
+def _wait_for_ready(*, paths: console_ops.ConsolePaths, timeout_sec: float = 8.0, interval_sec: float = 0.25) -> dict[str, object]:
+    deadline = time.monotonic() + float(timeout_sec)
+    snapshot = console_ops.collect_status(paths=paths, is_process_running_fn=is_process_running)
+    while (not bool(snapshot.get("ready", False))) and time.monotonic() < deadline:
+        time.sleep(float(interval_sec))
+        snapshot = console_ops.collect_status(paths=paths, is_process_running_fn=is_process_running)
+    return snapshot
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="One-command local stream console launcher")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -154,7 +164,8 @@ def run(argv: list[str] | None = None) -> int:
                     f"{item.get('action', 'unknown')} "
                     f"pid={item.get('pid', 'n/a')}"
                 )
-            status = console_ops.collect_status(paths=paths, is_process_running_fn=is_process_running)
+            # Intent: UI dev server startup is asynchronous; poll briefly to avoid false negative readiness.
+            status = _wait_for_ready(paths=paths)
             for line in _status_lines(status):
                 print(line)
             return EXIT_OK if bool(status.get("ready", False)) else EXIT_RUNTIME

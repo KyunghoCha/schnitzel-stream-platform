@@ -19,6 +19,7 @@ class StreamRuntimeState:
     last_error_lines: list[str] = field(default_factory=list)
     last_file_size: int = 0
     last_file_mtime_ns: int = 0
+    last_head_sample: str = ""
 
 
 @dataclass
@@ -66,14 +67,24 @@ def read_new_lines(path: Path, state: StreamRuntimeState) -> list[str]:
         and int(state.last_file_mtime_ns) != 0
         and int(mtime_ns) != int(state.last_file_mtime_ns)
     )
-    if int(state.offset) > int(size) or rewritten_same_size:
-        # Intent: log truncation/rewrite/rotation must not stall incremental parsing.
-        state.offset = 0
-
     with path.open("r", encoding="utf-8", errors="replace") as f:
+        # Intent: detect same-size file rewrites that may not bump mtime on some filesystems.
+        head_sample = f.read(min(128, int(size)))
+        rewritten_same_size = rewritten_same_size or (
+            int(state.offset) == int(size)
+            and int(state.last_file_size) == int(size)
+            and bool(state.last_head_sample)
+            and head_sample != state.last_head_sample
+        )
+
+        if int(state.offset) > int(size) or rewritten_same_size:
+            # Intent: log truncation/rewrite/rotation must not stall incremental parsing.
+            state.offset = 0
+
         f.seek(int(state.offset))
         text = f.read()
         state.offset = int(f.tell())
+    state.last_head_sample = str(head_sample)
     state.last_file_size = int(size)
     state.last_file_mtime_ns = int(mtime_ns)
     return text.splitlines()

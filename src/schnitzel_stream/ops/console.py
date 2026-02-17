@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
+import shutil
 import socket
 from typing import Any, Callable
 from urllib import error as urlerror
@@ -252,9 +253,10 @@ def build_ui_command(
     ui_host: str,
     ui_port: int,
 ) -> list[str]:
+    npm_exec = shutil.which("npm") or "npm"
     # Intent: use npm --prefix so we do not require a per-process cwd in process_manager.start_process.
     return [
-        "npm",
+        str(npm_exec),
         "--prefix",
         str((repo_root / "apps" / "stream-console").resolve()),
         "run",

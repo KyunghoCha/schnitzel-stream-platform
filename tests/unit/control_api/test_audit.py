@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import time
 
 from schnitzel_stream.control_api.audit import AuditLogger
 
@@ -102,6 +103,8 @@ def test_audit_since_filter_works_across_rotated_files(tmp_path: Path):
         request_id="r0",
         meta={},
     )
+    # Intent: ensure monotonic timestamp ordering so `since=pivot.ts` deterministically excludes r0.
+    time.sleep(0.002)
     pivot = logger.append(
         actor="local",
         action="fleet.start",
