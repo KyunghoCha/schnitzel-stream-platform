@@ -1,0 +1,29 @@
+{
+  "audit": {
+    "default_max_bytes": 10485760,
+    "default_max_files": 5,
+    "default_path": "outputs/audit/stream_control_audit.jsonl",
+    "env_max_bytes": "SS_AUDIT_MAX_BYTES",
+    "env_max_files": "SS_AUDIT_MAX_FILES"
+  },
+  "cors": {
+    "default_origins": [
+      "http://127.0.0.1:5173",
+      "http://localhost:5173"
+    ],
+    "env_cors_origins": "SS_CONTROL_API_CORS_ORIGINS"
+  },
+  "mutating_endpoints": [
+    "POST /api/v1/presets/{preset_id}/run",
+    "POST /api/v1/fleet/start",
+    "POST /api/v1/fleet/stop"
+  ],
+  "schema_version": 1,
+  "security": {
+    "env_local_mutation_override": "SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS",
+    "env_token": "SS_CONTROL_API_TOKEN",
+    "local_mutation_override_enabled_no_token": false,
+    "mutation_auth_mode_no_token": "bearer_required_for_mutation",
+    "security_mode_no_token": "local-only"
+  }
+}

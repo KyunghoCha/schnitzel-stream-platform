@@ -78,6 +78,9 @@ jobs:
           python scripts/env_doctor.py --profile yolo --json
           python scripts/env_doctor.py --profile webcam --json
 
+      - name: Control policy snapshot drift gate
+        run: python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json
+
       - name: Preset launcher sanity checks
         run: |
           python scripts/stream_run.py --list
