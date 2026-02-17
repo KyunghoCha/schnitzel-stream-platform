@@ -8,9 +8,9 @@ This guide starts the local control API + web console stack with one command sur
 
 ## 3-Step Quick Path
 
-1. `doctor`
-2. `up`
-3. `down`
+1. `bootstrap_env`
+2. `doctor`
+3. `up`/`down`
 
 ## Windows PowerShell
 
@@ -19,6 +19,8 @@ cd C:\Projects\schnitzel-stream-platform
 conda activate schnitzel-stream
 $env:PYTHONPATH = "src"
 
+python scripts/bootstrap_env.py --profile console --manager pip
+python scripts/env_doctor.py --profile console --strict --json
 python scripts/stream_console.py doctor --strict --json
 python scripts/stream_console.py up --allow-local-mutations
 python scripts/stream_console.py status --json
@@ -31,6 +33,8 @@ python scripts/stream_console.py down
 cd /mnt/c/Projects/schnitzel-stream-platform
 export PYTHONPATH=src
 
+python3 scripts/bootstrap_env.py --profile console --manager pip
+python3 scripts/env_doctor.py --profile console --strict --json
 python3 scripts/stream_console.py doctor --strict --json
 python3 scripts/stream_console.py up --allow-local-mutations
 python3 scripts/stream_console.py status --json
@@ -64,6 +68,13 @@ python scripts/stream_console.py up --ui-only
 python scripts/stream_console.py up --api-port 18710 --ui-port 5180 --log-dir outputs/console_run_custom
 ```
 
+Block editor path:
+
+```bash
+python scripts/stream_console.py up --allow-local-mutations
+# open http://127.0.0.1:5173 -> Editor tab
+```
+
 ## Output Paths
 
 - API log: `outputs/console_run/control_api.log`
@@ -78,9 +89,9 @@ python scripts/stream_console.py up --api-port 18710 --ui-port 5180 --log-dir ou
 
 ## 3단계 빠른 경로
 
-1. `doctor`
-2. `up`
-3. `down`
+1. `bootstrap_env`
+2. `doctor`
+3. `up`/`down`
 
 ## Windows PowerShell
 
@@ -89,6 +100,8 @@ cd C:\Projects\schnitzel-stream-platform
 conda activate schnitzel-stream
 $env:PYTHONPATH = "src"
 
+python scripts/bootstrap_env.py --profile console --manager pip
+python scripts/env_doctor.py --profile console --strict --json
 python scripts/stream_console.py doctor --strict --json
 python scripts/stream_console.py up --allow-local-mutations
 python scripts/stream_console.py status --json
@@ -101,6 +114,8 @@ python scripts/stream_console.py down
 cd /mnt/c/Projects/schnitzel-stream-platform
 export PYTHONPATH=src
 
+python3 scripts/bootstrap_env.py --profile console --manager pip
+python3 scripts/env_doctor.py --profile console --strict --json
 python3 scripts/stream_console.py doctor --strict --json
 python3 scripts/stream_console.py up --allow-local-mutations
 python3 scripts/stream_console.py status --json
@@ -132,6 +147,13 @@ python scripts/stream_console.py up --ui-only
 
 # 포트/로그 경로 커스텀
 python scripts/stream_console.py up --api-port 18710 --ui-port 5180 --log-dir outputs/console_run_custom
+```
+
+블록 에디터 경로:
+
+```bash
+python scripts/stream_console.py up --allow-local-mutations
+# http://127.0.0.1:5173 접속 후 Editor 탭
 ```
 
 ## 출력 경로

@@ -57,10 +57,17 @@ flowchart LR
 
 ### Quickstart
 
-1. Install
+1. Dependency-first bootstrap
 
 ```bash
-pip install -r requirements.txt
+python scripts/bootstrap_env.py --profile base --manager pip
+python scripts/bootstrap_env.py --profile console --manager pip
+```
+
+Conda baseline:
+
+```bash
+conda env create -f environment.yml
 ```
 
 2. Environment
@@ -209,6 +216,16 @@ python scripts/stream_console.py down
 - Use `--token <value>` on `up` to set API bearer mode from bootstrap command.
 - Detailed guide: `docs/guides/local_console_quickstart.md`
 
+14. Block editor MVP (GUI graph authoring)
+
+```bash
+python scripts/stream_console.py up --allow-local-mutations
+# open http://127.0.0.1:5173 and go to the "Editor" tab
+```
+
+- Supports: node placement/link/property editing, YAML import/export, validate/run.
+- Detailed guide: `docs/guides/block_editor_quickstart.md`
+
 ### Graph Spec (v2)
 
 - `plugin` format: `module:ClassName`
@@ -319,10 +336,17 @@ flowchart LR
 
 ### 빠른 시작
 
-1. 설치
+1. 의존성 기준선 부트스트랩
 
 ```bash
-pip install -r requirements.txt
+python scripts/bootstrap_env.py --profile base --manager pip
+python scripts/bootstrap_env.py --profile console --manager pip
+```
+
+Conda 기준선:
+
+```bash
+conda env create -f environment.yml
 ```
 
 2. 환경 설정
@@ -470,6 +494,16 @@ python scripts/stream_console.py down
 - `--allow-local-mutations`는 로컬 실습 환경에서만 mutating endpoint를 명시적으로 여는 옵션이다.
 - `up`에서 `--token <value>`를 주면 API를 bearer 모드로 바로 띄울 수 있다.
 - 상세 가이드: `docs/guides/local_console_quickstart.md`
+
+14. 블록 에디터 MVP(GUI 그래프 작성)
+
+```bash
+python scripts/stream_console.py up --allow-local-mutations
+# http://127.0.0.1:5173 접속 후 "Editor" 탭 이동
+```
+
+- 지원 범위: 노드 배치/연결/속성 편집, YAML import/export, validate/run
+- 상세 가이드: `docs/guides/block_editor_quickstart.md`
 
 ### 그래프 스펙(v2)
 

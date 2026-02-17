@@ -6,6 +6,14 @@ Complete command reference for v2 node-graph runtime.
 
 ### Prerequisites
 
+Dependency bootstrap (recommended):
+
+```bash
+python scripts/bootstrap_env.py --profile base --manager pip
+python scripts/bootstrap_env.py --profile console --manager pip
+python scripts/bootstrap_env.py --profile yolo --manager pip
+```
+
 ```powershell
 # Windows
 ./setup_env.ps1
@@ -336,6 +344,13 @@ python scripts/stream_console.py status --json
 python scripts/stream_console.py down
 ```
 
+Block editor quick path:
+
+```bash
+python scripts/stream_console.py up --allow-local-mutations
+# open http://127.0.0.1:5173 -> Editor tab
+```
+
 Stream console options:
 - `up --api-host --api-port --ui-host --ui-port --log-dir --allow-local-mutations --token --api-only --ui-only`
 - `status --log-dir --json`
@@ -361,6 +376,20 @@ Control policy snapshot drift checker:
 python scripts/control_policy_snapshot.py
 python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json
 ```
+
+Environment bootstrap helper:
+
+```bash
+python scripts/bootstrap_env.py --profile base --manager auto
+python scripts/bootstrap_env.py --profile console --manager auto
+python scripts/bootstrap_env.py --profile yolo --manager auto
+python scripts/bootstrap_env.py --profile console --manager pip --dry-run
+```
+
+Bootstrap profiles:
+- `base`: runtime + dev Python dependencies
+- `console`: base + API/UI runtime checks (`fastapi`, `uvicorn`, `node`, `npm`)
+- `yolo`: base + model stack opt-in (`requirements-model.txt`)
 
 Runtime environment variables used per stream process:
 - `SS_STREAM_ID`
@@ -404,6 +433,10 @@ API surface (v1):
 - `GET /api/v1/presets?experimental=<bool>`
 - `POST /api/v1/presets/{preset_id}/validate`
 - `POST /api/v1/presets/{preset_id}/run`
+- `GET /api/v1/graph/profiles?experimental=<bool>`
+- `POST /api/v1/graph/from-profile`
+- `POST /api/v1/graph/validate`
+- `POST /api/v1/graph/run`
 - `POST /api/v1/fleet/start`
 - `POST /api/v1/fleet/stop`
 - `GET /api/v1/fleet/status`
@@ -418,6 +451,7 @@ Quick checks:
 curl -s http://127.0.0.1:18700/api/v1/health
 curl -s "http://127.0.0.1:18700/api/v1/presets?experimental=false"
 curl -s -X POST http://127.0.0.1:18700/api/v1/env/check -H "Content-Type: application/json" -d '{"profile":"base","strict":false}'
+curl -s -X POST http://127.0.0.1:18700/api/v1/graph/validate -H "Content-Type: application/json" -d '{"spec":{"version":2,"nodes":[],"edges":[],"config":{}}}'
 ```
 
 ### Stream Console Web UI (React + Vite + TypeScript)
@@ -454,6 +488,14 @@ export ALLOW_ALL_PLUGINS=true
 v2 노드 그래프 런타임 기준 명령어 레퍼런스입니다.
 
 ### 사전 준비
+
+의존성 부트스트랩(권장):
+
+```bash
+python scripts/bootstrap_env.py --profile base --manager pip
+python scripts/bootstrap_env.py --profile console --manager pip
+python scripts/bootstrap_env.py --profile yolo --manager pip
+```
 
 ```powershell
 # Windows
@@ -785,6 +827,13 @@ python scripts/stream_console.py status --json
 python scripts/stream_console.py down
 ```
 
+블록 에디터 빠른 경로:
+
+```bash
+python scripts/stream_console.py up --allow-local-mutations
+# http://127.0.0.1:5173 접속 -> Editor 탭
+```
+
 stream_console 옵션:
 - `up --api-host --api-port --ui-host --ui-port --log-dir --allow-local-mutations --token --api-only --ui-only`
 - `status --log-dir --json`
@@ -803,6 +852,20 @@ python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_
 ```bash
 python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
 ```
+
+환경 부트스트랩 헬퍼:
+
+```bash
+python scripts/bootstrap_env.py --profile base --manager auto
+python scripts/bootstrap_env.py --profile console --manager auto
+python scripts/bootstrap_env.py --profile yolo --manager auto
+python scripts/bootstrap_env.py --profile console --manager pip --dry-run
+```
+
+bootstrap 프로필:
+- `base`: 기본 런타임 + 개발용 Python 의존성
+- `console`: base + API/UI 실행 필수 검사(`fastapi`, `uvicorn`, `node`, `npm`)
+- `yolo`: base + 모델 스택 opt-in(`requirements-model.txt`)
 
 stream별 런타임 환경변수:
 - `SS_STREAM_ID`
@@ -846,6 +909,10 @@ API 표면(v1):
 - `GET /api/v1/presets?experimental=<bool>`
 - `POST /api/v1/presets/{preset_id}/validate`
 - `POST /api/v1/presets/{preset_id}/run`
+- `GET /api/v1/graph/profiles?experimental=<bool>`
+- `POST /api/v1/graph/from-profile`
+- `POST /api/v1/graph/validate`
+- `POST /api/v1/graph/run`
 - `POST /api/v1/fleet/start`
 - `POST /api/v1/fleet/stop`
 - `GET /api/v1/fleet/status`
@@ -860,6 +927,7 @@ API 표면(v1):
 curl -s http://127.0.0.1:18700/api/v1/health
 curl -s "http://127.0.0.1:18700/api/v1/presets?experimental=false"
 curl -s -X POST http://127.0.0.1:18700/api/v1/env/check -H "Content-Type: application/json" -d '{"profile":"base","strict":false}'
+curl -s -X POST http://127.0.0.1:18700/api/v1/graph/validate -H "Content-Type: application/json" -d '{"spec":{"version":2,"nodes":[],"edges":[],"config":{}}}'
 ```
 
 ### Stream Console 웹 UI (React + Vite + TypeScript)
