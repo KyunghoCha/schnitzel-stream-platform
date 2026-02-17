@@ -59,6 +59,7 @@ describe("Stream Console App", () => {
     expect(screen.getByRole("button", { name: "Dashboard" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Presets" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Governance" })).toBeInTheDocument();
+    expect(screen.getByText(/Monitor shows fleet log\/PID streams only/i)).toBeInTheDocument();
   });
 
   it("loads presets when switching tab", async () => {
@@ -68,6 +69,8 @@ describe("Stream Console App", () => {
     await waitFor(() => {
       expect(screen.getByDisplayValue("inproc_demo")).toBeInTheDocument();
     });
+    expect(screen.getByText("Preset Session Output (One-shot)")).toBeInTheDocument();
+    expect(screen.getByText(/not a fleet monitor stream/i)).toBeInTheDocument();
   });
 
   it("runs dashboard refresh", async () => {

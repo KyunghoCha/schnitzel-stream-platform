@@ -46,6 +46,7 @@ export function App() {
   const [auditLimit, setAuditLimit] = useState<string>("50");
   const [policySnapshot, setPolicySnapshot] = useState<Record<string, unknown> | null>(null);
   const [auditRows, setAuditRows] = useState<Record<string, unknown>[]>([]);
+  const [presetSessionOutput, setPresetSessionOutput] = useState<string>("(no preset session output yet)");
 
   const [output, setOutput] = useState<string>("Ready");
   const currentPreset = useMemo(() => presets.find((x) => x.preset_id === presetId), [presets, presetId]);
@@ -107,6 +108,7 @@ export function App() {
         method: "POST",
         body
       });
+      setPresetSessionOutput(JSON.stringify(resp, null, 2));
       setOutput(JSON.stringify(resp, null, 2));
     });
   }
@@ -216,6 +218,7 @@ export function App() {
               Refresh
             </button>
           </div>
+          <p className="hint">Monitor shows fleet log/PID streams only. Preset run output is a one-shot session result.</p>
           <pre>{JSON.stringify({ health, fleetStatus, monitorSnapshot }, null, 2)}</pre>
         </article>
       </section>
@@ -266,6 +269,10 @@ export function App() {
           <p className="hint">
             selected: {currentPreset?.preset_id ?? "-"} {currentPreset?.experimental ? "(experimental)" : ""}
           </p>
+          <h4>Preset Session Output (One-shot)</h4>
+          <p className="hint">This output is not a fleet monitor stream.</p>
+          <pre>{presetSessionOutput}</pre>
+          <h4>Preset Catalog Payload</h4>
           <pre>{JSON.stringify(presets, null, 2)}</pre>
         </article>
       </section>
@@ -329,6 +336,7 @@ export function App() {
               Refresh
             </button>
           </div>
+          <p className="hint">Monitor tracks fleet logs/PIDs only. Use Fleet Start to populate stream rows.</p>
           <div className="table-wrap">
             <table>
               <thead>
