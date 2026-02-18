@@ -1,8 +1,8 @@
 # Handoff Prompt (schnitzel-stream-platform)
 
-Last updated: 2026-02-18
+Last updated: 2026-02-19
 
-Current step id (SSOT): `P26.1` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P26.8` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -35,7 +35,7 @@ Current baseline:
 - P23.9 interaction hotfix completed (drag smoothness + snap connect + overlap-safe align)
 - reliability hardening phase completed (`P24.1`~`P24.7`, durable-first reliability expansion delivered)
 - plugin DX closure phase completed (`P25.1`~`P25.6`, scaffold dry-run/validate flow + contract check + required CI + docs sync)
-- productization closure phase opened (`P26.1`, Lab RC freeze + drift-gate finalization lane)
+- productization closure phase completed (`P26.1`~`P26.8`, Lab RC freeze + drift-gate + conda required + release readiness)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -74,7 +74,7 @@ Verification (local):
 - P23.9 상호작용 핫픽스 완료(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)
 - 운영 신뢰성 하드닝 페이즈 완료(`P24.1`~`P24.7`, durable-first 신뢰성 확장 반영 완료)
 - 플러그인 DX 마감 페이즈 완료(`P25.1`~`P25.6`, 스캐폴드 dry-run/validate + 계약검사 + required CI + 문서 동기화)
-- 제품화 마감 페이즈 오픈(`P26.1`, Lab RC 동결 + 드리프트 게이트 최종화 레인)
+- 제품화 마감 페이즈 완료(`P26.1`~`P26.8`, Lab RC 동결 + 드리프트 게이트 + conda required + release readiness)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`

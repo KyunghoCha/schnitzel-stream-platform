@@ -1,6 +1,6 @@
 # Schnitzel Stream Docs Index
 
-Last updated: 2026-02-18
+Last updated: 2026-02-19
 
 ## English
 
@@ -32,6 +32,7 @@ Runtime baseline:
 17. `docs/guides/local_console_quickstart.md`
 18. `docs/guides/graph_wizard_guide.md`
 19. `docs/guides/block_editor_quickstart.md`
+20. `docs/guides/lab_rc_release_checklist.md`
 
 Onboarding standard path:
 - `bootstrap -> doctor -> up/down`
@@ -74,6 +75,9 @@ Onboarding standard path:
 - Graph editor ops service: `src/schnitzel_stream/ops/graph_editor.py`
 - Block editor direct-manipulation UI: `apps/stream-console/src/App.tsx`, `apps/stream-console/src/editor_nodes.tsx`, `apps/stream-console/src/editor_layout.ts`, `apps/stream-console/src/editor_connect.ts`
 - Control policy snapshot gate: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`
+- Command surface snapshot gate: `scripts/command_surface_snapshot.py`, `configs/policy/command_surface_snapshot_v1.json`
+- SSOT sync drift gate: `scripts/ssot_sync_check.py`, `configs/policy/ssot_sync_snapshot_v1.json`
+- Release readiness aggregate gate: `scripts/release_readiness.py`
 - Environment diagnostics: `scripts/env_doctor.py`
 - Reliability smoke gate: `scripts/reliability_smoke.py`
 - Showcase report renderer: `scripts/demo_report_view.py`
@@ -111,6 +115,7 @@ Onboarding standard path:
 17. `docs/guides/local_console_quickstart.md`
 18. `docs/guides/graph_wizard_guide.md`
 19. `docs/guides/block_editor_quickstart.md`
+20. `docs/guides/lab_rc_release_checklist.md`
 
 온보딩 표준 경로:
 - `bootstrap -> doctor -> up/down`
@@ -153,6 +158,9 @@ Onboarding standard path:
 - 그래프 편집 ops 서비스: `src/schnitzel_stream/ops/graph_editor.py`
 - 블록 에디터 직접 조작 UI: `apps/stream-console/src/App.tsx`, `apps/stream-console/src/editor_nodes.tsx`, `apps/stream-console/src/editor_layout.ts`, `apps/stream-console/src/editor_connect.ts`
 - 제어 정책 스냅샷 게이트: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`
+- 명령 표면 스냅샷 게이트: `scripts/command_surface_snapshot.py`, `configs/policy/command_surface_snapshot_v1.json`
+- SSOT 동기화 드리프트 게이트: `scripts/ssot_sync_check.py`, `configs/policy/ssot_sync_snapshot_v1.json`
+- 릴리즈 준비 집약 게이트: `scripts/release_readiness.py`
 - 환경 진단: `scripts/env_doctor.py`
 - 신뢰성 스모크 게이트: `scripts/reliability_smoke.py`
 - 쇼케이스 리포트 렌더러: `scripts/demo_report_view.py`

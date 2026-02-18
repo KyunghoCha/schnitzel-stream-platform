@@ -1,6 +1,6 @@
 # Doc-Code Mapping
 
-Last updated: 2026-02-18
+Last updated: 2026-02-19
 
 ## English
 
@@ -41,6 +41,7 @@ This document is the active mapping between runtime code and maintained docs.
 | Local mock backend tool | `src/schnitzel_stream/tools/mock_backend.py` | `tests/unit/nodes/test_http_nodes.py` | `docs/ops/command_reference.md` |
 | Ops shared service layer (preset/fleet/monitor/env/console) | `src/schnitzel_stream/ops/*.py` | `tests/unit/scripts/test_stream_run.py`, `tests/unit/scripts/test_stream_fleet.py`, `tests/unit/scripts/test_stream_monitor.py`, `tests/unit/scripts/test_env_doctor.py`, `tests/unit/ops/test_console_ops.py` | `docs/ops/command_reference.md`, `README.md`, `docs/guides/local_console_quickstart.md` |
 | Stream control API + governance hardening | `src/schnitzel_stream/control_api/*.py`, `scripts/stream_control_api.py`, `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json` | `tests/unit/control_api/test_control_api.py`, `tests/unit/control_api/test_audit.py`, `tests/unit/scripts/test_control_policy_snapshot.py` | `docs/ops/command_reference.md`, `README.md`, `docs/roadmap/execution_roadmap.md` |
+| Productization drift gates (Lab RC freeze) | `scripts/command_surface_snapshot.py`, `scripts/ssot_sync_check.py`, `scripts/release_readiness.py`, `configs/policy/command_surface_snapshot_v1.json`, `configs/policy/ssot_sync_snapshot_v1.json` | `tests/unit/scripts/test_command_surface_snapshot.py`, `tests/unit/scripts/test_ssot_sync_check.py`, `tests/unit/scripts/test_release_readiness.py` | `docs/guides/lab_rc_release_checklist.md`, `docs/implementation/operations_release.md`, `docs/ops/command_reference.md` |
 | Stream console web UI | `apps/stream-console/src/*.tsx`, `apps/stream-console/src/*.ts` | `apps/stream-console/src/App.test.tsx` | `README.md`, `docs/ops/command_reference.md` |
 | Graph authoring wizard (template profiles) | `scripts/graph_wizard.py`, `src/schnitzel_stream/ops/graph_wizard.py`, `configs/wizard_profiles/*.yaml`, `configs/graphs/templates/*.yaml` | `tests/unit/ops/test_graph_wizard_ops.py`, `tests/unit/scripts/test_graph_wizard.py` | `docs/guides/graph_wizard_guide.md`, `docs/ops/command_reference.md`, `README.md` |
 | Dependency baseline bootstrap (Conda + pip) | `environment.yml`, `scripts/bootstrap_env.py`, `setup_env.ps1`, `setup_env.sh` | `python3 scripts/bootstrap_env.py --profile base --manager pip --dry-run --skip-doctor --json` | `README.md`, `docs/ops/command_reference.md`, `docs/guides/local_console_quickstart.md` |
@@ -63,6 +64,9 @@ This document is the active mapping between runtime code and maintained docs.
 | `scripts/stream_console.py` | one-command local console bootstrap (`up`/`status`/`down`/`doctor`) | `docs/ops/command_reference.md`, `docs/guides/local_console_quickstart.md`, `README.md` |
 | `scripts/stream_control_api.py` | local-first control API server (optional bearer auth + governance endpoints) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/control_policy_snapshot.py` | control policy snapshot emit/check (`--check` drift gate) | `docs/ops/command_reference.md`, `README.md` |
+| `scripts/command_surface_snapshot.py` | frozen command surface snapshot emit/check (`--check` drift gate) | `docs/ops/command_reference.md`, `docs/guides/lab_rc_release_checklist.md` |
+| `scripts/ssot_sync_check.py` | SSOT step/status synchronization drift checker (`--strict`, `--json`) | `docs/ops/command_reference.md`, `docs/roadmap/execution_roadmap.md` |
+| `scripts/release_readiness.py` | aggregated Lab RC release gate runner (`--profile lab-rc`, `--json`) | `docs/guides/lab_rc_release_checklist.md`, `docs/implementation/operations_release.md`, `docs/ops/command_reference.md` |
 | `scripts/proc_graph_validate.py` | process-graph foundation validator (`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
 | `scripts/scaffold_plugin.py` | plugin code/test/graph scaffold generator (`--dry-run`, `--validate-generated`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
 | `scripts/plugin_contract_check.py` | plugin pack/module/graph contract checker (`--strict`, `--json`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
@@ -116,6 +120,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | 로컬 mock backend 도구 | `src/schnitzel_stream/tools/mock_backend.py` | `tests/unit/nodes/test_http_nodes.py` | `docs/ops/command_reference.md` |
 | Ops 공통 서비스 레이어(preset/fleet/monitor/env/console) | `src/schnitzel_stream/ops/*.py` | `tests/unit/scripts/test_stream_run.py`, `tests/unit/scripts/test_stream_fleet.py`, `tests/unit/scripts/test_stream_monitor.py`, `tests/unit/scripts/test_env_doctor.py`, `tests/unit/ops/test_console_ops.py` | `docs/ops/command_reference.md`, `README.md`, `docs/guides/local_console_quickstart.md` |
 | Stream control API + 거버넌스 하드닝 | `src/schnitzel_stream/control_api/*.py`, `scripts/stream_control_api.py`, `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json` | `tests/unit/control_api/test_control_api.py`, `tests/unit/control_api/test_audit.py`, `tests/unit/scripts/test_control_policy_snapshot.py` | `docs/ops/command_reference.md`, `README.md`, `docs/roadmap/execution_roadmap.md` |
+| 제품화 드리프트 게이트(Lab RC 동결) | `scripts/command_surface_snapshot.py`, `scripts/ssot_sync_check.py`, `scripts/release_readiness.py`, `configs/policy/command_surface_snapshot_v1.json`, `configs/policy/ssot_sync_snapshot_v1.json` | `tests/unit/scripts/test_command_surface_snapshot.py`, `tests/unit/scripts/test_ssot_sync_check.py`, `tests/unit/scripts/test_release_readiness.py` | `docs/guides/lab_rc_release_checklist.md`, `docs/implementation/operations_release.md`, `docs/ops/command_reference.md` |
 | Stream console 웹 UI | `apps/stream-console/src/*.tsx`, `apps/stream-console/src/*.ts` | `apps/stream-console/src/App.test.tsx` | `README.md`, `docs/ops/command_reference.md` |
 | 그래프 작성 wizard(템플릿 프로필) | `scripts/graph_wizard.py`, `src/schnitzel_stream/ops/graph_wizard.py`, `configs/wizard_profiles/*.yaml`, `configs/graphs/templates/*.yaml` | `tests/unit/ops/test_graph_wizard_ops.py`, `tests/unit/scripts/test_graph_wizard.py` | `docs/guides/graph_wizard_guide.md`, `docs/ops/command_reference.md`, `README.md` |
 | 의존성 기준선 부트스트랩(Conda + pip) | `environment.yml`, `scripts/bootstrap_env.py`, `setup_env.ps1`, `setup_env.sh` | `python3 scripts/bootstrap_env.py --profile base --manager pip --dry-run --skip-doctor --json` | `README.md`, `docs/ops/command_reference.md`, `docs/guides/local_console_quickstart.md` |
@@ -138,6 +143,9 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | `scripts/stream_console.py` | 원커맨드 로컬 콘솔 부트스트랩(`up`/`status`/`down`/`doctor`) | `docs/ops/command_reference.md`, `docs/guides/local_console_quickstart.md`, `README.md` |
 | `scripts/stream_control_api.py` | 로컬 우선 control API 서버(선택적 Bearer 인증 + 거버넌스 엔드포인트) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/control_policy_snapshot.py` | 제어 정책 스냅샷 생성/검사(`--check` 드리프트 게이트) | `docs/ops/command_reference.md`, `README.md` |
+| `scripts/command_surface_snapshot.py` | 동결 명령 표면 스냅샷 생성/검사(`--check` 드리프트 게이트) | `docs/ops/command_reference.md`, `docs/guides/lab_rc_release_checklist.md` |
+| `scripts/ssot_sync_check.py` | SSOT step/status 동기화 드리프트 검사(`--strict`, `--json`) | `docs/ops/command_reference.md`, `docs/roadmap/execution_roadmap.md` |
+| `scripts/release_readiness.py` | Lab RC 집약 릴리즈 게이트 실행기(`--profile lab-rc`, `--json`) | `docs/guides/lab_rc_release_checklist.md`, `docs/implementation/operations_release.md`, `docs/ops/command_reference.md` |
 | `scripts/proc_graph_validate.py` | 프로세스 그래프 foundation 검증기(`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
 | `scripts/scaffold_plugin.py` | 플러그인 코드/테스트/그래프 스캐폴드 생성기(`--dry-run`, `--validate-generated`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
 | `scripts/plugin_contract_check.py` | 플러그인 팩/모듈/그래프 계약 검사기(`--strict`, `--json`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |

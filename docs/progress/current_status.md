@@ -1,12 +1,12 @@
 # Current Status
 
-Last updated: 2026-02-18
+Last updated: 2026-02-19
 
 ## English
 
 - Runtime baseline: v2 node graph only
 - Legacy runtime: removed from `main` (`P4.5` complete)
-- Execution SSOT current step id: `P26.1` (productization closure phase opened)
+- Execution SSOT current step id: `P26.8` (productization closure completed)
 - P10 hardening track (`P10.1`~`P10.5`) completed
 - P11 demo track (`P11.1`~`P11.6`) completed
 - P12 foundation track completed (`P12.1`~`P12.7`: validator-first process graph scope)
@@ -24,8 +24,8 @@ Last updated: 2026-02-18
 - P23.9 interaction hotfix completed (drag smoothness + snap connect + overlap-safe align)
 - P24 reliability hardening track completed (`P24.1`~`P24.7`: durable boundaries + restart/backlog/ack regressions + reliability smoke CI gate)
 - P25 plugin DX closure track completed (`P25.1`~`P25.6`: scaffold dry-run/validate flow + contract checker + required CI + docs sync)
-- P26 productization closure track in progress (`P26.1`: SSOT opened, release/drift gates and conda-required promotion next)
-- Non-research completion rule recorded: roadmap is implementation-complete when `P22`~`P26` are done in order (`R*`/`G*` remain out-of-scope)
+- P26 productization closure track completed (`P26.1`~`P26.8`: Lab RC semver freeze, command/SSOT drift gates, conda required lane, release-readiness aggregator, docs sync)
+- Non-research completion rule satisfied: `P22`~`P26` done in order (research gates `R*`/`G*` remain out-of-scope)
 - Owner split and research-gate contract: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 
 For detailed status, always refer to:
@@ -36,7 +36,7 @@ For detailed status, always refer to:
 
 - 런타임 기준선: v2 노드 그래프 전용
 - 레거시 런타임: `main`에서 제거 완료 (`P4.5` 완료)
-- 실행 SSOT current step id: `P26.1` (제품화 마감 페이즈 오픈)
+- 실행 SSOT current step id: `P26.8` (제품화 마감 페이즈 완료)
 - P10 하드닝 트랙(`P10.1`~`P10.5`) 완료
 - P11 데모 트랙(`P11.1`~`P11.6`) 완료
 - P12 foundation 트랙 완료(`P12.1`~`P12.7`: validator-first 프로세스 그래프 범위)
@@ -54,8 +54,8 @@ For detailed status, always refer to:
 - P23.9 상호작용 핫픽스 완료(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)
 - P24 운영 신뢰성 하드닝 트랙 완료(`P24.1`~`P24.7`: durable 경계/재시작 회귀/신뢰성 스모크 CI 게이트 반영)
 - P25 플러그인 DX 마감 트랙 완료(`P25.1`~`P25.6`: 스캐폴드 dry-run/validate + 계약검사기 + required CI + 문서 동기화)
-- P26 제품화 마감 트랙 진행 중(`P26.1`: SSOT 오픈, 릴리즈/드리프트 게이트 및 conda required 승격 예정)
-- 연구 제외 완성 기준 반영: `P22`~`P26`을 순차 완료하면 구현 범위 완성으로 간주(`R*`/`G*`는 비범위 유지)
+- P26 제품화 마감 트랙 완료(`P26.1`~`P26.8`: Lab RC semver 동결, 명령면/SSOT 드리프트 게이트, conda required 레인, 릴리즈 집약 명령, 문서 동기화)
+- 연구 제외 완성 기준 충족: `P22`~`P26` 순차 완료(`R*`/`G*`는 비범위 유지)
 - 소유권 분리/연구 게이트 계약: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 
 상세 상태는 아래를 기준으로 본다:

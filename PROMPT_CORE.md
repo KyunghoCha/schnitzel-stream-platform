@@ -1,6 +1,6 @@
 # Handoff Prompt Core (schnitzel-stream-platform)
 
-Last updated: 2026-02-18
+Last updated: 2026-02-19
 
 ## English
 
@@ -10,7 +10,7 @@ Execution SSOT:
 - `docs/roadmap/execution_roadmap.md`
 
 Current status:
-- Current step id: `P26.1` (productization closure phase opened; Lab RC freeze/drift gates in progress)
+- Current step id: `P26.8` (productization closure completed; Lab RC freeze/drift gates finalized)
 - Core platform phases (`P0`~`P10`) are complete on `main`
 - Demo packaging phase (`P11`) is complete on `main`
 - Process-graph foundation phase (`P12`) is complete (`validator-first`, SQLite bridge)
@@ -28,7 +28,7 @@ Current status:
 - Interaction hotfix step (`P23.9`) is complete (drag smoothness + snap connect + overlap-safe align)
 - Reliability hardening phase (`P24.1`~`P24.7`) is complete
 - Plugin DX closure phase is complete (`P25.1`~`P25.6`)
-- Productization closure phase is open (`P26.1`)
+- Productization closure phase is complete (`P26.1`~`P26.8`)
 - Legacy runtime/docs were removed from the working tree
 - Historical legacy state can be inspected via tag `pre-legacy-purge-20260216`
 
@@ -60,7 +60,7 @@ Context budget rule:
 - `docs/roadmap/execution_roadmap.md`
 
 현재 상태:
-- 현재 step id: `P26.1` (제품화 마감 페이즈 오픈, Lab RC 동결/드리프트 게이트 진행)
+- 현재 step id: `P26.8` (제품화 마감 페이즈 완료, Lab RC 동결/드리프트 게이트 마감)
 - 코어 플랫폼 단계(`P0`~`P10`)는 `main` 기준 완료
 - 데모 패키징 단계(`P11`) 완료
 - 프로세스 그래프 foundation 단계(`P12`) 완료(`validator-first`, SQLite 브리지)
@@ -78,7 +78,7 @@ Context budget rule:
 - 상호작용 핫픽스 단계(`P23.9`) 완료(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)
 - 운영 신뢰성 하드닝 단계(`P24.1`~`P24.7`) 완료
 - 플러그인 DX 마감 단계 완료(`P25.1`~`P25.6`)
-- 제품화 마감 단계 오픈(`P26.1`)
+- 제품화 마감 단계 완료(`P26.1`~`P26.8`)
 - 레거시 런타임/문서는 워킹 트리에서 제거됨
 - 과거 레거시 상태는 태그 `pre-legacy-purge-20260216`에서 확인
 
