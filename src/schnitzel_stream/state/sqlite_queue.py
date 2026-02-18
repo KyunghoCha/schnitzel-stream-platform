@@ -81,7 +81,10 @@ class SqliteQueue:
         key_raw = idempotency_key or packet.meta.get("idempotency_key") or packet.packet_id
         key = str(key_raw).strip()
         if not key:
-            raise ValueError("idempotency_key must not be empty")
+            raise ValueError(
+                "idempotency_key must not be empty "
+                f"(path={self._path} kind={packet.kind} source_id={packet.source_id})",
+            )
 
         # P7.1 portability rule:
         # - Durable lanes are JSON-only until a blob/handle strategy exists.
@@ -92,7 +95,7 @@ class SqliteQueue:
         except TypeError as exc:
             raise TypeError(
                 "SqliteQueue requires JSON-serializable packet.payload and packet.meta "
-                f"(kind={packet.kind} source_id={packet.source_id})"
+                f"(path={self._path} kind={packet.kind} source_id={packet.source_id})"
             ) from exc
         cur = self._conn.cursor()
         cur.execute(
@@ -116,13 +119,19 @@ class SqliteQueue:
         if cur.rowcount == 1:
             seq = cur.lastrowid
             if seq is None:
-                raise RuntimeError("sqlite enqueue failed: lastrowid is None")
+                raise RuntimeError(
+                    "sqlite enqueue failed: lastrowid is None "
+                    f"(path={self._path} key={key} kind={packet.kind} source_id={packet.source_id})",
+                )
             return int(seq)
 
         # Insert was ignored due to idempotency constraint; return existing seq.
         row = cur.execute("SELECT seq FROM packets WHERE idempotency_key = ?", (key,)).fetchone()
         if row is None:
-            raise RuntimeError("sqlite enqueue failed: idempotency row not found after conflict")
+            raise RuntimeError(
+                "sqlite enqueue failed: idempotency row not found after conflict "
+                f"(path={self._path} key={key} kind={packet.kind} source_id={packet.source_id})",
+            )
         return int(row["seq"])
 
     def read(self, *, limit: int = 100) -> list[QueuedPacket]:
