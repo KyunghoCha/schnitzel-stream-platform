@@ -414,6 +414,25 @@ python scripts/control_policy_snapshot.py
 python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json
 ```
 
+Command surface snapshot drift checker:
+
+```bash
+python scripts/command_surface_snapshot.py
+python scripts/command_surface_snapshot.py --check --baseline configs/policy/command_surface_snapshot_v1.json
+```
+
+SSOT sync drift checker:
+
+```bash
+python scripts/ssot_sync_check.py --strict --json
+```
+
+Release readiness aggregate (Lab RC):
+
+```bash
+python scripts/release_readiness.py --profile lab-rc --json
+```
+
 Environment bootstrap helper:
 
 ```bash
@@ -948,6 +967,32 @@ bootstrap 프로필:
 bootstrap 옵션:
 - `--skip-doctor`: bootstrap 단계에서 doctor 실행 생략
 - `--json`: 기계 파싱 가능한 envelope 출력(`schema_version`, `status`, `steps`, `next_action`)
+
+Control API 정책 스냅샷 드리프트 검사:
+
+```bash
+python scripts/control_policy_snapshot.py
+python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json
+```
+
+명령 표면 스냅샷 드리프트 검사:
+
+```bash
+python scripts/command_surface_snapshot.py
+python scripts/command_surface_snapshot.py --check --baseline configs/policy/command_surface_snapshot_v1.json
+```
+
+SSOT 동기화 드리프트 검사:
+
+```bash
+python scripts/ssot_sync_check.py --strict --json
+```
+
+릴리즈 준비 집약 검사(Lab RC):
+
+```bash
+python scripts/release_readiness.py --profile lab-rc --json
+```
 
 stream별 런타임 환경변수:
 - `SS_STREAM_ID`

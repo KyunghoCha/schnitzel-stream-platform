@@ -35,10 +35,15 @@ This checklist defines the Lab RC release baseline for `v0.1.0-rc.1`.
 - `python3 scripts/command_surface_snapshot.py --check --baseline configs/policy/command_surface_snapshot_v1.json`
 - `python3 scripts/ssot_sync_check.py --strict --json`
 
-5. Release readiness aggregate
+5. Conda reproducibility lane (required)
+- `conda env update -n schnitzel-stream -f environment.yml --prune`
+- `conda run -n schnitzel-stream python scripts/env_doctor.py --profile console --strict --json`
+- `conda run -n schnitzel-stream python scripts/stream_run.py --preset inproc_demo --validate-only`
+
+6. Release readiness aggregate
 - `python3 scripts/release_readiness.py --profile lab-rc --json`
 
-6. Tagging and note draft
+7. Tagging and note draft
 - tag format: `v0.1.0-rc.1`
 - include:
   - freeze scope
@@ -78,10 +83,15 @@ This checklist defines the Lab RC release baseline for `v0.1.0-rc.1`.
 - `python3 scripts/command_surface_snapshot.py --check --baseline configs/policy/command_surface_snapshot_v1.json`
 - `python3 scripts/ssot_sync_check.py --strict --json`
 
-5. 릴리즈 준비 집약 명령
+5. conda 재현성 레인(required)
+- `conda env update -n schnitzel-stream -f environment.yml --prune`
+- `conda run -n schnitzel-stream python scripts/env_doctor.py --profile console --strict --json`
+- `conda run -n schnitzel-stream python scripts/stream_run.py --preset inproc_demo --validate-only`
+
+6. 릴리즈 준비 집약 명령
 - `python3 scripts/release_readiness.py --profile lab-rc --json`
 
-6. 태그/노트 초안
+7. 태그/노트 초안
 - 태그 형식: `v0.1.0-rc.1`
 - 포함 항목:
   - 동결 범위

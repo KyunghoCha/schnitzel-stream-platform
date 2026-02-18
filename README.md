@@ -37,6 +37,11 @@ Current focus:
   - `scripts/env_doctor.py`
   - `scripts/graph_wizard.py`
   - `scripts/stream_control_api.py`
+- Required gates: both `pip` and `conda` lanes must pass
+  - policy drift: `python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json`
+  - command-surface drift: `python scripts/command_surface_snapshot.py --check --baseline configs/policy/command_surface_snapshot_v1.json`
+  - SSOT drift: `python scripts/ssot_sync_check.py --strict --json`
+  - aggregate readiness: `python scripts/release_readiness.py --profile lab-rc --json`
 - Release checklist: `docs/guides/lab_rc_release_checklist.md`
 
 ### Architecture
@@ -328,6 +333,11 @@ Default allowlist is `schnitzel_stream.*`.
   - `scripts/env_doctor.py`
   - `scripts/graph_wizard.py`
   - `scripts/stream_control_api.py`
+- 필수 게이트: `pip` + `conda` 레인 모두 통과
+  - 정책 드리프트: `python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json`
+  - 명령 표면 드리프트: `python scripts/command_surface_snapshot.py --check --baseline configs/policy/command_surface_snapshot_v1.json`
+  - SSOT 드리프트: `python scripts/ssot_sync_check.py --strict --json`
+  - 집약 릴리즈 검사: `python scripts/release_readiness.py --profile lab-rc --json`
 - 릴리즈 체크리스트: `docs/guides/lab_rc_release_checklist.md`
 
 ### 아키텍처
