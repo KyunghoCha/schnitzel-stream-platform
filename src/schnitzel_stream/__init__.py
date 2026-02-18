@@ -13,4 +13,4 @@ Status:
 __all__ = ["__version__"]
 
 # Keep a local version string for logs/docs. (No packaging metadata yet.)
-__version__ = "0.1.0"
+__version__ = "0.1.0-rc.1"

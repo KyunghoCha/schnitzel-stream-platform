@@ -25,6 +25,20 @@ Current focus:
 - edge-oriented ops conventions
 - CLI is graph-native only
 
+### Release Baseline
+
+- Lab RC target: `v0.1.0-rc.1`
+- Freeze scope: Core+Ops command surfaces
+  - `python -m schnitzel_stream`
+  - `scripts/stream_run.py`
+  - `scripts/stream_fleet.py`
+  - `scripts/stream_monitor.py`
+  - `scripts/stream_console.py`
+  - `scripts/env_doctor.py`
+  - `scripts/graph_wizard.py`
+  - `scripts/stream_control_api.py`
+- Release checklist: `docs/guides/lab_rc_release_checklist.md`
+
 ### Architecture
 
 ```mermaid
@@ -301,6 +315,20 @@ Default allowlist is `schnitzel_stream.*`.
 - 내구 큐(SQLite/WAL) 빌딩블록
 - 엣지 운영 관례 정리
 - CLI는 그래프 중심 인터페이스만 지원
+
+### 릴리즈 기준선
+
+- Lab RC 타깃: `v0.1.0-rc.1`
+- 동결 범위: Core+Ops 명령 표면
+  - `python -m schnitzel_stream`
+  - `scripts/stream_run.py`
+  - `scripts/stream_fleet.py`
+  - `scripts/stream_monitor.py`
+  - `scripts/stream_console.py`
+  - `scripts/env_doctor.py`
+  - `scripts/graph_wizard.py`
+  - `scripts/stream_control_api.py`
+- 릴리즈 체크리스트: `docs/guides/lab_rc_release_checklist.md`
 
 ### 아키텍처
 
