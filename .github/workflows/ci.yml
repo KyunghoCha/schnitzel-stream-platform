@@ -80,6 +80,18 @@ jobs:
       - name: Reliability smoke gate
         run: python scripts/reliability_smoke.py --mode quick --json
 
+      - name: Plugin scaffold dry-run gate
+        run: |
+          python scripts/scaffold_plugin.py --repo-root outputs/scaffold_smoke --pack sensor --kind node --name ThresholdNode --dry-run
+
+      - name: Plugin scaffold generate+validate gate
+        run: |
+          python scripts/scaffold_plugin.py --repo-root outputs/scaffold_smoke --pack sensor --kind node --name ThresholdNode --validate-generated
+
+      - name: Plugin contract strict gate
+        run: |
+          python scripts/plugin_contract_check.py --repo-root outputs/scaffold_smoke --pack sensor --module threshold_node --class ThresholdNode --graph outputs/scaffold_smoke/configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
+
       - name: Dependency bootstrap dry-run checks
         run: |
           python scripts/bootstrap_env.py --profile base --manager pip --dry-run --skip-doctor --json
