@@ -1,0 +1,67 @@
+{
+  "commands": [
+    {
+      "entrypoint": "python -m schnitzel_stream",
+      "frozen": true,
+      "id": "core.cli.run",
+      "kind": "core"
+    },
+    {
+      "entrypoint": "python -m schnitzel_stream validate",
+      "frozen": true,
+      "id": "core.cli.validate",
+      "kind": "core"
+    },
+    {
+      "entrypoint": "python scripts/stream_run.py",
+      "frozen": true,
+      "id": "ops.stream_run",
+      "kind": "ops"
+    },
+    {
+      "entrypoint": "python scripts/stream_fleet.py",
+      "frozen": true,
+      "id": "ops.stream_fleet",
+      "kind": "ops"
+    },
+    {
+      "entrypoint": "python scripts/stream_monitor.py",
+      "frozen": true,
+      "id": "ops.stream_monitor",
+      "kind": "ops"
+    },
+    {
+      "entrypoint": "python scripts/stream_console.py",
+      "frozen": true,
+      "id": "ops.stream_console",
+      "kind": "ops"
+    },
+    {
+      "entrypoint": "python scripts/env_doctor.py",
+      "frozen": true,
+      "id": "ops.env_doctor",
+      "kind": "ops"
+    },
+    {
+      "entrypoint": "python scripts/graph_wizard.py",
+      "frozen": true,
+      "id": "ops.graph_wizard",
+      "kind": "ops"
+    },
+    {
+      "entrypoint": "python scripts/stream_control_api.py",
+      "frozen": true,
+      "id": "ops.stream_control_api",
+      "kind": "ops"
+    }
+  ],
+  "freeze_scope": "core_ops",
+  "non_frozen_surfaces": [
+    "experimental preset options (--experimental)",
+    "experimental yolo presets and model stack",
+    "advanced block editor interaction/ui polish tracks"
+  ],
+  "release_target": "lab_rc",
+  "schema_version": 1,
+  "version": "0.1.0-rc.1"
+}
