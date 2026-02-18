@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "documents": {
+    "execution_roadmap": "docs/roadmap/execution_roadmap.md",
+    "current_status": "docs/progress/current_status.md",
+    "prompt": "PROMPT.md",
+    "prompt_core": "PROMPT_CORE.md",
+    "owner_split": "docs/roadmap/owner_split_playbook.md"
+  },
+  "patterns": {
+    "step_id": "Current step id[^`]*`(?P<step>[^`]+)`",
+    "roadmap_current_position": "Current position:.*\\(`(?P<step>P[0-9.]+)`\\)"
+  }
+}
