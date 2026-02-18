@@ -77,6 +77,9 @@ jobs:
       - name: Environment doctor gate
         run: python scripts/env_doctor.py --strict
 
+      - name: Reliability smoke gate
+        run: python scripts/reliability_smoke.py --mode quick --json
+
       - name: Dependency bootstrap dry-run checks
         run: |
           python scripts/bootstrap_env.py --profile base --manager pip --dry-run --skip-doctor --json
