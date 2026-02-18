@@ -29,6 +29,7 @@ This document is the active mapping between runtime code and maintained docs.
 | Process-graph validation (sqlite bridge, strict 1:1) | `src/schnitzel_stream/procgraph/validate.py` | `tests/unit/procgraph/test_proc_graph_validate.py`, `tests/unit/scripts/test_proc_graph_validate_script.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/design/architecture_2.0.md` |
 | In-proc scheduler/runtime | `src/schnitzel_stream/runtime/inproc.py` | `tests/unit/test_inproc_*.py` | `docs/implementation/runtime_core.md` |
 | Plugin loading policy | `src/schnitzel_stream/plugins/registry.py` | `tests/unit/test_graph_compat.py` | `docs/implementation/plugin_packs.md` |
+| Plugin DX scaffold and contract checks | `scripts/scaffold_plugin.py`, `scripts/plugin_contract_check.py` | `tests/unit/scripts/test_scaffold_plugin.py`, `tests/unit/scripts/test_plugin_contract_check.py` | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
 | Packet contract | `src/schnitzel_stream/packet.py` | `tests/unit/test_payload_ref_roundtrip.py` | `docs/contracts/stream_packet.md` |
 | Payload reference strategy | `src/schnitzel_stream/nodes/blob_ref.py` | `tests/unit/test_payload_ref_roundtrip.py` | `docs/contracts/stream_packet.md` |
 | Durable queue and replay primitives | `src/schnitzel_stream/nodes/durable_sqlite.py`, `src/schnitzel_stream/state/sqlite_queue.py` | `tests/unit/test_sqlite_queue.py`, `tests/unit/nodes/test_durable_sqlite_nodes.py`, `tests/integration/test_durable_queue_replay.py`, `tests/integration/test_durable_queue_reliability.py` | `docs/implementation/operations_release.md`, `docs/implementation/testing_quality.md` |
@@ -63,7 +64,8 @@ This document is the active mapping between runtime code and maintained docs.
 | `scripts/stream_control_api.py` | local-first control API server (optional bearer auth + governance endpoints) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/control_policy_snapshot.py` | control policy snapshot emit/check (`--check` drift gate) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/proc_graph_validate.py` | process-graph foundation validator (`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
-| `scripts/scaffold_plugin.py` | plugin code/test/graph scaffold generator | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md` |
+| `scripts/scaffold_plugin.py` | plugin code/test/graph scaffold generator (`--dry-run`, `--validate-generated`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
+| `scripts/plugin_contract_check.py` | plugin pack/module/graph contract checker (`--strict`, `--json`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
 | `scripts/demo_pack.py` | one-command showcase runner (`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/demo_report_view.py` | static showcase report renderer (Markdown/HTML) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/docs_hygiene.py` | docs structure/reference hygiene checker | `docs/governance/documentation_policy.md` |
@@ -102,6 +104,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | 프로세스 그래프 검증(SQLite 브리지, strict 1:1) | `src/schnitzel_stream/procgraph/validate.py` | `tests/unit/procgraph/test_proc_graph_validate.py`, `tests/unit/scripts/test_proc_graph_validate_script.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/design/architecture_2.0.md` |
 | 인프로세스 런타임 스케줄러 | `src/schnitzel_stream/runtime/inproc.py` | `tests/unit/test_inproc_*.py` | `docs/implementation/runtime_core.md` |
 | 플러그인 로딩 정책 | `src/schnitzel_stream/plugins/registry.py` | `tests/unit/test_graph_compat.py` | `docs/implementation/plugin_packs.md` |
+| 플러그인 DX 스캐폴드/계약 검사 | `scripts/scaffold_plugin.py`, `scripts/plugin_contract_check.py` | `tests/unit/scripts/test_scaffold_plugin.py`, `tests/unit/scripts/test_plugin_contract_check.py` | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
 | 패킷 계약 | `src/schnitzel_stream/packet.py` | `tests/unit/test_payload_ref_roundtrip.py` | `docs/contracts/stream_packet.md` |
 | payload_ref 전략 | `src/schnitzel_stream/nodes/blob_ref.py` | `tests/unit/test_payload_ref_roundtrip.py` | `docs/contracts/stream_packet.md` |
 | 내구 큐/재전송 프리미티브 | `src/schnitzel_stream/nodes/durable_sqlite.py`, `src/schnitzel_stream/state/sqlite_queue.py` | `tests/unit/test_sqlite_queue.py`, `tests/unit/nodes/test_durable_sqlite_nodes.py`, `tests/integration/test_durable_queue_replay.py`, `tests/integration/test_durable_queue_reliability.py` | `docs/implementation/operations_release.md`, `docs/implementation/testing_quality.md` |
@@ -136,7 +139,8 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | `scripts/stream_control_api.py` | 로컬 우선 control API 서버(선택적 Bearer 인증 + 거버넌스 엔드포인트) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/control_policy_snapshot.py` | 제어 정책 스냅샷 생성/검사(`--check` 드리프트 게이트) | `docs/ops/command_reference.md`, `README.md` |
 | `scripts/proc_graph_validate.py` | 프로세스 그래프 foundation 검증기(`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
-| `scripts/scaffold_plugin.py` | 플러그인 코드/테스트/그래프 스캐폴드 생성기 | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md` |
+| `scripts/scaffold_plugin.py` | 플러그인 코드/테스트/그래프 스캐폴드 생성기(`--dry-run`, `--validate-generated`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
+| `scripts/plugin_contract_check.py` | 플러그인 팩/모듈/그래프 계약 검사기(`--strict`, `--json`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
 | `scripts/demo_pack.py` | 원커맨드 쇼케이스 실행기(`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/demo_report_view.py` | 쇼케이스 리포트 정적 렌더러(Markdown/HTML) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/docs_hygiene.py` | 문서 구조/참조 무결성 검사기 | `docs/governance/documentation_policy.md` |

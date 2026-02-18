@@ -1,6 +1,6 @@
 # Plugin Authoring Guide
 
-Last updated: 2026-02-16
+Last updated: 2026-02-18
 
 ## English
 
@@ -24,6 +24,13 @@ Optional flags:
 - `--register-export` (default): register generated class in `packs/<pack>/nodes/__init__.py`
 - `--no-register-export`: skip export registration
 - `--force`: overwrite existing generated files
+- `--dry-run`: print deterministic file plan (`action=create|overwrite|conflict`) without writing files
+- `--validate-generated`: run `compileall` + `python -m schnitzel_stream validate --graph ...` after generation
+
+Validation contract:
+- `--dry-run` + `--validate-generated` is blocked (`exit code 2`)
+- generation/validation failure returns `exit code 1`
+- validation failure keeps generated files for debugging
 
 ## Generated Files
 
@@ -44,6 +51,9 @@ For `--pack sensor --kind node --name ThresholdNode`:
 ## Verify
 
 ```bash
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --dry-run
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --validate-generated
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
 python -m schnitzel_stream validate --graph configs/graphs/dev_sensor_threshold_node_v2.yaml
 python3 -m compileall -q src tests scripts
 ```
@@ -72,6 +82,13 @@ python scripts/scaffold_plugin.py \
 - `--register-export` (기본): 생성 클래스를 `packs/<pack>/nodes/__init__.py`에 자동 등록
 - `--no-register-export`: 자동 export 등록 생략
 - `--force`: 기존 생성 파일 덮어쓰기
+- `--dry-run`: 파일을 생성하지 않고 `action=create|overwrite|conflict` 계획만 출력
+- `--validate-generated`: 생성 직후 `compileall` + 그래프 validate를 자동 실행
+
+검증 계약:
+- `--dry-run` + `--validate-generated` 동시 사용은 차단(`exit code 2`)
+- 생성/검증 실패는 `exit code 1` 반환
+- 검증 실패 시 생성 파일은 디버깅을 위해 보존
 
 ## 생성 파일
 
@@ -92,6 +109,9 @@ python scripts/scaffold_plugin.py \
 ## 검증
 
 ```bash
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --dry-run
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --validate-generated
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
 python -m schnitzel_stream validate --graph configs/graphs/dev_sensor_threshold_node_v2.yaml
 python3 -m compileall -q src tests scripts
 ```

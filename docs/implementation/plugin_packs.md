@@ -1,6 +1,6 @@
 # Plugin Packs and Extension Boundaries
 
-Last updated: 2026-02-16
+Last updated: 2026-02-18
 
 ## English
 
@@ -30,11 +30,25 @@ Use the scaffold utility to bootstrap plugin code/test/graph files:
 
 ```bash
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --dry-run
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --validate-generated
 ```
 
 Default behavior:
 - generated class is auto-registered in `src/schnitzel_stream/packs/<pack>/nodes/__init__.py`
 - use `--no-register-export` to skip auto registration
+- `--dry-run` never writes files and returns `1` on conflicts without side effects
+- `--validate-generated` runs compile + graph validation after generation (validation failure keeps files for debugging)
+
+Contract checker:
+
+```bash
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
+```
+
+Exit codes:
+- scaffold: `0` success, `1` runtime/validation failure, `2` usage error
+- contract check: `0` success, `1` contract violation, `2` usage error
 
 Details: `docs/guides/plugin_authoring_guide.md`
 
@@ -75,11 +89,25 @@ When adding/changing plugins:
 
 ```bash
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --dry-run
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --validate-generated
 ```
 
 기본 동작:
 - 생성 클래스는 `src/schnitzel_stream/packs/<pack>/nodes/__init__.py`에 자동 등록된다
 - 자동 등록을 끄려면 `--no-register-export`를 사용한다
+- `--dry-run`은 파일을 쓰지 않고 계획만 출력하며 충돌 시 부작용 없이 `1` 반환
+- `--validate-generated`는 생성 후 compile + 그래프 검증을 즉시 실행(검증 실패 시 파일 보존)
+
+계약 검사기:
+
+```bash
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
+```
+
+종료 코드:
+- scaffold: `0` 성공, `1` 실행/검증 실패, `2` 사용법 오류
+- contract check: `0` 성공, `1` 계약 위반, `2` 사용법 오류
 
 상세 가이드: `docs/guides/plugin_authoring_guide.md`
 

@@ -67,6 +67,7 @@ Onboarding standard path:
 - Stream monitor: `scripts/stream_monitor.py`
 - Preset launcher (no-env-first): `scripts/stream_run.py`
 - Graph wizard (template-profile graph generator): `scripts/graph_wizard.py`
+- Plugin scaffold + contract check: `scripts/scaffold_plugin.py`, `scripts/plugin_contract_check.py`
 - Dependency bootstrap helper: `scripts/bootstrap_env.py`, `environment.yml`
 - Stream console bootstrap: `scripts/stream_console.py`
 - Stream control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`
@@ -145,6 +146,7 @@ Onboarding standard path:
 - Stream 모니터: `scripts/stream_monitor.py`
 - 프리셋 실행기(무환경변수 우선): `scripts/stream_run.py`
 - Graph wizard(템플릿 프로필 그래프 생성기): `scripts/graph_wizard.py`
+- 플러그인 스캐폴드 + 계약 검사: `scripts/scaffold_plugin.py`, `scripts/plugin_contract_check.py`
 - 의존성 부트스트랩 헬퍼: `scripts/bootstrap_env.py`, `environment.yml`
 - Stream 콘솔 부트스트랩: `scripts/stream_console.py`
 - Stream Control API: `scripts/stream_control_api.py`, `src/schnitzel_stream/control_api/`

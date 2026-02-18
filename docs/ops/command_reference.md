@@ -303,11 +303,25 @@ Plugin scaffold:
 
 ```bash
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --dry-run
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --validate-generated
 ```
 
 Scaffold export options:
 - `--register-export` (default): update `packs/<pack>/nodes/__init__.py`
 - `--no-register-export`: skip export registration
+- `--dry-run`: print deterministic file actions (`action=create|overwrite|conflict`) without writes
+- `--validate-generated`: run generated plugin/test compile and graph validation immediately
+
+Plugin contract check:
+
+```bash
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
+```
+
+DX script exit codes:
+- scaffold: `0` success, `1` runtime/validation failure, `2` usage error
+- contract check: `0` success, `1` contract violation, `2` usage error
 
 Stream fleet launcher (primary):
 
@@ -813,11 +827,25 @@ python scripts/reliability_smoke.py --mode full
 
 ```bash
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --dry-run
+python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --validate-generated
 ```
 
 스캐폴드 export 옵션:
 - `--register-export` (기본): `packs/<pack>/nodes/__init__.py` 자동 갱신
 - `--no-register-export`: export 등록 생략
+- `--dry-run`: 파일을 쓰지 않고 `action=create|overwrite|conflict` 계획만 출력
+- `--validate-generated`: 생성 직후 plugin/test compile + graph validate 자동 실행
+
+플러그인 계약 검사:
+
+```bash
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
+```
+
+DX 스크립트 종료코드:
+- scaffold: `0` 성공, `1` 실행/검증 실패, `2` 사용법 오류
+- contract check: `0` 성공, `1` 계약 위반, `2` 사용법 오류
 
 Stream fleet 실행기(주 경로):
 

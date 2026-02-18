@@ -10,7 +10,7 @@ Execution SSOT:
 - `docs/roadmap/execution_roadmap.md`
 
 Current status:
-- Current step id: `P25.1` (plugin DX closure phase opened; scaffold/contract/CI hardening in progress)
+- Current step id: `P25.6` (plugin DX closure phase completed; scaffold/contract/CI/docs hardening delivered)
 - Core platform phases (`P0`~`P10`) are complete on `main`
 - Demo packaging phase (`P11`) is complete on `main`
 - Process-graph foundation phase (`P12`) is complete (`validator-first`, SQLite bridge)
@@ -27,7 +27,7 @@ Current status:
 - Block editor hardening baseline (`P23.1`~`P23.8`) is complete
 - Interaction hotfix step (`P23.9`) is complete (drag smoothness + snap connect + overlap-safe align)
 - Reliability hardening phase (`P24.1`~`P24.7`) is complete
-- Plugin DX closure phase is open (`P25.1`)
+- Plugin DX closure phase is complete (`P25.1`~`P25.6`)
 - Legacy runtime/docs were removed from the working tree
 - Historical legacy state can be inspected via tag `pre-legacy-purge-20260216`
 
@@ -59,7 +59,7 @@ Context budget rule:
 - `docs/roadmap/execution_roadmap.md`
 
 현재 상태:
-- 현재 step id: `P25.1` (플러그인 DX 마감 페이즈 오픈, 스캐폴드/계약검사/CI 하드닝 진행)
+- 현재 step id: `P25.6` (플러그인 DX 마감 페이즈 완료, 스캐폴드/계약검사/CI/문서 하드닝 반영)
 - 코어 플랫폼 단계(`P0`~`P10`)는 `main` 기준 완료
 - 데모 패키징 단계(`P11`) 완료
 - 프로세스 그래프 foundation 단계(`P12`) 완료(`validator-first`, SQLite 브리지)
@@ -76,7 +76,7 @@ Context budget rule:
 - 블록 편집기 하드닝 기준선(`P23.1`~`P23.8`) 완료
 - 상호작용 핫픽스 단계(`P23.9`) 완료(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)
 - 운영 신뢰성 하드닝 단계(`P24.1`~`P24.7`) 완료
-- 플러그인 DX 마감 단계 오픈(`P25.1`)
+- 플러그인 DX 마감 단계 완료(`P25.1`~`P25.6`)
 - 레거시 런타임/문서는 워킹 트리에서 제거됨
 - 과거 레거시 상태는 태그 `pre-legacy-purge-20260216`에서 확인
 

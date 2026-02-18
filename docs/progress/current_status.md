@@ -6,7 +6,7 @@ Last updated: 2026-02-18
 
 - Runtime baseline: v2 node graph only
 - Legacy runtime: removed from `main` (`P4.5` complete)
-- Execution SSOT current step id: `P25.1` (plugin DX closure phase opened)
+- Execution SSOT current step id: `P25.6` (plugin DX closure phase completed)
 - P10 hardening track (`P10.1`~`P10.5`) completed
 - P11 demo track (`P11.1`~`P11.6`) completed
 - P12 foundation track completed (`P12.1`~`P12.7`: validator-first process graph scope)
@@ -23,7 +23,7 @@ Last updated: 2026-02-18
 - P23 block editor hardening baseline completed (`P23.1`~`P23.8`: direct manipulation + kind visuals + built-in layout + readability + docs/tests sync)
 - P23.9 interaction hotfix completed (drag smoothness + snap connect + overlap-safe align)
 - P24 reliability hardening track completed (`P24.1`~`P24.7`: durable boundaries + restart/backlog/ack regressions + reliability smoke CI gate)
-- P25 plugin DX closure track in progress (`P25.1`: SSOT opened, scaffold/contract/CI hardening next)
+- P25 plugin DX closure track completed (`P25.1`~`P25.6`: scaffold dry-run/validate flow + contract checker + required CI + docs sync)
 - Non-research completion rule recorded: roadmap is implementation-complete when `P22`~`P26` are done in order (`R*`/`G*` remain out-of-scope)
 - Owner split and research-gate contract: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 
@@ -35,7 +35,7 @@ For detailed status, always refer to:
 
 - 런타임 기준선: v2 노드 그래프 전용
 - 레거시 런타임: `main`에서 제거 완료 (`P4.5` 완료)
-- 실행 SSOT current step id: `P25.1` (플러그인 DX 마감 페이즈 오픈)
+- 실행 SSOT current step id: `P25.6` (플러그인 DX 마감 페이즈 완료)
 - P10 하드닝 트랙(`P10.1`~`P10.5`) 완료
 - P11 데모 트랙(`P11.1`~`P11.6`) 완료
 - P12 foundation 트랙 완료(`P12.1`~`P12.7`: validator-first 프로세스 그래프 범위)
@@ -52,7 +52,7 @@ For detailed status, always refer to:
 - P23 블록 편집기 하드닝 기준선 완료(`P23.1`~`P23.8`: 직접 조작 + kind 시각화 + 내장 정렬 + 결과 가독성 + 문서/테스트 동기화)
 - P23.9 상호작용 핫픽스 완료(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)
 - P24 운영 신뢰성 하드닝 트랙 완료(`P24.1`~`P24.7`: durable 경계/재시작 회귀/신뢰성 스모크 CI 게이트 반영)
-- P25 플러그인 DX 마감 트랙 진행 중(`P25.1`: SSOT 오픈, 스캐폴드/계약검사/CI 하드닝 예정)
+- P25 플러그인 DX 마감 트랙 완료(`P25.1`~`P25.6`: 스캐폴드 dry-run/validate + 계약검사기 + required CI + 문서 동기화)
 - 연구 제외 완성 기준 반영: `P22`~`P26`을 순차 완료하면 구현 범위 완성으로 간주(`R*`/`G*`는 비범위 유지)
 - 소유권 분리/연구 게이트 계약: `docs/roadmap/owner_split_playbook.md` (`E*`/`R*`/`G*`)
 
