@@ -1,6 +1,6 @@
 # Testing and Quality Gates
 
-Last updated: 2026-02-16
+Last updated: 2026-02-18
 
 ## English
 
@@ -21,6 +21,22 @@ Last updated: 2026-02-16
 - compile gate: `python3 -m compileall -q src tests scripts`
 - pytest gate (when env ready):
   - `PYTHONPATH=src PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q`
+
+## Reliability Smoke (P24)
+
+- quick mode:
+  - `python3 scripts/reliability_smoke.py --mode quick --json`
+- full mode:
+  - `python3 scripts/reliability_smoke.py --mode full`
+
+Quick mode focuses on durable reliability regressions:
+- `tests/unit/test_sqlite_queue.py`
+- `tests/unit/nodes/test_durable_sqlite_nodes.py`
+- `tests/integration/test_durable_queue_replay.py`
+- `tests/integration/test_durable_queue_reliability.py`
+
+Full mode extends quick mode with:
+- `tests/integration/test_v2_durable_queue_idempotency_e2e.py`
 
 ## Policy
 
@@ -49,6 +65,22 @@ Any runtime behavior change must include at least one of:
 - 컴파일 게이트: `python3 -m compileall -q src tests scripts`
 - pytest 게이트(환경 준비 시):
   - `PYTHONPATH=src PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q`
+
+## 신뢰성 스모크(P24)
+
+- quick 모드:
+  - `python3 scripts/reliability_smoke.py --mode quick --json`
+- full 모드:
+  - `python3 scripts/reliability_smoke.py --mode full`
+
+quick 모드는 durable 신뢰성 핵심 회귀에 집중한다:
+- `tests/unit/test_sqlite_queue.py`
+- `tests/unit/nodes/test_durable_sqlite_nodes.py`
+- `tests/integration/test_durable_queue_replay.py`
+- `tests/integration/test_durable_queue_reliability.py`
+
+full 모드는 quick 범위에 아래를 추가한다:
+- `tests/integration/test_v2_durable_queue_idempotency_e2e.py`
 
 ## 정책
 

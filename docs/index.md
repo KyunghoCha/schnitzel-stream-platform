@@ -1,6 +1,6 @@
 # Schnitzel Stream Docs Index
 
-Last updated: 2026-02-17
+Last updated: 2026-02-18
 
 ## English
 
@@ -74,6 +74,7 @@ Onboarding standard path:
 - Block editor direct-manipulation UI: `apps/stream-console/src/App.tsx`, `apps/stream-console/src/editor_nodes.tsx`, `apps/stream-console/src/editor_layout.ts`, `apps/stream-console/src/editor_connect.ts`
 - Control policy snapshot gate: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`
 - Environment diagnostics: `scripts/env_doctor.py`
+- Reliability smoke gate: `scripts/reliability_smoke.py`
 - Showcase report renderer: `scripts/demo_report_view.py`
 - Web console: `apps/stream-console/`
 
@@ -151,5 +152,6 @@ Onboarding standard path:
 - 블록 에디터 직접 조작 UI: `apps/stream-console/src/App.tsx`, `apps/stream-console/src/editor_nodes.tsx`, `apps/stream-console/src/editor_layout.ts`, `apps/stream-console/src/editor_connect.ts`
 - 제어 정책 스냅샷 게이트: `scripts/control_policy_snapshot.py`, `configs/policy/control_api_policy_snapshot_v1.json`
 - 환경 진단: `scripts/env_doctor.py`
+- 신뢰성 스모크 게이트: `scripts/reliability_smoke.py`
 - 쇼케이스 리포트 렌더러: `scripts/demo_report_view.py`
 - 웹 콘솔: `apps/stream-console/`

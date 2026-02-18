@@ -10,7 +10,7 @@ Execution SSOT:
 - `docs/roadmap/execution_roadmap.md`
 
 Current status:
-- Current step id: `P24.1` (reliability hardening phase opened; durable-first regression expansion)
+- Current step id: `P24.7` (reliability hardening phase completed; durable-first regression expansion delivered)
 - Core platform phases (`P0`~`P10`) are complete on `main`
 - Demo packaging phase (`P11`) is complete on `main`
 - Process-graph foundation phase (`P12`) is complete (`validator-first`, SQLite bridge)
@@ -26,7 +26,7 @@ Current status:
 - Onboarding closure phase (`P22`) is complete (`P22.1`~`P22.8`: explicit `bootstrap -> doctor -> up/down` + Win/Linux parity)
 - Block editor hardening baseline (`P23.1`~`P23.8`) is complete
 - Interaction hotfix step (`P23.9`) is complete (drag smoothness + snap connect + overlap-safe align)
-- Reliability hardening phase (`P24`) is opened with `P24.1` as current execution step
+- Reliability hardening phase (`P24.1`~`P24.7`) is complete
 - Legacy runtime/docs were removed from the working tree
 - Historical legacy state can be inspected via tag `pre-legacy-purge-20260216`
 
@@ -58,7 +58,7 @@ Context budget rule:
 - `docs/roadmap/execution_roadmap.md`
 
 현재 상태:
-- 현재 step id: `P24.1` (운영 신뢰성 하드닝 페이즈 오픈, durable-first 회귀 확장 시작)
+- 현재 step id: `P24.7` (운영 신뢰성 하드닝 페이즈 완료, durable-first 회귀 확장 반영)
 - 코어 플랫폼 단계(`P0`~`P10`)는 `main` 기준 완료
 - 데모 패키징 단계(`P11`) 완료
 - 프로세스 그래프 foundation 단계(`P12`) 완료(`validator-first`, SQLite 브리지)
@@ -74,7 +74,7 @@ Context budget rule:
 - 온보딩 완결 단계(`P22`) 완료(`P22.1`~`P22.8`: `bootstrap -> doctor -> up/down` 명시 3단계 + Win/Linux 동급)
 - 블록 편집기 하드닝 기준선(`P23.1`~`P23.8`) 완료
 - 상호작용 핫픽스 단계(`P23.9`) 완료(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)
-- 운영 신뢰성 하드닝 단계(`P24`) 오픈, 현재 실행 단계는 `P24.1`
+- 운영 신뢰성 하드닝 단계(`P24.1`~`P24.7`) 완료
 - 레거시 런타임/문서는 워킹 트리에서 제거됨
 - 과거 레거시 상태는 태그 `pre-legacy-purge-20260216`에서 확인
 

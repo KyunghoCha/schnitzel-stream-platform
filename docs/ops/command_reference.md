@@ -292,6 +292,13 @@ python scripts/regression_check.py --max-events 5
 python scripts/regression_check.py --max-events 5 --update-golden
 ```
 
+Reliability smoke (durable-first regression gate):
+
+```bash
+python scripts/reliability_smoke.py --mode quick --json
+python scripts/reliability_smoke.py --mode full
+```
+
 Plugin scaffold:
 
 ```bash
@@ -793,6 +800,13 @@ python scripts/check_rtsp.py --strict
 ```bash
 python scripts/regression_check.py --max-events 5
 python scripts/regression_check.py --max-events 5 --update-golden
+```
+
+신뢰성 스모크(durable 우선 회귀 게이트):
+
+```bash
+python scripts/reliability_smoke.py --mode quick --json
+python scripts/reliability_smoke.py --mode full
 ```
 
 플러그인 스캐폴드:

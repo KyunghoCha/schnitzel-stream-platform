@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-18
 
-Current step id (SSOT): `P24.1` (see `docs/roadmap/execution_roadmap.md`)
+Current step id (SSOT): `P24.7` (see `docs/roadmap/execution_roadmap.md`)
 
 ## English
 
@@ -33,7 +33,7 @@ Current baseline:
 - onboarding closure track completed (`P22.1`~`P22.8`, explicit 3-step onboarding closure + Win/Linux parity gates)
 - block editor hardening baseline completed (`P23.1`~`P23.8`, direct manipulation UX hardening finished)
 - P23.9 interaction hotfix completed (drag smoothness + snap connect + overlap-safe align)
-- reliability hardening phase opened (`P24.1`, durable-first reliability expansion in progress)
+- reliability hardening phase completed (`P24.1`~`P24.7`, durable-first reliability expansion delivered)
 
 Verification (local):
 - syntax check: `python3 -m compileall -q src tests`
@@ -70,7 +70,7 @@ Verification (local):
 - 온보딩 완결 트랙 완료(`P22.1`~`P22.8`, 명시 3단계 온보딩 완결 + Win/Linux 동급 게이트)
 - 블록 편집기 하드닝 기준선 완료(`P23.1`~`P23.8`, 직접 조작 UX 하드닝 완료)
 - P23.9 상호작용 핫픽스 완료(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)
-- 운영 신뢰성 하드닝 페이즈 오픈(`P24.1`, durable-first 신뢰성 확장 진행)
+- 운영 신뢰성 하드닝 페이즈 완료(`P24.1`~`P24.7`, durable-first 신뢰성 확장 반영 완료)
 
 검증(로컬):
 - 문법 검사: `python3 -m compileall -q src tests`

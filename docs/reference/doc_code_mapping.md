@@ -1,6 +1,6 @@
 # Doc-Code Mapping
 
-Last updated: 2026-02-17
+Last updated: 2026-02-18
 
 ## English
 
@@ -31,7 +31,7 @@ This document is the active mapping between runtime code and maintained docs.
 | Plugin loading policy | `src/schnitzel_stream/plugins/registry.py` | `tests/unit/test_graph_compat.py` | `docs/implementation/plugin_packs.md` |
 | Packet contract | `src/schnitzel_stream/packet.py` | `tests/unit/test_payload_ref_roundtrip.py` | `docs/contracts/stream_packet.md` |
 | Payload reference strategy | `src/schnitzel_stream/nodes/blob_ref.py` | `tests/unit/test_payload_ref_roundtrip.py` | `docs/contracts/stream_packet.md` |
-| Durable queue and replay primitives | `src/schnitzel_stream/nodes/durable_sqlite.py`, `src/schnitzel_stream/state/sqlite_queue.py` | `tests/unit/test_sqlite_queue.py`, `tests/integration/test_durable_queue_replay.py` | `docs/implementation/operations_release.md` |
+| Durable queue and replay primitives | `src/schnitzel_stream/nodes/durable_sqlite.py`, `src/schnitzel_stream/state/sqlite_queue.py` | `tests/unit/test_sqlite_queue.py`, `tests/unit/nodes/test_durable_sqlite_nodes.py`, `tests/integration/test_durable_queue_replay.py`, `tests/integration/test_durable_queue_reliability.py` | `docs/implementation/operations_release.md`, `docs/implementation/testing_quality.md` |
 | HTTP sink | `src/schnitzel_stream/nodes/http.py` | `tests/unit/nodes/test_http_nodes.py` | `docs/ops/command_reference.md` |
 | JSONL/File sinks | `src/schnitzel_stream/nodes/file_sink.py` | `tests/unit/nodes/test_file_sink_nodes.py` | `docs/ops/command_reference.md` |
 | Vision source/policy/event nodes | `src/schnitzel_stream/packs/vision/nodes/*.py`, `src/schnitzel_stream/packs/vision/policy/*.py` | `tests/unit/nodes/test_video_nodes.py`, `tests/unit/nodes/test_policy_nodes.py`, `tests/unit/nodes/test_event_builder_node.py` | `docs/packs/vision/README.md`, `docs/packs/vision/event_protocol_v0.2.md`, `docs/packs/vision/model_interface.md` |
@@ -53,6 +53,7 @@ This document is the active mapping between runtime code and maintained docs.
 | `scripts/env_doctor.py` | runtime environment/dependency diagnostics (`--strict`, `--json`, `--profile`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/check_rtsp.py` | RTSP reconnect E2E smoke on v2 graph | `docs/ops/command_reference.md` |
 | `scripts/regression_check.py` | v2 golden comparison helper | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
+| `scripts/reliability_smoke.py` | durable reliability smoke gate (`quick`/`full`, JSON summary contract) | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/stream_fleet.py` | generic stream fleet launcher (`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
 | `scripts/stream_monitor.py` | read-only stream TUI monitor (pid/log based) | `docs/ops/command_reference.md` |
 | `scripts/stream_run.py` | one-command preset launcher (`--list`, `--preset`, `--experimental`, `--doctor`, YOLO override flags) | `docs/ops/command_reference.md`, `README.md`, `docs/guides/local_console_quickstart.md` |
@@ -103,7 +104,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | 플러그인 로딩 정책 | `src/schnitzel_stream/plugins/registry.py` | `tests/unit/test_graph_compat.py` | `docs/implementation/plugin_packs.md` |
 | 패킷 계약 | `src/schnitzel_stream/packet.py` | `tests/unit/test_payload_ref_roundtrip.py` | `docs/contracts/stream_packet.md` |
 | payload_ref 전략 | `src/schnitzel_stream/nodes/blob_ref.py` | `tests/unit/test_payload_ref_roundtrip.py` | `docs/contracts/stream_packet.md` |
-| 내구 큐/재전송 프리미티브 | `src/schnitzel_stream/nodes/durable_sqlite.py`, `src/schnitzel_stream/state/sqlite_queue.py` | `tests/unit/test_sqlite_queue.py`, `tests/integration/test_durable_queue_replay.py` | `docs/implementation/operations_release.md` |
+| 내구 큐/재전송 프리미티브 | `src/schnitzel_stream/nodes/durable_sqlite.py`, `src/schnitzel_stream/state/sqlite_queue.py` | `tests/unit/test_sqlite_queue.py`, `tests/unit/nodes/test_durable_sqlite_nodes.py`, `tests/integration/test_durable_queue_replay.py`, `tests/integration/test_durable_queue_reliability.py` | `docs/implementation/operations_release.md`, `docs/implementation/testing_quality.md` |
 | HTTP 싱크 | `src/schnitzel_stream/nodes/http.py` | `tests/unit/nodes/test_http_nodes.py` | `docs/ops/command_reference.md` |
 | JSONL/File 싱크 | `src/schnitzel_stream/nodes/file_sink.py` | `tests/unit/nodes/test_file_sink_nodes.py` | `docs/ops/command_reference.md` |
 | Vision source/policy/event 노드 | `src/schnitzel_stream/packs/vision/nodes/*.py`, `src/schnitzel_stream/packs/vision/policy/*.py` | `tests/unit/nodes/test_video_nodes.py`, `tests/unit/nodes/test_policy_nodes.py`, `tests/unit/nodes/test_event_builder_node.py` | `docs/packs/vision/README.md`, `docs/packs/vision/event_protocol_v0.2.md`, `docs/packs/vision/model_interface.md` |
@@ -125,6 +126,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | `scripts/env_doctor.py` | 런타임 환경/의존성 진단(`--strict`, `--json`, `--profile`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
 | `scripts/check_rtsp.py` | v2 그래프 기반 RTSP 재연결 E2E 스모크 | `docs/ops/command_reference.md` |
 | `scripts/regression_check.py` | v2 골든 비교 헬퍼 | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
+| `scripts/reliability_smoke.py` | durable 신뢰성 스모크 게이트(`quick`/`full`, JSON 요약 계약) | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/stream_fleet.py` | 범용 stream fleet 실행기(`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
 | `scripts/stream_monitor.py` | 읽기 전용 stream TUI 모니터(pid/log 기반) | `docs/ops/command_reference.md` |
 | `scripts/stream_run.py` | 원커맨드 프리셋 실행기(`--list`, `--preset`, `--experimental`, `--doctor`, YOLO override 옵션) | `docs/ops/command_reference.md`, `README.md`, `docs/guides/local_console_quickstart.md` |
