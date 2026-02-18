@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-18
 
-Current step id: `P24.7`
+Current step id: `P25.1`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 24 reliability hardening completed (`P24.1`~`P24.7`)**
+Current position: **Phase 25 plugin DX closure opened (`P25.1`)**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -409,9 +409,26 @@ Intent:
 - `P24.6` Enforce reliability smoke in CI required gates. `DONE` (bd14445)
 - `P24.7` Final docs/index/mapping/status sync for P24 assets. `DONE`
 
-#### Planned Non-Research Finish Track (`P25`~`P26`) (NEXT)
+#### Phase 25: Plugin DX Closure (NOW)
 
-- `P25` Plugin DX closure: scaffold/template quality, authoring flow reduction, stricter mapping checks.
+Intent:
+- Lock plugin authoring into one deterministic loop: scaffold -> validate -> contract check -> CI gate.
+- Keep runtime core semantics unchanged while tightening authoring contracts and diagnostics.
+- Promote plugin DX checks to required CI gates immediately.
+
+- `P25.1` Open phase and align SSOT step id/state docs for plugin DX closure. `NOW`
+- `P25.2` Add `scaffold_plugin` dry-run contract (`--dry-run`, deterministic `action=... path=...` plan output). `NEXT`
+- `P25.3` Add `scaffold_plugin` post-generate validation flow (`--validate-generated`, external `--repo-root` support). `NEXT`
+- `P25.4` Add `plugin_contract_check` script (`--strict`, `--json`) for pack/module/graph contract checks. `NEXT`
+- `P25.5` Add required CI DX gates (scaffold dry-run/generate-validate + contract check). `NEXT`
+- `P25.6` Final docs/index/mapping/status sync for P25 assets. `NEXT`
+
+#### Phase 26: Productization Closure (NEXT)
+
+Intent:
+- Freeze product surfaces and release criteria after DX/reliability closure.
+- Keep docs/code/CI in permanent drift=0 discipline at release boundary.
+
 - `P26` Productization closure: release checklist, command surface freeze, docs/code/CI drift=0 target.
 
 #### Research Track (Not On Critical Path)
@@ -456,8 +473,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P24.7`
-- 전체 위치: **Phase 24 운영 신뢰성 하드닝 완료(`P24.1`~`P24.7`)**
+- current step id: `P25.1`
+- 전체 위치: **Phase 25 플러그인 DX 마감 페이즈 오픈(`P25.1`)**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -494,7 +511,7 @@ Intent:
 | Phase 22 | DONE | 온보딩/설치 경로 완결(bootstrap/doctor/up-down 명시 3단계 고정) |
 | Phase 23 | DONE | 블록 편집기 상호작용 핫픽스(P23.9: 드래그 반응/스냅 연결/겹침 없는 정렬) |
 | Phase 24 | DONE | 운영 신뢰성 회귀 하드닝(재시작/백로그/ACK/타임아웃) 완료 |
-| Phase 25 | NEXT | 플러그인 DX 마감(스캐폴드/템플릿/가이드 완성도) |
+| Phase 25 | NOW | 플러그인 DX 마감(생성->검증->계약검사->CI 게이트 일체화) |
 | Phase 26 | NEXT | 제품화 마감(릴리즈 체크리스트/명령면 고정/드리프트 0) |
 
 ### 완성 기준(구현 범위 한정)
@@ -509,9 +526,9 @@ Intent:
 
 ### 현재 우선순위
 
-1. `P25.1`로 플러그인 DX 마감 페이즈를 오픈하고 SSOT 상태를 전환한다
-2. 스캐폴드/템플릿/가이드 경로를 1회 생성-검증 루프로 단순화한다
-3. 문서-코드 매핑과 CI 게이트를 DX 중심으로 유지해 드리프트를 차단한다
+1. `P25.2`~`P25.4`로 플러그인 생성/검증/계약검사 루프를 고정한다
+2. `P25.5`에서 DX 게이트를 required로 승격해 병합 전 차단선을 만든다
+3. `P25.6`에서 문서-코드 매핑을 동기화해 DX 드리프트를 0으로 맞춘다
 
 ### 레거시 관련 기준
 
