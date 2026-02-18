@@ -153,3 +153,92 @@ def test_scaffold_dry_run_returns_conflict_when_target_exists(tmp_path: Path, ca
     assert rc == 1
     out = capsys.readouterr().out
     assert "action=conflict" in out
+
+
+def test_scaffold_rejects_dry_run_validate_generated_combo(tmp_path: Path, capsys):
+    mod = _load_scaffold_module()
+    rc = mod.run(
+        [
+            "--repo-root",
+            str(tmp_path),
+            "--pack",
+            "sensor",
+            "--kind",
+            "node",
+            "--name",
+            "ThresholdNode",
+            "--dry-run",
+            "--validate-generated",
+        ]
+    )
+    assert rc == 2
+    assert "--dry-run cannot be combined with --validate-generated" in capsys.readouterr().err
+
+
+def test_scaffold_validate_generated_runs_post_validation(tmp_path: Path, monkeypatch):
+    mod = _load_scaffold_module()
+    captured: dict[str, Path] = {}
+
+    def _fake_validate(*, paths, repo_root, current_repo_root):
+        captured["repo_root"] = repo_root
+        captured["current_repo_root"] = current_repo_root
+        return mod.PostGenerateValidation(ok=True, command="validate", returncode=0, stdout_tail="", stderr_tail="")
+
+    monkeypatch.setattr(mod, "_run_post_generate_validation", _fake_validate)
+    rc = mod.run(
+        [
+            "--repo-root",
+            str(tmp_path),
+            "--pack",
+            "sensor",
+            "--kind",
+            "node",
+            "--name",
+            "ThresholdNode",
+            "--validate-generated",
+        ]
+    )
+    assert rc == 0
+    assert captured["repo_root"] == tmp_path.resolve()
+    assert captured["current_repo_root"] == Path(mod.__file__).resolve().parents[1]
+
+
+def test_scaffold_validate_generated_failure_keeps_generated_files(tmp_path: Path, monkeypatch):
+    mod = _load_scaffold_module()
+
+    def _failed_validate(*, paths, repo_root, current_repo_root):
+        return mod.PostGenerateValidation(
+            ok=False,
+            command="validate",
+            returncode=1,
+            stdout_tail="",
+            stderr_tail="failure",
+        )
+
+    monkeypatch.setattr(mod, "_run_post_generate_validation", _failed_validate)
+    rc = mod.run(
+        [
+            "--repo-root",
+            str(tmp_path),
+            "--pack",
+            "sensor",
+            "--kind",
+            "node",
+            "--name",
+            "ThresholdNode",
+            "--validate-generated",
+        ]
+    )
+    assert rc == 1
+    plugin = tmp_path / "src" / "schnitzel_stream" / "packs" / "sensor" / "nodes" / "threshold_node.py"
+    graph = tmp_path / "configs" / "graphs" / "dev_sensor_threshold_node_v2.yaml"
+    assert plugin.exists()
+    assert graph.exists()
+
+
+def test_scaffold_validation_env_contains_repo_root_src_first(tmp_path: Path):
+    mod = _load_scaffold_module()
+    env = mod._build_validation_env(repo_root=tmp_path.resolve(), current_repo_root=Path(mod.__file__).resolve().parents[1])
+    parts = [p for p in str(env.get("PYTHONPATH", "")).split(mod.os.pathsep) if p]
+    assert parts[0] == str((tmp_path / "src").resolve())
+    assert parts[1] == str((Path(mod.__file__).resolve().parents[1] / "src").resolve())

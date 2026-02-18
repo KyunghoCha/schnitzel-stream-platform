@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
+import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -43,7 +45,40 @@ class PlanEntry:
     action: str
 
 
+@dataclass(frozen=True)
+class PostGenerateValidation:
+    ok: bool
+    command: str
+    returncode: int
+    stdout_tail: str
+    stderr_tail: str
+
+
 _ALL_BLOCK_RE = re.compile(r"(?ms)^__all__\s*=\s*\[(?P<body>.*?)\]\s*$")
+_GRAPH_VALIDATE_INLINE = """
+from __future__ import annotations
+import pathlib
+import sys
+
+repo_root = pathlib.Path(sys.argv[1]).resolve()
+graph_path = pathlib.Path(sys.argv[2]).resolve()
+extra_pkg_root = repo_root / "src" / "schnitzel_stream"
+
+if extra_pkg_root.exists():
+    import schnitzel_stream
+    extra_pkg = str(extra_pkg_root)
+    if extra_pkg not in schnitzel_stream.__path__:
+        schnitzel_stream.__path__.append(extra_pkg)
+
+    import schnitzel_stream.packs as packs_pkg
+    extra_packs = str(extra_pkg_root / "packs")
+    if extra_packs not in packs_pkg.__path__:
+        packs_pkg.__path__.append(extra_packs)
+
+from schnitzel_stream.cli.__main__ import main
+sys.argv = ["schnitzel_stream", "validate", "--graph", str(graph_path)]
+raise SystemExit(main())
+""".strip()
 
 
 def _build_paths(repo_root: Path, *, pack: str, module: str) -> ScaffoldPaths:
@@ -275,6 +310,77 @@ def _print_plan(plan: list[PlanEntry]) -> None:
         print(f"action={item.action} path={item.path}")
 
 
+def _script_repo_root() -> Path:
+    return Path(__file__).resolve().parents[1]
+
+
+def _build_validation_env(*, repo_root: Path, current_repo_root: Path) -> dict[str, str]:
+    env = dict(os.environ)
+    merged: list[str] = [str((repo_root / "src").resolve()), str((current_repo_root / "src").resolve())]
+    existing = str(env.get("PYTHONPATH", "") or "").strip()
+    if existing:
+        merged.append(existing)
+
+    # Intent: keep deterministic import precedence and avoid duplicate PYTHONPATH entries during scaffold validation.
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for raw in merged:
+        for token in str(raw).split(os.pathsep):
+            val = str(token).strip()
+            if not val or val in seen:
+                continue
+            seen.add(val)
+            deduped.append(val)
+    env["PYTHONPATH"] = os.pathsep.join(deduped)
+    return env
+
+
+def _run_subprocess(*, cmd: list[str], cwd: Path, env: dict[str, str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        cmd,
+        cwd=str(cwd),
+        env=env,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+
+
+def _tail(text: str, *, lines: int = 20) -> str:
+    chunks = str(text or "").splitlines()
+    if not chunks:
+        return ""
+    return "\n".join(chunks[-lines:])
+
+
+def _run_post_generate_validation(*, paths: ScaffoldPaths, repo_root: Path, current_repo_root: Path) -> PostGenerateValidation:
+    env = _build_validation_env(repo_root=repo_root, current_repo_root=current_repo_root)
+
+    compile_cmd = [sys.executable, "-m", "compileall", "-q", str(paths.plugin_file), str(paths.test_file)]
+    print(f"validate_step=compileall command={' '.join(compile_cmd)}")
+    compiled = _run_subprocess(cmd=compile_cmd, cwd=current_repo_root, env=env)
+    if int(compiled.returncode) != 0:
+        return PostGenerateValidation(
+            ok=False,
+            command=" ".join(compile_cmd),
+            returncode=int(compiled.returncode),
+            stdout_tail=_tail(compiled.stdout),
+            stderr_tail=_tail(compiled.stderr),
+        )
+
+    validate_cmd = [sys.executable, "-c", _GRAPH_VALIDATE_INLINE, str(repo_root), str(paths.graph_file)]
+    print(f"validate_step=graph command={sys.executable} -m schnitzel_stream validate --graph {paths.graph_file}")
+    validated = _run_subprocess(cmd=validate_cmd, cwd=current_repo_root, env=env)
+    return PostGenerateValidation(
+        ok=int(validated.returncode) == 0,
+        command=f"{sys.executable} -m schnitzel_stream validate --graph {paths.graph_file}",
+        returncode=int(validated.returncode),
+        stdout_tail=_tail(validated.stdout),
+        stderr_tail=_tail(validated.stderr),
+    )
+
+
 def _format_all_block(names: list[str]) -> str:
     rows = "".join(f'    "{name}",\n' for name in names)
     return f"__all__ = [\n{rows}]\n"
@@ -339,6 +445,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--force", action="store_true", help="Overwrite existing scaffold files")
     parser.add_argument("--dry-run", action="store_true", help="Print file actions without writing files")
+    parser.add_argument("--validate-generated", action="store_true", help="Run compile+graph validation after generation")
     parser.set_defaults(register_export=True)
     return parser.parse_args(argv)
 
@@ -346,6 +453,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def run(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     repo_root = Path(args.repo_root).resolve()
+    current_repo_root = _script_repo_root()
 
     kind = _normalize_kind(args.kind)
     class_name = str(args.name).strip()
@@ -361,6 +469,9 @@ def run(argv: list[str] | None = None) -> int:
     paths = _build_paths(repo_root, pack=pack, module=module)
     plan = _build_plan(paths, force=bool(args.force), register_export=bool(args.register_export))
     has_conflict = any(item.action == "conflict" for item in plan)
+    if bool(args.dry_run) and bool(args.validate_generated):
+        print("Error: --dry-run cannot be combined with --validate-generated", file=sys.stderr)
+        return 2
 
     if bool(args.dry_run):
         # Intent: dry-run must never mutate files so users can confirm generation plans before side effects.
@@ -395,6 +506,21 @@ def run(argv: list[str] | None = None) -> int:
     print(f"generated test: {paths.test_file}")
     print(f"generated graph: {paths.graph_file}")
     print("example plugin path: " f"schnitzel_stream.packs.{pack}.nodes.{module}:{class_name}")
+    if bool(args.validate_generated):
+        result = _run_post_generate_validation(paths=paths, repo_root=repo_root, current_repo_root=current_repo_root)
+        if not result.ok:
+            print("Error: generated scaffold validation failed", file=sys.stderr)
+            print(f"command: {result.command}", file=sys.stderr)
+            print(f"returncode: {result.returncode}", file=sys.stderr)
+            if result.stdout_tail:
+                print("stdout_tail:", file=sys.stderr)
+                print(result.stdout_tail, file=sys.stderr)
+            if result.stderr_tail:
+                print("stderr_tail:", file=sys.stderr)
+                print(result.stderr_tail, file=sys.stderr)
+            # Intent: keep generated files on validate-generated failure so plugin authors can debug artifacts directly.
+            return 1
+        print("validate_generated=ok")
     return 0
 
 
