@@ -111,3 +111,45 @@ def test_scaffold_can_skip_export_registration(tmp_path: Path):
     assert mod.run(args) == 0
     exports = tmp_path / "src" / "schnitzel_stream" / "packs" / "audio" / "nodes" / "__init__.py"
     assert not exports.exists()
+
+
+def test_scaffold_dry_run_prints_plan_without_writes(tmp_path: Path, capsys):
+    mod = _load_scaffold_module()
+    rc = mod.run(
+        [
+            "--repo-root",
+            str(tmp_path),
+            "--pack",
+            "sensor",
+            "--kind",
+            "node",
+            "--name",
+            "ThresholdNode",
+            "--dry-run",
+        ]
+    )
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "action=create" in out
+    assert "threshold_node.py" in out
+    plugin = tmp_path / "src" / "schnitzel_stream" / "packs" / "sensor" / "nodes" / "threshold_node.py"
+    assert not plugin.exists()
+
+
+def test_scaffold_dry_run_returns_conflict_when_target_exists(tmp_path: Path, capsys):
+    mod = _load_scaffold_module()
+    args = [
+        "--repo-root",
+        str(tmp_path),
+        "--pack",
+        "sensor",
+        "--kind",
+        "node",
+        "--name",
+        "ThresholdNode",
+    ]
+    assert mod.run(args) == 0
+    rc = mod.run([*args, "--dry-run"])
+    assert rc == 1
+    out = capsys.readouterr().out
+    assert "action=conflict" in out

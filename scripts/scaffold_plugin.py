@@ -37,6 +37,12 @@ class ScaffoldPaths:
     graph_file: Path
 
 
+@dataclass(frozen=True)
+class PlanEntry:
+    path: Path
+    action: str
+
+
 _ALL_BLOCK_RE = re.compile(r"(?ms)^__all__\s*=\s*\[(?P<body>.*?)\]\s*$")
 
 
@@ -239,6 +245,36 @@ def _write_file(path: Path, text: str, *, force: bool) -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def _plan_action(path: Path, *, force: bool, allow_conflict: bool = True) -> str:
+    if path.exists():
+        if allow_conflict and not force:
+            return "conflict"
+        return "overwrite"
+    return "create"
+
+
+def _build_plan(paths: ScaffoldPaths, *, force: bool, register_export: bool) -> list[PlanEntry]:
+    plan = [
+        PlanEntry(path=paths.plugin_file, action=_plan_action(paths.plugin_file, force=force)),
+        PlanEntry(path=paths.test_file, action=_plan_action(paths.test_file, force=force)),
+        PlanEntry(path=paths.graph_file, action=_plan_action(paths.graph_file, force=force)),
+    ]
+    if register_export:
+        init_file = paths.plugin_file.parent / "__init__.py"
+        plan.append(
+            PlanEntry(
+                path=init_file,
+                action=_plan_action(init_file, force=force, allow_conflict=False),
+            )
+        )
+    return plan
+
+
+def _print_plan(plan: list[PlanEntry]) -> None:
+    for item in plan:
+        print(f"action={item.action} path={item.path}")
+
+
 def _format_all_block(names: list[str]) -> str:
     rows = "".join(f'    "{name}",\n' for name in names)
     return f"__all__ = [\n{rows}]\n"
@@ -302,6 +338,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Skip nodes/__init__.py export registration",
     )
     parser.add_argument("--force", action="store_true", help="Overwrite existing scaffold files")
+    parser.add_argument("--dry-run", action="store_true", help="Print file actions without writing files")
     parser.set_defaults(register_export=True)
     return parser.parse_args(argv)
 
@@ -322,6 +359,18 @@ def run(argv: list[str] | None = None) -> int:
     output_kinds = _parse_kinds(args.output_kinds)
 
     paths = _build_paths(repo_root, pack=pack, module=module)
+    plan = _build_plan(paths, force=bool(args.force), register_export=bool(args.register_export))
+    has_conflict = any(item.action == "conflict" for item in plan)
+
+    if bool(args.dry_run):
+        # Intent: dry-run must never mutate files so users can confirm generation plans before side effects.
+        _print_plan(plan)
+        return 1 if has_conflict else 0
+
+    if has_conflict:
+        _print_plan(plan)
+        print("Error: one or more scaffold targets already exist (re-run with --force)", file=sys.stderr)
+        return 1
 
     try:
         _write_file(
