@@ -156,6 +156,8 @@ class SqliteQueueAckSink:
         self._meta_key = str(cfg.get("meta_key", "durable"))
         self._forward = bool(cfg.get("forward", False))
         self._acked_total = 0
+        self._ack_invalid_total = 0
+        self._ack_missing_total = 0
 
     def process(self, packet: StreamPacket) -> Iterable[StreamPacket]:
         meta = dict(packet.meta)
@@ -163,10 +165,16 @@ class SqliteQueueAckSink:
         if not isinstance(raw, dict):
             raise ValueError(f"SqliteQueueAckSink expects packet.meta[{self._meta_key}] as a mapping")
         seq = raw.get("seq")
-        if not isinstance(seq, int):
+        if not isinstance(seq, int) or isinstance(seq, bool):
+            self._ack_invalid_total += 1
             raise ValueError(f"SqliteQueueAckSink expects packet.meta[{self._meta_key}].seq as int")
-        if self._queue.ack(seq=seq):
+        if seq <= 0:
+            # Intent: treat non-positive seq as invalid ack input while keeping compatibility (no exception for value).
+            self._ack_invalid_total += 1
+        elif self._queue.ack(seq=seq):
             self._acked_total += 1
+        else:
+            self._ack_missing_total += 1
         if self._forward:
             return [packet]
         return []
@@ -174,6 +182,8 @@ class SqliteQueueAckSink:
     def metrics(self) -> dict[str, int]:
         return {
             "acked_total": int(self._acked_total),
+            "ack_invalid_total": int(self._ack_invalid_total),
+            "ack_missing_total": int(self._ack_missing_total),
             "queue_depth": int(self._queue.count()),
         }
 
