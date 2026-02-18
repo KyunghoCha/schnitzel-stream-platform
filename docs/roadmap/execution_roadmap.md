@@ -2,7 +2,7 @@
 
 Last updated: 2026-02-18
 
-Current step id: `P25.6`
+Current step id: `P26.1`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 25 plugin DX closure completed (`P25.1`~`P25.6`)**
+Current position: **Phase 26 productization closure opened (`P26.1`)**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -409,7 +409,7 @@ Intent:
 - `P24.6` Enforce reliability smoke in CI required gates. `DONE` (bd14445)
 - `P24.7` Final docs/index/mapping/status sync for P24 assets. `DONE`
 
-#### Phase 25: Plugin DX Closure (NOW)
+#### Phase 25: Plugin DX Closure (DONE)
 
 Intent:
 - Lock plugin authoring into one deterministic loop: scaffold -> validate -> contract check -> CI gate.
@@ -423,13 +423,20 @@ Intent:
 - `P25.5` Add required CI DX gates (scaffold dry-run/generate-validate + contract check). `DONE` (964ca35)
 - `P25.6` Final docs/index/mapping/status sync for P25 assets. `DONE`
 
-#### Phase 26: Productization Closure (NEXT)
+#### Phase 26: Productization Closure (NOW)
 
 Intent:
 - Freeze product surfaces and release criteria after DX/reliability closure.
 - Keep docs/code/CI in permanent drift=0 discipline at release boundary.
 
-- `P26` Productization closure: release checklist, command surface freeze, docs/code/CI drift=0 target.
+- `P26.1` Open phase and align SSOT step id/state docs for productization closure. `NOW`
+- `P26.2` Pin Lab RC semver metadata and release scope (`v0.1.0-rc.1`). `NEXT`
+- `P26.3` Add command-surface drift gate baseline/checker. `NEXT`
+- `P26.4` Add SSOT sync drift gate baseline/checker. `NEXT`
+- `P26.5` Promote conda reproducibility lane into required CI gate. `NEXT`
+- `P26.6` Add release-readiness aggregate check command (`lab-rc`). `NEXT`
+- `P26.7` Rewrite release/ops docs for freeze policy and Lab RC checklist. `NEXT`
+- `P26.8` Final docs/index/mapping/status sync and close phase. `NEXT`
 
 #### Research Track (Not On Critical Path)
 
@@ -473,8 +480,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P25.6`
-- 전체 위치: **Phase 25 플러그인 DX 마감 페이즈 완료(`P25.1`~`P25.6`)**
+- current step id: `P26.1`
+- 전체 위치: **Phase 26 제품화 마감 페이즈 오픈(`P26.1`)**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -512,7 +519,7 @@ Intent:
 | Phase 23 | DONE | 블록 편집기 상호작용 핫픽스(P23.9: 드래그 반응/스냅 연결/겹침 없는 정렬) |
 | Phase 24 | DONE | 운영 신뢰성 회귀 하드닝(재시작/백로그/ACK/타임아웃) 완료 |
 | Phase 25 | DONE | 플러그인 DX 마감(생성->검증->계약검사->CI 게이트 일체화) |
-| Phase 26 | NEXT | 제품화 마감(릴리즈 체크리스트/명령면 고정/드리프트 0) |
+| Phase 26 | NOW | 제품화 마감(릴리즈 체크리스트/명령면 고정/드리프트 0) |
 
 ### 완성 기준(구현 범위 한정)
 
@@ -526,9 +533,9 @@ Intent:
 
 ### 현재 우선순위
 
-1. `P26` 제품화 마감 범위를 확정하고 릴리즈 체크리스트를 고정한다
-2. 명령면/문서/CI 드리프트 0 기준을 제품화 페이즈에서 최종 고정한다
-3. 연구 트랙(`R*`, `G*`)은 구현 마감 범위와 분리해 유지한다
+1. `P26.2`로 Lab RC(`v0.1.0-rc.1`) 버전/범위를 고정한다
+2. `P26.3`~`P26.5`로 명령면/SSOT/conda 드리프트 게이트를 required로 승격한다
+3. `P26.6`~`P26.8`로 release-readiness 명령과 문서/매핑을 마감한다
 
 ### 레거시 관련 기준
 

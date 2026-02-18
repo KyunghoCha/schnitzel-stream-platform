@@ -1,6 +1,6 @@
 # Owner Split Playbook (Agent Build Track vs User Research Track)
 
-Last updated: 2026-02-17
+Last updated: 2026-02-18
 
 ## English
 
@@ -19,7 +19,7 @@ This playbook fixes decision ownership after `P12` completion.
 
 ## Execution Status Snapshot
 
-Current step id: `P21.8`
+Current step id: `P26.1`
 
 ### Agent Track Status (`E-*`)
 
@@ -280,7 +280,7 @@ Current step id: `P21.8`
 
 ## 실행 상태 스냅샷
 
-현재 step id: `P21.8`
+현재 step id: `P26.1`
 
 ### Agent 트랙 상태 (`E-*`)
 
