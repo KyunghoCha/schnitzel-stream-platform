@@ -110,6 +110,12 @@ jobs:
       - name: Control policy snapshot drift gate
         run: python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json
 
+      - name: Command surface snapshot drift gate
+        run: python scripts/command_surface_snapshot.py --check --baseline configs/policy/command_surface_snapshot_v1.json
+
+      - name: SSOT sync drift gate
+        run: python scripts/ssot_sync_check.py --strict --json
+
       - name: Preset launcher sanity checks
         run: |
           python scripts/stream_run.py --list
@@ -200,6 +206,42 @@ jobs:
       - name: Build
         run: npm run build
 
+  conda-smoke:
+    name: conda-smoke (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: schnitzel-stream
+          auto-activate-base: false
+          auto-update-conda: false
+          channels: conda-forge
+
+      - name: Create or update conda environment
+        shell: bash -l {0}
+        run: |
+          conda env update -n schnitzel-stream -f environment.yml --prune
+
+      - name: Conda required smoke checks
+        shell: bash -l {0}
+        run: |
+          conda run -n schnitzel-stream python scripts/env_doctor.py --profile console --strict --json
+          conda run -n schnitzel-stream python -m compileall -q src tests scripts
+          conda run -n schnitzel-stream python scripts/stream_run.py --preset inproc_demo --validate-only
+          conda run -n schnitzel-stream python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json
+          conda run -n schnitzel-stream python scripts/command_surface_snapshot.py --check --baseline configs/policy/command_surface_snapshot_v1.json
+          conda run -n schnitzel-stream python scripts/ssot_sync_check.py --strict --json
+
   required-gate:
     name: required-gate
     runs-on: ubuntu-latest
@@ -207,6 +249,7 @@ jobs:
       - test
       - no-docker-smoke
       - ui-console
+      - conda-smoke
     if: ${{ always() }}
     steps:
       - name: Fail if any matrix job failed
@@ -221,6 +264,10 @@ jobs:
           fi
           if [ "${{ needs.ui-console.result }}" != "success" ]; then
             echo "UI console job did not pass: ${{ needs.ui-console.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.conda-smoke.result }}" != "success" ]; then
+            echo "Conda smoke job did not pass: ${{ needs.conda-smoke.result }}"
             exit 1
           fi
           echo "All matrix test jobs passed."
