@@ -1,8 +1,8 @@
 # Execution Roadmap (Platform Pivot SSOT)
 
-Last updated: 2026-02-17
+Last updated: 2026-02-18
 
-Current step id: `P23.9`
+Current step id: `P24.1`
 
 ## English
 
@@ -55,7 +55,7 @@ Status legend:
 - `P0.6` SSOT docs for pivot (architecture/plan/support matrix/roadmap refinement). `DONE` (5e30823, 151676c, 4f1ab87, 92567af)
 - `P0.7` StreamPacket contract SSOT + references. `DONE` (f34f876)
 
-Current position: **Phase 23.9 block editor interaction hotfix completed**
+Current position: **Phase 24 reliability hardening opened (`P24.1`)**
 
 #### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
@@ -394,9 +394,23 @@ Intent:
   - `P23.9.6` Expand interaction/layout/connect regression tests. `DONE` (6c6603d)
   - `P23.9.7` Final docs/mapping/status sync for P23.9 assets. `DONE`
 
-#### Planned Non-Research Finish Track (`P24`~`P26`) (NEXT)
+#### Phase 24: Reliability Hardening (NOW)
 
-- `P24` Reliability hardening: restart/backlog/ack/timeout regression expansion with deterministic CI coverage.
+Intent:
+- Lock durable reliability behavior through deterministic regression coverage before release closure.
+- Keep runtime semantics unchanged while strengthening queue boundary diagnostics and restart safety.
+- Promote reliability smoke checks into required CI gates.
+
+- `P24.1` Open phase and align SSOT step id/state docs for reliability track. `NOW`
+- `P24.2` Harden SQLite durable queue boundary diagnostics with compatibility-safe semantics. `NEXT`
+- `P24.3` Add durable ack observability metrics and unit coverage. `NEXT`
+- `P24.4` Expand restart/backlog/partial-ack integration regressions. `NEXT`
+- `P24.5` Add reliability smoke command (`quick`/`full`, JSON contract). `NEXT`
+- `P24.6` Enforce reliability smoke in CI required gates. `NEXT`
+- `P24.7` Final docs/index/mapping/status sync for P24 assets. `NEXT`
+
+#### Planned Non-Research Finish Track (`P25`~`P26`) (NEXT)
+
 - `P25` Plugin DX closure: scaffold/template quality, authoring flow reduction, stricter mapping checks.
 - `P26` Productization closure: release checklist, command surface freeze, docs/code/CI drift=0 target.
 
@@ -442,8 +456,8 @@ Intent:
 
 ### 현재 상태 한눈에 보기
 
-- current step id: `P23.9`
-- 전체 위치: **Phase 23.9 블록 편집기 상호작용 핫픽스 완료**
+- current step id: `P24.1`
+- 전체 위치: **Phase 24 운영 신뢰성 하드닝 오픈(`P24.1`)**
 - 레거시 런타임(관련 레거시 경로)은 `main`에서 제거 완료
 
 상태 표기:
@@ -479,7 +493,7 @@ Intent:
 | Phase 21 | DONE | 의존성 기준선 고정 + 블록코딩 GUI MVP 도입 |
 | Phase 22 | DONE | 온보딩/설치 경로 완결(bootstrap/doctor/up-down 명시 3단계 고정) |
 | Phase 23 | DONE | 블록 편집기 상호작용 핫픽스(P23.9: 드래그 반응/스냅 연결/겹침 없는 정렬) |
-| Phase 24 | NEXT | 운영 신뢰성 회귀 하드닝(재시작/백로그/ACK/타임아웃) |
+| Phase 24 | NOW | 운영 신뢰성 회귀 하드닝(재시작/백로그/ACK/타임아웃) 진행 시작 |
 | Phase 25 | NEXT | 플러그인 DX 마감(스캐폴드/템플릿/가이드 완성도) |
 | Phase 26 | NEXT | 제품화 마감(릴리즈 체크리스트/명령면 고정/드리프트 0) |
 
@@ -495,9 +509,9 @@ Intent:
 
 ### 현재 우선순위
 
-1. `P24.1`로 운영 신뢰성 하드닝 페이즈를 오픈하고 SSOT 상태를 전환한다
-2. 재시작/백로그/ACK/타임아웃 경계 회귀를 테스트 우선으로 확장한다
-3. CI 게이트에서 신뢰성 회귀와 문서 정합성을 동시 유지한다
+1. SQLite durable 큐 경계조건(`P24.2`)을 호환 유지 방식으로 고정한다
+2. 재시작/백로그/ACK 경계 회귀(`P24.3`~`P24.4`)를 테스트 우선으로 확장한다
+3. 신뢰성 스모크 게이트(`P24.5`~`P24.6`)를 CI required로 승격한다
 
 ### 레거시 관련 기준
 
