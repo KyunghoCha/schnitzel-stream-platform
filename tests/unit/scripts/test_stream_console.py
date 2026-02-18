@@ -130,3 +130,64 @@ def test_up_failure_reports_dependency_guidance(monkeypatch, capsys):
     assert "failure_kind=dependency_missing" in err
     assert "recover_powershell=" in err
     assert "recover_bash=" in err
+
+
+def test_up_failure_reports_port_conflict_guidance(monkeypatch, capsys):
+    mod = _load_stream_console_module()
+    monkeypatch.setattr(
+        mod.console_ops,
+        "start_selected_services",
+        lambda **_kwargs: [{"service": "api", "action": "started", "pid": 123}],
+    )
+    monkeypatch.setattr(
+        mod,
+        "_wait_for_ready",
+        lambda **_kwargs: {
+            "schema_version": 1,
+            "ready": False,
+            "log_dir": "x",
+            "state": {"api": {"enabled": True}, "ui": {"enabled": False}},
+            "api": {"status": "stale", "running": False, "port_open": True, "health": {"reason": "n/a", "status_code": None}},
+            "ui": {"status": "not_found", "running": False, "port_open": False},
+        },
+    )
+    monkeypatch.setattr(mod.env_ops, "run_checks", lambda **_kwargs: [])
+
+    rc = mod.run(["up", "--api-only", "--api-port", "18700"])
+    assert rc == mod.EXIT_RUNTIME
+    err = capsys.readouterr().err
+    assert "failure_kind=port_conflict" in err
+    assert "failure_reason=api port 18700 is already in use" in err
+
+
+def test_up_failure_reports_api_health_failed(monkeypatch, capsys):
+    mod = _load_stream_console_module()
+    monkeypatch.setattr(
+        mod.console_ops,
+        "start_selected_services",
+        lambda **_kwargs: [{"service": "api", "action": "started", "pid": 123}],
+    )
+    monkeypatch.setattr(
+        mod,
+        "_wait_for_ready",
+        lambda **_kwargs: {
+            "schema_version": 1,
+            "ready": False,
+            "log_dir": "x",
+            "state": {"api": {"enabled": True}, "ui": {"enabled": False}},
+            "api": {
+                "status": "running",
+                "running": True,
+                "port_open": False,
+                "health": {"ok": False, "reason": "http 500", "status_code": 500},
+            },
+            "ui": {"status": "not_found", "running": False, "port_open": False},
+        },
+    )
+    monkeypatch.setattr(mod.env_ops, "run_checks", lambda **_kwargs: [])
+
+    rc = mod.run(["up", "--api-only"])
+    assert rc == mod.EXIT_RUNTIME
+    err = capsys.readouterr().err
+    assert "failure_kind=api_health_failed" in err
+    assert "failure_reason=http 500" in err

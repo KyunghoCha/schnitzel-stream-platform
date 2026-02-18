@@ -133,3 +133,71 @@ def test_durable_queue_delete_on_emit_clears_rows_without_ack(tmp_path):
         assert q.read(limit=10) == []
     finally:
         q.close()
+
+
+def test_durable_queue_partial_ack_replays_only_remaining_packets(tmp_path):
+    db_path = tmp_path / "queue.sqlite3"
+
+    packets = []
+    for idx in range(5):
+        packets.append(
+            {
+                "kind": "event",
+                "source_id": "cam01",
+                "payload": {"x": idx},
+                "meta": {"idempotency_key": f"event-{idx:03d}"},
+            }
+        )
+    enqueue_nodes = [
+        NodeSpec(
+            node_id="src",
+            kind="source",
+            plugin="schnitzel_stream.nodes.dev:StaticSource",
+            config={"packets": packets},
+        ),
+        NodeSpec(
+            node_id="q",
+            kind="sink",
+            plugin="schnitzel_stream.nodes.durable_sqlite:SqliteQueueSink",
+            config={"path": str(db_path), "forward": False},
+        ),
+    ]
+    InProcGraphRunner().run(nodes=enqueue_nodes, edges=[EdgeSpec(src="src", dst="q")])
+
+    drain_nodes = [
+        NodeSpec(
+            node_id="src",
+            kind="source",
+            plugin="schnitzel_stream.nodes.durable_sqlite:SqliteQueueSource",
+            config={"path": str(db_path), "limit": 2, "delete_on_emit": False},
+        ),
+        NodeSpec(node_id="op", kind="node", plugin="schnitzel_stream.nodes.dev:Identity"),
+        NodeSpec(
+            node_id="ack",
+            kind="sink",
+            plugin="schnitzel_stream.nodes.durable_sqlite:SqliteQueueAckSink",
+            config={"path": str(db_path)},
+        ),
+    ]
+    drain_edges = [EdgeSpec(src="src", dst="op"), EdgeSpec(src="op", dst="ack")]
+
+    r1 = InProcGraphRunner().run(nodes=drain_nodes, edges=drain_edges)
+    assert len(r1.outputs_by_node["src"]) == 2
+
+    q1 = SqliteQueue(db_path)
+    try:
+        assert len(q1.read(limit=10)) == 3
+    finally:
+        q1.close()
+
+    drain_nodes[0] = NodeSpec(
+        node_id="src",
+        kind="source",
+        plugin="schnitzel_stream.nodes.durable_sqlite:SqliteQueueSource",
+        config={"path": str(db_path), "limit": 10, "delete_on_emit": False},
+    )
+    r2 = InProcGraphRunner().run(nodes=drain_nodes, edges=drain_edges)
+    assert len(r2.outputs_by_node["src"]) == 3
+
+    r3 = InProcGraphRunner().run(nodes=drain_nodes, edges=drain_edges)
+    assert len(r3.outputs_by_node["src"]) == 0

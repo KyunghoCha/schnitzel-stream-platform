@@ -180,3 +180,26 @@ def test_run_classifies_dependency_error_as_environment(monkeypatch, tmp_path: P
     assert payload["status"] == "failed"
     assert payload["scenarios"][0]["failure_kind"] == "environment"
     assert payload["scenarios"][0]["failure_reason"] == "dependency_missing"
+
+
+def test_run_classifies_timeout_failure(monkeypatch, tmp_path: Path):
+    mod = _load_demo_pack_module()
+    _write_showcase_graphs(tmp_path)
+    monkeypatch.setattr(mod, "_repo_root", lambda: tmp_path)
+
+    def _timeout_fail(cmd, *, cwd, env):
+        cmd_line = " ".join(cmd)
+        if "validate" in cmd_line:
+            return mod.CommandResult(returncode=0, stdout="ok", stderr="", duration_sec=0.01)
+        return mod.CommandResult(returncode=124, stdout="", stderr="command timed out", duration_sec=120.0)
+
+    monkeypatch.setattr(mod, "_run_command", _timeout_fail)
+
+    report_path = tmp_path / "outputs" / "reports" / "timeout_fail.json"
+    rc = mod.run(["--profile", "ci", "--report", str(report_path)])
+    assert rc == 1
+
+    payload = json.loads(report_path.read_text(encoding="utf-8"))
+    assert payload["status"] == "failed"
+    assert payload["scenarios"][0]["failure_kind"] == "run"
+    assert payload["scenarios"][0]["failure_reason"] == "command_timeout"
