@@ -43,7 +43,7 @@ def _write_baseline(repo_root: Path) -> Path:
         },
         "patterns": {
             "step_id": "Current step id[^`]*`(?P<step>[^`]+)`",
-            "roadmap_current_position": "Current position:.*\\\\(`(?P<step>P[0-9.]+)`\\\\)",
+            "roadmap_current_position": "Current position:.*\\(`(?P<step>P[0-9.]+)`\\)",
         },
     }
     baseline.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")

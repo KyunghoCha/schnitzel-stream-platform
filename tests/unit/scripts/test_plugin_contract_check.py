@@ -59,6 +59,7 @@ def test_plugin_contract_check_fails_when_pack_missing(tmp_path: Path):
 
 def test_plugin_contract_check_strict_success_for_scaffolded_pack(tmp_path: Path, capsys):
     _scaffold_sensor_pack(tmp_path)
+    capsys.readouterr()
     mod = _load_contract_module()
     rc = mod.run(
         [
@@ -83,6 +84,7 @@ def test_plugin_contract_check_strict_success_for_scaffolded_pack(tmp_path: Path
 
 def test_plugin_contract_check_graph_validate_success_with_stubbed_subprocess(tmp_path: Path, monkeypatch, capsys):
     _scaffold_sensor_pack(tmp_path)
+    capsys.readouterr()
     mod = _load_contract_module()
 
     def _ok_subprocess(*, cmd, cwd, env):
@@ -113,6 +115,7 @@ def test_plugin_contract_check_graph_validate_success_with_stubbed_subprocess(tm
 
 def test_plugin_contract_check_strict_detects_missing_export(tmp_path: Path, capsys):
     _scaffold_sensor_pack(tmp_path)
+    capsys.readouterr()
     init_file = tmp_path / "src" / "schnitzel_stream" / "packs" / "sensor" / "nodes" / "__init__.py"
     init_file.write_text("from __future__ import annotations\n\n__all__ = []\n", encoding="utf-8")
 
