@@ -1,0 +1,33 @@
+schema_version: 1
+workload_id: recovery_stress
+description: Queue stress with explicit recovery marker after outage.
+latency_budget_ms: 140.0
+
+source_config:
+  total_events: 380
+  groups: [group_a, group_b]
+  group_probs:
+    group_a: 0.6
+    group_b: 0.4
+  burst_every: 9
+  burst_size: 10
+  event_interval_ms: 10.0
+  recovery_marker_seq: 420
+  outage_sleep_ms: 400.0
+
+burst_config:
+  count: 8
+
+processor_config:
+  delay_ms: 2.4
+  jitter_ms: 0.6
+  group_delay_ms:
+    group_a: 0.0
+    group_b: 1.8
+  __runtime__:
+    inbox_max: 4
+
+sink_config:
+  group_weights:
+    group_a: 1.0
+    group_b: 1.8

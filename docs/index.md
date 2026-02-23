@@ -33,6 +33,7 @@ Runtime baseline:
 18. `docs/guides/graph_wizard_guide.md`
 19. `docs/guides/block_editor_quickstart.md`
 20. `docs/guides/lab_rc_release_checklist.md`
+21. `docs/experiments/backpressure_fairness_paper_plan.md`
 
 Onboarding standard path:
 - `bootstrap -> doctor -> up/down`
@@ -50,6 +51,7 @@ Onboarding standard path:
 - `docs/guides/`: usage guides
 - `docs/packs/`: pack-specific docs (vision etc.)
 - `docs/progress/`: current status snapshots
+- `docs/experiments/`: reproducible experiment and paper plans
 
 ## Historical Docs
 
@@ -116,6 +118,7 @@ Onboarding standard path:
 18. `docs/guides/graph_wizard_guide.md`
 19. `docs/guides/block_editor_quickstart.md`
 20. `docs/guides/lab_rc_release_checklist.md`
+21. `docs/experiments/backpressure_fairness_paper_plan.md`
 
 온보딩 표준 경로:
 - `bootstrap -> doctor -> up/down`
@@ -133,6 +136,7 @@ Onboarding standard path:
 - `docs/guides/`: 사용 가이드
 - `docs/packs/`: 팩별 문서(vision 등)
 - `docs/progress/`: 현재 상태 스냅샷
+- `docs/experiments/`: 재현 실험/논문 계획
 
 ## 역사 문서
 

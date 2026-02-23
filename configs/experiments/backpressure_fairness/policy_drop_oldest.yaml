@@ -1,0 +1,9 @@
+schema_version: 1
+policy_id: drop_oldest
+description: Drop oldest queued packet when inbox is full.
+
+node_overrides:
+  processor:
+    __runtime__:
+      inbox_overflow: drop_oldest
+

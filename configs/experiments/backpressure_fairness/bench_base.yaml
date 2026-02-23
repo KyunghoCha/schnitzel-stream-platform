@@ -1,0 +1,71 @@
+schema_version: 1
+experiment_id: backpressure_fairness
+output_dir: outputs/experiments/backpressure_fairness
+repeats: 30
+seed_base: 12000
+latency_budget_ms: 120.0
+
+node_ids:
+  source: src
+  burst: burst
+  processor: processor
+  sink: sink
+
+graph:
+  version: 2
+  nodes:
+    - id: src
+      kind: source
+      plugin: schnitzel_stream.packs.experiments.nodes:SyntheticRiskEventSource
+      config:
+        source_id: fairness_lab
+        total_events: 360
+        groups: [group_a, group_b]
+        group_probs:
+          group_a: 0.5
+          group_b: 0.5
+        burst_every: 20
+        burst_size: 4
+        event_interval_ms: 16.0
+        recovery_marker_seq: 220
+        outage_sleep_ms: 250.0
+        emit_sleep_ms: 0.0
+
+    - id: processor
+      kind: node
+      plugin: schnitzel_stream.packs.experiments.nodes:SlowScoringNode
+      config:
+        __runtime__:
+          inbox_max: 32
+          inbox_overflow: drop_new
+        delay_ms: 2.0
+        jitter_ms: 0.8
+        group_delay_ms:
+          group_a: 0.0
+          group_b: 2.2
+
+    - id: sink
+      kind: sink
+      plugin: schnitzel_stream.packs.experiments.nodes:BackpressureMetricsSink
+      config:
+        output_path: outputs/experiments/backpressure_fairness/_placeholder/events.jsonl
+        flush: true
+        forward: false
+        group_weights:
+          group_a: 1.0
+          group_b: 1.4
+
+    - id: burst
+      kind: node
+      plugin: schnitzel_stream.nodes.dev:BurstNode
+      config:
+        count: 4
+        meta_key: burst_seq
+
+  edges:
+    - from: src
+      to: burst
+    - from: burst
+      to: processor
+    - from: processor
+      to: sink
