@@ -16,6 +16,7 @@ Phase 6 note:
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 import inspect
+import math
 from typing import Any, Iterable
 
 from schnitzel_stream.graph.model import EdgeSpec, NodeSpec
@@ -138,6 +139,9 @@ class InProcGraphRunner:
 
         inbox_max_by_node: dict[str, int] = {}
         inbox_overflow_by_node: dict[str, str] = {}
+        overflow_weight_key_by_node: dict[str, str] = {}
+        overflow_default_weight_by_node: dict[str, float] = {}
+        overflow_weights_by_node: dict[str, dict[str, float]] = {}
         for n in nodes:
             nid = n.node_id
             kind = str(n.kind).strip().lower()
@@ -154,6 +158,31 @@ class InProcGraphRunner:
             raw_overflow = rcfg.get("inbox_overflow", "drop_new")
             overflow = str(raw_overflow or "").strip().lower() or "drop_new"
             inbox_overflow_by_node[nid] = overflow
+            raw_weight_key = rcfg.get("overflow_weight_key", "group_id")
+            overflow_weight_key_by_node[nid] = str(raw_weight_key or "").strip() or "group_id"
+            try:
+                default_weight = float(rcfg.get("overflow_default_weight", 1.0))
+            except (TypeError, ValueError):
+                default_weight = 1.0
+            if not math.isfinite(default_weight):
+                default_weight = 1.0
+            overflow_default_weight_by_node[nid] = default_weight
+
+            raw_weights = rcfg.get("overflow_weights")
+            parsed_weights: dict[str, float] = {}
+            if isinstance(raw_weights, dict):
+                for raw_k, raw_v in raw_weights.items():
+                    key = str(raw_k).strip()
+                    if not key:
+                        continue
+                    try:
+                        value = float(raw_v)
+                    except (TypeError, ValueError):
+                        continue
+                    if not math.isfinite(value):
+                        continue
+                    parsed_weights[key] = value
+            overflow_weights_by_node[nid] = parsed_weights
 
         instances: dict[str, Any] = {}
         for n in nodes:
@@ -181,6 +210,41 @@ class InProcGraphRunner:
             work_q.extend(new_q)
             return dropped
 
+        def _drop_weighted_task(dst_id: str) -> bool:
+            # O(n) fallback used only under backpressure.
+            if inbox_counts.get(dst_id, 0) <= 0:
+                return False
+
+            weight_key = overflow_weight_key_by_node.get(dst_id, "group_id")
+            default_weight = float(overflow_default_weight_by_node.get(dst_id, 1.0))
+            value_weights = overflow_weights_by_node.get(dst_id, {})
+
+            best_idx: int | None = None
+            best_weight = float("inf")
+            for idx, (nid, pkt) in enumerate(work_q):
+                if nid != dst_id:
+                    continue
+                raw_value = pkt.meta.get(weight_key)
+                if raw_value is None and isinstance(pkt.payload, dict):
+                    raw_value = pkt.payload.get(weight_key)
+                weight = float(value_weights.get(str(raw_value), default_weight))
+                if weight < best_weight:
+                    best_weight = weight
+                    best_idx = idx
+
+            if best_idx is None:
+                return False
+
+            new_q: deque[tuple[str, StreamPacket]] = deque()
+            for idx, item in enumerate(work_q):
+                if idx == best_idx:
+                    inbox_counts[dst_id] = max(0, int(inbox_counts.get(dst_id, 0)) - 1)
+                    continue
+                new_q.append(item)
+            work_q.clear()
+            work_q.extend(new_q)
+            return True
+
         def _enqueue(src_id: str, pkt: StreamPacket) -> None:
             nonlocal dropped_total
             for dst_id in outgoing.get(src_id, []):
@@ -193,6 +257,15 @@ class InProcGraphRunner:
                         )
                     if overflow == "drop_oldest":
                         if _drop_oldest_task(dst_id):
+                            dropped_by_node[dst_id] += 1
+                            dropped_total += 1
+                        else:
+                            # Fallback: if we couldn't drop an existing task, drop the new one.
+                            dropped_by_node[dst_id] += 1
+                            dropped_total += 1
+                            continue
+                    elif overflow == "weighted_drop":
+                        if _drop_weighted_task(dst_id):
                             dropped_by_node[dst_id] += 1
                             dropped_total += 1
                         else:

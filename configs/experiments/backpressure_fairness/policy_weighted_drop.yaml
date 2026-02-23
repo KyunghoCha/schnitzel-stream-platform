@@ -1,0 +1,13 @@
+schema_version: 1
+policy_id: weighted_drop
+description: Fairness-aware weighted drop that protects higher-weight groups under overflow.
+
+node_overrides:
+  processor:
+    __runtime__:
+      inbox_overflow: weighted_drop
+      overflow_weight_key: group_id
+      overflow_default_weight: 1.0
+      overflow_weights:
+        group_a: 1.0
+        group_b: 2.0
