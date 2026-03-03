@@ -1,0 +1,96 @@
+schema_version: 1
+analysis_id: backpressure_fairness_v1
+frozen_on: 2026-03-03
+language: en
+
+scope:
+  core_claim: native fairness analysis under backpressure
+  appendix_claim: ros2 comparative evidence
+  non_scope:
+    - distributed orchestrator implementation
+    - personal or identifiable data ingestion
+    - external production ros2 architecture benchmarking
+
+research_questions:
+  - id: rq1
+    text: How do backpressure policies change reliability and latency under fixed workloads?
+  - id: rq2
+    text: How do policies shift group-level harm distribution under queue pressure?
+  - id: rq3
+    text: How does native runtime compare with ros2 baseline on fairness-observability and reproducibility metrics?
+
+hypotheses:
+  - id: h1
+    text: Policy ranking changes when fairness-weighted harm is prioritized over average throughput.
+  - id: h2
+    text: Weighted drop can reduce harm-weighted cost without large reliability regression.
+  - id: h3
+    text: Native pipeline produces tighter reproducibility metrics than ros2 baseline under the same run schema.
+
+metrics:
+  aggregate_core:
+    - throughput
+    - p95_latency_ms
+    - drop_rate
+    - event_miss_rate
+    - harm_weighted_cost
+    - group_miss_gap
+    - group_latency_gap_ms
+  pairwise_metrics:
+    - harm_weighted_cost
+    - event_miss_rate
+    - p95_latency_ms
+    - group_miss_gap
+    - group_latency_gap_ms
+    - drop_rate
+  ranking_rule:
+    primary: harm_weighted_cost_mean
+    tie_breakers:
+      - event_miss_rate_mean
+      - p95_latency_ms_mean
+      - policy_id
+
+statistics:
+  alpha: 0.05
+  confidence_interval: bootstrap_95
+  significance_test: mann_whitney_u_two_sided
+  multiple_comparison_correction: holm_bonferroni
+  effect_size: cliffs_delta
+  cliffs_delta_thresholds:
+    negligible: 0.147
+    small: 0.33
+    medium: 0.474
+    large: 1.0
+
+interpretation_rules:
+  - rule: Do not claim superiority when holm-adjusted p is missing or > alpha.
+  - rule: Report effect size direction and magnitude with every significant claim.
+  - rule: Treat ros2 comparison as appendix support, not core acceptance gate.
+  - rule: Keep discussion aligned with fixed metrics and frozen ranking rule.
+
+quality_gates:
+  required_tests:
+    - tests/unit/test_inproc_backpressure.py
+    - tests/unit/scripts/test_backpressure_experiment_scripts.py
+  full_regression_command: python -m pytest -q
+  docs_hygiene_command: python scripts/docs_hygiene.py --strict
+  schema_requirements:
+    aggregate:
+      - summary_rows
+      - pairwise_tests
+      - ranking_by_workload
+      - significance_alpha
+      - pairwise_metric_keys
+    ros2_compare:
+      - native_summary_rows
+      - ros2_summary_rows
+      - comparisons
+      - reproducibility
+
+ethics:
+  data_policy:
+    - synthetic stream only
+    - no personal data
+  reporting_policy:
+    - include limitation section for workload realism
+    - include risk note on fairness metric assumptions

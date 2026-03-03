@@ -1,0 +1,30 @@
+schema_version: 1
+matrix_id: backpressure_fairness_final_v1
+experiment_id: backpressure_fairness
+
+base_config: configs/experiments/backpressure_fairness/bench_base.yaml
+analysis_spec: configs/experiments/backpressure_fairness/analysis_spec_v1.yaml
+
+policies:
+  - configs/experiments/backpressure_fairness/policy_drop_new.yaml
+  - configs/experiments/backpressure_fairness/policy_drop_oldest.yaml
+  - configs/experiments/backpressure_fairness/policy_error.yaml
+  - configs/experiments/backpressure_fairness/policy_weighted_drop.yaml
+
+workloads:
+  - configs/experiments/backpressure_fairness/workloads_balanced.yaml
+  - configs/experiments/backpressure_fairness/workloads_skewed_burst.yaml
+  - configs/experiments/backpressure_fairness/workloads_recovery_stress.yaml
+  - configs/experiments/backpressure_fairness/workloads_minority_spike.yaml
+
+execution:
+  repeats: 50
+  seed_base: 12000
+  max_runs: 0
+  strict: false
+  quality_profile: full
+  continue_on_ros2_missing: true
+
+paths:
+  output_root: outputs/experiments/backpressure_fairness/paper_submission_v1
+  ros2_runs_glob: outputs/experiments/backpressure_fairness/ros2_baseline/session_*/runs/run_*.json

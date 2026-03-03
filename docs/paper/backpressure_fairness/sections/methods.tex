@@ -1,0 +1,17 @@
+\section{Methods}
+\subsection{Experiment Matrix}
+We evaluate four policies (drop\_new, drop\_oldest, error, weighted\_drop)
+across four workloads (balanced, skewed\_burst, recovery\_stress, minority\_spike).
+Each policy-workload pair is repeated with fixed seed rules.
+
+\subsection{Frozen Analysis Specification}
+Before running full experiments, we freeze:
+(1) core metrics,
+(2) ranking rule,
+(3) significance tests and correction,
+(4) effect-size interpretation thresholds.
+
+\subsection{Statistics}
+We report bootstrap 95\% confidence intervals,
+Mann--Whitney U tests, Holm correction, and Cliff's delta.
+No claim of superiority is made when adjusted significance is unavailable or non-significant.

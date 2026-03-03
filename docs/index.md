@@ -52,6 +52,7 @@ Onboarding standard path:
 - `docs/packs/`: pack-specific docs (vision etc.)
 - `docs/progress/`: current status snapshots
 - `docs/experiments/`: reproducible experiment and paper plans
+- `docs/paper/`: submission manuscript templates and section skeletons
 
 ## Historical Docs
 
@@ -137,6 +138,7 @@ Onboarding standard path:
 - `docs/packs/`: 팩별 문서(vision 등)
 - `docs/progress/`: 현재 상태 스냅샷
 - `docs/experiments/`: 재현 실험/논문 계획
+- `docs/paper/`: 제출용 원고 템플릿/섹션 스켈레톤
 
 ## 역사 문서
 

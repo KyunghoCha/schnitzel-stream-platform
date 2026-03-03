@@ -31,6 +31,13 @@ This paper targets a practical ethical question in stream processing systems:
 
 ## Reproducible Commands
 
+Freeze analysis and matrix specs:
+
+```bash
+cat configs/experiments/backpressure_fairness/analysis_spec_v1.yaml
+cat configs/experiments/backpressure_fairness/final_matrix_v1.yaml
+```
+
 Run benchmark sessions:
 
 ```bash
@@ -64,11 +71,19 @@ conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/comp
   --ros2-runs-glob 'outputs/experiments/backpressure_fairness/ros2_baseline/session_*/runs/run_*.json'
 ```
 
+Run one-shot paper pipeline:
+
+```bash
+conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/run_paper_pipeline.py \
+  --matrix configs/experiments/backpressure_fairness/final_matrix_v1.yaml
+```
+
 ## Outputs
 
 - Aggregate: `backpressure_aggregate.json`, `backpressure_summary.csv`, `backpressure_pairwise_tests.csv`
 - Tables: `research_tables.md`, `table_pairwise_significance.csv`
 - ROS2 compare: `ros2_comparison.json`, `ros2_comparison.csv`, `ros2_reproducibility.csv`
+- Submission package: `artifacts_manifest.json`, `repro_commands.md`, `submission_checklist.md`
 
 ## 한국어
 
@@ -98,6 +113,13 @@ conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/comp
 - 반복: 정책-워크로드 조합당 `50`회(논문 기본값)
 
 ## 재현 명령어
+
+분석/매트릭스 고정 스펙:
+
+```bash
+cat configs/experiments/backpressure_fairness/analysis_spec_v1.yaml
+cat configs/experiments/backpressure_fairness/final_matrix_v1.yaml
+```
 
 벤치 실행:
 
@@ -132,8 +154,16 @@ conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/comp
   --ros2-runs-glob 'outputs/experiments/backpressure_fairness/ros2_baseline/session_*/runs/run_*.json'
 ```
 
+원샷 논문 파이프라인:
+
+```bash
+conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/run_paper_pipeline.py \
+  --matrix configs/experiments/backpressure_fairness/final_matrix_v1.yaml
+```
+
 ## 산출물
 
 - 집계: `backpressure_aggregate.json`, `backpressure_summary.csv`, `backpressure_pairwise_tests.csv`
 - 표: `research_tables.md`, `table_pairwise_significance.csv`
 - ROS2 비교: `ros2_comparison.json`, `ros2_comparison.csv`, `ros2_reproducibility.csv`
+- 제출 패키지: `artifacts_manifest.json`, `repro_commands.md`, `submission_checklist.md`
