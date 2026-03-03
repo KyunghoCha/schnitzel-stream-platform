@@ -1,9 +1,0 @@
-schema_version: 1
-policy_id: error
-description: Raise runtime error when inbox overflows.
-
-node_overrides:
-  processor:
-    __runtime__:
-      inbox_overflow: error
-
