@@ -1,17 +1,38 @@
 \section{Methods}
 \subsection{Experiment Matrix}
-We evaluate four policies (drop\_new, drop\_oldest, error, weighted\_drop)
-across four workloads (balanced, skewed\_burst, recovery\_stress, minority\_spike).
-Each policy-workload pair is repeated with fixed seed rules.
+We evaluate four policies (\texttt{drop\_new}, \texttt{drop\_oldest}, \texttt{error}, \texttt{weighted\_drop})
+across four workloads (\texttt{balanced}, \texttt{skewed\_burst}, \texttt{recovery\_stress}, \texttt{minority\_spike}).
+Each policy-workload pair is repeated 50 times with deterministic seed derivation from \texttt{seed\_base=12000}.
+The expected matrix size is \(4 \times 4 \times 50 = 800\) runs per system.
+
+\subsection{Data Source Freeze}
+All manuscript numbers are sourced from one frozen artifact root:
+\texttt{outputs/experiments/backpressure\_fairness/paper\_submission\_final\_ros2}.
+No post-hoc experiment rerun or manual number entry is used in this draft.
 
 \subsection{Frozen Analysis Specification}
-Before running full experiments, we freeze:
-(1) core metrics,
+Before full execution, \texttt{analysis\_spec\_v1.yaml} fixes
+(1) metric keys,
 (2) ranking rule,
-(3) significance tests and correction,
-(4) effect-size interpretation thresholds.
+(3) statistical tests,
+(4) effect-size thresholds,
+(5) interpretation constraints.
+
+Primary ranking uses \texttt{harm\_weighted\_cost\_mean}; ties are resolved by
+\texttt{event\_miss\_rate\_mean}, then \texttt{p95\_latency\_ms\_mean}, then policy id.
+Pairwise evaluation uses the non-error policy set for six metrics:
+\texttt{harm\_weighted\_cost}, \texttt{event\_miss\_rate}, \texttt{p95\_latency\_ms},
+\texttt{group\_miss\_gap}, \texttt{group\_latency\_gap\_ms}, and \texttt{drop\_rate}.
 
 \subsection{Statistics}
-We report bootstrap 95\% confidence intervals,
-Mann--Whitney U tests, Holm correction, and Cliff's delta.
-No claim of superiority is made when adjusted significance is unavailable or non-significant.
+The protocol uses bootstrap 95\% confidence intervals, two-sided Mann--Whitney U tests,
+Holm--Bonferroni correction (\(\alpha = 0.05\)), and Cliff's delta.
+Effect-size interpretation follows fixed thresholds:
+negligible \(<0.147\), small \(<0.33\), medium \(<0.474\), large \(\ge 0.474\).
+Superiority claims are prohibited when Holm-adjusted \(p\) is missing or \(>0.05\).
+
+\subsection{Execution Environments}
+Native stages run in conda environment \texttt{schnitzel-stream}.
+ROS2 stages run with system interpreter \texttt{/usr/bin/python3} after sourcing
+\texttt{/opt/ros/humble/setup.bash}, due \texttt{rclpy} compatibility constraints.
+Both systems emit the same run schema contract.

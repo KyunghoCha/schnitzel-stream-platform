@@ -1,10 +1,24 @@
 \section{Reproducibility Package}
-The submission package includes:
+Single source of truth for this manuscript:
+\texttt{outputs/experiments/backpressure\_fairness/paper\_submission\_final\_ros2}.
+
+The package includes:
 \begin{itemize}
-  \item versioned matrix and analysis specs,
-  \item generated artifact manifest,
-  \item command log for re-execution,
-  \item checklist for quality gates and output contracts.
+  \item frozen configs: \texttt{final\_matrix\_v1.yaml}, \texttt{analysis\_spec\_v1.yaml},
+  \item aggregate outputs: \texttt{aggregate/backpressure\_aggregate.json} and CSV companions,
+  \item ROS2 comparison outputs: \texttt{ros2\_comparison.json/csv}, \texttt{ros2\_reproducibility.csv},
+  \item manuscript tables: \texttt{package/latex\_tables/*.tex},
+  \item execution and QA records: \texttt{package/artifacts\_manifest.json},
+  \texttt{package/repro\_commands.md}, \texttt{package/submission\_checklist.md}.
 \end{itemize}
 
-All commands are expected to run in the \texttt{schnitzel-stream} conda environment with \texttt{PYTHONPATH=src}.
+Interpreter split is required:
+\begin{itemize}
+  \item native stages: conda \texttt{schnitzel-stream} Python with \texttt{PYTHONPATH=src},
+  \item ROS2 stages: \texttt{/usr/bin/python3} after sourcing \texttt{/opt/ros/humble/setup.bash}.
+\end{itemize}
+
+The final manifest for this artifact set reports:
+\texttt{ros2\_baseline\_stage\_status=ok},
+\texttt{ros2\_compare\_stage\_status=ok},
+and all configured quality gates as passed.

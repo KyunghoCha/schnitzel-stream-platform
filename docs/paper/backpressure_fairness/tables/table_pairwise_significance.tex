@@ -1,0 +1,51 @@
+\begin{table}[t]
+\centering
+\caption{Pairwise policy significance and effect-size summary (top rows).}
+\label{tab:pairwise_significance}
+\begin{tabular}{llllllll}
+\hline
+Workload & Metric & Pair & Cliff Delta & p MWU & p Holm & Sig & Better \\
+\hline
+balanced & drop\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
+balanced & drop\_rate & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+balanced & drop\_rate & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+balanced & event\_miss\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
+balanced & event\_miss\_rate & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+balanced & event\_miss\_rate & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+balanced & group\_latency\_gap\_ms & drop\_oldest vs weighted\_drop & -0.1376 & 0.2371 & 0.7113 & no & drop\_oldest \\
+balanced & group\_latency\_gap\_ms & drop\_new vs drop\_oldest & 0.0752 & 0.5192 & 1.0000 & no & drop\_oldest \\
+balanced & group\_latency\_gap\_ms & drop\_new vs weighted\_drop & -0.0760 & 0.5147 & 1.0000 & no & drop\_new \\
+balanced & group\_miss\_gap & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
+balanced & group\_miss\_gap & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+balanced & group\_miss\_gap & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+balanced & harm\_weighted\_cost & drop\_oldest vs weighted\_drop & 0.7352 & 0.0000 & 0.0000 & yes & weighted\_drop \\
+balanced & harm\_weighted\_cost & drop\_new vs drop\_oldest & -0.5872 & 0.0000 & 0.0000 & yes & drop\_new \\
+balanced & harm\_weighted\_cost & drop\_new vs weighted\_drop & 0.1432 & 0.2185 & 0.2185 & no & weighted\_drop \\
+balanced & p95\_latency\_ms & drop\_oldest vs weighted\_drop & 0.7304 & 0.0000 & 0.0000 & yes & weighted\_drop \\
+balanced & p95\_latency\_ms & drop\_new vs drop\_oldest & -0.5448 & 0.0000 & 0.0000 & yes & drop\_new \\
+balanced & p95\_latency\_ms & drop\_new vs weighted\_drop & 0.1304 & 0.2626 & 0.2626 & no & weighted\_drop \\
+minority\_spike & drop\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
+minority\_spike & drop\_rate & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+minority\_spike & drop\_rate & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+minority\_spike & event\_miss\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
+minority\_spike & event\_miss\_rate & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+minority\_spike & event\_miss\_rate & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+minority\_spike & group\_latency\_gap\_ms & drop\_new vs drop\_oldest & -0.0056 & 0.9643 & 1.0000 & no & drop\_new \\
+minority\_spike & group\_latency\_gap\_ms & drop\_new vs weighted\_drop & -0.0584 & 0.6172 & 1.0000 & no & drop\_new \\
+minority\_spike & group\_latency\_gap\_ms & drop\_oldest vs weighted\_drop & -0.0560 & 0.6319 & 1.0000 & no & drop\_oldest \\
+minority\_spike & group\_miss\_gap & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
+minority\_spike & group\_miss\_gap & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+minority\_spike & group\_miss\_gap & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+minority\_spike & harm\_weighted\_cost & drop\_new vs weighted\_drop & -0.7064 & 0.0000 & 0.0000 & yes & drop\_new \\
+minority\_spike & harm\_weighted\_cost & drop\_oldest vs weighted\_drop & -0.6056 & 0.0000 & 0.0000 & yes & drop\_oldest \\
+minority\_spike & harm\_weighted\_cost & drop\_new vs drop\_oldest & 0.0568 & 0.6270 & 0.6270 & no & drop\_oldest \\
+minority\_spike & p95\_latency\_ms & drop\_oldest vs weighted\_drop & -0.5792 & 0.0000 & 0.0000 & yes & drop\_oldest \\
+minority\_spike & p95\_latency\_ms & drop\_new vs weighted\_drop & -0.5264 & 0.0000 & 0.0000 & yes & drop\_new \\
+minority\_spike & p95\_latency\_ms & drop\_new vs drop\_oldest & 0.0296 & 0.8013 & 0.8013 & no & drop\_oldest \\
+recovery\_stress & drop\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
+recovery\_stress & drop\_rate & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+recovery\_stress & drop\_rate & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
+recovery\_stress & event\_miss\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
+\hline
+\end{tabular}
+\end{table}

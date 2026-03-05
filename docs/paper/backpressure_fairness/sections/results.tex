@@ -2,13 +2,70 @@
 \subsection{Core Metrics}
 \input{tables/table_core_metrics.tex}
 
+Table~\ref{tab:core_metrics} reports 16 workload-policy cells.
+For non-error policies, each cell has \(N=50\) successful runs.
+For \texttt{error}, all runs fail in every workload (\(0/50\) successful per cell; 200 failed runs total),
+and these failures are kept in the final tables rather than filtered.
+
+Across non-error policies, mean \texttt{drop\_rate} and \texttt{event\_miss\_rate} are workload-constant:
+0.3333 (balanced), 0.4000 (minority\_spike), and 0.5000 (recovery\_stress, skewed\_burst).
+Across all non-error cells, \texttt{throughput\_mean} spans 289.9619 to 558.5661 and
+\texttt{p95\_latency\_ms\_mean} spans 3.4448 to 18.3916.
+
 \subsection{Fairness Metrics}
 \input{tables/table_fairness_metrics.tex}
+
+Table~\ref{tab:fairness_metrics} shows \texttt{group\_miss\_gap\_mean}=0.0000 in all non-error cells.
+The observed \texttt{group\_latency\_gap\_ms\_mean} ranges from 0.0289 (balanced, drop\_oldest)
+to 9.0154 (skewed\_burst, weighted\_drop).
+Pairwise tests for \texttt{group\_latency\_gap\_ms} are non-significant in every workload
+(minimum Holm-adjusted \(p=0.2047\), recovery\_stress drop\_new vs weighted\_drop).
 
 \subsection{Policy Ranking}
 \input{tables/table_policy_ranking.tex}
 
+Ranking (Table~\ref{tab:policy_ranking}) is workload-specific under the frozen rule:
+\texttt{weighted\_drop} is rank 1 for balanced and recovery\_stress,
+\texttt{drop\_oldest} is rank 1 for minority\_spike,
+and \texttt{drop\_new} is rank 1 for skewed\_burst.
+
+Rank-1 \texttt{harm\_weighted\_cost\_mean} with bootstrap 95\% CI:
+balanced \texttt{weighted\_drop} \(33.7637\,[33.7631,33.7644]\),
+minority\_spike \texttt{drop\_oldest} \(41.3017\,[41.2998,41.3037]\),
+recovery\_stress \texttt{weighted\_drop} \(51.1518\,[51.1503,51.1532]\),
+skewed\_burst \texttt{drop\_new} \(51.2351\,[51.2335,51.2366]\).
+
 \subsection{Pairwise Significance and Effect Size}
 \input{tables/table_pairwise_significance.tex}
 
-Figure assets should be exported into \texttt{figures/} and referenced here.
+Table~\ref{tab:pairwise_significance} is a compact view; the full 72 pairwise rows are in
+\texttt{tables/table\_pairwise\_significance.csv}.
+Among the 72 tests, 10 satisfy Holm-adjusted \(p<0.05\).
+All significant rows are confined to \texttt{harm\_weighted\_cost} (5 rows)
+and \texttt{p95\_latency\_ms} (5 rows); no significant findings appear in
+\texttt{drop\_rate}, \texttt{event\_miss\_rate}, \texttt{group\_miss\_gap}, or \texttt{group\_latency\_gap\_ms}.
+
+By workload:
+\begin{itemize}
+  \item balanced:
+  \texttt{drop\_new} vs \texttt{drop\_oldest} has lower
+  \texttt{harm\_weighted\_cost\_mean} (33.7644 vs 33.7675; Holm \(p=8.5\times 10^{-7}\); \(d=-0.5872\), large)
+  and lower \texttt{p95\_latency\_ms\_mean} (3.4508 vs 3.4743; Holm \(p=5.43\times 10^{-6}\); \(d=-0.5448\), large).
+  \texttt{weighted\_drop} vs \texttt{drop\_oldest} is also lower on harm
+  (33.7637 vs 33.7675; Holm \(p<10^{-8}\); \(d=0.7352\), large)
+  and p95 latency (3.4448 vs 3.4743; Holm \(p<10^{-8}\); \(d=0.7304\), large).
+  \item minority\_spike:
+  \texttt{weighted\_drop} has higher \texttt{harm\_weighted\_cost\_mean} than \texttt{drop\_new}
+  (41.3087 vs 41.3019; Holm \(p<10^{-8}\); \(d=-0.7064\), large)
+  and \texttt{drop\_oldest} (41.3087 vs 41.3017; Holm \(p=3.7\times 10^{-7}\); \(d=-0.6056\), large).
+  It also has higher \texttt{p95\_latency\_ms\_mean} than \texttt{drop\_new}
+  (14.2404 vs 14.1666; Holm \(p=1.165\times 10^{-5}\); \(d=-0.5264\), large)
+  and \texttt{drop\_oldest} (14.2404 vs 14.1619; Holm \(p=1.83\times 10^{-6}\); \(d=-0.5792\), large).
+  The \texttt{drop\_new} vs \texttt{drop\_oldest} comparisons are non-significant on both metrics.
+  \item recovery\_stress: no pairwise test reaches Holm significance.
+  \item skewed\_burst:
+  \texttt{drop\_new} vs \texttt{drop\_oldest} has lower
+  \texttt{harm\_weighted\_cost\_mean} (51.2351 vs 51.2379; Holm \(p=0.0283\); \(d=-0.3016\), small)
+  and lower \texttt{p95\_latency\_ms\_mean} (14.6361 vs 14.6828; Holm \(p=0.0073\); \(d=-0.3520\), medium).
+  Comparisons against \texttt{weighted\_drop} are non-significant.
+\end{itemize}

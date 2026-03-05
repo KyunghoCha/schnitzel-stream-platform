@@ -1,7 +1,13 @@
 \section{Introduction}
-Queue overflow policy is often treated as a purely operational choice.
-In fairness-sensitive pipelines, the same policy can produce unequal harm across groups,
-even when average throughput remains similar.
+Queue overflow policy is often selected as an operational tuning parameter.
+This study evaluates it as a measurable decision variable under fixed stress workloads and fixed analysis rules.
 
-This work asks: how should we evaluate backpressure policies when both reliability and fairness matter?
-We present a reproducible benchmark protocol and report policy trade-offs with fixed statistical rules.
+The objective is limited and explicit: compare four overflow policies on latency, reliability, and fairness-sensitive
+metrics, then report only what is supported by the frozen statistical protocol.
+The core claim is based on native runtime results.
+ROS2 transport results are reported in the appendix as supporting comparative evidence under the same run schema.
+
+The paper contribution is an artifact-first report:
+(1) frozen analysis specification,
+(2) complete matrix execution records,
+(3) table-ready outputs linked to run-level JSON/CSV artifacts.

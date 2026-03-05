@@ -1,3 +1,8 @@
 \section{Conclusion}
-This paper provides a reproducible framework for evaluating backpressure policy as a fairness decision.
-The deliverable includes fixed analysis rules, repeatable runs, and submission-ready tables and appendices.
+Under a frozen \(4 \times 4 \times 50\) protocol, native policy ranking is workload-dependent rather than uniform.
+Significant differences are limited to \texttt{harm\_weighted\_cost} and \texttt{p95\_latency\_ms};
+other tested metrics remain non-significant in this matrix.
+The \texttt{error} policy results are fully reported as failed-run outcomes.
+
+The submission artifact set is reproducible and contract-checked, with ROS2 comparison kept as appendix-only evidence.
+Claims are restricted to measured comparisons in the fixed dataset and do not assert broader causal or universal behavior.

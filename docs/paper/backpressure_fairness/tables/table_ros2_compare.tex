@@ -1,0 +1,27 @@
+\begin{table}[t]
+\centering
+\caption{Native vs ROS2 appendix comparison.}
+\label{tab:ros2_appendix_compare}
+\begin{tabular}{llllllll}
+\hline
+Workload & Policy & Native Harm & ROS2 Harm & Delta Harm & Winner & Native P95 & ROS2 P95 \\
+\hline
+balanced & drop\_new & 33.7644 & 100.9389 & -67.1745 & native & 3.4508 & 64.1356 \\
+balanced & drop\_oldest & 33.7675 & 101.1942 & -67.4267 & native & 3.4743 & 68.4818 \\
+balanced & error & - & - & - &  & - & - \\
+balanced & weighted\_drop & 33.7637 & 101.6193 & -67.8556 & native & 3.4448 & 72.2289 \\
+minority\_spike & drop\_new & 41.3019 & 106.9239 & -65.6220 & native & 14.1666 & 94.8550 \\
+minority\_spike & drop\_oldest & 41.3017 & 106.8374 & -65.5357 & native & 14.1619 & 92.2928 \\
+minority\_spike & error & - & - & - &  & - & - \\
+minority\_spike & weighted\_drop & 41.3087 & 106.6339 & -65.3252 & native & 14.2404 & 84.1768 \\
+recovery\_stress & drop\_new & 51.1527 & 105.1598 & -54.0070 & native & 18.3828 & 88.3393 \\
+recovery\_stress & drop\_oldest & 51.1537 & 104.9408 & -53.7871 & native & 18.3916 & 80.6087 \\
+recovery\_stress & error & - & - & - &  & - & - \\
+recovery\_stress & weighted\_drop & 51.1518 & 103.8623 & -52.7105 & native & 18.3720 & 68.0209 \\
+skewed\_burst & drop\_new & 51.2351 & 104.6816 & -53.4465 & native & 14.6361 & 62.5274 \\
+skewed\_burst & drop\_oldest & 51.2379 & 105.7728 & -54.5349 & native & 14.6828 & 77.7128 \\
+skewed\_burst & error & - & - & - &  & - & - \\
+skewed\_burst & weighted\_drop & 51.2375 & 105.1007 & -53.8632 & native & 14.6612 & 70.2944 \\
+\hline
+\end{tabular}
+\end{table}

@@ -1,7 +1,15 @@
 \begin{abstract}
-This paper studies fairness-sensitive failure behavior in stream processing under backpressure.
-We evaluate four queue-overflow policies across four reproducible workloads and report latency,
-reliability, group-gap metrics, and harm-weighted cost.
-The native runtime analysis is the core claim, while ROS2 comparison is reported as appendix evidence.
-All experiments, statistics, and tables are generated from versioned configs and scripts.
+This paper reports a frozen-analysis benchmark of backpressure policy behavior under fairness-sensitive
+stream stress. Native and ROS2 baseline systems each execute 800 runs
+(4 policies \(\times\) 4 workloads \(\times\) 50 repeats) under a shared run schema.
+In native results, the rank-1 policy differs by workload:
+\texttt{weighted\_drop} (balanced, recovery\_stress),
+\texttt{drop\_oldest} (minority\_spike), and
+\texttt{drop\_new} (skewed\_burst).
+Across 72 Holm-corrected pairwise tests among non-error policies, 10 are significant
+and all significant findings are on \texttt{harm\_weighted\_cost} or \texttt{p95\_latency\_ms}.
+The \texttt{error} policy is retained in reporting and shows zero successful runs in all workloads.
+ROS2 results are treated as appendix evidence only; under this transport baseline, native means are lower
+for harm and p95 latency in every comparable workload-policy cell.
+All numeric claims are traceable to generated JSON/CSV artifacts.
 \end{abstract}

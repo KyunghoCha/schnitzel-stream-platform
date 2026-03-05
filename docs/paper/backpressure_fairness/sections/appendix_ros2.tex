@@ -1,5 +1,17 @@
 \section{Appendix: ROS2 Comparative Evidence}
 \input{tables/table_ros2_compare.tex}
 
-This appendix compares native and ROS2 runs under the same result schema.
-The comparison supports reproducibility and observability discussion, while core claims remain native-centric.
+This appendix compares native and ROS2 transport baseline runs under the same schema and matrix shape
+(\(4 \times 4 \times 50 = 800\) runs each).
+Core claims remain native-centric; this section is supportive evidence only.
+
+From \texttt{ros2\_comparison.csv}, all 12 comparable non-error workload-policy cells show
+lower native means for both \texttt{harm\_weighted\_cost} and \texttt{p95\_latency\_ms}
+(Table~\ref{tab:ros2_appendix_compare}).
+The \texttt{error} policy is missing in both systems for comparison rows and is kept as explicit missing data.
+
+From \texttt{ros2\_reproducibility.csv}, both systems have equal failure rate (0.25) because
+\texttt{error} runs fail by design in both matrices.
+Reproducibility dispersion is higher in ROS2 baseline under this setup
+(\texttt{repro\_cv\_mean}=0.6326 vs 0.2901; \texttt{repro\_cv\_max}=1.6074 vs 0.5846).
+This appendix does not generalize to all ROS2 deployments; it only describes this transport baseline configuration.

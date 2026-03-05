@@ -1,6 +1,25 @@
 \section{Discussion}
-The central result is whether policy choice changes harm-weighted outcomes and group-gap behavior.
-Interpretation prioritizes adjusted significance and effect-size magnitude over mean-only comparisons.
+This section separates observed facts from interpretation scope.
 
-Limitations include synthetic workload realism and dependency on configured group weights.
-ROS2 comparison is treated as supportive appendix evidence rather than a core acceptance gate.
+\textbf{Observed in native runs.}
+Policy choice changes rank order by workload (Table~\ref{tab:policy_ranking}).
+Significant differences are concentrated in two metrics (\texttt{harm\_weighted\_cost}, \texttt{p95\_latency\_ms})
+and three workloads (balanced, minority\_spike, skewed\_burst).
+Recovery\_stress shows no Holm-significant pairwise differences; the largest observed mean differences are
+\(\Delta\texttt{harm\_weighted\_cost}=0.00197\) and \(\Delta\texttt{p95\_latency\_ms}=0.01953\).
+
+\textbf{Observed non-significance that is retained.}
+\texttt{drop\_rate} and \texttt{event\_miss\_rate} are identical across non-error policies within each workload.
+\texttt{group\_miss\_gap} remains 0.0 for all non-error cells.
+\texttt{group\_latency\_gap\_ms} differs numerically but remains non-significant after Holm correction.
+These null findings are part of the result, not exclusions.
+
+\textbf{Interpretation boundary.}
+The paper reports comparative behavior under this synthetic workload family and fixed metric definitions.
+No causal mechanism is claimed beyond observed associations.
+No claim is made that one policy is globally superior across all workloads.
+
+\textbf{Limitations.}
+Workloads are synthetic, fairness weighting is configuration-dependent, and policy behavior is evaluated in
+single-host experimental setups.
+Therefore, external validity to different workload distributions or deployment constraints is not asserted.

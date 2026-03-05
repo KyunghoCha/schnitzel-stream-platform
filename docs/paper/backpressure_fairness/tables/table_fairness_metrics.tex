@@ -1,0 +1,27 @@
+\begin{table}[t]
+\centering
+\caption{Fairness-sensitive metrics by policy and workload.}
+\label{tab:fairness_metrics}
+\begin{tabular}{lllllll}
+\hline
+Workload & Policy & Worst Group & Worst Miss & Worst P95 & Miss Gap & Latency Gap \\
+\hline
+balanced & drop\_new & group\_b & 0.3333 & 3.4630 & 0.0000 & 0.0295 \\
+balanced & drop\_oldest & group\_a & 0.3333 & 3.4875 & 0.0000 & 0.0289 \\
+balanced & error &  & - & - & - & - \\
+balanced & weighted\_drop & group\_b & 0.3333 & 3.4586 & 0.0000 & 0.0311 \\
+minority\_spike & drop\_new & group\_b & 0.4000 & 14.7112 & 0.0000 & 8.4356 \\
+minority\_spike & drop\_oldest & group\_b & 0.4000 & 14.7097 & 0.0000 & 8.4379 \\
+minority\_spike & error &  & - & - & - & - \\
+minority\_spike & weighted\_drop & group\_b & 0.4000 & 14.7770 & 0.0000 & 8.4396 \\
+recovery\_stress & drop\_new & group\_b & 0.5000 & 18.7217 & 0.0000 & 7.2337 \\
+recovery\_stress & drop\_oldest & group\_b & 0.5000 & 18.7318 & 0.0000 & 7.2233 \\
+recovery\_stress & error &  & - & - & - & - \\
+recovery\_stress & weighted\_drop & group\_b & 0.5000 & 18.6972 & 0.0000 & 7.2034 \\
+skewed\_burst & drop\_new & group\_b & 0.5000 & 15.1613 & 0.0000 & 8.9927 \\
+skewed\_burst & drop\_oldest & group\_b & 0.5000 & 15.1910 & 0.0000 & 8.9987 \\
+skewed\_burst & error &  & - & - & - & - \\
+skewed\_burst & weighted\_drop & group\_b & 0.5000 & 15.1926 & 0.0000 & 9.0154 \\
+\hline
+\end{tabular}
+\end{table}

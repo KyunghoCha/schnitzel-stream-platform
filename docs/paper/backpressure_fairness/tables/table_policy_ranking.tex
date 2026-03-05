@@ -1,0 +1,27 @@
+\begin{table}[t]
+\centering
+\caption{Policy ranking by workload using fixed tie-breaking rule.}
+\label{tab:policy_ranking}
+\begin{tabular}{llllll}
+\hline
+Workload & Rank & Policy & Harm Cost & Miss Rate & P95 Latency \\
+\hline
+balanced & 1 & weighted\_drop & 33.7637 & 0.3333 & 3.4448 \\
+balanced & 2 & drop\_new & 33.7644 & 0.3333 & 3.4508 \\
+balanced & 3 & drop\_oldest & 33.7675 & 0.3333 & 3.4743 \\
+balanced & 4 & error & - & - & - \\
+minority\_spike & 1 & drop\_oldest & 41.3017 & 0.4000 & 14.1619 \\
+minority\_spike & 2 & drop\_new & 41.3019 & 0.4000 & 14.1666 \\
+minority\_spike & 3 & weighted\_drop & 41.3087 & 0.4000 & 14.2404 \\
+minority\_spike & 4 & error & - & - & - \\
+recovery\_stress & 1 & weighted\_drop & 51.1518 & 0.5000 & 18.3720 \\
+recovery\_stress & 2 & drop\_new & 51.1527 & 0.5000 & 18.3828 \\
+recovery\_stress & 3 & drop\_oldest & 51.1537 & 0.5000 & 18.3916 \\
+recovery\_stress & 4 & error & - & - & - \\
+skewed\_burst & 1 & drop\_new & 51.2351 & 0.5000 & 14.6361 \\
+skewed\_burst & 2 & weighted\_drop & 51.2375 & 0.5000 & 14.6612 \\
+skewed\_burst & 3 & drop\_oldest & 51.2379 & 0.5000 & 14.6828 \\
+skewed\_burst & 4 & error & - & - & - \\
+\hline
+\end{tabular}
+\end{table}

@@ -1,0 +1,27 @@
+\begin{table}[t]
+\centering
+\caption{Core performance and reliability metrics.}
+\label{tab:core_metrics}
+\begin{tabular}{llllllll}
+\hline
+Workload & Policy & N & Throughput & P95 Latency & Drop & Miss & Harm Cost \\
+\hline
+balanced & drop\_new & 50 & 558.0042 & 3.4508 & 0.3333 & 0.3333 & 33.7644 \\
+balanced & drop\_oldest & 50 & 555.0780 & 3.4743 & 0.3333 & 0.3333 & 33.7675 \\
+balanced & error & 0 & - & - & - & - & - \\
+balanced & weighted\_drop & 50 & 558.5661 & 3.4448 & 0.3333 & 0.3333 & 33.7637 \\
+minority\_spike & drop\_new & 50 & 430.0380 & 14.1666 & 0.4000 & 0.4000 & 41.3019 \\
+minority\_spike & drop\_oldest & 50 & 430.8375 & 14.1619 & 0.4000 & 0.4000 & 41.3017 \\
+minority\_spike & error & 0 & - & - & - & - & - \\
+minority\_spike & weighted\_drop & 50 & 425.6626 & 14.2404 & 0.4000 & 0.4000 & 41.3087 \\
+recovery\_stress & drop\_new & 50 & 289.9619 & 18.3828 & 0.5000 & 0.5000 & 51.1527 \\
+recovery\_stress & drop\_oldest & 50 & 290.3658 & 18.3916 & 0.5000 & 0.5000 & 51.1537 \\
+recovery\_stress & error & 0 & - & - & - & - & - \\
+recovery\_stress & weighted\_drop & 50 & 290.4629 & 18.3720 & 0.5000 & 0.5000 & 51.1518 \\
+skewed\_burst & drop\_new & 50 & 414.6281 & 14.6361 & 0.5000 & 0.5000 & 51.2351 \\
+skewed\_burst & drop\_oldest & 50 & 410.9764 & 14.6828 & 0.5000 & 0.5000 & 51.2379 \\
+skewed\_burst & error & 0 & - & - & - & - & - \\
+skewed\_burst & weighted\_drop & 50 & 411.6848 & 14.6612 & 0.5000 & 0.5000 & 51.2375 \\
+\hline
+\end{tabular}
+\end{table}
