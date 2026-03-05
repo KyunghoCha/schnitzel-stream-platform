@@ -24,7 +24,11 @@ execution:
   strict: false
   quality_profile: full
   continue_on_ros2_missing: true
+  ros2_baseline_enabled: true
+  fail_on_ros2_error: true
+  ros2_python_executable: /usr/bin/python3
 
 paths:
   output_root: outputs/experiments/backpressure_fairness/paper_submission_v1
+  ros2_output_root: outputs/experiments/backpressure_fairness/ros2_baseline
   ros2_runs_glob: outputs/experiments/backpressure_fairness/ros2_baseline/session_*/runs/run_*.json

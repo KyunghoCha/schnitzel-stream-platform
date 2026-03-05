@@ -45,6 +45,15 @@ conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/run_
   --base configs/experiments/backpressure_fairness/bench_base.yaml
 ```
 
+Run ROS2 transport baseline sessions (must use ROS2-compatible Python):
+
+```bash
+source /opt/ros/humble/setup.bash
+env PYTHONPATH=src:$PYTHONPATH /usr/bin/python3 scripts/experiments/run_ros2_backpressure_bench.py \
+  --base configs/experiments/backpressure_fairness/bench_base.yaml \
+  --out-dir outputs/experiments/backpressure_fairness/ros2_baseline
+```
+
 Aggregate and compute pairwise significance/effect sizes:
 
 ```bash
@@ -75,8 +84,13 @@ Run one-shot paper pipeline:
 
 ```bash
 conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/run_paper_pipeline.py \
-  --matrix configs/experiments/backpressure_fairness/final_matrix_v1.yaml
+  --matrix configs/experiments/backpressure_fairness/final_matrix_v1.yaml \
+  --ros2-python-exe /usr/bin/python3
 ```
+
+Note:
+- Conda Python 3.11/3.13 may not load `rclpy` ABI for ROS2 humble.
+- Keep native stages on `conda` and force ROS2 stages to `/usr/bin/python3`.
 
 ## Outputs
 
@@ -128,6 +142,15 @@ conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/run_
   --base configs/experiments/backpressure_fairness/bench_base.yaml
 ```
 
+ROS2 transport baseline 실행(ROS2 호환 Python 필수):
+
+```bash
+source /opt/ros/humble/setup.bash
+env PYTHONPATH=src:$PYTHONPATH /usr/bin/python3 scripts/experiments/run_ros2_backpressure_bench.py \
+  --base configs/experiments/backpressure_fairness/bench_base.yaml \
+  --out-dir outputs/experiments/backpressure_fairness/ros2_baseline
+```
+
 집계 + 유의성/효과크기 계산:
 
 ```bash
@@ -158,8 +181,13 @@ conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/comp
 
 ```bash
 conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/run_paper_pipeline.py \
-  --matrix configs/experiments/backpressure_fairness/final_matrix_v1.yaml
+  --matrix configs/experiments/backpressure_fairness/final_matrix_v1.yaml \
+  --ros2-python-exe /usr/bin/python3
 ```
+
+주의:
+- Conda Python 3.11/3.13에서는 ROS2 humble `rclpy` ABI가 맞지 않을 수 있다.
+- Native 단계는 `conda`, ROS2 단계는 `/usr/bin/python3`를 고정 사용한다.
 
 ## 산출물
 

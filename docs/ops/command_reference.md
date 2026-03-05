@@ -299,6 +299,29 @@ python scripts/reliability_smoke.py --mode quick --json
 python scripts/reliability_smoke.py --mode full
 ```
 
+Backpressure fairness paper pipeline (native + ROS2 baseline):
+
+```bash
+# Native benchmark (conda)
+conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/run_backpressure_bench.py \
+  --base configs/experiments/backpressure_fairness/bench_base.yaml
+
+# ROS2 transport baseline (system python + ROS2 humble)
+source /opt/ros/humble/setup.bash
+env PYTHONPATH=src:$PYTHONPATH /usr/bin/python3 scripts/experiments/run_ros2_backpressure_bench.py \
+  --base configs/experiments/backpressure_fairness/bench_base.yaml \
+  --out-dir outputs/experiments/backpressure_fairness/ros2_baseline
+
+# One-shot paper pipeline (explicit ROS2 python split)
+conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/run_paper_pipeline.py \
+  --matrix configs/experiments/backpressure_fairness/final_matrix_v1.yaml \
+  --ros2-python-exe /usr/bin/python3
+```
+
+Note:
+- Conda Python 3.11/3.13 may not load ROS2 humble `rclpy` ABI.
+- Keep ROS2 stages on `/usr/bin/python3`.
+
 Plugin scaffold:
 
 ```bash
@@ -841,6 +864,29 @@ python scripts/regression_check.py --max-events 5 --update-golden
 python scripts/reliability_smoke.py --mode quick --json
 python scripts/reliability_smoke.py --mode full
 ```
+
+Backpressure fairness 논문 파이프라인(native + ROS2 baseline):
+
+```bash
+# Native 벤치(conda)
+conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/run_backpressure_bench.py \
+  --base configs/experiments/backpressure_fairness/bench_base.yaml
+
+# ROS2 transport baseline(시스템 python + ROS2 humble)
+source /opt/ros/humble/setup.bash
+env PYTHONPATH=src:$PYTHONPATH /usr/bin/python3 scripts/experiments/run_ros2_backpressure_bench.py \
+  --base configs/experiments/backpressure_fairness/bench_base.yaml \
+  --out-dir outputs/experiments/backpressure_fairness/ros2_baseline
+
+# 원샷 논문 파이프라인(ROS2 python 분리 고정)
+conda run -n schnitzel-stream env PYTHONPATH=src python scripts/experiments/run_paper_pipeline.py \
+  --matrix configs/experiments/backpressure_fairness/final_matrix_v1.yaml \
+  --ros2-python-exe /usr/bin/python3
+```
+
+주의:
+- Conda Python 3.11/3.13에서는 ROS2 humble `rclpy` ABI가 맞지 않을 수 있음.
+- ROS2 단계는 `/usr/bin/python3` 사용을 고정 권장.
 
 플러그인 스캐폴드:
 

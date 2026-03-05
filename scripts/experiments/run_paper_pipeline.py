@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import subprocess
 import shutil
+import shlex
 import sys
 from typing import Any
 
@@ -96,6 +97,15 @@ def _run_cmd(*, cmd: list[str], cwd: Path, name: str, env: dict[str, str]) -> di
     }
 
 
+def _ros2_wrapped_cmd(*, py_exe: str, argv: list[str], src_path: str) -> list[str]:
+    quoted_argv = " ".join(shlex.quote(str(x)) for x in argv)
+    script = (
+        "source /opt/ros/humble/setup.bash "
+        f"&& env PYTHONPATH={shlex.quote(src_path)}:$PYTHONPATH {shlex.quote(str(py_exe))} {quoted_argv}"
+    )
+    return ["/bin/bash", "-lc", script]
+
+
 def _latest_session(base_dir: Path) -> Path | None:
     if not base_dir.exists():
         return None
@@ -167,9 +177,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--analysis-spec", default="", help="analysis spec yaml override")
     parser.add_argument("--out-root", default="", help="pipeline output root override")
     parser.add_argument("--paper-root", default=DEFAULT_PAPER_ROOT, help="paper tex root path")
+    parser.add_argument(
+        "--ros2-python-exe",
+        default="",
+        help="python executable for ROS2 stages (defaults to matrix or /usr/bin/python3)",
+    )
     parser.add_argument("--quality-profile", choices=["none", "quick", "full"], default="", help="quality gate profile override")
     parser.add_argument("--max-runs", type=int, default=None, help="optional max run cap for quick execution")
     parser.add_argument("--skip-native-run", action="store_true", help="reuse latest native session in output root")
+    parser.add_argument("--skip-ros2-baseline", action="store_true", help="skip ros2 baseline generation stage")
     parser.add_argument("--skip-ros2-compare", action="store_true", help="skip ros2 appendix comparison stage")
     parser.add_argument("--strict-native", action="store_true", help="force strict mode for benchmark run")
     parser.add_argument("--json", action="store_true", help="print manifest as json")
@@ -234,7 +250,15 @@ def run(argv: list[str] | None = None) -> int:
     if profile not in {"none", "quick", "full"}:
         profile = "full"
     continue_on_ros2_missing = bool(exec_cfg.get("continue_on_ros2_missing", True))
+    ros2_baseline_enabled = bool(exec_cfg.get("ros2_baseline_enabled", True))
+    fail_on_ros2_error = bool(exec_cfg.get("fail_on_ros2_error", False))
     ros2_runs_glob = str(paths_cfg.get("ros2_runs_glob", "")).strip()
+    ros2_output_root = _resolve_path(
+        str(paths_cfg.get("ros2_output_root", "outputs/experiments/backpressure_fairness/ros2_baseline"))
+    )
+    ros2_python_exe = str(
+        args.ros2_python_exe or exec_cfg.get("ros2_python_executable", "/usr/bin/python3")
+    ).strip() or "/usr/bin/python3"
     max_runs = _as_int(args.max_runs if args.max_runs is not None else exec_cfg.get("max_runs", 0), default=0, minimum=0)
 
     native_session_dir: Path | None = None
@@ -344,33 +368,88 @@ def run(argv: list[str] | None = None) -> int:
         return 1
 
     ros2_json_path = ros2_out / "ros2_comparison.json"
-    ros2_stage_status = "skipped"
+    ros2_baseline_stage_status = "skipped"
+    ros2_compare_stage_status = "skipped"
+    ros2_session_dir = ""
+    effective_ros2_runs_glob = ros2_runs_glob
+
+    should_run_ros2_baseline = bool(ros2_baseline_enabled and (not bool(args.skip_ros2_baseline)))
+    if should_run_ros2_baseline:
+        preflight_cmd = _ros2_wrapped_cmd(py_exe=ros2_python_exe, argv=["-c", "import rclpy"], src_path=src_path)
+        commands_executed.append(preflight_cmd)
+        preflight_stage = _run_cmd(cmd=preflight_cmd, cwd=PROJECT_ROOT, name="ros2_python_preflight", env=env)
+        stages.append(preflight_stage)
+        if preflight_stage["returncode"] != 0:
+            ros2_baseline_stage_status = "failed"
+            if fail_on_ros2_error:
+                print(preflight_stage["stderr"], file=sys.stderr)
+                return 1
+        else:
+            strict_ros2 = bool(exec_cfg.get("strict", False) or bool(args.strict_native))
+            ros2_bench_argv = [
+                "scripts/experiments/run_ros2_backpressure_bench.py",
+                "--base",
+                str(matrix.get("base_config", "configs/experiments/backpressure_fairness/bench_base.yaml")),
+                "--repeats",
+                str(repeats),
+                "--seed-base",
+                str(seed_base),
+                "--out-dir",
+                str(ros2_output_root),
+                "--json",
+                "--compact",
+            ]
+            if max_runs > 0:
+                ros2_bench_argv.extend(["--max-runs", str(max_runs)])
+            if strict_ros2:
+                ros2_bench_argv.append("--strict")
+            for p in policies:
+                ros2_bench_argv.extend(["--policy", p])
+            for w in workloads:
+                ros2_bench_argv.extend(["--workload", w])
+            ros2_bench_cmd = _ros2_wrapped_cmd(py_exe=ros2_python_exe, argv=ros2_bench_argv, src_path=src_path)
+
+            commands_executed.append(ros2_bench_cmd)
+            ros2_bench_stage = _run_cmd(cmd=ros2_bench_cmd, cwd=PROJECT_ROOT, name="ros2_baseline_bench", env=env)
+            stages.append(ros2_bench_stage)
+            if ros2_bench_stage["returncode"] == 0:
+                ros2_baseline_stage_status = "ok"
+                ros2_bench_json = ros2_bench_stage.get("json") if isinstance(ros2_bench_stage.get("json"), dict) else {}
+                ros2_session_dir = str(ros2_bench_json.get("session_dir", "")).strip()
+                if ros2_session_dir:
+                    effective_ros2_runs_glob = str((Path(ros2_session_dir).resolve() / "runs" / "*.json"))
+            else:
+                ros2_baseline_stage_status = "failed"
+                if fail_on_ros2_error:
+                    print(ros2_bench_stage["stderr"], file=sys.stderr)
+                    return 1
+
     if not bool(args.skip_ros2_compare):
-        if not ros2_runs_glob:
+        if not effective_ros2_runs_glob:
             if not continue_on_ros2_missing:
                 print("Error: ros2_runs_glob missing and continue_on_ros2_missing=false", file=sys.stderr)
                 return 2
         else:
-            ros2_cmd = [
-                py,
+            ros2_argv = [
                 "scripts/experiments/compare_ros2_baseline.py",
                 "--native-runs-glob",
                 runs_glob,
                 "--ros2-runs-glob",
-                ros2_runs_glob,
+                effective_ros2_runs_glob,
                 "--out-dir",
                 str(ros2_out),
                 "--json",
                 "--compact",
             ]
+            ros2_cmd = _ros2_wrapped_cmd(py_exe=ros2_python_exe, argv=ros2_argv, src_path=src_path)
             commands_executed.append(ros2_cmd)
             ros2_stage = _run_cmd(cmd=ros2_cmd, cwd=PROJECT_ROOT, name="ros2_compare", env=env)
             stages.append(ros2_stage)
             if ros2_stage["returncode"] == 0:
-                ros2_stage_status = "ok"
+                ros2_compare_stage_status = "ok"
             else:
-                ros2_stage_status = "failed"
-                if not continue_on_ros2_missing:
+                ros2_compare_stage_status = "failed"
+                if bool(fail_on_ros2_error or (not continue_on_ros2_missing)):
                     print(ros2_stage["stderr"], file=sys.stderr)
                     return 1
 
@@ -515,6 +594,8 @@ def run(argv: list[str] | None = None) -> int:
         "research_tables": str(tables_out / "research_tables.md"),
         "tables_manifest": str(tables_out / "tables_manifest.json"),
         "ros2_comparison_json": str(ros2_json_path) if ros2_json_path.exists() else "",
+        "ros2_session_dir": str(ros2_session_dir),
+        "ros2_runs_glob_effective": str(effective_ros2_runs_glob),
         "latex_manifest": str(latex_tables_out / "latex_tables_manifest.json"),
         "paper_root": str(paper_root),
         "paper_draft_root": str(paper_draft_root),
@@ -531,7 +612,9 @@ def run(argv: list[str] | None = None) -> int:
             "missing_aggregate_keys": missing_agg,
             "missing_ros2_keys": missing_ros2,
         },
-        "ros2_stage_status": ros2_stage_status,
+        "ros2_stage_status": ros2_compare_stage_status,
+        "ros2_baseline_stage_status": ros2_baseline_stage_status,
+        "ros2_compare_stage_status": ros2_compare_stage_status,
         "artifacts": artifacts,
         "stages": [
             {

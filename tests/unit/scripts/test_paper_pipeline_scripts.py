@@ -169,8 +169,11 @@ def test_run_paper_pipeline_script_smoke(tmp_path: Path):
                 "  strict: false",
                 "  quality_profile: none",
                 "  continue_on_ros2_missing: true",
+                "  ros2_baseline_enabled: false",
+                "  fail_on_ros2_error: false",
                 "paths:",
                 f"  output_root: {tmp_path / 'out'}",
+                f"  ros2_output_root: {tmp_path / 'ros2_out'}",
                 "  ros2_runs_glob: outputs/experiments/backpressure_fairness/ros2_baseline/session_*/runs/run_*.json",
                 "",
             ]
@@ -190,6 +193,7 @@ def test_run_paper_pipeline_script_smoke(tmp_path: Path):
             "none",
             "--max-runs",
             "1",
+            "--skip-ros2-baseline",
             "--skip-ros2-compare",
         ]
     )
@@ -207,3 +211,373 @@ def test_run_paper_pipeline_script_smoke(tmp_path: Path):
     assert Path(payload["artifacts"]["aggregate_json"]).exists()
     assert Path(payload["artifacts"]["research_tables"]).exists()
     assert Path(payload["artifacts"]["latex_manifest"]).exists()
+
+
+def test_run_paper_pipeline_ros2_preflight_failure_hard(tmp_path: Path, monkeypatch):
+    pipeline_mod = _load_module(
+        "run_paper_pipeline_test_module_preflight_hard",
+        "scripts/experiments/run_paper_pipeline.py",
+    )
+
+    analysis_yaml = tmp_path / "analysis.yaml"
+    analysis_yaml.write_text(
+        "\n".join(
+            [
+                "schema_version: 1",
+                "quality_gates:",
+                "  schema_requirements:",
+                "    aggregate: [summary_rows, pairwise_tests, ranking_by_workload, significance_alpha, pairwise_metric_keys]",
+                "    ros2_compare: [native_summary_rows, ros2_summary_rows, comparisons, reproducibility]",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    matrix_yaml = tmp_path / "matrix.yaml"
+    matrix_yaml.write_text(
+        "\n".join(
+            [
+                "schema_version: 1",
+                "matrix_id: smoke_preflight_hard",
+                "experiment_id: backpressure_fairness",
+                "base_config: configs/experiments/backpressure_fairness/bench_base.yaml",
+                f"analysis_spec: {analysis_yaml}",
+                "policies: [configs/experiments/backpressure_fairness/policy_drop_new.yaml]",
+                "workloads: [configs/experiments/backpressure_fairness/workloads_balanced.yaml]",
+                "execution:",
+                "  repeats: 1",
+                "  seed_base: 12000",
+                "  max_runs: 1",
+                "  strict: false",
+                "  quality_profile: none",
+                "  continue_on_ros2_missing: true",
+                "  ros2_baseline_enabled: true",
+                "  fail_on_ros2_error: true",
+                "  ros2_python_executable: /usr/bin/python3",
+                "paths:",
+                f"  output_root: {tmp_path / 'out'}",
+                f"  ros2_output_root: {tmp_path / 'ros2_out'}",
+                "  ros2_runs_glob: outputs/experiments/backpressure_fairness/ros2_baseline/session_*/runs/run_*.json",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    calls: list[tuple[str, list[str]]] = []
+
+    def _fake_run_cmd(*, cmd, cwd, name, env):
+        calls.append((str(name), [str(x) for x in cmd]))
+        if name == "native_bench":
+            session_dir = tmp_path / "out" / "native" / "session_0000"
+            (session_dir / "runs").mkdir(parents=True, exist_ok=True)
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "json": {"session_dir": str(session_dir)},
+            }
+        if name == "aggregate":
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "json": {
+                    "summary_rows": [],
+                    "pairwise_tests": [],
+                    "ranking_by_workload": [],
+                    "significance_alpha": 0.05,
+                    "pairwise_metric_keys": [],
+                },
+            }
+        if name in {"plots", "tables"}:
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "json": {},
+            }
+        if name == "ros2_python_preflight":
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 1,
+                "stdout": "",
+                "stderr": "preflight failed",
+                "json": None,
+            }
+        return {
+            "name": name,
+            "cmd": cmd,
+            "started": "t0",
+            "finished": "t1",
+            "returncode": 0,
+            "stdout": "",
+            "stderr": "",
+            "json": {},
+        }
+
+    monkeypatch.setattr(pipeline_mod, "_run_cmd", _fake_run_cmd)
+    rc = pipeline_mod.run(
+        [
+            "--matrix",
+            str(matrix_yaml),
+            "--analysis-spec",
+            str(analysis_yaml),
+            "--out-root",
+            str(tmp_path / "out"),
+            "--quality-profile",
+            "none",
+            "--max-runs",
+            "1",
+            "--ros2-python-exe",
+            "/usr/bin/python3",
+        ]
+    )
+    assert rc == 1
+    names = [name for name, _ in calls]
+    assert "ros2_python_preflight" in names
+
+
+def test_run_paper_pipeline_ros2_python_executable_forwarded(tmp_path: Path, monkeypatch):
+    pipeline_mod = _load_module(
+        "run_paper_pipeline_test_module_ros2_py",
+        "scripts/experiments/run_paper_pipeline.py",
+    )
+
+    analysis_yaml = tmp_path / "analysis.yaml"
+    analysis_yaml.write_text(
+        "\n".join(
+            [
+                "schema_version: 1",
+                "quality_gates:",
+                "  schema_requirements:",
+                "    aggregate: [summary_rows, pairwise_tests, ranking_by_workload, significance_alpha, pairwise_metric_keys]",
+                "    ros2_compare: [native_summary_rows, ros2_summary_rows, comparisons, reproducibility]",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    matrix_yaml = tmp_path / "matrix.yaml"
+    matrix_yaml.write_text(
+        "\n".join(
+            [
+                "schema_version: 1",
+                "matrix_id: smoke_ros2_python",
+                "experiment_id: backpressure_fairness",
+                "base_config: configs/experiments/backpressure_fairness/bench_base.yaml",
+                f"analysis_spec: {analysis_yaml}",
+                "policies: [configs/experiments/backpressure_fairness/policy_drop_new.yaml]",
+                "workloads: [configs/experiments/backpressure_fairness/workloads_balanced.yaml]",
+                "execution:",
+                "  repeats: 1",
+                "  seed_base: 12000",
+                "  max_runs: 1",
+                "  strict: false",
+                "  quality_profile: none",
+                "  continue_on_ros2_missing: true",
+                "  ros2_baseline_enabled: true",
+                "  fail_on_ros2_error: false",
+                "paths:",
+                f"  output_root: {tmp_path / 'out'}",
+                f"  ros2_output_root: {tmp_path / 'ros2_out'}",
+                "  ros2_runs_glob: outputs/experiments/backpressure_fairness/ros2_baseline/session_*/runs/run_*.json",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    calls: list[tuple[str, list[str]]] = []
+
+    def _fake_run_cmd(*, cmd, cwd, name, env):
+        calls.append((str(name), [str(x) for x in cmd]))
+        if name == "native_bench":
+            session_dir = tmp_path / "out" / "native" / "session_native"
+            (session_dir / "runs").mkdir(parents=True, exist_ok=True)
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "json": {"session_dir": str(session_dir)},
+            }
+        if name == "aggregate":
+            agg_dir = tmp_path / "out" / "aggregate"
+            agg_dir.mkdir(parents=True, exist_ok=True)
+            (agg_dir / "backpressure_aggregate.json").write_text(
+                json.dumps(
+                    {
+                        "summary_rows": [],
+                        "pairwise_tests": [],
+                        "ranking_by_workload": [],
+                        "significance_alpha": 0.05,
+                        "pairwise_metric_keys": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "json": {
+                    "summary_rows": [],
+                    "pairwise_tests": [],
+                    "ranking_by_workload": [],
+                    "significance_alpha": 0.05,
+                    "pairwise_metric_keys": [],
+                },
+            }
+        if name == "tables":
+            tables_dir = tmp_path / "out" / "tables"
+            tables_dir.mkdir(parents=True, exist_ok=True)
+            (tables_dir / "research_tables.md").write_text("ok", encoding="utf-8")
+            (tables_dir / "tables_manifest.json").write_text("{}", encoding="utf-8")
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "json": {},
+            }
+        if name == "plots":
+            plots_dir = tmp_path / "out" / "plots"
+            plots_dir.mkdir(parents=True, exist_ok=True)
+            (plots_dir / "plots_manifest.json").write_text("{}", encoding="utf-8")
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "json": {},
+            }
+        if name == "ros2_python_preflight":
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "json": None,
+            }
+        if name == "ros2_baseline_bench":
+            ros2_session = tmp_path / "ros2_out" / "session_ros2"
+            (ros2_session / "runs").mkdir(parents=True, exist_ok=True)
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "json": {"session_dir": str(ros2_session)},
+            }
+        if name == "ros2_compare":
+            ros2_compare_dir = tmp_path / "out" / "ros2_compare"
+            ros2_compare_dir.mkdir(parents=True, exist_ok=True)
+            (ros2_compare_dir / "ros2_comparison.json").write_text(
+                json.dumps(
+                    {
+                        "native_summary_rows": [],
+                        "ros2_summary_rows": [],
+                        "comparisons": [],
+                        "reproducibility": {},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "json": {},
+            }
+        if name == "latex_export":
+            latex_dir = tmp_path / "out" / "package" / "latex_tables"
+            latex_dir.mkdir(parents=True, exist_ok=True)
+            (latex_dir / "latex_tables_manifest.json").write_text("{}", encoding="utf-8")
+            return {
+                "name": name,
+                "cmd": cmd,
+                "started": "t0",
+                "finished": "t1",
+                "returncode": 0,
+                "stdout": "",
+                "stderr": "",
+                "json": {},
+            }
+        return {
+            "name": name,
+            "cmd": cmd,
+            "started": "t0",
+            "finished": "t1",
+            "returncode": 0,
+            "stdout": "",
+            "stderr": "",
+            "json": {},
+        }
+
+    monkeypatch.setattr(pipeline_mod, "_run_cmd", _fake_run_cmd)
+    rc = pipeline_mod.run(
+        [
+            "--matrix",
+            str(matrix_yaml),
+            "--analysis-spec",
+            str(analysis_yaml),
+            "--out-root",
+            str(tmp_path / "out"),
+            "--quality-profile",
+            "none",
+            "--max-runs",
+            "1",
+            "--ros2-python-exe",
+            "/usr/bin/python3",
+        ]
+    )
+    assert rc == 0
+    preflight = [cmd for name, cmd in calls if name == "ros2_python_preflight"]
+    assert preflight
+    assert preflight[0][0] == "/bin/bash"
+    assert "/usr/bin/python3" in " ".join(preflight[0])
+    compare = [cmd for name, cmd in calls if name == "ros2_compare"]
+    assert compare
+    assert compare[0][0] == "/bin/bash"
+    assert "/usr/bin/python3" in " ".join(compare[0])
