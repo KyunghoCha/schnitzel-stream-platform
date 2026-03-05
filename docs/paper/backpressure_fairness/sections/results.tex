@@ -69,8 +69,9 @@ the lowest mean harm appears at \texttt{weighted\_drop} (balanced, recovery\_str
 \subsection{Pairwise Significance and Effect Size}
 \input{tables/table_pairwise_significance.tex}
 
-Table~\ref{tab:pairwise_significance} is a compact view; the full 72 pairwise rows are in
-\texttt{tables/table\_pairwise\_significance.csv}.
+Table~\ref{tab:pairwise_significance} reports all 72 pairwise rows using fixed abbreviations
+(workload/metric/policy codebook in caption), and the machine-readable export is
+\path{paper_submission_final_ros2/tables/table_pairwise_significance.csv}.
 Among the 72 tests, 10 satisfy Holm-adjusted \(p<0.05\).
 All significant rows are confined to \texttt{harm\_weighted\_cost} (5 rows)
 and \texttt{p95\_latency\_ms} (5 rows); no significant findings appear in

@@ -1,51 +1,90 @@
-\begin{table}[t]
-\centering
-\caption{Pairwise policy significance and effect-size summary (top rows).}
-\label{tab:pairwise_significance}
-\begin{tabular}{llllllll}
+\begin{center}
+\scriptsize
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt}
+\begin{longtable}{p{1.0cm}p{1.0cm}p{1.8cm}r r r c p{1.0cm}}
+\caption{Pairwise policy significance and effect-size summary (all 72 rows). Wkld: BAL/MNS/RCS/SKB. Metrics: DR/EMR/P95/GMG/GLG/HARM. Policy: DN=drop\_new, DO=drop\_oldest, WD=weighted\_drop, ER=error.}\label{tab:pairwise_significance}\\
 \hline
-Workload & Metric & Pair & Cliff Delta & p MWU & p Holm & Sig & Better \\
+Wkld & Met & Pair & d & p MWU & p Holm & Sig & Best \\
 \hline
-balanced & drop\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
-balanced & drop\_rate & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-balanced & drop\_rate & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-balanced & event\_miss\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
-balanced & event\_miss\_rate & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-balanced & event\_miss\_rate & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-balanced & group\_latency\_gap\_ms & drop\_oldest vs weighted\_drop & -0.1376 & 0.2371 & 0.7113 & no & drop\_oldest \\
-balanced & group\_latency\_gap\_ms & drop\_new vs drop\_oldest & 0.0752 & 0.5192 & 1.0000 & no & drop\_oldest \\
-balanced & group\_latency\_gap\_ms & drop\_new vs weighted\_drop & -0.0760 & 0.5147 & 1.0000 & no & drop\_new \\
-balanced & group\_miss\_gap & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
-balanced & group\_miss\_gap & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-balanced & group\_miss\_gap & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-balanced & harm\_weighted\_cost & drop\_oldest vs weighted\_drop & 0.7352 & 0.0000 & 0.0000 & yes & weighted\_drop \\
-balanced & harm\_weighted\_cost & drop\_new vs drop\_oldest & -0.5872 & 0.0000 & 0.0000 & yes & drop\_new \\
-balanced & harm\_weighted\_cost & drop\_new vs weighted\_drop & 0.1432 & 0.2185 & 0.2185 & no & weighted\_drop \\
-balanced & p95\_latency\_ms & drop\_oldest vs weighted\_drop & 0.7304 & 0.0000 & 0.0000 & yes & weighted\_drop \\
-balanced & p95\_latency\_ms & drop\_new vs drop\_oldest & -0.5448 & 0.0000 & 0.0000 & yes & drop\_new \\
-balanced & p95\_latency\_ms & drop\_new vs weighted\_drop & 0.1304 & 0.2626 & 0.2626 & no & weighted\_drop \\
-minority\_spike & drop\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
-minority\_spike & drop\_rate & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-minority\_spike & drop\_rate & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-minority\_spike & event\_miss\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
-minority\_spike & event\_miss\_rate & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-minority\_spike & event\_miss\_rate & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-minority\_spike & group\_latency\_gap\_ms & drop\_new vs drop\_oldest & -0.0056 & 0.9643 & 1.0000 & no & drop\_new \\
-minority\_spike & group\_latency\_gap\_ms & drop\_new vs weighted\_drop & -0.0584 & 0.6172 & 1.0000 & no & drop\_new \\
-minority\_spike & group\_latency\_gap\_ms & drop\_oldest vs weighted\_drop & -0.0560 & 0.6319 & 1.0000 & no & drop\_oldest \\
-minority\_spike & group\_miss\_gap & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
-minority\_spike & group\_miss\_gap & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-minority\_spike & group\_miss\_gap & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-minority\_spike & harm\_weighted\_cost & drop\_new vs weighted\_drop & -0.7064 & 0.0000 & 0.0000 & yes & drop\_new \\
-minority\_spike & harm\_weighted\_cost & drop\_oldest vs weighted\_drop & -0.6056 & 0.0000 & 0.0000 & yes & drop\_oldest \\
-minority\_spike & harm\_weighted\_cost & drop\_new vs drop\_oldest & 0.0568 & 0.6270 & 0.6270 & no & drop\_oldest \\
-minority\_spike & p95\_latency\_ms & drop\_oldest vs weighted\_drop & -0.5792 & 0.0000 & 0.0000 & yes & drop\_oldest \\
-minority\_spike & p95\_latency\_ms & drop\_new vs weighted\_drop & -0.5264 & 0.0000 & 0.0000 & yes & drop\_new \\
-minority\_spike & p95\_latency\_ms & drop\_new vs drop\_oldest & 0.0296 & 0.8013 & 0.8013 & no & drop\_oldest \\
-recovery\_stress & drop\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
-recovery\_stress & drop\_rate & drop\_new vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-recovery\_stress & drop\_rate & drop\_oldest vs weighted\_drop & 0.0000 & - & - & no & weighted\_drop \\
-recovery\_stress & event\_miss\_rate & drop\_new vs drop\_oldest & 0.0000 & - & - & no & drop\_oldest \\
+\endfirsthead
 \hline
-\end{tabular}
-\end{table}
+Wkld & Met & Pair & d & p MWU & p Holm & Sig & Best \\
+\hline
+\endhead
+BAL & DR & DN vs DO & 0.0000 & - & - & no & DO \\
+BAL & DR & DN vs WD & 0.0000 & - & - & no & WD \\
+BAL & DR & DO vs WD & 0.0000 & - & - & no & WD \\
+BAL & EMR & DN vs DO & 0.0000 & - & - & no & DO \\
+BAL & EMR & DN vs WD & 0.0000 & - & - & no & WD \\
+BAL & EMR & DO vs WD & 0.0000 & - & - & no & WD \\
+BAL & GLG & DO vs WD & -0.1376 & 0.2371 & 0.7113 & no & DO \\
+BAL & GLG & DN vs DO & 0.0752 & 0.5192 & 1.0000 & no & DO \\
+BAL & GLG & DN vs WD & -0.0760 & 0.5147 & 1.0000 & no & DN \\
+BAL & GMG & DN vs DO & 0.0000 & - & - & no & DO \\
+BAL & GMG & DN vs WD & 0.0000 & - & - & no & WD \\
+BAL & GMG & DO vs WD & 0.0000 & - & - & no & WD \\
+BAL & HARM & DO vs WD & 0.7352 & 0.0000 & 0.0000 & yes & WD \\
+BAL & HARM & DN vs DO & -0.5872 & 0.0000 & 0.0000 & yes & DN \\
+BAL & HARM & DN vs WD & 0.1432 & 0.2185 & 0.2185 & no & WD \\
+BAL & P95 & DO vs WD & 0.7304 & 0.0000 & 0.0000 & yes & WD \\
+BAL & P95 & DN vs DO & -0.5448 & 0.0000 & 0.0000 & yes & DN \\
+BAL & P95 & DN vs WD & 0.1304 & 0.2626 & 0.2626 & no & WD \\
+MNS & DR & DN vs DO & 0.0000 & - & - & no & DO \\
+MNS & DR & DN vs WD & 0.0000 & - & - & no & WD \\
+MNS & DR & DO vs WD & 0.0000 & - & - & no & WD \\
+MNS & EMR & DN vs DO & 0.0000 & - & - & no & DO \\
+MNS & EMR & DN vs WD & 0.0000 & - & - & no & WD \\
+MNS & EMR & DO vs WD & 0.0000 & - & - & no & WD \\
+MNS & GLG & DN vs DO & -0.0056 & 0.9643 & 1.0000 & no & DN \\
+MNS & GLG & DN vs WD & -0.0584 & 0.6172 & 1.0000 & no & DN \\
+MNS & GLG & DO vs WD & -0.0560 & 0.6319 & 1.0000 & no & DO \\
+MNS & GMG & DN vs DO & 0.0000 & - & - & no & DO \\
+MNS & GMG & DN vs WD & 0.0000 & - & - & no & WD \\
+MNS & GMG & DO vs WD & 0.0000 & - & - & no & WD \\
+MNS & HARM & DN vs WD & -0.7064 & 0.0000 & 0.0000 & yes & DN \\
+MNS & HARM & DO vs WD & -0.6056 & 0.0000 & 0.0000 & yes & DO \\
+MNS & HARM & DN vs DO & 0.0568 & 0.6270 & 0.6270 & no & DO \\
+MNS & P95 & DO vs WD & -0.5792 & 0.0000 & 0.0000 & yes & DO \\
+MNS & P95 & DN vs WD & -0.5264 & 0.0000 & 0.0000 & yes & DN \\
+MNS & P95 & DN vs DO & 0.0296 & 0.8013 & 0.8013 & no & DO \\
+RCS & DR & DN vs DO & 0.0000 & - & - & no & DO \\
+RCS & DR & DN vs WD & 0.0000 & - & - & no & WD \\
+RCS & DR & DO vs WD & 0.0000 & - & - & no & WD \\
+RCS & EMR & DN vs DO & 0.0000 & - & - & no & DO \\
+RCS & EMR & DN vs WD & 0.0000 & - & - & no & WD \\
+RCS & EMR & DO vs WD & 0.0000 & - & - & no & WD \\
+RCS & GLG & DN vs WD & 0.2120 & 0.0682 & 0.2047 & no & WD \\
+RCS & GLG & DN vs DO & 0.1168 & 0.3158 & 0.4117 & no & DO \\
+RCS & GLG & DO vs WD & 0.1472 & 0.2059 & 0.4117 & no & WD \\
+RCS & GMG & DN vs DO & 0.0000 & - & - & no & DO \\
+RCS & GMG & DN vs WD & 0.0000 & - & - & no & WD \\
+RCS & GMG & DO vs WD & 0.0000 & - & - & no & WD \\
+RCS & HARM & DO vs WD & 0.2376 & 0.0410 & 0.1229 & no & WD \\
+RCS & HARM & DN vs DO & -0.1384 & 0.2344 & 0.4687 & no & DN \\
+RCS & HARM & DN vs WD & 0.0880 & 0.4503 & 0.4687 & no & WD \\
+RCS & P95 & DO vs WD & 0.1760 & 0.1302 & 0.3907 & no & WD \\
+RCS & P95 & DN vs DO & -0.0400 & 0.7329 & 0.7514 & no & DN \\
+RCS & P95 & DN vs WD & 0.1032 & 0.3757 & 0.7514 & no & WD \\
+SKB & DR & DN vs DO & 0.0000 & - & - & no & DO \\
+SKB & DR & DN vs WD & 0.0000 & - & - & no & WD \\
+SKB & DR & DO vs WD & 0.0000 & - & - & no & WD \\
+SKB & EMR & DN vs DO & 0.0000 & - & - & no & DO \\
+SKB & EMR & DN vs WD & 0.0000 & - & - & no & WD \\
+SKB & EMR & DO vs WD & 0.0000 & - & - & no & WD \\
+SKB & GLG & DN vs DO & -0.0296 & 0.8013 & 0.8605 & no & DN \\
+SKB & GLG & DN vs WD & -0.1240 & 0.2868 & 0.8605 & no & DN \\
+SKB & GLG & DO vs WD & -0.0960 & 0.4100 & 0.8605 & no & DO \\
+SKB & GMG & DN vs DO & 0.0000 & - & - & no & DO \\
+SKB & GMG & DN vs WD & 0.0000 & - & - & no & WD \\
+SKB & GMG & DO vs WD & 0.0000 & - & - & no & WD \\
+SKB & HARM & DN vs DO & -0.3016 & 0.0094 & 0.0283 & yes & DN \\
+SKB & HARM & DN vs WD & -0.2256 & 0.0523 & 0.1046 & no & DN \\
+SKB & HARM & DO vs WD & 0.0776 & 0.5059 & 0.5059 & no & WD \\
+SKB & P95 & DN vs DO & -0.3520 & 0.0024 & 0.0073 & yes & DN \\
+SKB & P95 & DN vs WD & -0.2064 & 0.0759 & 0.1517 & no & DN \\
+SKB & P95 & DO vs WD & 0.1712 & 0.1411 & 0.1517 & no & WD \\
+\hline
+\end{longtable}
+\normalsize
+\end{center}

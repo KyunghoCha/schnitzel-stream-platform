@@ -17,6 +17,29 @@ DEFAULT_AGGREGATE_JSON = "outputs/experiments/backpressure_fairness/aggregate/ba
 DEFAULT_ROS2_JSON = ""
 DEFAULT_OUT_DIR = "docs/paper/backpressure_fairness/tables"
 
+POLICY_ABBR = {
+    "drop_new": "DN",
+    "drop_oldest": "DO",
+    "weighted_drop": "WD",
+    "error": "ER",
+}
+
+METRIC_ABBR = {
+    "harm_weighted_cost": "HARM",
+    "event_miss_rate": "EMR",
+    "p95_latency_ms": "P95",
+    "group_miss_gap": "GMG",
+    "group_latency_gap_ms": "GLG",
+    "drop_rate": "DR",
+}
+
+WORKLOAD_ABBR = {
+    "balanced": "BAL",
+    "minority_spike": "MNS",
+    "recovery_stress": "RCS",
+    "skewed_burst": "SKB",
+}
+
 
 def _resolve_path(raw: str) -> Path:
     p = Path(str(raw).strip())
@@ -28,21 +51,18 @@ def _resolve_path(raw: str) -> Path:
 def _latex_escape(raw: Any) -> str:
     text = str(raw)
     repl = {
-        "\\": r"\\textbackslash{}",
-        "&": r"\\&",
-        "%": r"\\%",
-        "$": r"\\$",
-        "#": r"\\#",
-        "_": r"\\_",
-        "{": r"\\{",
-        "}": r"\\}",
-        "~": r"\\textasciitilde{}",
-        "^": r"\\textasciicircum{}",
+        "&": r"\&",
+        "%": r"\%",
+        "$": r"\$",
+        "#": r"\#",
+        "_": r"\_",
+        "{": r"\{",
+        "}": r"\}",
+        "~": r"\textasciitilde{}",
+        "^": r"\textasciicircum{}",
+        "\\": r"\textbackslash{}",
     }
-    out = text
-    for k, v in repl.items():
-        out = out.replace(k, v)
-    return out
+    return "".join(repl.get(ch, ch) for ch in text)
 
 
 def _f(raw: Any, digits: int = 4) -> str:
@@ -51,12 +71,27 @@ def _f(raw: Any, digits: int = 4) -> str:
     return "-"
 
 
+def _abbr_policy(raw: Any) -> str:
+    key = str(raw or "").strip()
+    return POLICY_ABBR.get(key, key or "-")
+
+
+def _abbr_metric(raw: Any) -> str:
+    key = str(raw or "").strip()
+    return METRIC_ABBR.get(key, key or "-")
+
+
+def _abbr_workload(raw: Any) -> str:
+    key = str(raw or "").strip()
+    return WORKLOAD_ABBR.get(key, key or "-")
+
+
 def _table_file(path: Path, *, caption: str, label: str, headers: list[str], rows: list[list[str]]) -> None:
     lines = [
         "\\begin{table}[t]",
         "\\centering",
         f"\\caption{{{_latex_escape(caption)}}}",
-        f"\\label{{{_latex_escape(label)}}}",
+        f"\\label{{{label}}}",
         f"\\begin{{tabular}}{{{'l' * len(headers)}}}",
         "\\hline",
         " & ".join(_latex_escape(h) for h in headers) + r" \\",
@@ -65,6 +100,40 @@ def _table_file(path: Path, *, caption: str, label: str, headers: list[str], row
     for row in rows:
         lines.append(" & ".join(_latex_escape(x) for x in row) + r" \\")
     lines.extend(["\\hline", "\\end{tabular}", "\\end{table}", ""])
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def _longtable_file(
+    path: Path,
+    *,
+    caption: str,
+    label: str,
+    headers: list[str],
+    rows: list[list[str]],
+    colspec: str | None = None,
+    size_cmd: str = "\\footnotesize",
+) -> None:
+    header_row = " & ".join(_latex_escape(h) for h in headers) + r" \\"
+    tabular_spec = str(colspec).strip() if isinstance(colspec, str) and str(colspec).strip() else ("l" * len(headers))
+    lines = [
+        "\\begin{center}",
+        size_cmd,
+        "\\setlength\\LTleft{0pt}",
+        "\\setlength\\LTright{0pt}",
+        f"\\begin{{longtable}}{{{tabular_spec}}}",
+        f"\\caption{{{_latex_escape(caption)}}}\\label{{{label}}}\\\\",
+        "\\hline",
+        header_row,
+        "\\hline",
+        "\\endfirsthead",
+        "\\hline",
+        header_row,
+        "\\hline",
+        "\\endhead",
+    ]
+    for row in rows:
+        lines.append(" & ".join(_latex_escape(x) for x in row) + r" \\")
+    lines.extend(["\\hline", "\\end{longtable}", "\\normalsize", "\\end{center}", ""])
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
@@ -191,26 +260,34 @@ def run(argv: list[str] | None = None) -> int:
         ),
     )
     pairwise_rows_out = []
-    for row in pairwise_sorted[:40]:
+    for row in pairwise_sorted:
+        policy_a = str(row.get("policy_a", ""))
+        policy_b = str(row.get("policy_b", ""))
         pairwise_rows_out.append(
             [
-                str(row.get("workload_id", "")),
-                str(row.get("metric", "")),
-                f"{row.get('policy_a', '')} vs {row.get('policy_b', '')}",
+                _abbr_workload(row.get("workload_id", "")),
+                _abbr_metric(row.get("metric", "")),
+                f"{_abbr_policy(policy_a)} vs {_abbr_policy(policy_b)}",
                 _f(row.get("effect_size_cliffs_delta")),
                 _f(row.get("p_value_mannwhitney")),
                 _f(row.get("p_value_holm")),
                 "yes" if bool(row.get("significant_0_05", False)) else "no",
-                str(row.get("better_policy", "")),
+                _abbr_policy(row.get("better_policy", "")),
             ]
         )
     pairwise_path = out_dir / "table_pairwise_significance.tex"
-    _table_file(
+    _longtable_file(
         pairwise_path,
-        caption="Pairwise policy significance and effect-size summary (top rows).",
+        caption=(
+            "Pairwise policy significance and effect-size summary (all 72 rows). "
+            "Wkld: BAL/MNS/RCS/SKB. Metrics: DR/EMR/P95/GMG/GLG/HARM. "
+            "Policy: DN=drop_new, DO=drop_oldest, WD=weighted_drop, ER=error."
+        ),
         label="tab:pairwise_significance",
-        headers=["Workload", "Metric", "Pair", "Cliff Delta", "p MWU", "p Holm", "Sig", "Better"],
+        headers=["Wkld", "Met", "Pair", "d", "p MWU", "p Holm", "Sig", "Best"],
         rows=pairwise_rows_out,
+        colspec="p{1.0cm}p{1.0cm}p{1.8cm}r r r c p{1.0cm}",
+        size_cmd="\\scriptsize",
     )
 
     ros2_table_path = out_dir / "table_ros2_compare.tex"
