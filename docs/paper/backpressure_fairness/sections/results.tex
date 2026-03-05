@@ -35,6 +35,24 @@ minority\_spike \texttt{drop\_oldest} \(41.3017\,[41.2998,41.3037]\),
 recovery\_stress \texttt{weighted\_drop} \(51.1518\,[51.1503,51.1532]\),
 skewed\_burst \texttt{drop\_new} \(51.2351\,[51.2335,51.2366]\).
 
+\subsection{Graph View}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.48\linewidth]{figures/balanced__harm_weighted_cost_mean.png}\hfill
+  \includegraphics[width=0.48\linewidth]{figures/minority_spike__harm_weighted_cost_mean.png}
+  \vspace{4pt}
+
+  \includegraphics[width=0.48\linewidth]{figures/recovery_stress__harm_weighted_cost_mean.png}\hfill
+  \includegraphics[width=0.48\linewidth]{figures/skewed_burst__harm_weighted_cost_mean.png}
+  \caption{Per-workload \texttt{harm\_weighted\_cost\_mean} plots generated from the frozen artifact set.
+  These graphs provide a visual cross-check for the ranking and pairwise statistics.}
+  \label{fig:harm_cost_by_workload}
+\end{figure}
+
+Figure~\ref{fig:harm_cost_by_workload} matches the ranking trends in Table~\ref{tab:policy_ranking}:
+the lowest mean harm appears at \texttt{weighted\_drop} (balanced, recovery\_stress),
+\texttt{drop\_oldest} (minority\_spike), and \texttt{drop\_new} (skewed\_burst).
+
 \subsection{Pairwise Significance and Effect Size}
 \input{tables/table_pairwise_significance.tex}
 
