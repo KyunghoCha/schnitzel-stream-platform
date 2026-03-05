@@ -17,12 +17,40 @@ SCHEMA_VERSION = 1
 DEFAULT_AGGREGATE_JSON = "outputs/experiments/backpressure_fairness/aggregate/backpressure_aggregate.json"
 DEFAULT_OUT_DIR = "outputs/experiments/backpressure_fairness/plots"
 
-PLOT_METRICS = [
-    ("harm_weighted_cost_mean", "Harm Weighted Cost (mean)"),
-    ("event_miss_rate_mean", "Event Miss Rate (mean)"),
-    ("p95_latency_ms_mean", "P95 Latency ms (mean)"),
-    ("drop_rate_mean", "Drop Rate (mean)"),
+PLOT_METRICS: list[dict[str, str]] = [
+    {
+        "metric": "harm_weighted_cost_mean",
+        "title": "Harm Weighted Cost (mean, 95% CI)",
+        "ci_low": "harm_weighted_cost_ci95_low",
+        "ci_high": "harm_weighted_cost_ci95_high",
+    },
+    {
+        "metric": "p95_latency_ms_mean",
+        "title": "P95 Latency ms (mean, 95% CI)",
+        "ci_low": "p95_latency_ms_ci95_low",
+        "ci_high": "p95_latency_ms_ci95_high",
+    },
+    {
+        "metric": "throughput_mean",
+        "title": "Throughput (mean, 95% CI)",
+        "ci_low": "throughput_ci95_low",
+        "ci_high": "throughput_ci95_high",
+    },
+    {
+        "metric": "recovery_time_ms_mean",
+        "title": "Recovery Time ms (mean, 95% CI)",
+        "ci_low": "recovery_time_ms_ci95_low",
+        "ci_high": "recovery_time_ms_ci95_high",
+    },
+    {
+        "metric": "group_latency_gap_ms_mean",
+        "title": "Group Latency Gap ms (mean, 95% CI)",
+        "ci_low": "group_latency_gap_ms_ci95_low",
+        "ci_high": "group_latency_gap_ms_ci95_high",
+    },
 ]
+
+POLICY_ORDER = ["drop_new", "drop_oldest", "weighted_drop", "error"]
 
 
 def _resolve_path(raw: str) -> Path:
@@ -48,57 +76,161 @@ def _svg_escape(raw: str) -> str:
     )
 
 
-def _build_svg(*, title: str, metric: str, rows: list[dict[str, Any]], out_path: Path) -> None:
-    labels = [str(row.get("policy_id", "")) for row in rows]
-    values: list[float] = []
-    for row in rows:
-        raw = row.get(metric)
-        values.append(float(raw) if isinstance(raw, (int, float)) else 0.0)
+def _to_float(raw: Any) -> float | None:
+    if isinstance(raw, bool):
+        return None
+    if isinstance(raw, (int, float)):
+        val = float(raw)
+        return val if math.isfinite(val) else None
+    return None
 
-    width = max(760, 180 + 120 * len(values))
-    height = 420
-    left = 80
+
+def _policy_sort_key(policy_id: str) -> tuple[int, str]:
+    if policy_id in POLICY_ORDER:
+        return (POLICY_ORDER.index(policy_id), policy_id)
+    return (len(POLICY_ORDER) + 1, policy_id)
+
+
+def _collect_points(rows: list[dict[str, Any]], metric_cfg: dict[str, str]) -> list[dict[str, Any]]:
+    metric = metric_cfg["metric"]
+    ci_low = metric_cfg["ci_low"]
+    ci_high = metric_cfg["ci_high"]
+    points: list[dict[str, Any]] = []
+    for row in rows:
+        policy_id = str(row.get("policy_id", "")).strip() or "unknown"
+        mean_v = _to_float(row.get(metric))
+        lo_v = _to_float(row.get(ci_low))
+        hi_v = _to_float(row.get(ci_high))
+        if mean_v is None:
+            lo_v = None
+            hi_v = None
+        else:
+            lo_v = lo_v if lo_v is not None else mean_v
+            hi_v = hi_v if hi_v is not None else mean_v
+            if lo_v > hi_v:
+                lo_v, hi_v = hi_v, lo_v
+        points.append(
+            {
+                "policy_id": policy_id,
+                "mean": mean_v,
+                "ci_low": lo_v,
+                "ci_high": hi_v,
+            }
+        )
+    points.sort(key=lambda item: _policy_sort_key(str(item["policy_id"])))
+    return points
+
+
+def _metric_has_variation(points: list[dict[str, Any]]) -> tuple[bool, str]:
+    vals = [float(item["mean"]) for item in points if item.get("mean") is not None]
+    if len(vals) < 2:
+        return False, "insufficient_non_null_values"
+    span = max(vals) - min(vals)
+    if math.isclose(span, 0.0, rel_tol=1e-9, abs_tol=1e-12):
+        return False, "policy_invariant_metric"
+    return True, ""
+
+
+def _tick_label(value: float) -> str:
+    if abs(value) >= 100:
+        return f"{value:.1f}".rstrip("0").rstrip(".")
+    if abs(value) >= 1:
+        return f"{value:.3f}".rstrip("0").rstrip(".")
+    return f"{value:.4f}".rstrip("0").rstrip(".")
+
+
+def _build_svg(
+    *,
+    title: str,
+    metric: str,
+    points: list[dict[str, Any]],
+    out_path: Path,
+) -> None:
+    width = max(760, 180 + 130 * len(points))
+    height = 430
+    left = 88
     right = 24
-    top = 70
-    bottom = 90
+    top = 78
+    bottom = 95
     plot_w = width - left - right
     plot_h = height - top - bottom
-    max_val = max(values) if values else 1.0
-    if max_val <= 0.0:
-        max_val = 1.0
-
-    n = max(1, len(values))
-    slot_w = plot_w / n
-    bar_w = min(72.0, slot_w * 0.65)
     x_axis_y = top + plot_h
 
-    grid = []
+    y_candidates: list[float] = []
+    for p in points:
+        mean_v = p.get("mean")
+        if mean_v is None:
+            continue
+        y_candidates.append(float(mean_v))
+        lo = p.get("ci_low")
+        hi = p.get("ci_high")
+        if lo is not None:
+            y_candidates.append(float(lo))
+        if hi is not None:
+            y_candidates.append(float(hi))
+    if not y_candidates:
+        y_min = 0.0
+        y_max = 1.0
+    else:
+        y_min = min(y_candidates)
+        y_max = max(y_candidates)
+        spread = y_max - y_min
+        if spread <= 0.0:
+            pad = max(1.0, abs(y_max) * 0.1)
+        else:
+            pad = spread * 0.12
+        y_min -= pad
+        y_max += pad
+        if math.isclose(y_min, y_max):
+            y_max = y_min + 1.0
+
+    def y_of(v: float) -> float:
+        return top + (y_max - v) / (y_max - y_min) * plot_h
+
+    grid: list[str] = []
     for i in range(6):
-        y = top + plot_h - (plot_h * (i / 5.0))
-        v = max_val * (i / 5.0)
+        frac = i / 5.0
+        y = top + plot_h - plot_h * frac
+        v = y_min + (y_max - y_min) * frac
         grid.append(
             f'<line x1="{left}" y1="{y:.2f}" x2="{left + plot_w:.2f}" y2="{y:.2f}" stroke="#d7dde5" stroke-width="1" />'
         )
         grid.append(
-            f'<text x="{left - 10}" y="{y + 4:.2f}" text-anchor="end" font-size="11" fill="#344055">{v:.3g}</text>'
+            f'<text x="{left - 10}" y="{y + 4:.2f}" text-anchor="end" font-size="11" fill="#344055">{_svg_escape(_tick_label(v))}</text>'
         )
 
-    bars = []
-    for idx, val in enumerate(values):
+    n = max(1, len(points))
+    slot_w = plot_w / n
+    marks: list[str] = []
+    for idx, p in enumerate(points):
         cx = left + slot_w * idx + slot_w / 2.0
-        bar_h = 0.0 if max_val <= 0 else (val / max_val) * plot_h
-        x = cx - bar_w / 2.0
-        y = x_axis_y - bar_h
-        color = "#2a9d8f" if idx % 2 == 0 else "#457b9d"
-        bars.append(
-            f'<rect x="{x:.2f}" y="{y:.2f}" width="{bar_w:.2f}" height="{bar_h:.2f}" fill="{color}" rx="4" ry="4" />'
-        )
-        bars.append(
-            f'<text x="{cx:.2f}" y="{y - 8:.2f}" text-anchor="middle" font-size="11" fill="#1f2937">{val:.4g}</text>'
-        )
-        label = _svg_escape(labels[idx])
-        bars.append(
-            f'<text x="{cx:.2f}" y="{x_axis_y + 20:.2f}" text-anchor="middle" font-size="11" fill="#344055">{label}</text>'
+        label = _svg_escape(str(p["policy_id"]))
+        mean_v = p.get("mean")
+        if mean_v is None:
+            # Explicit NA marker for failed/empty policy results.
+            y = x_axis_y - 18.0
+            marks.append(f'<line x1="{cx - 6:.2f}" y1="{y - 6:.2f}" x2="{cx + 6:.2f}" y2="{y + 6:.2f}" stroke="#b91c1c" stroke-width="2" />')
+            marks.append(f'<line x1="{cx - 6:.2f}" y1="{y + 6:.2f}" x2="{cx + 6:.2f}" y2="{y - 6:.2f}" stroke="#b91c1c" stroke-width="2" />')
+            marks.append(
+                f'<text x="{cx:.2f}" y="{y - 10:.2f}" text-anchor="middle" font-size="11" fill="#b91c1c">NA</text>'
+            )
+        else:
+            color = "#1d4ed8" if idx % 2 == 0 else "#0f766e"
+            mean_f = float(mean_v)
+            lo = float(p.get("ci_low") if p.get("ci_low") is not None else mean_f)
+            hi = float(p.get("ci_high") if p.get("ci_high") is not None else mean_f)
+            y_mean = y_of(mean_f)
+            y_lo = y_of(lo)
+            y_hi = y_of(hi)
+            marks.append(f'<line x1="{cx:.2f}" y1="{y_lo:.2f}" x2="{cx:.2f}" y2="{y_hi:.2f}" stroke="{color}" stroke-width="2.2" />')
+            marks.append(f'<line x1="{cx - 7:.2f}" y1="{y_lo:.2f}" x2="{cx + 7:.2f}" y2="{y_lo:.2f}" stroke="{color}" stroke-width="2" />')
+            marks.append(f'<line x1="{cx - 7:.2f}" y1="{y_hi:.2f}" x2="{cx + 7:.2f}" y2="{y_hi:.2f}" stroke="{color}" stroke-width="2" />')
+            marks.append(f'<circle cx="{cx:.2f}" cy="{y_mean:.2f}" r="4.6" fill="{color}" />')
+            marks.append(
+                f'<text x="{cx:.2f}" y="{y_mean - 10:.2f}" text-anchor="middle" font-size="11" fill="#1f2937">{_svg_escape(_tick_label(mean_f))}</text>'
+            )
+        marks.append(
+            f'<text x="{cx:.2f}" y="{x_axis_y + 24:.2f}" text-anchor="middle" font-size="11" fill="#344055">{label}</text>'
         )
 
     svg = "\n".join(
@@ -108,10 +240,11 @@ def _build_svg(*, title: str, metric: str, rows: list[dict[str, Any]], out_path:
             '<rect x="0" y="0" width="100%" height="100%" fill="#f7fafc" />',
             f'<text x="{left}" y="34" font-size="20" font-weight="700" fill="#1f2937">{_svg_escape(title)}</text>',
             f'<text x="{left}" y="54" font-size="12" fill="#4b5563">{_svg_escape(metric)}</text>',
+            f'<text x="{width - 26}" y="34" text-anchor="end" font-size="11" fill="#4b5563">points = mean, whiskers = 95% CI, NA = failed/no metric</text>',
             *grid,
             f'<line x1="{left}" y1="{x_axis_y:.2f}" x2="{left + plot_w:.2f}" y2="{x_axis_y:.2f}" stroke="#6b7280" stroke-width="1.5" />',
-            *bars,
-            '</svg>',
+            *marks,
+            "</svg>",
             "",
         ]
     )
@@ -159,15 +292,29 @@ def run(argv: list[str] | None = None) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     generated: list[dict[str, str]] = []
+    skipped: list[dict[str, str]] = []
     for workload_id, items in sorted(by_workload.items()):
-        ordered = sorted(items, key=lambda row: str(row.get("policy_id", "")))
-        for metric, metric_title in PLOT_METRICS:
+        ordered = sorted(items, key=lambda row: _policy_sort_key(str(row.get("policy_id", ""))))
+        for metric_cfg in PLOT_METRICS:
+            metric = metric_cfg["metric"]
+            metric_title = metric_cfg["title"]
+            points = _collect_points(ordered, metric_cfg)
+            ok, reason = _metric_has_variation(points)
+            if not ok:
+                skipped.append(
+                    {
+                        "workload_id": workload_id,
+                        "metric": metric,
+                        "reason": reason,
+                    }
+                )
+                continue
             svg_name = f"{_sanitize(workload_id)}__{_sanitize(metric)}.svg"
             svg_path = out_dir / svg_name
             _build_svg(
                 title=f"{workload_id} - {metric_title}",
                 metric=metric,
-                rows=ordered,
+                points=points,
                 out_path=svg_path,
             )
             generated.append(
@@ -196,6 +343,12 @@ def run(argv: list[str] | None = None) -> int:
             lines.append("")
         p = Path(item["path"])
         lines.append(f"- {item['title']}: `{p.name}`")
+    if skipped:
+        lines.extend(["", "## Skipped Metrics", ""])
+        for item in skipped:
+            lines.append(
+                f"- {item['workload_id']} / {item['metric']}: {item['reason']}"
+            )
     lines.append("")
     index_path.write_text("\n".join(lines), encoding="utf-8")
 
@@ -204,7 +357,9 @@ def run(argv: list[str] | None = None) -> int:
         "ts": datetime.now(timezone.utc).isoformat(),
         "aggregate_json": str(aggregate_path),
         "plot_count": len(generated),
+        "skipped_count": len(skipped),
         "plots": generated,
+        "skipped": skipped,
         "index_markdown": str(index_path),
     }
     manifest_path = out_dir / "plots_manifest.json"
@@ -228,4 +383,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -1,5 +1,9 @@
 # Backpressure Fairness 논문 한글 요약
 
+## English
+Quick Korean summary of the submission-ready paper artifacts.
+
+## 한국어
 ## 1) 연구 범위
 - 이 문서는 `outputs/experiments/backpressure_fairness/paper_submission_final_ros2` 산출물만 근거로 작성했다.
 - 실험 매트릭스: `4 정책 x 4 워크로드 x 50 반복 = 시스템당 800 run`.
@@ -16,11 +20,15 @@
 - `error` 정책은 모든 워크로드에서 `ok_count=0`으로 실패 결과를 숨기지 않고 그대로 보고했다.
 
 ## 3) 그래프 위치
-- 논문 삽입용 그래프(PDF):
-  - `docs/paper/backpressure_fairness/figures/balanced__harm_weighted_cost_mean.pdf`
-  - `docs/paper/backpressure_fairness/figures/minority_spike__harm_weighted_cost_mean.pdf`
-  - `docs/paper/backpressure_fairness/figures/recovery_stress__harm_weighted_cost_mean.pdf`
-  - `docs/paper/backpressure_fairness/figures/skewed_burst__harm_weighted_cost_mean.pdf`
+- 논문 삽입용 그래프(PNG):
+  - `docs/paper/backpressure_fairness/figures/balanced__harm_weighted_cost_mean.png`
+  - `docs/paper/backpressure_fairness/figures/minority_spike__harm_weighted_cost_mean.png`
+  - `docs/paper/backpressure_fairness/figures/recovery_stress__harm_weighted_cost_mean.png`
+  - `docs/paper/backpressure_fairness/figures/skewed_burst__harm_weighted_cost_mean.png`
+  - `docs/paper/backpressure_fairness/figures/balanced__p95_latency_ms_mean.png`
+  - `docs/paper/backpressure_fairness/figures/minority_spike__p95_latency_ms_mean.png`
+  - `docs/paper/backpressure_fairness/figures/recovery_stress__p95_latency_ms_mean.png`
+  - `docs/paper/backpressure_fairness/figures/skewed_burst__p95_latency_ms_mean.png`
 - 원본 그래프(SVG):
   - `outputs/experiments/backpressure_fairness/paper_submission_final_ros2/plots/*.svg`
 
@@ -34,4 +42,3 @@
 cd ~/Projects/schnitzel-stream-platform/docs/paper/backpressure_fairness
 conda run -n schnitzel-stream tectonic --keep-logs --keep-intermediates main.tex
 ```
-
