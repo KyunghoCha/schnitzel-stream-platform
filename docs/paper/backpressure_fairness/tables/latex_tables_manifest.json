@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "ts": "2026-03-05T08:26:45.662790+00:00",
+  "aggregate_json": "/home/ckh/Projects/schnitzel-stream-platform/outputs/experiments/backpressure_fairness/paper_submission_final_ros2/aggregate/backpressure_aggregate.json",
+  "ros2_json": "/home/ckh/Projects/schnitzel-stream-platform/outputs/experiments/backpressure_fairness/paper_submission_final_ros2/ros2_compare/ros2_comparison.json",
+  "out_dir": "/home/ckh/Projects/schnitzel-stream-platform/docs/paper/backpressure_fairness/tables",
+  "tables": {
+    "core": "/home/ckh/Projects/schnitzel-stream-platform/docs/paper/backpressure_fairness/tables/table_core_metrics.tex",
+    "fairness": "/home/ckh/Projects/schnitzel-stream-platform/docs/paper/backpressure_fairness/tables/table_fairness_metrics.tex",
+    "ranking": "/home/ckh/Projects/schnitzel-stream-platform/docs/paper/backpressure_fairness/tables/table_policy_ranking.tex",
+    "pairwise": "/home/ckh/Projects/schnitzel-stream-platform/docs/paper/backpressure_fairness/tables/table_pairwise_significance.tex",
+    "ros2": "/home/ckh/Projects/schnitzel-stream-platform/docs/paper/backpressure_fairness/tables/table_ros2_compare.tex"
+  },
+  "ros2_exported": true
+}

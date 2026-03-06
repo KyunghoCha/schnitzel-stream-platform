@@ -1,0 +1,67 @@
+version: 2
+
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.packs.vision.nodes:OpenCvWebcamSource
+    config:
+      camera_index: ${oc.env:SS_CAMERA_INDEX,0}
+      source_id: ${oc.env:SS_STREAM_ID,webcam01}
+      reconnect: true
+      reconnect_backoff_sec: 0.5
+      reconnect_backoff_max_sec: 5.0
+      reconnect_max_attempts: 0
+
+  - id: yolo
+    kind: node
+    plugin: schnitzel_stream.packs.vision.nodes:YoloV8DetectorNode
+    config:
+      __runtime__:
+        inbox_max: 1
+        inbox_overflow: drop_oldest
+      model_path: ${oc.env:SS_YOLO_MODEL_PATH,models/yolov8n.pt}
+      conf: ${oc.env:SS_YOLO_CONF,0.35}
+      iou: ${oc.env:SS_YOLO_IOU,0.45}
+      max_det: ${oc.env:SS_YOLO_MAX_DET,100}
+      device: ${oc.env:SS_YOLO_DEVICE,cpu}
+
+  - id: follow
+    kind: node
+    plugin: schnitzel_stream.packs.robotics.nodes:PersonFollowCmdVelNode
+    config:
+      __runtime__:
+        inbox_max: 1
+        inbox_overflow: drop_oldest
+      person_class_ids: [0]
+      person_class_names: [person]
+      min_confidence: ${oc.env:SS_FOLLOW_MIN_CONF,0.4}
+      target_select: ${oc.env:SS_FOLLOW_TARGET_SELECT,largest}
+      desired_height_ratio: ${oc.env:SS_FOLLOW_TARGET_RATIO,0.35}
+      height_ratio_tolerance: ${oc.env:SS_FOLLOW_RATIO_TOL,0.05}
+      linear_kp: ${oc.env:SS_FOLLOW_LINEAR_KP,0.8}
+      angular_kp: ${oc.env:SS_FOLLOW_ANGULAR_KP,1.2}
+      max_linear: ${oc.env:SS_FOLLOW_MAX_LINEAR,0.18}
+      max_angular: ${oc.env:SS_FOLLOW_MAX_ANGULAR,1.2}
+      center_error_for_linear: ${oc.env:SS_FOLLOW_CENTER_ERR,0.25}
+      allow_reverse: ${oc.env:SS_FOLLOW_ALLOW_REVERSE,false}
+
+  - id: cmd_vel
+    kind: sink
+    plugin: schnitzel_stream.packs.robotics.nodes:Ros2CmdVelSink
+    config:
+      topic: ${oc.env:SS_CMD_VEL_TOPIC,/cmd_vel}
+      node_name: ${oc.env:SS_CMD_VEL_NODE,schnitzel_cmd_vel_sink}
+      qos_depth: ${oc.env:SS_CMD_VEL_QOS,10}
+      stop_on_close: true
+      forward: false
+
+edges:
+  - from: src
+    to: yolo
+  - from: yolo
+    to: follow
+  - from: follow
+    to: cmd_vel
+
+config: {}
+
