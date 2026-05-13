@@ -4,81 +4,97 @@
 ![Status](https://img.shields.io/badge/Status-Active-informational)
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue)
 
-Edge-first stream processing runtime built around validated node graphs and plugin-based sources, processors, and sinks.
+> Edge-first universal stream processing platform
+> 엣지 우선 범용 스트림 플랫폼
 
-Stable entrypoint:
+Stable entrypoint (SSOT): `python -m schnitzel_stream`
 
-```bash
-python -m schnitzel_stream
+---
+
+## English
+
+### Overview
+
+`schnitzel-stream-platform` is a node-graph runtime for stream processing.
+
+Current focus:
+- portable node graph execution
+- strict graph validation (topology + compatibility)
+- plugin-based IO/policy nodes
+- durable queue primitives (SQLite/WAL)
+- edge-oriented ops conventions
+- CLI is graph-native only
+
+### Release Baseline
+
+- Lab RC target: `v0.1.0-rc.1`
+- Freeze scope: Core+Ops command surfaces
+  - `python -m schnitzel_stream`
+  - `scripts/stream_run.py`
+  - `scripts/stream_fleet.py`
+  - `scripts/stream_monitor.py`
+  - `scripts/stream_console.py`
+  - `scripts/env_doctor.py`
+  - `scripts/graph_wizard.py`
+  - `scripts/stream_control_api.py`
+- Required gates: both `pip` and `conda` lanes must pass
+  - policy drift: `python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json`
+  - command-surface drift: `python scripts/command_surface_snapshot.py --check --baseline configs/policy/command_surface_snapshot_v1.json`
+  - SSOT drift: `python scripts/ssot_sync_check.py --strict --json`
+  - aggregate readiness: `python scripts/release_readiness.py --profile lab-rc --json`
+- Release checklist: `docs/guides/lab_rc_release_checklist.md`
+
+### Architecture
+
+```mermaid
+flowchart LR
+  subgraph Ingress["Ingress"]
+    S["Source Plugins"]
+  end
+
+  subgraph Runtime["Runtime"]
+    V["Graph Validator"]
+    G["In-Proc Scheduler"]
+    N["Node Plugins"]
+  end
+
+  subgraph Egress["Egress"]
+    D["Durable Queue Nodes"]
+    K["Sink Plugins"]
+  end
+
+  subgraph Meta["Meta"]
+    P["Plugin Policy Allowlist"]
+    O["Observability Contract"]
+  end
+
+  S --> G --> N --> D --> K
+  V -."validate".-> G
+  P -."govern".-> G
+  O -."report".-> G
 ```
 
-## What This Repository Provides
+### Quickstart
 
-- A node graph runtime for portable stream processing.
-- Strict graph validation for topology and plugin compatibility.
-- Plugin boundaries for `source`, `node`, and `sink` components.
-- Durable queue primitives based on SQLite/WAL.
-- Local operations tools for presets, fleet processes, monitoring, and a thin web console.
-- Release and CI gates for command-surface, policy, documentation, and environment drift.
-
-## Quickstart
-
-### 1. Bootstrap
-
-Windows PowerShell:
+1. Bootstrap (zero-env-first)
 
 ```powershell
+# Windows PowerShell
 ./setup_env.ps1 -Profile console -Manager pip -SkipDoctor
 ```
 
-Linux/macOS:
-
 ```bash
+# Linux/macOS
 ./setup_env.sh --profile console --manager pip --skip-doctor
 ```
 
-### 2. Check The Environment
+2. Doctor
 
 ```bash
 python scripts/stream_console.py doctor --strict --json
 ```
 
-### 3. Validate And Run A Graph
-
-```bash
-python -m schnitzel_stream validate
-python -m schnitzel_stream
-```
-
-Run a specific graph:
-
-```bash
-python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
-```
-
-### 4. Run The Demo Pack
-
-```bash
-python scripts/demo_pack.py --profile ci
-python scripts/demo_pack.py --profile webcam --camera-index 0 --max-events 50
-```
-
-Default report:
-
-```text
-outputs/reports/demo_pack_latest.json
-```
-
-Manual guide:
-
-```text
-docs/guides/demo_pack_guide.md
-```
-
-### 5. Start The Local Console
+3. Up / Down
 
 ```bash
 python scripts/stream_console.py up --allow-local-mutations
@@ -86,17 +102,151 @@ python scripts/stream_console.py status --json
 python scripts/stream_console.py down
 ```
 
-Then open:
+4. Validate runtime graph
 
-```text
-http://127.0.0.1:5173
+```bash
+python -m schnitzel_stream validate
 ```
 
-The console supports preset runs, fleet monitoring, and GUI graph authoring.
+5. Run default graph
 
-## Node Graph Format
+```bash
+python -m schnitzel_stream
+```
 
-Node graph specs are identified by the `nodes` and `edges` envelope. Do not add a graph `version` field.
+6. Useful demo graphs
+
+```bash
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink.yaml
+```
+
+6-1. File YOLO overlay (loop + low-latency queue policy)
+
+```bash
+export SS_INPUT_PATH=data/samples/2048246-hd_1920_1080_24fps.mp4
+export SS_YOLO_MODEL_PATH=models/yolov8n.pt
+export SS_YOLO_DEVICE=cpu   # use 0 for GPU
+export SS_INPUT_LOOP=true
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
+```
+
+7. One-command demo pack (demo profiles)
+
+```bash
+python scripts/demo_pack.py --profile ci
+python scripts/demo_pack.py --profile webcam --camera-index 0 --max-events 50
+```
+
+- Default report path: `outputs/reports/demo_pack_latest.json`
+- Manual fallback guide: `docs/guides/demo_pack_guide.md`
+
+8. Render static report summary (no GUI required)
+
+```bash
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
+```
+
+9. Stream fleet operations (universal runner + monitor)
+
+```bash
+python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template.yaml
+python scripts/stream_fleet.py status
+python scripts/stream_monitor.py --once --json
+python scripts/stream_fleet.py stop
+```
+
+10. One-command preset launcher
+
+```bash
+python scripts/stream_run.py --list
+python scripts/stream_run.py --preset inproc_demo --validate-only
+python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
+python scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
+python scripts/stream_run.py --preset file_yolo_view --experimental --model-path models/yolov8n.pt --device cpu --max-events 60
+```
+
+- Default path is option-first (no env required); env vars remain as advanced overrides.
+
+10-1. Graph wizard (template profile generation, non-interactive)
+
+```bash
+python scripts/graph_wizard.py --list-profiles
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo.yaml --validate-after-generate
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo.yaml
+```
+
+- Use `--experimental` for opt-in profiles (`file_yolo_headless`, `file_yolo_view`, `webcam_yolo`).
+- Detailed guide: `docs/guides/graph_wizard_guide.md`
+
+11. Control API server (local-first, optional bearer token)
+
+```bash
+# recommended: set bearer token for all control calls
+export SS_CONTROL_API_TOKEN=change-me
+
+python scripts/stream_control_api.py --host 127.0.0.1 --port 18700
+```
+
+- In local-only mode without token, mutating endpoints are blocked by default:
+  - `POST /api/v1/presets/{preset_id}/run`
+  - `POST /api/v1/fleet/start`
+  - `POST /api/v1/fleet/stop`
+- Temporary one-cycle local override: `SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS=true`
+- Audit retention defaults: `SS_AUDIT_MAX_BYTES=10485760`, `SS_AUDIT_MAX_FILES=5`
+- Policy snapshot drift gate: `python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json`
+
+12. Thin web console (React + Vite + TypeScript)
+
+```bash
+cd apps/stream-console
+npm ci
+npm run dev
+```
+
+- Monitor tab is fleet-only telemetry (PID/log based).
+- Preset run output is session output and is not counted as fleet monitor stream rows.
+
+13. One-command local console bootstrap (doctor -> up -> status -> down)
+
+```bash
+python scripts/stream_console.py doctor --strict --json
+python scripts/stream_console.py up --allow-local-mutations
+python scripts/stream_console.py status --json
+python scripts/stream_console.py down
+```
+
+- `--allow-local-mutations` is explicit local-lab opt-in for mutating endpoints.
+- Use `--token <value>` on `up` to set API bearer mode from bootstrap command.
+- Detailed guide: `docs/guides/local_console_quickstart.md`
+
+14. Block editor (GUI graph authoring)
+
+```bash
+python scripts/stream_console.py up --allow-local-mutations
+# open http://127.0.0.1:5173 and go to the "Editor" tab
+```
+
+- Supports: node placement/link/property editing, YAML import/export, validate/run.
+- Direct manipulation: drag nodes on canvas and connect edges via handles.
+- Snap connect: dropping near/on a node body snaps to nearest input handle.
+- Hybrid edge guard: blocks `sink -> *`, `* -> source`, self-loop, and exact duplicates.
+- Built-in layout actions: `Auto Layout`, `Align Horizontal`, `Align Vertical`, `Fit View`.
+- Align policy: selected-first (if 2+ selected nodes) with overlap-safe packing.
+- Validation view: status badge (`ok/error`), node/edge counts, readable failure summary.
+- Compatibility: manual Add Edge form is still kept for one cycle.
+- Detailed guide: `docs/guides/block_editor_quickstart.md`
+
+### Graph Spec
+
+- `plugin` format: `module:ClassName`
+- node `kind`: `source`, `node`, `sink` (reserved: `delay`, `initial`)
 
 ```yaml
 nodes:
@@ -114,46 +264,240 @@ edges:
 config: {}
 ```
 
-Supported node kinds:
+### Node Kind Model (5 kinds)
 
-- `source`: emits stream packets.
-- `node`: transforms or routes packets.
-- `sink`: consumes terminal packets.
-- `delay`: reserved pass-through timing/condition kind.
-- `initial`: reserved bootstrap state/seed kind.
+```mermaid
+flowchart LR
+  I["initial<br/>bootstrap packet/state"] --> N1["node<br/>process(packet)"]
+  S["source<br/>run()"] --> N1
+  N1 --> D["delay<br/>gated pass-through"]
+  D --> N2["node<br/>process(packet)"]
+  N2 --> K["sink<br/>terminal process(packet)"]
+```
 
-Only `source` has special scheduler behavior in the current in-process runtime. Other kinds run through plugin `process()` semantics after packets are enqueued.
+- `source`: emits packets through `run()`; must not have incoming edges.
+- `node`: generic transform/router; can be used for fan-in/fan-out.
+- `sink`: terminal consumer; must not have outgoing edges.
+- `delay`: time/condition-gated pass-through kind; currently handled via plugin `process()` semantics.
+- `initial`: bootstrap kind for initial state/seed packet injection at graph start.
 
-## Common Commands
+Runtime note:
+- In the current in-proc runtime, only `source` has dedicated scheduler behavior.
+- `node`, `sink`, `delay`, `initial` are executed via `process()` once packets are enqueued.
 
-| Task | Command |
-| --- | --- |
-| Validate default graph | `python -m schnitzel_stream validate` |
-| Run default graph | `python -m schnitzel_stream` |
-| List presets | `python scripts/stream_run.py --list` |
-| Run a preset validation | `python scripts/stream_run.py --preset inproc_demo --validate-only` |
-| Generate a graph from a profile | `python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo.yaml --validate-after-generate` |
-| Start fleet processes | `python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template.yaml` |
-| Inspect fleet status | `python scripts/stream_fleet.py status` |
-| Monitor once | `python scripts/stream_monitor.py --once --json` |
-| Stop fleet processes | `python scripts/stream_fleet.py stop` |
+### Plugin Policy
 
-## Control API
+Default allowlist is `schnitzel_stream.*`.
 
-The control API is local-first. Mutating endpoints require either a bearer token or an explicit local-lab override.
+- `ALLOWED_PLUGIN_PREFIXES` (comma-separated prefixes)
+- `ALLOW_ALL_PLUGINS=true` (dev only)
+
+### Documentation
+
+- Docs index: `docs/index.md`
+- Documentation inventory: `docs/reference/document_inventory.md`
+- Documentation policy: `docs/governance/documentation_policy.md`
+- Doc-code mapping: `docs/reference/doc_code_mapping.md`
+- Progress index: `docs/progress/README.md`
+- Current status snapshot: `docs/progress/current_status.md`
+- Execution SSOT: `docs/roadmap/execution_roadmap.md`
+- StreamPacket contract: `docs/contracts/stream_packet.md`
+- Observability contract: `docs/contracts/observability.md`
+
+---
+
+## 한국어
+
+### 개요
+
+`schnitzel-stream-platform`은 노드 그래프 기반 스트림 처리 런타임입니다.
+
+현재 핵심:
+- 노드 그래프 실행
+- 그래프 정적 검증(토폴로지 + 호환성)
+- 플러그인 기반 입출력/정책 노드
+- 내구 큐(SQLite/WAL) 빌딩블록
+- 엣지 운영 관례 정리
+- CLI는 그래프 중심 인터페이스만 지원
+
+### 릴리즈 기준선
+
+- Lab RC 타깃: `v0.1.0-rc.1`
+- 동결 범위: Core+Ops 명령 표면
+  - `python -m schnitzel_stream`
+  - `scripts/stream_run.py`
+  - `scripts/stream_fleet.py`
+  - `scripts/stream_monitor.py`
+  - `scripts/stream_console.py`
+  - `scripts/env_doctor.py`
+  - `scripts/graph_wizard.py`
+  - `scripts/stream_control_api.py`
+- 필수 게이트: `pip` + `conda` 레인 모두 통과
+  - 정책 드리프트: `python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json`
+  - 명령 표면 드리프트: `python scripts/command_surface_snapshot.py --check --baseline configs/policy/command_surface_snapshot_v1.json`
+  - SSOT 드리프트: `python scripts/ssot_sync_check.py --strict --json`
+  - 집약 릴리즈 검사: `python scripts/release_readiness.py --profile lab-rc --json`
+- 릴리즈 체크리스트: `docs/guides/lab_rc_release_checklist.md`
+
+### 아키텍처
+
+```mermaid
+flowchart LR
+  subgraph Ingress["Ingress"]
+    S["입력 소스 플러그인"]
+  end
+
+  subgraph Runtime["Runtime"]
+    V["그래프 검증기"]
+    G["인프로세스 스케줄러"]
+    N["노드 플러그인"]
+  end
+
+  subgraph Egress["Egress"]
+    D["내구 큐 노드"]
+    K["출력 싱크 플러그인"]
+  end
+
+  subgraph Meta["Meta"]
+    P["플러그인 Allowlist 정책"]
+    O["관측 가능성 계약"]
+  end
+
+  S --> G --> N --> D --> K
+  V -."검증".-> G
+  P -."정책".-> G
+  O -."리포트".-> G
+```
+
+### 빠른 시작
+
+1. Bootstrap (무환경변수 우선)
+
+```powershell
+# Windows PowerShell
+./setup_env.ps1 -Profile console -Manager pip -SkipDoctor
+```
 
 ```bash
+# Linux/macOS
+./setup_env.sh --profile console --manager pip --skip-doctor
+```
+
+2. Doctor
+
+```bash
+python scripts/stream_console.py doctor --strict --json
+```
+
+3. Up / Down
+
+```bash
+python scripts/stream_console.py up --allow-local-mutations
+python scripts/stream_console.py status --json
+python scripts/stream_console.py down
+```
+
+4. 런타임 그래프 검증
+
+```bash
+python -m schnitzel_stream validate
+```
+
+5. 기본 그래프 실행
+
+```bash
+python -m schnitzel_stream
+```
+
+6. 주요 데모 그래프
+
+```bash
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink.yaml
+```
+
+6-1. 파일 YOLO 오버레이(반복 재생 + 저지연 큐 정책)
+
+```bash
+export SS_INPUT_PATH=data/samples/2048246-hd_1920_1080_24fps.mp4
+export SS_YOLO_MODEL_PATH=models/yolov8n.pt
+export SS_YOLO_DEVICE=cpu   # GPU는 0 사용
+export SS_INPUT_LOOP=true
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
+```
+
+7. 원커맨드 데모 팩(데모 프로필)
+
+```bash
+python scripts/demo_pack.py --profile ci
+python scripts/demo_pack.py --profile webcam --camera-index 0 --max-events 50
+```
+
+- 기본 리포트 경로: `outputs/reports/demo_pack_latest.json`
+- 수동 시연 fallback 가이드: `docs/guides/demo_pack_guide.md`
+
+8. 정적 리포트 요약 생성(GUI 없이 확인)
+
+```bash
+python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format both
+```
+
+9. Stream fleet 운영(범용 실행기 + 모니터)
+
+```bash
+python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template.yaml
+python scripts/stream_fleet.py status
+python scripts/stream_monitor.py --once --json
+python scripts/stream_fleet.py stop
+```
+
+10. 원커맨드 프리셋 실행기
+
+```bash
+python scripts/stream_run.py --list
+python scripts/stream_run.py --preset inproc_demo --validate-only
+python scripts/stream_run.py --preset file_frames --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30
+python scripts/stream_run.py --preset file_yolo_headless --experimental --doctor --validate-only
+python scripts/stream_run.py --preset file_yolo_view --experimental --model-path models/yolov8n.pt --device cpu --max-events 60
+```
+
+- 기본 경로는 옵션 중심(no env)이며, 환경변수 방식은 고급 override 용도로 유지한다.
+
+10-1. Graph wizard(템플릿 프로필 생성, 비상호작용)
+
+```bash
+python scripts/graph_wizard.py --list-profiles
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo.yaml --validate-after-generate
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo.yaml
+```
+
+- 실험 프로필(`file_yolo_headless`, `file_yolo_view`, `webcam_yolo`)은 `--experimental`로 opt-in 한다.
+- 상세 가이드: `docs/guides/graph_wizard_guide.md`
+
+11. Control API 서버(로컬 기본, 선택적 Bearer 토큰)
+
+```bash
+# 권장: 제어 호출 전체에 Bearer 토큰 사용
 export SS_CONTROL_API_TOKEN=change-me
+
 python scripts/stream_control_api.py --host 127.0.0.1 --port 18700
 ```
 
-Temporary local override:
+- 토큰 없이 local-only 모드일 때 mutating endpoint는 기본 차단:
+  - `POST /api/v1/presets/{preset_id}/run`
+  - `POST /api/v1/fleet/start`
+  - `POST /api/v1/fleet/stop`
+- 임시(1사이클) 로컬 완화: `SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS=true`
+- 감사 보존 기본값: `SS_AUDIT_MAX_BYTES=10485760`, `SS_AUDIT_MAX_FILES=5`
+- 정책 스냅샷 드리프트 게이트: `python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json`
 
-```bash
-SS_CONTROL_API_ALLOW_LOCAL_MUTATIONS=true
-```
-
-## Web Console
+12. Thin Web 콘솔(React + Vite + TypeScript)
 
 ```bash
 cd apps/stream-console
@@ -161,75 +505,108 @@ npm ci
 npm run dev
 ```
 
-The web console includes:
+- Monitor 탭은 fleet 로그/PID 기반 telemetry만 보여준다.
+- Preset run 결과는 session output이며 fleet monitor stream row로 집계되지 않는다.
 
-- fleet-only monitor telemetry
-- preset session output
-- graph editor with YAML import/export
-- validate/run actions for graph specs
-
-## Development Checks
-
-Python:
+13. 원커맨드 로컬 콘솔 부트스트랩(doctor -> up -> status -> down)
 
 ```bash
-python -m pytest
-python scripts/release_readiness.py --profile lab-rc --json
+python scripts/stream_console.py doctor --strict --json
+python scripts/stream_console.py up --allow-local-mutations
+python scripts/stream_console.py status --json
+python scripts/stream_console.py down
 ```
 
-Web console:
+- `--allow-local-mutations`는 로컬 실습 환경에서만 mutating endpoint를 명시적으로 여는 옵션이다.
+- `up`에서 `--token <value>`를 주면 API를 bearer 모드로 바로 띄울 수 있다.
+- 상세 가이드: `docs/guides/local_console_quickstart.md`
+
+14. 블록 에디터(GUI 그래프 작성)
 
 ```bash
-cd apps/stream-console
-npm ci
-npm run typecheck
-npm run test
-npm run build
+python scripts/stream_console.py up --allow-local-mutations
+# http://127.0.0.1:5173 접속 후 "Editor" 탭 이동
 ```
 
-CI workflow:
+- 지원 범위: 노드 배치/연결/속성 편집, YAML import/export, validate/run
+- 직접 조작: 캔버스에서 노드를 드래그하고 핸들 연결로 엣지를 생성
+- 스냅 연결: 노드 본체/근처에 드롭하면 가장 가까운 입력 핸들로 자동 연결
+- 하이브리드 연결 가드: `sink -> *`, `* -> source`, self-loop, 완전 중복 엣지 차단
+- 내장 정렬 액션: `Auto Layout`, `Align Horizontal`, `Align Vertical`, `Fit View`
+- 정렬 정책: 선택 노드가 2개 이상이면 선택 우선 정렬 + 겹침 방지 패킹
+- 검증 표시: 상태 배지(`ok/error`), 노드/엣지 수, 읽기 쉬운 실패 요약
+- 호환성: 수동 Add Edge 폼은 1사이클 동안 유지
+- 상세 가이드: `docs/guides/block_editor_quickstart.md`
 
-```text
-.github/workflows/ci.yml
+### 그래프 스펙
+
+- `plugin` 형식: `module:ClassName`
+- 노드 `kind`: `source`, `node`, `sink` (예약: `delay`, `initial`)
+
+```yaml
+nodes:
+  - id: src
+    kind: source
+    plugin: schnitzel_stream.nodes.dev:StaticSource
+    config:
+      packets: []
+  - id: out
+    kind: sink
+    plugin: schnitzel_stream.nodes.dev:PrintSink
+edges:
+  - from: src
+    to: out
+config: {}
 ```
 
-CI currently covers:
+### 노드 Kind 모델(5종)
 
-- Python tests on Ubuntu, Windows, and macOS
-- no-Docker smoke checks
-- docs, test hygiene, environment, plugin, policy, command-surface, and SSOT gates
-- React/Vite console typecheck, tests, and build
-- conda smoke checks on Ubuntu and Windows
-- final `required-gate`
-
-## Release Baseline
-
-- Lab RC target: `v0.1.0-rc.1`
-- Release checklist: `docs/guides/lab_rc_release_checklist.md`
-- Execution SSOT: `docs/roadmap/execution_roadmap.md`
-
-Required release gates:
-
-```bash
-python scripts/control_policy_snapshot.py --check --baseline configs/policy/control_api_policy_snapshot_v1.json
-python scripts/command_surface_snapshot.py --check --baseline configs/policy/command_surface_snapshot_v1.json
-python scripts/ssot_sync_check.py --strict --json
-python scripts/release_readiness.py --profile lab-rc --json
+```mermaid
+flowchart LR
+  I["initial<br/>초기 패킷/상태 주입"] --> N1["node<br/>process(packet)"]
+  S["source<br/>run()"] --> N1
+  N1 --> D["delay<br/>조건/시간 기반 통과"]
+  D --> N2["node<br/>process(packet)"]
+  N2 --> K["sink<br/>종단 process(packet)"]
 ```
 
-## Documentation Map
+- `source`: `run()`으로 패킷을 생성하는 시작 노드이며 incoming edge를 가질 수 없습니다.
+- `node`: 일반 변환/라우팅 노드이며 fan-in, fan-out 구성의 중심이 됩니다.
+- `sink`: 최종 소비 노드이며 outgoing edge를 가질 수 없습니다.
+- `delay`: 시간/조건 기반으로 패킷 흐름을 제어하는 kind이며 현재는 플러그인 `process()` 의미로 동작합니다.
+- `initial`: 그래프 시작 시 초기 상태/시드 패킷을 주입할 때 쓰는 kind입니다.
 
-- Docs index: `docs/index.md`
-- Command reference: `docs/ops/command_reference.md`
-- Node graph guide: `docs/guides/node_graph_guide.md`
-- Graph wizard guide: `docs/guides/graph_wizard_guide.md`
-- Demo pack guide: `docs/guides/demo_pack_guide.md`
-- Local console guide: `docs/guides/local_console_quickstart.md`
-- Block editor guide: `docs/guides/block_editor_quickstart.md`
-- StreamPacket contract: `docs/contracts/stream_packet.md`
-- Observability contract: `docs/contracts/observability.md`
-- Doc-code mapping: `docs/reference/doc_code_mapping.md`
+런타임 참고:
+- 현재 in-proc 런타임에서 스케줄러 특수 경로를 가지는 건 `source`입니다.
+- `node`, `sink`, `delay`, `initial`은 큐에 들어온 패킷을 `process()`로 처리합니다.
 
-## License
+### 플러그인 정책
+
+기본 allowlist는 `schnitzel_stream.*` 입니다.
+
+- `ALLOWED_PLUGIN_PREFIXES` (콤마 구분 prefix)
+- `ALLOW_ALL_PLUGINS=true` (개발용)
+
+### 문서
+
+- 문서 인덱스: `docs/index.md`
+- 문서 인벤토리: `docs/reference/document_inventory.md`
+- 문서 정책: `docs/governance/documentation_policy.md`
+- 문서-코드 매핑: `docs/reference/doc_code_mapping.md`
+- 진행 인덱스: `docs/progress/README.md`
+- 현재 상태 스냅샷: `docs/progress/current_status.md`
+- 실행 SSOT: `docs/roadmap/execution_roadmap.md`
+- StreamPacket 계약: `docs/contracts/stream_packet.md`
+- 관측 가능성 계약: `docs/contracts/observability.md`
+
+---
+
+### License
 
 Apache License 2.0 (`LICENSE`)
+
+---
+
+<p align="center">
+  Made with ❤️ by <b>Kyungho Cha</b>
+</p>
