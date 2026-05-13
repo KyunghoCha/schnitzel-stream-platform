@@ -2,7 +2,7 @@
 # scripts/check_rtsp.py
 # Docs: docs/ops/command_reference.md, docs/implementation/testing_quality.md
 """
-RTSP E2E 안정성 테스트 (v2 graph, cross-platform).
+RTSP E2E 안정성 테스트 (node graph, cross-platform).
 
 사용법:
     python scripts/check_rtsp.py [--strict] [--log-dir ...]
@@ -137,7 +137,7 @@ def count_packets(log_dir: Path) -> int:
     if not pipe_log.exists():
         return 0
     text = pipe_log.read_text(encoding="utf-8", errors="ignore")
-    # Intent: v2 RTSP graph writes one line per sampled frame with `RTSP ` prefix.
+    # Intent: the RTSP graph writes one line per sampled frame with `RTSP ` prefix.
     return text.count("RTSP {")
 
 
@@ -164,8 +164,7 @@ def _resolve_video() -> Path:
 
 
 def _write_rtsp_graph(path: Path, rtsp_url: str) -> None:
-    graph = f"""version: 2
-nodes:
+    graph = f"""nodes:
   - id: src
     kind: source
     plugin: schnitzel_stream.packs.vision.nodes:OpenCvRtspSource
@@ -270,8 +269,8 @@ def run_e2e_test(args: argparse.Namespace) -> int:
         print(f"started ffmpeg pid={ffmpeg_pid}")
         time.sleep(3)
 
-        # 3) Run v2 RTSP graph
-        graph_path = log_dir / "rtsp_check_graph_v2.yaml"
+        # 3) Run RTSP graph
+        graph_path = log_dir / "rtsp_check_graph.yaml"
         _write_rtsp_graph(graph_path, rtsp_url)
 
         pipeline_cmd = [
@@ -333,7 +332,7 @@ def run_e2e_test(args: argparse.Namespace) -> int:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="RTSP E2E stability test (v2 graph)")
+    parser = argparse.ArgumentParser(description="RTSP E2E stability test (node graph)")
     parser.add_argument("--strict", action="store_true", help="exit with error if reconnect recovery fails")
     parser.add_argument(
         "--log-dir",

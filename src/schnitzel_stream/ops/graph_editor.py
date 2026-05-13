@@ -88,13 +88,8 @@ def shell_cmd(cmd: list[str]) -> str:
 
 def parse_graph_spec_input(spec_input: Mapping[str, Any]) -> tuple[list[NodeSpec], list[EdgeSpec], dict[str, Any]]:
     payload = _as_mapping(spec_input, what="spec")
-    version_raw = payload.get("version", 2)
-    try:
-        version = int(version_raw)
-    except (TypeError, ValueError) as exc:
-        raise GraphEditorUsageError("spec.version must be int") from exc
-    if version != 2:
-        raise GraphEditorUsageError("spec.version must be 2")
+    if "version" in payload:
+        raise GraphEditorUsageError("node graph spec must not define version")
 
     nodes_raw = _as_list(payload.get("nodes", []), what="spec.nodes")
     edges_raw = _as_list(payload.get("edges", []), what="spec.edges")
@@ -143,7 +138,6 @@ def parse_graph_spec_input(spec_input: Mapping[str, Any]) -> tuple[list[NodeSpec
 def normalized_spec_dict(spec_input: Mapping[str, Any]) -> dict[str, Any]:
     nodes, edges, config = parse_graph_spec_input(spec_input)
     return {
-        "version": 2,
         "nodes": [
             {
                 "id": node.node_id,

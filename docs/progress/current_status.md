@@ -4,7 +4,7 @@ Last updated: 2026-02-19
 
 ## English
 
-- Runtime baseline: v2 node graph only
+- Runtime baseline: node graph only
 - Legacy runtime: removed from `main` (`P4.5` complete)
 - Execution SSOT current step id: `P26.8` (productization closure completed)
 - P10 hardening track (`P10.1`~`P10.5`) completed
@@ -34,7 +34,7 @@ For detailed status, always refer to:
 
 ## 한국어
 
-- 런타임 기준선: v2 노드 그래프 전용
+- 런타임 기준선: 노드 그래프 전용
 - 레거시 런타임: `main`에서 제거 완료 (`P4.5` 완료)
 - 실행 SSOT current step id: `P26.8` (제품화 마감 페이즈 완료)
 - P10 하드닝 트랙(`P10.1`~`P10.5`) 완료

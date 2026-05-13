@@ -8,7 +8,7 @@ Last updated: 2026-02-18
 
 - Unit tests: graph/runtime/node behavior
 - Integration tests: durable queue replay, end-to-end graph behavior
-- Regression: v2 golden output comparison
+- Regression: golden output comparison
 
 ## Active Test Locations
 
@@ -36,7 +36,7 @@ Quick mode focuses on durable reliability regressions:
 - `tests/integration/test_durable_queue_reliability.py`
 
 Full mode extends quick mode with:
-- `tests/integration/test_v2_durable_queue_idempotency_e2e.py`
+- `tests/integration/test_durable_queue_idempotency_e2e.py`
 
 ## Policy
 
@@ -52,7 +52,7 @@ Any runtime behavior change must include at least one of:
 
 - 단위 테스트: 그래프/런타임/노드 동작
 - 통합 테스트: 내구 큐 재전송, 그래프 E2E 동작
-- 회귀 테스트: v2 골든 출력 비교
+- 회귀 테스트: 골든 출력 비교
 
 ## 활성 테스트 위치
 
@@ -80,7 +80,7 @@ quick 모드는 durable 신뢰성 핵심 회귀에 집중한다:
 - `tests/integration/test_durable_queue_reliability.py`
 
 full 모드는 quick 범위에 아래를 추가한다:
-- `tests/integration/test_v2_durable_queue_idempotency_e2e.py`
+- `tests/integration/test_durable_queue_idempotency_e2e.py`
 
 ## 정책
 

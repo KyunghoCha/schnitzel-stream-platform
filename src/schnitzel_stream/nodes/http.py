@@ -4,7 +4,7 @@ from __future__ import annotations
 HTTP sink node plugins.
 
 Intent:
-- Provide a transport-agnostic HTTP sink for v2 graphs without coupling runtime core to backend schema.
+- Provide a transport-agnostic HTTP sink without coupling runtime core to backend schema.
 - Keep delivery semantics explicit in config (idempotency header + retry policy).
 """
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 Mock detection node (frame -> detection).
 
 Intent:
-- Phase 4 parity work needs an end-to-end v2 vision demo graph without heavyweight model deps.
+- End-to-end vision demo graphs need deterministic detections without heavyweight model deps.
 - This node emits deterministic detections from frame indices so we can write golden tests.
 """
 

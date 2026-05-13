@@ -1,6 +1,6 @@
 id: http_event_sink
 description: Static event payload to HTTP sink
-template: configs/graphs/templates/http_event_sink_v2.template.yaml
+template: configs/graphs/templates/http_event_sink.template.yaml
 experimental: false
 defaults:
   HTTP_URL: http://127.0.0.1:18080/api/events

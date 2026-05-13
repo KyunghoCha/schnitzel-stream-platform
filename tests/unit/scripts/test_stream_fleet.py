@@ -130,7 +130,7 @@ def test_cmd_start_uses_graph_template_and_env(monkeypatch, tmp_path: Path):
     )
 
     graph = tmp_path / "graph.yaml"
-    graph.write_text("version: 2\nnodes: []\nedges: []\nconfig: {}\n", encoding="utf-8")
+    graph.write_text("nodes: []\nedges: []\nconfig: {}\n", encoding="utf-8")
 
     calls: list[tuple[list[str], dict[str, str]]] = []
 

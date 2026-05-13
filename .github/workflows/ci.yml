@@ -162,11 +162,11 @@ jobs:
         env:
           PYTHONPATH: src
         run: |
-          python -m schnitzel_stream validate --graph configs/graphs/dev_inproc_demo_v2.yaml
-          python -m schnitzel_stream validate --graph configs/graphs/dev_http_event_sink_v2.yaml
-          python -m schnitzel_stream validate --graph configs/graphs/dev_jsonl_sink_v2.yaml
-          python -m schnitzel_stream validate --graph configs/graphs/dev_json_file_sink_v2.yaml
-          python -m schnitzel_stream validate --graph configs/graphs/showcase_inproc_v2.yaml
+          python -m schnitzel_stream validate --graph configs/graphs/dev_inproc_demo.yaml
+          python -m schnitzel_stream validate --graph configs/graphs/dev_http_event_sink.yaml
+          python -m schnitzel_stream validate --graph configs/graphs/dev_jsonl_sink.yaml
+          python -m schnitzel_stream validate --graph configs/graphs/dev_json_file_sink.yaml
+          python -m schnitzel_stream validate --graph configs/graphs/demo_inproc.yaml
 
       - name: Validate process-graph foundation spec
         run: python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml
@@ -174,7 +174,7 @@ jobs:
       - name: Run no-dependency v2 graph
         env:
           PYTHONPATH: src
-        run: python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --max-events 5
+        run: python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml --max-events 5
 
       - name: Run demo pack (ci profile)
         run: python scripts/demo_pack.py --profile ci --max-events 10

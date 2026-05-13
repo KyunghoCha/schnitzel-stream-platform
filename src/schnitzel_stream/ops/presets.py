@@ -34,12 +34,12 @@ def build_preset_table(repo_root: Path) -> dict[str, PresetSpec]:
         "inproc_demo": PresetSpec(
             preset_id="inproc_demo",
             description="Minimal in-proc packet flow demo",
-            graph=graphs / "dev_inproc_demo_v2.yaml",
+            graph=graphs / "dev_inproc_demo.yaml",
         ),
         "file_frames": PresetSpec(
             preset_id="file_frames",
             description="Video-file source + frame sampler + print sink",
-            graph=graphs / "dev_video_file_frames_v2.yaml",
+            graph=graphs / "dev_video_file_frames.yaml",
             env_defaults={
                 "SS_INPUT_PATH": str((repo_root / "data" / "samples" / "2048246-hd_1920_1080_24fps.mp4").resolve()),
                 "SS_INPUT_LOOP": "false",
@@ -48,13 +48,13 @@ def build_preset_table(repo_root: Path) -> dict[str, PresetSpec]:
         "webcam_frames": PresetSpec(
             preset_id="webcam_frames",
             description="Webcam source + frame sampler + print sink",
-            graph=graphs / "dev_webcam_frames_v2.yaml",
+            graph=graphs / "dev_webcam_frames.yaml",
             env_defaults={"SS_CAMERA_INDEX": "0"},
         ),
         "file_yolo_view": PresetSpec(
             preset_id="file_yolo_view",
             description="Video-file YOLO overlay with OpenCV window (GUI required)",
-            graph=graphs / "dev_video_file_yolo_overlay_v2.yaml",
+            graph=graphs / "dev_video_file_yolo_overlay.yaml",
             experimental=True,
             env_defaults={
                 "SS_INPUT_PATH": str((repo_root / "data" / "samples" / "2048246-hd_1920_1080_24fps.mp4").resolve()),
@@ -66,7 +66,7 @@ def build_preset_table(repo_root: Path) -> dict[str, PresetSpec]:
         "file_yolo_headless": PresetSpec(
             preset_id="file_yolo_headless",
             description="Video-file YOLO headless run (no OpenCV GUI required)",
-            graph=graphs / "dev_video_file_yolo_headless_v2.yaml",
+            graph=graphs / "dev_video_file_yolo_headless.yaml",
             experimental=True,
             env_defaults={
                 "SS_INPUT_PATH": str((repo_root / "data" / "samples" / "2048246-hd_1920_1080_24fps.mp4").resolve()),
@@ -79,7 +79,7 @@ def build_preset_table(repo_root: Path) -> dict[str, PresetSpec]:
         "webcam_yolo": PresetSpec(
             preset_id="webcam_yolo",
             description="Webcam YOLO overlay",
-            graph=graphs / "dev_webcam_yolo_overlay_v2.yaml",
+            graph=graphs / "dev_webcam_yolo_overlay.yaml",
             experimental=True,
             env_defaults={
                 "SS_CAMERA_INDEX": "0",

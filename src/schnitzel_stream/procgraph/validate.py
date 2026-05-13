@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from schnitzel_stream.graph.compat import validate_graph_compat
-from schnitzel_stream.graph.spec import load_node_graph_spec, peek_graph_version
+from schnitzel_stream.graph.spec import ensure_node_graph_spec, load_node_graph_spec
 from schnitzel_stream.graph.validate import validate_graph
 from schnitzel_stream.plugins.registry import PluginRegistry
 from schnitzel_stream.procgraph.model import ChannelSpec, LinkSpec, ProcessGraphSpec, ProcessSpec
@@ -58,11 +58,7 @@ def _load_and_validate_node_graph(
 ) -> tuple[Path, object]:
     graph_path = _normalize_path(process.graph, root=root)
     try:
-        version = peek_graph_version(graph_path)
-        if version != 2:
-            raise ProcessGraphValidationError(
-                f"process={process.process_id} graph must be version=2: {graph_path} (got version={version})"
-            )
+        ensure_node_graph_spec(graph_path)
         spec = load_node_graph_spec(graph_path)
         validate_graph(spec.nodes, spec.edges, allow_cycles=False)
         validate_graph_compat(spec.nodes, spec.edges, transport="inproc", registry=registry)

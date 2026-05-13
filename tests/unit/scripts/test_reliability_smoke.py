@@ -23,7 +23,7 @@ def test_targets_for_mode_contract():
     quick = mod._targets_for_mode("quick")
     full = mod._targets_for_mode("full")
     assert "tests/unit/test_sqlite_queue.py" in quick
-    assert "tests/integration/test_v2_durable_queue_idempotency_e2e.py" in full
+    assert "tests/integration/test_durable_queue_idempotency_e2e.py" in full
     assert len(full) > len(quick)
 
 

@@ -22,7 +22,6 @@ export type GraphEdgeInput = {
 };
 
 export type GraphSpecInput = {
-  version: 2;
   nodes: GraphNodeInput[];
   edges: GraphEdgeInput[];
   config: Record<string, unknown>;
@@ -92,17 +91,6 @@ export function defaultApiBase(): string {
   return typeof envValue === "string" && envValue.trim() ? envValue : DEFAULT_BASE;
 }
 
-function asNumber(value: unknown): number | undefined {
-  if (value === null || value === undefined || value === "") {
-    return undefined;
-  }
-  const n = Number(value);
-  if (!Number.isFinite(n)) {
-    return undefined;
-  }
-  return n;
-}
-
 function asText(value: unknown): string {
   return String(value ?? "").trim();
 }
@@ -157,13 +145,11 @@ export function normalizeGraphSpecInput(input: unknown): GraphSpecInput {
     return out;
   });
 
-  const versionNum = asNumber(obj.version);
-  if (versionNum !== undefined && versionNum !== 2) {
-    throw new Error("spec.version must be 2");
+  if (Object.prototype.hasOwnProperty.call(obj, "version")) {
+    throw new Error("node graph spec must not define version");
   }
 
   return {
-    version: 2,
     nodes,
     edges,
     config: { ...configRaw }

@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 # scripts/stream_fleet.py
 # Docs: docs/ops/command_reference.md
-"""
-Universal stream fleet launcher (cross-platform).
-Start/stop/status management for per-stream v2 graph processes.
-"""
+"""Start, stop, and inspect per-stream graph processes."""
 from __future__ import annotations
 
 import argparse
@@ -23,7 +20,7 @@ from process_manager import is_process_running, start_process, stop_process
 
 
 DEFAULT_LOG_DIR = str(Path(tempfile.gettempdir()) / "schnitzel_stream_fleet_run")
-DEFAULT_GRAPH_TEMPLATE = str(PROJECT_ROOT / "configs" / "graphs" / "dev_stream_template_v2.yaml")
+DEFAULT_GRAPH_TEMPLATE = str(PROJECT_ROOT / "configs" / "graphs" / "dev_stream_template.yaml")
 DEFAULT_CONFIG = str(PROJECT_ROOT / "configs" / "fleet.yaml")
 
 
@@ -126,7 +123,7 @@ def build_parser(
     default_graph_template: str = DEFAULT_GRAPH_TEMPLATE,
     default_log_dir: str = DEFAULT_LOG_DIR,
 ) -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Universal stream fleet launcher (cross-platform)", prog=prog)
+    parser = argparse.ArgumentParser(description="Stream fleet launcher (cross-platform)", prog=prog)
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     start_parser = subparsers.add_parser("start", help="Start all stream graph processes")
@@ -139,7 +136,7 @@ def build_parser(
     start_parser.add_argument(
         "--graph-template",
         default=default_graph_template,
-        help="Path to v2 graph template used for each stream process",
+        help="Path to graph template used for each stream process",
     )
     start_parser.add_argument(
         "--log-dir",

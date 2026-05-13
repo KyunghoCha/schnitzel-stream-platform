@@ -19,9 +19,9 @@ def test_load_process_graph_spec_parses_v1(tmp_path):
         version: 1
         processes:
           - id: enqueue
-            graph: configs/graphs/dev_durable_enqueue_v2.yaml
+            graph: configs/graphs/dev_durable_enqueue.yaml
           - id: drain
-            graph: configs/graphs/dev_durable_drain_ack_v2.yaml
+            graph: configs/graphs/dev_durable_drain_ack.yaml
         channels:
           - id: q1
             kind: sqlite_queue
@@ -46,7 +46,7 @@ def test_load_process_graph_spec_parses_v1(tmp_path):
     [
         (
             """
-            version: 2
+            version: 99
             processes: []
             channels: []
             links: []

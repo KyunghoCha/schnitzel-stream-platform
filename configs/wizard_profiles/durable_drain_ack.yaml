@@ -1,6 +1,6 @@
 id: durable_drain_ack
 description: Durable queue drain + ack graph
-template: configs/graphs/templates/durable_drain_ack_v2.template.yaml
+template: configs/graphs/templates/durable_drain_ack.template.yaml
 experimental: false
 defaults:
   QUEUE_PATH: outputs/queues/dev_demo.sqlite3

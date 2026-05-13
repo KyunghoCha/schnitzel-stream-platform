@@ -35,7 +35,7 @@ def test_scaffold_generates_node_plugin_files(tmp_path: Path):
 
     plugin = tmp_path / "src" / "schnitzel_stream" / "packs" / "sensor" / "nodes" / "threshold_node.py"
     test_file = tmp_path / "tests" / "unit" / "packs" / "sensor" / "nodes" / "test_threshold_node.py"
-    graph = tmp_path / "configs" / "graphs" / "dev_sensor_threshold_node_v2.yaml"
+    graph = tmp_path / "configs" / "graphs" / "dev_sensor_threshold_node.yaml"
     exports = tmp_path / "src" / "schnitzel_stream" / "packs" / "sensor" / "nodes" / "__init__.py"
 
     assert plugin.exists()
@@ -231,7 +231,7 @@ def test_scaffold_validate_generated_failure_keeps_generated_files(tmp_path: Pat
     )
     assert rc == 1
     plugin = tmp_path / "src" / "schnitzel_stream" / "packs" / "sensor" / "nodes" / "threshold_node.py"
-    graph = tmp_path / "configs" / "graphs" / "dev_sensor_threshold_node_v2.yaml"
+    graph = tmp_path / "configs" / "graphs" / "dev_sensor_threshold_node.yaml"
     assert plugin.exists()
     assert graph.exists()
 

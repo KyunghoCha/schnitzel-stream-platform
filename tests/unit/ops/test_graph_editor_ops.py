@@ -10,7 +10,6 @@ from schnitzel_stream.ops import graph_editor as editor_ops
 def test_parse_graph_spec_input_accepts_alias_fields():
     nodes, edges, config = editor_ops.parse_graph_spec_input(
         {
-            "version": 2,
             "nodes": [
                 {
                     "id": "src",
@@ -39,11 +38,11 @@ def test_parse_graph_spec_input_accepts_alias_fields():
     assert config["throttle"]["max_queue"] == 8
 
 
-def test_parse_graph_spec_input_rejects_invalid_version():
+def test_parse_graph_spec_input_rejects_version_field():
     with pytest.raises(editor_ops.GraphEditorUsageError):
         editor_ops.parse_graph_spec_input(
             {
-                "version": 3,
+                "version": 1,
                 "nodes": [],
                 "edges": [],
                 "config": {},
@@ -54,7 +53,6 @@ def test_parse_graph_spec_input_rejects_invalid_version():
 def test_validate_graph_spec_returns_error_for_missing_edge_target():
     result = editor_ops.validate_graph_spec(
         {
-            "version": 2,
             "nodes": [
                 {
                     "id": "src",

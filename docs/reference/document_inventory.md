@@ -42,10 +42,10 @@ Last updated: 2026-02-19
   - `docs/progress/current_status.md`
 - Usage:
   - `docs/ops/command_reference.md` (includes explicit onboarding 3-step `bootstrap -> doctor -> up/down`, option-first `stream_run` presets, `graph_wizard` template generation, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` profiles, `bootstrap_env`, `reliability_smoke`, `scaffold_plugin` (`--dry-run`/`--validate-generated`), `plugin_contract_check` (`--strict`/`--json`), `demo_report_view`, `control_policy_snapshot`, `command_surface_snapshot`, `ssot_sync_check`, `release_readiness`, and block editor direct-manipulation paths including snap-connect / selected-first align semantics)
-  - `docs/guides/v2_node_graph_guide.md`
+  - `docs/guides/node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`
-  - `docs/guides/professor_showcase_guide.md`
+  - `docs/guides/demo_pack_guide.md`
   - `docs/guides/local_console_quickstart.md`
   - `docs/guides/graph_wizard_guide.md`
   - `docs/guides/block_editor_quickstart.md`
@@ -102,10 +102,10 @@ Last updated: 2026-02-19
   - `docs/progress/current_status.md`
 - 사용:
   - `docs/ops/command_reference.md` (명시 온보딩 3단계 `bootstrap -> doctor -> up/down`, 옵션 중심 `stream_run` 프리셋, `graph_wizard` 템플릿 생성, `stream_fleet`, `stream_monitor`, `stream_console`, `stream_control_api`, `env_doctor` 프로필, `bootstrap_env`, `reliability_smoke`, `scaffold_plugin`(`--dry-run`/`--validate-generated`), `plugin_contract_check`(`--strict`/`--json`), `demo_report_view`, `control_policy_snapshot`, `command_surface_snapshot`, `ssot_sync_check`, `release_readiness`, 블록 에디터 직접 조작 경로 + 스냅 연결/선택 우선 정렬 규칙 포함)
-  - `docs/guides/v2_node_graph_guide.md`
+  - `docs/guides/node_graph_guide.md`
   - `docs/guides/plugin_authoring_guide.md`
   - `docs/guides/process_graph_foundation_guide.md`
-  - `docs/guides/professor_showcase_guide.md`
+  - `docs/guides/demo_pack_guide.md`
   - `docs/guides/local_console_quickstart.md`
   - `docs/guides/graph_wizard_guide.md`
   - `docs/guides/block_editor_quickstart.md`

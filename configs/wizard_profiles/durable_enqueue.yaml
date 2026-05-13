@@ -1,6 +1,6 @@
 id: durable_enqueue
 description: Durable enqueue source-to-sqlite queue graph
-template: configs/graphs/templates/durable_enqueue_v2.template.yaml
+template: configs/graphs/templates/durable_enqueue.template.yaml
 experimental: false
 defaults:
   QUEUE_PATH: outputs/queues/dev_demo.sqlite3

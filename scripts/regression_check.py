@@ -16,9 +16,9 @@ from schnitzel_stream.control.throttle import FixedBudgetThrottle
 from schnitzel_stream.graph.spec import load_node_graph_spec
 from schnitzel_stream.runtime.inproc import InProcGraphRunner
 
-GOLDEN = ROOT / "tests" / "regression" / "v2_golden_events.jsonl"
+GOLDEN = ROOT / "tests" / "regression" / "node_graph_golden_events.jsonl"
 TMP_OUT = Path(tempfile.gettempdir()) / "events_regression.jsonl"
-GRAPH = ROOT / "configs" / "graphs" / "dev_vision_e2e_mock_v2.yaml"
+GRAPH = ROOT / "configs" / "graphs" / "dev_vision_e2e_mock.yaml"
 
 
 _COMPARE_KEYS = {"event_type", "object_type", "severity", "track_id", "bbox", "confidence", "zone"}
@@ -39,7 +39,7 @@ def _run_pipeline(max_events: int) -> None:
     throttle = FixedBudgetThrottle(max_source_emits_total=max_events) if max_events > 0 else None
     result = runner.run(nodes=spec.nodes, edges=spec.edges, throttle=throttle)
 
-    # Intent: for v2 golden checks we persist forwarded packets from terminal node `out`.
+    # Intent: persist forwarded packets from terminal node `out` for golden checks.
     outs = result.outputs_by_node.get("out", [])
     lines: list[str] = []
     for packet in outs:

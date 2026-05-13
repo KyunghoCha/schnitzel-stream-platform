@@ -21,9 +21,9 @@ flowchart LR
   end
 
   subgraph S["Specification Layer"]
-    S1["Node Graph Spec v2"]
+    S1["Node Graph Spec "]
     S2["Process Graph Spec v1"]
-    S3["Future Process Graph v2: N:N and Loop Policy"]
+    S3["Future Process Graph : N:N and Loop Policy"]
   end
 
   subgraph R["Execution Layer"]
@@ -50,7 +50,7 @@ flowchart LR
 
   subgraph O["Observability and Governance"]
     O1["Metrics Health and Reports (Done)"]
-    O2["Static Showcase Visualization (Done)"]
+    O2["Static Demo Visualization (Done)"]
     O3["Live UI Dashboard (Backlog)"]
     O4["Plugin Security and Governance Baseline (Research)"]
   end
@@ -124,9 +124,9 @@ flowchart LR
   end
 
   subgraph S["명세 계층"]
-    S1["노드 그래프 스펙 v2"]
+    S1["노드 그래프 스펙 "]
     S2["프로세스 그래프 스펙 v1"]
-    S3["미래 프로세스 그래프 v2: N:N 및 루프 정책"]
+    S3["미래 프로세스 그래프 : N:N 및 루프 정책"]
   end
 
   subgraph R["실행 계층"]

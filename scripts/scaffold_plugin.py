@@ -84,7 +84,7 @@ raise SystemExit(main())
 def _build_paths(repo_root: Path, *, pack: str, module: str) -> ScaffoldPaths:
     plugin_file = repo_root / "src" / "schnitzel_stream" / "packs" / pack / "nodes" / f"{module}.py"
     test_file = repo_root / "tests" / "unit" / "packs" / pack / "nodes" / f"test_{module}.py"
-    graph_file = repo_root / "configs" / "graphs" / f"dev_{pack}_{module}_v2.yaml"
+    graph_file = repo_root / "configs" / "graphs" / f"dev_{pack}_{module}.yaml"
     return ScaffoldPaths(plugin_file=plugin_file, test_file=test_file, graph_file=graph_file)
 
 
@@ -195,7 +195,6 @@ def _render_graph(*, kind: str, pack: str, module: str, class_name: str) -> str:
 
     if kind == "source":
         return (
-            "version: 2\n"
             "nodes:\n"
             "  - id: src\n"
             "    kind: source\n"
@@ -217,7 +216,6 @@ def _render_graph(*, kind: str, pack: str, module: str, class_name: str) -> str:
 
     if kind == "node":
         return (
-            "version: 2\n"
             "nodes:\n"
             "  - id: src\n"
             "    kind: source\n"
@@ -249,7 +247,6 @@ def _render_graph(*, kind: str, pack: str, module: str, class_name: str) -> str:
         )
 
     return (
-        "version: 2\n"
         "nodes:\n"
         "  - id: src\n"
         "    kind: source\n"

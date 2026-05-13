@@ -8,14 +8,11 @@ from omegaconf import OmegaConf
 
 from schnitzel_stream.graph.model import EdgeSpec, NodeSpec
 
-_SUPPORTED_GRAPH_VERSIONS = (2,)
-
 
 @dataclass(frozen=True)
 class NodeGraphSpec:
     """Node graph specification."""
 
-    version: int
     nodes: list[NodeSpec]
     edges: list[EdgeSpec]
     config: dict[str, Any]
@@ -49,52 +46,34 @@ def _load_yaml_mapping(path: str | Path) -> tuple[Path, dict[str, Any]]:
     return p, cont
 
 
-def peek_graph_version(path: str | Path) -> int:
-    """Read only the graph version from YAML.
+def _validate_node_graph_format(cont: dict[str, Any], *, path: Path) -> None:
+    """Validate the active node graph envelope.
 
-    Intent:
-    - Keep version dispatch centralized.
-    - Legacy v1(job) specs are intentionally rejected.
+    Node graph specs are identified by the `nodes`/`edges` envelope. They do
+    not use a public graph-version field.
     """
-    p, cont = _load_yaml_mapping(path)
+    if "version" in cont:
+        raise ValueError(f"node graph spec must not define version: {path}")
 
-    version_raw = cont.get("version")
-    if version_raw is None:
-        has_job = "job" in cont
-        has_nodes = "nodes" in cont
-        has_edges = "edges" in cont
-        if has_job:
-            # Intent: fail fast with a migration hint instead of silently treating v1 as default.
-            raise ValueError(
-                f"legacy v1 job graph is no longer supported: {p}. "
-                "Migrate to v2 node graph (nodes/edges).",
-            )
-        if has_nodes or has_edges:
-            return 2
-        raise ValueError(f"graph spec must define version=2 or nodes/edges: {p}")
-
-    try:
-        version = int(version_raw)
-    except (TypeError, ValueError) as exc:
-        raise ValueError(f"graph spec version must be int: {p}") from exc
-    if version != 2:
+    if "job" in cont:
         raise ValueError(
-            f"unsupported graph spec version: {version} (supported: {_SUPPORTED_GRAPH_VERSIONS}); "
-            "legacy v1(job) is removed.",
+            f"job-style graph is no longer supported: {path}. "
+            "Use node graph format with nodes and edges.",
         )
-    return version
+    if "nodes" not in cont and "edges" not in cont:
+        raise ValueError(f"graph spec must define nodes or edges: {path}")
+
+
+def ensure_node_graph_spec(path: str | Path) -> None:
+    """Validate that a YAML file uses the active node graph format."""
+
+    p, cont = _load_yaml_mapping(path)
+    _validate_node_graph_format(cont, path=p)
 
 
 def load_node_graph_spec(path: str | Path) -> NodeGraphSpec:
     p, cont = _load_yaml_mapping(path)
-
-    version_raw = cont.get("version", 2)
-    try:
-        version = int(version_raw)
-    except (TypeError, ValueError) as exc:
-        raise ValueError(f"graph spec version must be int: {p}") from exc
-    if version != 2:
-        raise ValueError(f"node graph spec version must be 2 (v1 removed): {p}")
+    _validate_node_graph_format(cont, path=p)
 
     nodes_raw = _as_list(cont.get("nodes"))
     edges_raw = _as_list(cont.get("edges"))
@@ -146,4 +125,4 @@ def load_node_graph_spec(path: str | Path) -> NodeGraphSpec:
         )
 
     config = _as_dict(cont.get("config"))
-    return NodeGraphSpec(version=version, nodes=nodes, edges=edges, config=config)
+    return NodeGraphSpec(nodes=nodes, edges=edges, config=config)

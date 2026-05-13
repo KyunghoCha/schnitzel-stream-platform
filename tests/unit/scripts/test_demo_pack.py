@@ -18,16 +18,16 @@ def _load_demo_pack_module() -> ModuleType:
     return module
 
 
-def _write_showcase_graphs(repo_root: Path) -> None:
+def _write_demo_graphs(repo_root: Path) -> None:
     graphs = repo_root / "configs" / "graphs"
     graphs.mkdir(parents=True, exist_ok=True)
     for name in (
-        "showcase_inproc_v2.yaml",
-        "showcase_durable_enqueue_v2.yaml",
-        "showcase_durable_drain_ack_v2.yaml",
-        "showcase_webcam_v2.yaml",
+        "demo_inproc.yaml",
+        "demo_durable_enqueue.yaml",
+        "demo_durable_drain_ack.yaml",
+        "demo_webcam.yaml",
     ):
-        (graphs / name).write_text("version: 2\nnodes: []\nedges: []\nconfig: {}\n", encoding="utf-8")
+        (graphs / name).write_text("nodes: []\nedges: []\nconfig: {}\n", encoding="utf-8")
 
 
 def test_build_scenarios_by_profile():
@@ -38,15 +38,15 @@ def test_build_scenarios_by_profile():
     assert [s.scenario_id for s in ci_scenarios] == ["S1", "S2"]
     assert all(not s.webcam_required for s in ci_scenarios)
 
-    professor_scenarios = mod._build_scenarios("professor", repo_root)
-    assert [s.scenario_id for s in professor_scenarios] == ["S1", "S2", "S3"]
-    assert professor_scenarios[-1].webcam_required
-    assert professor_scenarios[-1].graphs[0].name == "showcase_webcam_v2.yaml"
+    webcam_scenarios = mod._build_scenarios("webcam", repo_root)
+    assert [s.scenario_id for s in webcam_scenarios] == ["S1", "S2", "S3"]
+    assert webcam_scenarios[-1].webcam_required
+    assert webcam_scenarios[-1].graphs[0].name == "demo_webcam.yaml"
 
 
 def test_run_writes_report_schema_for_ci(monkeypatch, tmp_path: Path):
     mod = _load_demo_pack_module()
-    _write_showcase_graphs(tmp_path)
+    _write_demo_graphs(tmp_path)
     monkeypatch.setattr(mod, "_repo_root", lambda: tmp_path)
 
     def _ok_run(_cmd, *, cwd, env):
@@ -78,7 +78,7 @@ def test_run_writes_report_schema_for_ci(monkeypatch, tmp_path: Path):
 
 def test_run_returns_2_on_validation_failure(monkeypatch, tmp_path: Path):
     mod = _load_demo_pack_module()
-    _write_showcase_graphs(tmp_path)
+    _write_demo_graphs(tmp_path)
     monkeypatch.setattr(mod, "_repo_root", lambda: tmp_path)
 
     def _validate_fail(cmd, *, cwd, env):
@@ -99,23 +99,23 @@ def test_run_returns_2_on_validation_failure(monkeypatch, tmp_path: Path):
     assert payload["scenarios"][0]["failure_reason"] == "validate_failed"
 
 
-def test_run_returns_20_on_professor_webcam_failure(monkeypatch, tmp_path: Path):
+def test_run_returns_20_on_webcam_profile_failure(monkeypatch, tmp_path: Path):
     mod = _load_demo_pack_module()
-    _write_showcase_graphs(tmp_path)
+    _write_demo_graphs(tmp_path)
     monkeypatch.setattr(mod, "_repo_root", lambda: tmp_path)
 
     def _webcam_fail(cmd, *, cwd, env):
         cmd_line = " ".join(cmd)
         if "validate" in cmd_line:
             return mod.CommandResult(returncode=0, stdout="ok", stderr="", duration_sec=0.01)
-        if "showcase_webcam_v2.yaml" in cmd_line:
+        if "demo_webcam.yaml" in cmd_line:
             return mod.CommandResult(returncode=5, stdout="", stderr="camera open failed", duration_sec=0.01)
         return mod.CommandResult(returncode=0, stdout="ok", stderr="", duration_sec=0.01)
 
     monkeypatch.setattr(mod, "_run_command", _webcam_fail)
 
     report_path = tmp_path / "outputs" / "reports" / "webcam_fail.json"
-    rc = mod.run(["--profile", "professor", "--report", str(report_path)])
+    rc = mod.run(["--profile", "webcam", "--report", str(report_path)])
     assert rc == 20
 
     payload = json.loads(report_path.read_text(encoding="utf-8"))
@@ -129,14 +129,14 @@ def test_run_returns_20_on_professor_webcam_failure(monkeypatch, tmp_path: Path)
 
 def test_run_returns_1_on_non_webcam_runtime_failure(monkeypatch, tmp_path: Path):
     mod = _load_demo_pack_module()
-    _write_showcase_graphs(tmp_path)
+    _write_demo_graphs(tmp_path)
     monkeypatch.setattr(mod, "_repo_root", lambda: tmp_path)
 
     def _generic_run_fail(cmd, *, cwd, env):
         cmd_line = " ".join(cmd)
         if "validate" in cmd_line:
             return mod.CommandResult(returncode=0, stdout="ok", stderr="", duration_sec=0.01)
-        if "showcase_durable_drain_ack_v2.yaml" in cmd_line:
+        if "demo_durable_drain_ack.yaml" in cmd_line:
             return mod.CommandResult(returncode=9, stdout="", stderr="runtime failed", duration_sec=0.01)
         return mod.CommandResult(returncode=0, stdout="ok", stderr="", duration_sec=0.01)
 
@@ -156,7 +156,7 @@ def test_run_returns_1_on_non_webcam_runtime_failure(monkeypatch, tmp_path: Path
 
 def test_run_classifies_dependency_error_as_environment(monkeypatch, tmp_path: Path):
     mod = _load_demo_pack_module()
-    _write_showcase_graphs(tmp_path)
+    _write_demo_graphs(tmp_path)
     monkeypatch.setattr(mod, "_repo_root", lambda: tmp_path)
 
     def _env_fail(cmd, *, cwd, env):
@@ -184,7 +184,7 @@ def test_run_classifies_dependency_error_as_environment(monkeypatch, tmp_path: P
 
 def test_run_classifies_timeout_failure(monkeypatch, tmp_path: Path):
     mod = _load_demo_pack_module()
-    _write_showcase_graphs(tmp_path)
+    _write_demo_graphs(tmp_path)
     monkeypatch.setattr(mod, "_repo_root", lambda: tmp_path)
 
     def _timeout_fail(cmd, *, cwd, env):

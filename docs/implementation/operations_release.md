@@ -18,7 +18,7 @@ Frozen Core+Ops command surfaces for Lab RC:
 
 Runtime semantics freeze:
 - in-proc scheduler semantics unchanged
-- v2 node-graph + process-graph foundation contracts unchanged
+- node-graph + process-graph foundation contracts unchanged
 
 ## Lab RC Baseline
 
@@ -88,7 +88,7 @@ Lab RC에서 동결하는 Core+Ops 명령 표면:
 
 런타임 의미론 동결:
 - in-proc 스케줄러 의미론 유지
-- v2 노드 그래프 + process-graph foundation 계약 유지
+- 노드 그래프 + process-graph foundation 계약 유지
 
 ## Lab RC 기준선
 

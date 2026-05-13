@@ -4,7 +4,7 @@ from __future__ import annotations
 Video nodes (OpenCV).
 
 Intent:
-- Provide a minimal file-video source for v2 graphs (Phase 4 parity work).
+- Provide a minimal file-video source for graph-based vision flows.
 - Keep OpenCV optional at import time: edges without cv2 can still import the package.
 """
 

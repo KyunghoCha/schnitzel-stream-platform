@@ -1,6 +1,6 @@
 id: file_yolo_headless
 description: Video-file YOLO headless run (no OpenCV GUI required)
-template: configs/graphs/templates/file_yolo_headless_v2.template.yaml
+template: configs/graphs/templates/file_yolo_headless.template.yaml
 experimental: true
 defaults:
   INPUT_PATH: data/samples/2048246-hd_1920_1080_24fps.mp4

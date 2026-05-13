@@ -4,7 +4,7 @@ import textwrap
 
 import pytest
 
-from schnitzel_stream.graph.spec import load_node_graph_spec, peek_graph_version
+from schnitzel_stream.graph.spec import ensure_node_graph_spec, load_node_graph_spec
 from schnitzel_stream.graph.validate import validate_graph
 
 
@@ -13,7 +13,6 @@ def test_load_node_graph_spec_parses_nodes_and_edges(tmp_path):
     p.write_text(
         textwrap.dedent(
             """
-            version: 2
             nodes:
               - id: a
                 kind: source
@@ -29,7 +28,6 @@ def test_load_node_graph_spec_parses_nodes_and_edges(tmp_path):
     )
 
     spec = load_node_graph_spec(p)
-    assert spec.version == 2
     assert [n.node_id for n in spec.nodes] == ["a", "b"]
     assert [(e.src, e.dst) for e in spec.edges] == [("a", "b")]
 
@@ -37,15 +35,15 @@ def test_load_node_graph_spec_parses_nodes_and_edges(tmp_path):
     validate_graph(spec.nodes, spec.edges)
 
 
-def test_load_node_graph_spec_rejects_wrong_version(tmp_path):
+def test_load_node_graph_spec_rejects_explicit_version_field(tmp_path):
     p = tmp_path / "graph.yaml"
     p.write_text("version: 1\nnodes: []\nedges: []\n", encoding="utf-8")
-    with pytest.raises(ValueError, match="version must be 2"):
+    with pytest.raises(ValueError, match="must not define version"):
         load_node_graph_spec(p)
 
 
-def test_peek_graph_version_rejects_legacy_job_graph(tmp_path):
+def test_ensure_node_graph_spec_rejects_job_style_graph(tmp_path):
     p = tmp_path / "graph.yaml"
     p.write_text("job: legacy.module:Job\n", encoding="utf-8")
-    with pytest.raises(ValueError, match="legacy v1 job graph"):
-        peek_graph_version(p)
+    with pytest.raises(ValueError, match="job-style graph"):
+        ensure_node_graph_spec(p)

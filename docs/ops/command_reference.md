@@ -2,7 +2,7 @@
 
 ## English
 
-Complete command reference for v2 node-graph runtime.
+Complete command reference for node-graph runtime.
 
 ### Prerequisites
 
@@ -40,13 +40,13 @@ python -m schnitzel_stream [options]
 python -m schnitzel_stream validate [--graph <path>]
 ```
 
-Default graph: `configs/graphs/dev_vision_e2e_mock_v2.yaml`
+Default graph: `configs/graphs/dev_vision_e2e_mock.yaml`
 
 ### CLI Options
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `--graph` | string | default v2 graph | Graph YAML path (`version: 2`) |
+| `--graph` | string | default graph | Graph YAML path |
 | `--validate-only` | flag | off | Validate and exit |
 | `--report-json` | flag | off | Print JSON run report |
 | `--max-events` | int | unlimited | Source packet budget |
@@ -57,16 +57,16 @@ Validate graph:
 
 ```bash
 python -m schnitzel_stream validate
-python -m schnitzel_stream validate --graph configs/graphs/dev_inproc_demo_v2.yaml
+python -m schnitzel_stream validate --graph configs/graphs/dev_inproc_demo.yaml
 ```
 
 Run graph:
 
 ```bash
 python -m schnitzel_stream
-python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --report-json
-python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --max-events 100
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml --report-json
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml --max-events 100
 ```
 
 ### Preset Launcher (One-Command UX)
@@ -114,15 +114,15 @@ python scripts/graph_wizard.py --list-profiles --experimental
 Generate + validate in one command:
 
 ```bash
-python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
-python scripts/graph_wizard.py --profile file_frames --out configs/graphs/generated_file_frames_v2.yaml --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30 --validate-after-generate
-python scripts/graph_wizard.py --profile file_yolo_headless --experimental --out configs/graphs/generated_file_yolo_headless_v2.yaml --model-path models/yolov8n.pt --device cpu
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo.yaml --validate-after-generate
+python scripts/graph_wizard.py --profile file_frames --out configs/graphs/generated_file_frames.yaml --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30 --validate-after-generate
+python scripts/graph_wizard.py --profile file_yolo_headless --experimental --out configs/graphs/generated_file_yolo_headless.yaml --model-path models/yolov8n.pt --device cpu
 ```
 
 Validate an existing generated graph:
 
 ```bash
-python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo.yaml
 ```
 
 Exit codes:
@@ -134,19 +134,19 @@ Exit codes:
 ### Demo Graphs
 
 ```bash
-python -m schnitzel_stream --graph configs/graphs/dev_vision_e2e_mock_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_headless_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_stream_template_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_vision_e2e_mock.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_drain.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_headless.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_stream_template.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink.yaml
 ```
 
 ### Webcam YOLO + OpenCV Overlay
@@ -161,8 +161,8 @@ pip install opencv-python
 Run webcam detection with box overlay window:
 
 ```bash
-python -m schnitzel_stream validate --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
+python -m schnitzel_stream validate --graph configs/graphs/dev_webcam_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay.yaml
 ```
 
 Optional environment overrides:
@@ -183,26 +183,26 @@ export SS_YOLO_MODEL_PATH=models/yolov8n.pt
 export SS_YOLO_DEVICE=cpu   # use 0 for GPU
 export SS_INPUT_LOOP=true
 
-python -m schnitzel_stream validate --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
+python -m schnitzel_stream validate --graph configs/graphs/dev_video_file_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
 ```
 
 Notes:
-- `dev_video_file_yolo_overlay_v2.yaml` sets `inbox_max=1` + `drop_oldest` on YOLO/display nodes.
+- `dev_video_file_yolo_overlay.yaml` sets `inbox_max=1` + `drop_oldest` on YOLO/display nodes.
 - This keeps display latency low when inference is slower than source FPS.
 
-### Demo Pack (Professor Showcase)
+### Demo Pack
 
 One-command profiles:
 
 ```bash
 python scripts/demo_pack.py --profile ci
-python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
+python scripts/demo_pack.py --profile webcam --camera-index 0 --max-events 50
 ```
 
 Options:
-- `--profile <ci|professor>`
-- `--camera-index <int>` (used for webcam showcase in professor profile)
+- `--profile <ci|webcam>`
+- `--camera-index <int>` (used for webcam demo in webcam profile)
 - `--max-events <int>`
 - `--report <path>` (default: `outputs/reports/demo_pack_latest.json`)
 
@@ -218,22 +218,22 @@ python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.jso
 python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.json --format html --out-dir outputs/reports
 ```
 
-Manual showcase scenarios:
+Manual demo scenarios:
 
 ```bash
 # S1: in-proc baseline
-python -m schnitzel_stream validate --graph configs/graphs/showcase_inproc_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/showcase_inproc_v2.yaml --max-events 50
+python -m schnitzel_stream validate --graph configs/graphs/demo_inproc.yaml
+python -m schnitzel_stream --graph configs/graphs/demo_inproc.yaml --max-events 50
 
 # S2: durable enqueue + drain/ack
-python -m schnitzel_stream validate --graph configs/graphs/showcase_durable_enqueue_v2.yaml
-python -m schnitzel_stream validate --graph configs/graphs/showcase_durable_drain_ack_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/showcase_durable_enqueue_v2.yaml --max-events 50
-python -m schnitzel_stream --graph configs/graphs/showcase_durable_drain_ack_v2.yaml --max-events 50
+python -m schnitzel_stream validate --graph configs/graphs/demo_durable_enqueue.yaml
+python -m schnitzel_stream validate --graph configs/graphs/demo_durable_drain_ack.yaml
+python -m schnitzel_stream --graph configs/graphs/demo_durable_enqueue.yaml --max-events 50
+python -m schnitzel_stream --graph configs/graphs/demo_durable_drain_ack.yaml --max-events 50
 
 # S3: webcam
-python -m schnitzel_stream validate --graph configs/graphs/showcase_webcam_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/showcase_webcam_v2.yaml --max-events 50
+python -m schnitzel_stream validate --graph configs/graphs/demo_webcam.yaml
+python -m schnitzel_stream --graph configs/graphs/demo_webcam.yaml --max-events 50
 ```
 
 ### Process Graph Foundation Validation
@@ -278,14 +278,14 @@ Environment doctor profiles:
 - `webcam`: optional camera-open probe (`--probe-webcam`)
 - `console`: adds `fastapi`/`uvicorn` imports and `node`/`npm` executable checks
 
-RTSP reconnect E2E (v2 graph):
+RTSP reconnect E2E (node graph):
 
 ```bash
 python scripts/check_rtsp.py
 python scripts/check_rtsp.py --strict
 ```
 
-Regression helper (v2 golden):
+Regression helper (golden):
 
 ```bash
 python scripts/regression_check.py --max-events 5
@@ -339,7 +339,7 @@ Scaffold export options:
 Plugin contract check:
 
 ```bash
-python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node.yaml --strict --json
 ```
 
 DX script exit codes:
@@ -349,7 +349,7 @@ DX script exit codes:
 Stream fleet launcher (primary):
 
 ```bash
-python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template_v2.yaml
+python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template.yaml
 python scripts/stream_fleet.py status
 python scripts/stream_fleet.py stop
 ```
@@ -367,8 +367,8 @@ Graph wizard (template profile generation):
 
 ```bash
 python scripts/graph_wizard.py --list-profiles
-python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
-python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo.yaml --validate-after-generate
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo.yaml
 ```
 
 Read-only stream monitor (pid/log based):
@@ -568,7 +568,7 @@ export ALLOW_ALL_PLUGINS=true
 
 ## 한국어
 
-v2 노드 그래프 런타임 기준 명령어 레퍼런스입니다.
+노드 그래프 런타임 기준 명령어 레퍼런스입니다.
 
 ### 사전 준비
 
@@ -606,13 +606,13 @@ python -m schnitzel_stream [options]
 python -m schnitzel_stream validate [--graph <path>]
 ```
 
-기본 그래프: `configs/graphs/dev_vision_e2e_mock_v2.yaml`
+기본 그래프: `configs/graphs/dev_vision_e2e_mock.yaml`
 
 ### CLI 옵션
 
 | 옵션 | 타입 | 기본값 | 설명 |
 |---|---|---|---|
-| `--graph` | string | 기본 v2 그래프 | 그래프 YAML 경로 (`version: 2`) |
+| `--graph` | string | 기본 그래프 | 그래프 YAML 경로 |
 | `--validate-only` | flag | off | 검증 후 종료 |
 | `--report-json` | flag | off | JSON 실행 리포트 출력 |
 | `--max-events` | int | unlimited | 소스 패킷 예산 |
@@ -623,16 +623,16 @@ python -m schnitzel_stream validate [--graph <path>]
 
 ```bash
 python -m schnitzel_stream validate
-python -m schnitzel_stream validate --graph configs/graphs/dev_inproc_demo_v2.yaml
+python -m schnitzel_stream validate --graph configs/graphs/dev_inproc_demo.yaml
 ```
 
 실행:
 
 ```bash
 python -m schnitzel_stream
-python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --report-json
-python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml --max-events 100
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml --report-json
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml --max-events 100
 ```
 
 ### 프리셋 실행기(원커맨드 UX)
@@ -680,15 +680,15 @@ python scripts/graph_wizard.py --list-profiles --experimental
 생성 + 검증 원커맨드:
 
 ```bash
-python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
-python scripts/graph_wizard.py --profile file_frames --out configs/graphs/generated_file_frames_v2.yaml --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30 --validate-after-generate
-python scripts/graph_wizard.py --profile file_yolo_headless --experimental --out configs/graphs/generated_file_yolo_headless_v2.yaml --model-path models/yolov8n.pt --device cpu
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo.yaml --validate-after-generate
+python scripts/graph_wizard.py --profile file_frames --out configs/graphs/generated_file_frames.yaml --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30 --validate-after-generate
+python scripts/graph_wizard.py --profile file_yolo_headless --experimental --out configs/graphs/generated_file_yolo_headless.yaml --model-path models/yolov8n.pt --device cpu
 ```
 
 생성된 그래프 단독 검증:
 
 ```bash
-python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo.yaml
 ```
 
 종료 코드:
@@ -700,19 +700,19 @@ python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc
 ### 데모 그래프
 
 ```bash
-python -m schnitzel_stream --graph configs/graphs/dev_vision_e2e_mock_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_headless_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_stream_template_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_vision_e2e_mock.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_drain.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_headless.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_stream_template.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_json_file_sink.yaml
 ```
 
 ### 웹캠 YOLO + OpenCV 오버레이
@@ -727,8 +727,8 @@ pip install opencv-python
 웹캠 사람/객체 검출 + 박스 오버레이 창 실행:
 
 ```bash
-python -m schnitzel_stream validate --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay_v2.yaml
+python -m schnitzel_stream validate --graph configs/graphs/dev_webcam_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_yolo_overlay.yaml
 ```
 
 선택 환경변수:
@@ -749,26 +749,26 @@ export SS_YOLO_MODEL_PATH=models/yolov8n.pt
 export SS_YOLO_DEVICE=cpu   # GPU는 0 사용
 export SS_INPUT_LOOP=true
 
-python -m schnitzel_stream validate --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
+python -m schnitzel_stream validate --graph configs/graphs/dev_video_file_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
 ```
 
 참고:
-- `dev_video_file_yolo_overlay_v2.yaml`은 YOLO/display 노드에 `inbox_max=1` + `drop_oldest`를 설정한다.
+- `dev_video_file_yolo_overlay.yaml`은 YOLO/display 노드에 `inbox_max=1` + `drop_oldest`를 설정한다.
 - 추론이 입력 FPS보다 느릴 때 화면 지연 누적을 줄이기 위한 정책이다.
 
-### 데모 팩(교수님 시연)
+### 데모 팩(데모)
 
 원커맨드 프로필:
 
 ```bash
 python scripts/demo_pack.py --profile ci
-python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
+python scripts/demo_pack.py --profile webcam --camera-index 0 --max-events 50
 ```
 
 옵션:
-- `--profile <ci|professor>`
-- `--camera-index <int>` (professor 프로필의 웹캠 시나리오 인덱스)
+- `--profile <ci|webcam>`
+- `--camera-index <int>` (webcam 프로필의 웹캠 시나리오 인덱스)
 - `--max-events <int>`
 - `--report <path>` (기본: `outputs/reports/demo_pack_latest.json`)
 
@@ -788,18 +788,18 @@ python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.jso
 
 ```bash
 # S1: in-proc 기본선
-python -m schnitzel_stream validate --graph configs/graphs/showcase_inproc_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/showcase_inproc_v2.yaml --max-events 50
+python -m schnitzel_stream validate --graph configs/graphs/demo_inproc.yaml
+python -m schnitzel_stream --graph configs/graphs/demo_inproc.yaml --max-events 50
 
 # S2: durable enqueue + drain/ack
-python -m schnitzel_stream validate --graph configs/graphs/showcase_durable_enqueue_v2.yaml
-python -m schnitzel_stream validate --graph configs/graphs/showcase_durable_drain_ack_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/showcase_durable_enqueue_v2.yaml --max-events 50
-python -m schnitzel_stream --graph configs/graphs/showcase_durable_drain_ack_v2.yaml --max-events 50
+python -m schnitzel_stream validate --graph configs/graphs/demo_durable_enqueue.yaml
+python -m schnitzel_stream validate --graph configs/graphs/demo_durable_drain_ack.yaml
+python -m schnitzel_stream --graph configs/graphs/demo_durable_enqueue.yaml --max-events 50
+python -m schnitzel_stream --graph configs/graphs/demo_durable_drain_ack.yaml --max-events 50
 
 # S3: 웹캠
-python -m schnitzel_stream validate --graph configs/graphs/showcase_webcam_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/showcase_webcam_v2.yaml --max-events 50
+python -m schnitzel_stream validate --graph configs/graphs/demo_webcam.yaml
+python -m schnitzel_stream --graph configs/graphs/demo_webcam.yaml --max-events 50
 ```
 
 ### 프로세스 그래프 Foundation 검증
@@ -844,14 +844,14 @@ env_doctor 프로필:
 - `webcam`: 카메라 오픈 프로브(옵션, `--probe-webcam`)
 - `console`: `fastapi`/`uvicorn` import와 `node`/`npm` 실행파일 점검
 
-RTSP 재연결 E2E(v2 그래프):
+RTSP 재연결 E2E(그래프):
 
 ```bash
 python scripts/check_rtsp.py
 python scripts/check_rtsp.py --strict
 ```
 
-회귀 헬퍼(v2 golden):
+회귀 헬퍼(golden):
 
 ```bash
 python scripts/regression_check.py --max-events 5
@@ -905,7 +905,7 @@ python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
 플러그인 계약 검사:
 
 ```bash
-python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node.yaml --strict --json
 ```
 
 DX 스크립트 종료코드:
@@ -915,7 +915,7 @@ DX 스크립트 종료코드:
 Stream fleet 실행기(주 경로):
 
 ```bash
-python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template_v2.yaml
+python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template.yaml
 python scripts/stream_fleet.py status
 python scripts/stream_fleet.py stop
 ```
@@ -933,8 +933,8 @@ Graph wizard(템플릿 프로필 생성):
 
 ```bash
 python scripts/graph_wizard.py --list-profiles
-python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
-python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo.yaml --validate-after-generate
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo.yaml
 ```
 
 읽기 전용 stream 모니터(pid/log 기반):

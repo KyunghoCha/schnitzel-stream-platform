@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 """
-In-process graph execution (Phase 1 MVP).
+In-process graph execution.
 
 Intent:
-- Execute a v2 node/edge graph in a single process for rapid iteration on edge devices.
+- Execute a node/edge graph in a single process for rapid iteration on edge devices.
 - Strict DAG only (no cycles) in Phase 1; restricted cycles are planned in `P1.7`.
 - No transport layer yet; nodes exchange StreamPackets in-memory (side-effects are implemented by node plugins).
 

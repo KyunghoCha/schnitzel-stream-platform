@@ -54,7 +54,7 @@ def test_generate_json_output(monkeypatch, capsys):
         "inproc_demo": profile(
             profile_id="inproc_demo",
             description="demo",
-            template_path=Path("configs/graphs/templates/inproc_demo_v2.template.yaml"),
+            template_path=Path("configs/graphs/templates/inproc_demo.template.yaml"),
             experimental=False,
             defaults={},
         )
@@ -89,7 +89,7 @@ def test_validate_mode_returns_precondition_when_invalid(monkeypatch):
         "inproc_demo": profile(
             profile_id="inproc_demo",
             description="demo",
-            template_path=Path("configs/graphs/templates/inproc_demo_v2.template.yaml"),
+            template_path=Path("configs/graphs/templates/inproc_demo.template.yaml"),
             experimental=False,
             defaults={},
         )
@@ -109,7 +109,7 @@ def test_generate_requires_experimental_opt_in(monkeypatch, capsys):
         "file_yolo_view": profile(
             profile_id="file_yolo_view",
             description="exp",
-            template_path=Path("configs/graphs/templates/file_yolo_view_v2.template.yaml"),
+            template_path=Path("configs/graphs/templates/file_yolo_view.template.yaml"),
             experimental=True,
             defaults={},
         )

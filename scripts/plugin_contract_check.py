@@ -279,7 +279,7 @@ def run(argv: list[str] | None = None) -> int:
                     _record("strict.all.sync", name in all_exports, f"{mod}:{name}")
 
         prefix = f"schnitzel_stream.packs.{pack}.nodes."
-        graph_files = sorted((repo_root / "configs" / "graphs").glob(f"dev_{pack}_*_v2.yaml"))
+        graph_files = sorted((repo_root / "configs" / "graphs").glob(f"dev_{pack}_*.yaml"))
         _record("strict.graph.discovery", True, f"graph_count={len(graph_files)}")
         for graph_file in graph_files:
             plugins = _extract_graph_plugins(graph_file)

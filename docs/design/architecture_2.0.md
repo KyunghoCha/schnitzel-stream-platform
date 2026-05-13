@@ -6,7 +6,7 @@ Last updated: 2026-02-16
 
 Intent:
 - This document is provisional and tracks the current platform baseline.
-- Baseline runtime is v2 node graph execution via `python -m schnitzel_stream`.
+- Baseline runtime is node graph execution via `python -m schnitzel_stream`.
 
 ### Summary
 
@@ -30,7 +30,7 @@ Intent:
 
 ### Runtime Contract
 
-- Graph format: `version: 2`
+- Graph format: node graph
 - Node contract: `run()` for sources, `process(packet)` for nodes/sinks
 - Packet contract: `StreamPacket`
 - Validation:
@@ -58,7 +58,7 @@ Intent:
 
 의도(Intent):
 - 이 문서는 잠정 문서이며 현재 플랫폼 기준선을 추적합니다.
-- 현재 기준 런타임은 `python -m schnitzel_stream` 기반 v2 노드 그래프 실행입니다.
+- 현재 기준 런타임은 `python -m schnitzel_stream` 기반 노드 그래프 실행입니다.
 
 ### 요약
 
@@ -82,7 +82,7 @@ Intent:
 
 ### 런타임 계약
 
-- 그래프 포맷: `version: 2`
+- 그래프 포맷: node graph
 - 노드 계약: source는 `run()`, node/sink는 `process(packet)`
 - 패킷 계약: `StreamPacket`
 - 검증:

@@ -24,7 +24,7 @@ class PresetRequest(BaseModel):
 
 class FleetStartRequest(BaseModel):
     config: str = "configs/fleet.yaml"
-    graph_template: str = "configs/graphs/dev_stream_template_v2.yaml"
+    graph_template: str = "configs/graphs/dev_stream_template.yaml"
     log_dir: str = DEFAULT_LOG_DIR
     streams: str = ""
     extra_args: str = ""
@@ -57,7 +57,6 @@ class GraphEdgeInput(BaseModel):
 
 
 class GraphSpecInput(BaseModel):
-    version: int = 2
     nodes: list[GraphNodeInput] = Field(default_factory=list)
     edges: list[GraphEdgeInput] = Field(default_factory=list)
     config: dict[str, object] = Field(default_factory=dict)

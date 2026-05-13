@@ -1,6 +1,6 @@
 id: inproc_demo
 description: Minimal in-proc packet flow demo
-template: configs/graphs/templates/inproc_demo_v2.template.yaml
+template: configs/graphs/templates/inproc_demo.template.yaml
 experimental: false
 defaults:
   DEMO_MESSAGE: hello

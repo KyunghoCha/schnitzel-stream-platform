@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 """
-Graph model (Phase 1 draft).
+Graph model.
 
 Intent:
-- Keep the node/edge spec minimal and stable for v2 runtime.
+- Keep the node/edge spec minimal and stable for the runtime.
 - Future phases may extend ports/config typing without breaking existing graphs.
 - This file is intentionally minimal and forward-compatible (ports/config exist but
   are not yet enforced by a runtime).

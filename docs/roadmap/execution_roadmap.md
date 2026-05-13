@@ -57,13 +57,13 @@ Status legend:
 
 Current position: **Phase 26 productization closure completed (`P26.8`)**
 
-#### Phase 1: Graph Runtime MVP (strict DAG) + StreamPacket Adoption (DONE ~100%)
+#### Phase 1: Graph Runtime (strict DAG) + StreamPacket Adoption (DONE ~100%)
 
 - `P1.1` Draft graph model + strict DAG validator + unit tests. `DONE` (27bb702)
-- `P1.2` Draft node-graph spec v2 loader + unit tests. `DONE` (2822ffa, 87d7a24)
+- `P1.2` Draft node-graph spec loader + unit tests. `DONE` (2822ffa, 87d7a24)
 - `P1.3` Centralize plugin allowlist checks in `PluginPolicy`. `DONE` (4d95fd5)
-- `P1.4` CLI: add `validate` / `--validate-only` for graph validation (v2 node graph baseline). `DONE` (f4322d4)
-- `P1.5` Runtime MVP: execute v2 graph (topological order) for in-proc packets only. `DONE` (7e1a9e7)
+- `P1.4` CLI: add `validate` / `--validate-only` for graph validation (node graph baseline). `DONE` (f4322d4)
+- `P1.5` Runtime: execute graph (topological order) for in-proc packets only. `DONE` (7e1a9e7)
 - `P1.6` Type/port/transport-compat validation (static). `DONE` (3fe090a)
 - `P1.7` Restricted cycles policy (Delay/InitialValue only) as a validator extension. `DONE` (53b38a9)
 
@@ -86,19 +86,19 @@ Intent:
 #### Phase 4: Legacy Decommission (DONE)
 
 Intent:
-- Legacy runtime removal was executed after v2 graph coverage was validated.
+- Legacy runtime removal was executed after graph coverage was validated.
 - Prefer extraction (separate package/repo) over hard-delete if external users still depend on it.
 - Legacy removal default used a **deprecation window** policy tied to `P4.3`.
 - Owner override path required explicit approval + checklist evidence (historical record in git history/tag).
 
-- `P4.1` Define v2 parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (historical record in git history/tag)
-- `P4.2` Implement v2 CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `DONE` (P4.2.1-P4.2.5)
+- `P4.1` Define parity scope + cutover criteria (what “legacy can be removed” means). `DONE` (ba2cb85) (historical record in git history/tag)
+- `P4.2` Implement CCTV pipeline graph + nodes to reach parity (source/model/policy/sink). `DONE` (P4.2.1-P4.2.5)
   - `P4.2.1` Port critical policy nodes (zones/dedup) into `schnitzel_stream` + tests + demo graph. `DONE` (ba6ea9d, 2ef7481, 1b0aa83, d14abcf)
-  - `P4.2.2` v2 event builder (protocol v0.2) node + tests. `DONE` (8860377, 618b20a, 8f558b2)
-  - `P4.2.3` v2 file-video source + sampler nodes + tests. `DONE` (a2e34fa, 6d8cd5e, 570409f)
-  - `P4.2.4` v2 mock model/detection node (frame -> detection) + tests. `DONE` (6af347c, 201f808)
-  - `P4.2.5` v2 end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
-- `P4.3` Switch default graph to v2 and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
+  - `P4.2.2` event builder (protocol v0.2) node + tests. `DONE` (8860377, 618b20a, 8f558b2)
+  - `P4.2.3` file-video source + sampler nodes + tests. `DONE` (a2e34fa, 6d8cd5e, 570409f)
+  - `P4.2.4` mock model/detection node (frame -> detection) + tests. `DONE` (6af347c, 201f808)
+  - `P4.2.5` end-to-end CCTV demo graph + golden/regression test. `DONE` (4b8408b, cb20638)
+- `P4.3` Switch default graph to node graph and start a deprecation window for v1 legacy job. `DONE` (248b10d, 9aa7a4d, 0ff8387, bd818f5)
 - `P4.4` Extract/quarantine legacy runtime with pinned dependencies before final removal. `DONE` (cefd89f, 37d7537, a57ee5a)
 - `P4.5` Remove legacy runtime from main tree after deprecation window or approved owner override. `DONE` (owner override executed; legacy runtime removed on `main`)
 
@@ -113,7 +113,7 @@ Intent:
   - DoD:
     - Top-level entry docs (`README.md`, `PROMPT*.md`, `docs/index.md`) clearly separate `platform` vs `legacy`.
     - Legacy-only docs/specs are removed from active docs and preserved in git history/tag.
-    - Default/example v2 graphs avoid CCTV-specific naming unless the example is explicitly legacy.
+    - Default/example graphs avoid CCTV-specific naming unless the example is explicitly legacy.
 - `P5.2` Plugin boundary hardening for IO (sources/sinks) and policy nodes. `DONE` (05719be, 5925f2e)
   - DoD:
     - RTSP/webcam/file sources are "just" `source` plugins (no core coupling).
@@ -174,7 +174,7 @@ Intent:
 
 Intent:
 - Lock quality/documentation gates so platform changes do not drift.
-- Remove legacy CLI compatibility shims and keep only v2 graph-native interfaces.
+- Remove legacy CLI compatibility shims and keep only graph-native interfaces.
 - Lower plugin authoring cost with scaffolding and explicit profile contracts.
 
 - `P10.1` SSOT realignment for hardening track (step id switch, docs sync). `DONE` (e73925a)
@@ -186,16 +186,16 @@ Intent:
 #### Phase 11: Demo Packaging & Reproducibility (DONE)
 
 Intent:
-- Ship a reproducible professor showcase package without changing runtime core semantics.
+- Ship a reproducible demo package without changing runtime core semantics.
 - Keep this cycle product-focused: demo reliability, command ergonomics, and documentation clarity.
 - Keep distributed/governance/control-plane work out of this execution track.
 
 - `P11.1` SSOT switch to demo track + scope freeze. `DONE` (2799e5e)
-- `P11.2` Freeze 3 showcase scenarios (in-proc, durable replay, webcam). `DONE` (16b451f)
+- `P11.2` Freeze 3 demo scenarios (in-proc, durable replay, webcam). `DONE` (16b451f)
 - `P11.3` Add one-command demo runner (`scripts/demo_pack.py`) with profile-based flow + report. `DONE` (16b451f)
-- `P11.4` Add manual showcase guide and command docs expansion. `DONE` (b7712b3)
+- `P11.4` Add manual demo guide and command docs expansion. `DONE` (b7712b3)
 - `P11.5` Add demo-pack tests + CI smoke integration (`--profile ci`). `DONE` (032752d, 1f76708)
-- `P11.6` Sync docs mapping/inventory/status for showcase assets. `DONE`
+- `P11.6` Sync docs mapping/inventory/status for demo assets. `DONE`
 
 #### Phase 12: Process Graph Foundation (Validator-First) (DONE)
 
@@ -244,7 +244,7 @@ Intent:
 #### Phase 15: UX Preset Onboarding (DONE)
 
 Intent:
-- Provide a one-command operator experience on top of the stable v2 runtime.
+- Provide a one-command operator experience on top of the stable runtime.
 - Keep runtime core semantics unchanged while reducing command/config burden.
 - Expose advanced model presets as opt-in (`--experimental`) to keep default UX deterministic.
 
@@ -327,11 +327,11 @@ Intent:
 - `P20.7` Add no-docker CI smoke for graph wizard generation/validation. `DONE` (356d322)
 - `P20.8` Final docs/index/mapping/status sync for P20 surfaces. `DONE`
 
-#### Phase 21: Dependency Baseline + Block Editor MVP (DONE)
+#### Phase 21: Dependency Baseline + Block Editor (DONE)
 
 Intent:
 - Lock deterministic dependency/onboarding baseline first (Conda + pip dual path).
-- Deliver a block-style graph editor MVP on top of existing control API/runtime semantics.
+- Deliver a block-style graph editor on top of existing control API/runtime semantics.
 - Keep research-track and core runtime semantics unchanged.
 
 - `P21.0` Open phase and align SSOT step id/state docs for dependency-first track. `DONE` (1701aaa)
@@ -340,7 +340,7 @@ Intent:
 - `P21.3` Harden `env_doctor` profile guidance to match bootstrap semantics. `DONE` (0af6b27)
 - `P21.4` Add graph editor ops service and profile->spec rendering reuse. `DONE` (6d70e1b)
 - `P21.5` Extend control API for graph profiles/validate/run flows. `DONE` (03abd59)
-- `P21.6` Add web block editor MVP (node/edge/property + YAML import/export + validate/run). `DONE`
+- `P21.6` Add web block editor (node/edge/property + YAML import/export + validate/run). `DONE`
 - `P21.7` Expand CI gates for dependency/bootstrap/editor surfaces. `DONE`
 - `P21.8` Final docs/index/mapping/status sync for P21 surfaces. `DONE`
 
@@ -494,17 +494,17 @@ Intent:
 | 구간 | 상태 | 메모 |
 |---|---|---|
 | Phase 0 | DONE | 엔트리포인트 통합, 기본 SSOT 정착 |
-| Phase 1 | DONE | v2 그래프 로더/검증기/실행기 기본선 확립 |
+| Phase 1 | DONE | 그래프 로더/검증기/실행기 기본선 확립 |
 | Phase 2 | DONE | durable queue, 재전송/멱등성 기반 강화 |
 | Phase 3 | DONE (core), LATER (P3.3) | 운영 제어면(메트릭/스로틀) 완료, LLM 컨트롤러는 선택 과제 |
-| Phase 4 | DONE | v2 전환 완료 및 레거시 런타임 제거 |
+| Phase 4 | DONE | 전환 완료 및 레거시 런타임 제거 |
 | Phase 5 | DONE | 도메인 중립 네이밍/경계 정리 |
 | Phase 6 | DONE | 스트리밍 in-proc 스케줄링/백프레셔 정착 |
 | Phase 7 | DONE | payload 이식성 규칙 + `payload_ref` 전략 반영 |
 | Phase 8 | DONE | RTSP/Webcam/HTTP/JSONL 등 IO 플러그인 팩 정리 |
 | Phase 9 | DONE | 패키징/릴리즈 규율 및 엣지 운영 규약 정리 |
 | Phase 10 | DONE | 품질 게이트/CLI 정리/플러그인 DX/데이터 프로파일 하드닝 |
-| Phase 11 | DONE | 교수님 시연용 데모 패키지/재현성 고정 |
+| Phase 11 | DONE | 데모용 데모 패키지/재현성 고정 |
 | Phase 12 | DONE | 프로세스 그래프 스펙/검증기(Validator-First, SQLite 1:1) 도입 완료 |
 | Phase 13 | DONE | 연구 제외 실행 완결 트랙(E1~E6) 완료 |
 | Phase 14 | DONE | 영상/레거시 뉘앙스 축소, 범용 stream fleet/monitor UX 전환 완료 |
@@ -514,7 +514,7 @@ Intent:
 | Phase 18 | DONE | 온보딩 UX + API/UI 원커맨드 콘솔 부트스트랩 완료 |
 | Phase 19 | DONE | 환경변수 의존 최소화 + 원커맨드 실행 단순화 |
 | Phase 20 | DONE | 그래프 작성 UX(CLI Wizard) 도입 및 템플릿 기반 생성면 구축 완료 |
-| Phase 21 | DONE | 의존성 기준선 고정 + 블록코딩 GUI MVP 도입 |
+| Phase 21 | DONE | 의존성 기준선 고정 + 블록코딩 GUI 도입 |
 | Phase 22 | DONE | 온보딩/설치 경로 완결(bootstrap/doctor/up-down 명시 3단계 고정) |
 | Phase 23 | DONE | 블록 편집기 상호작용 핫픽스(P23.9: 드래그 반응/스냅 연결/겹침 없는 정렬) |
 | Phase 24 | DONE | 운영 신뢰성 회귀 하드닝(재시작/백로그/ACK/타임아웃) 완료 |

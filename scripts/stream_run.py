@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # scripts/stream_run.py
 # Docs: docs/ops/command_reference.md
-"""
-One-command preset launcher for common v2 stream workflows.
-"""
+"""One-command preset launcher for common stream workflows."""
 from __future__ import annotations
 
 import argparse
@@ -30,7 +28,7 @@ def _repo_root() -> Path:
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="One-command v2 stream preset launcher")
+    parser = argparse.ArgumentParser(description="One-command stream preset launcher")
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--list", action="store_true", help="List available presets")
     mode.add_argument("--preset", default="", help="Preset id to run")

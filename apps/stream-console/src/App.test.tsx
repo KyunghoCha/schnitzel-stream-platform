@@ -58,7 +58,7 @@ describe("Stream Console App", () => {
                 {
                   preset_id: "inproc_demo",
                   experimental: false,
-                  graph: "configs/graphs/dev_inproc_demo_v2.yaml",
+                  graph: "configs/graphs/dev_inproc_demo.yaml",
                   description: "demo"
                 }
               ]
@@ -75,7 +75,7 @@ describe("Stream Console App", () => {
                 {
                   profile_id: "inproc_demo",
                   experimental: false,
-                  template: "configs/graphs/templates/inproc_demo_v2.template.yaml",
+                  template: "configs/graphs/templates/inproc_demo.template.yaml",
                   description: "editor demo"
                 }
               ]
@@ -91,7 +91,6 @@ describe("Stream Console App", () => {
               profile_id: "inproc_demo",
               overrides: {},
               spec: {
-                version: 2,
                 nodes: [
                   {
                     id: "src",
@@ -227,7 +226,7 @@ describe("Stream Console App", () => {
     fireEvent.click(screen.getByRole("button", { name: "Editor" }));
 
     await waitFor(() => {
-      expect(screen.getByText("Block Editor MVP")).toBeInTheDocument();
+      expect(screen.getByText("Block Editor")).toBeInTheDocument();
     });
     expect(screen.getByTestId("react-flow")).toBeInTheDocument();
 
@@ -260,7 +259,7 @@ describe("Stream Console App", () => {
     fireEvent.click(screen.getByRole("button", { name: "Editor" }));
 
     await waitFor(() => {
-      expect(screen.getByText("Block Editor MVP")).toBeInTheDocument();
+      expect(screen.getByText("Block Editor")).toBeInTheDocument();
     });
 
     const callCount = reactFlowSpy.mock.calls.length;

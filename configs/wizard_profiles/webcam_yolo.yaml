@@ -1,6 +1,6 @@
 id: webcam_yolo
 description: Webcam YOLO overlay with OpenCV window
-template: configs/graphs/templates/webcam_yolo_v2.template.yaml
+template: configs/graphs/templates/webcam_yolo.template.yaml
 experimental: true
 defaults:
   CAMERA_INDEX: "0"

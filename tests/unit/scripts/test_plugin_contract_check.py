@@ -103,7 +103,7 @@ def test_plugin_contract_check_graph_validate_success_with_stubbed_subprocess(tm
             "--class",
             "ThresholdNode",
             "--graph",
-            str(tmp_path / "configs" / "graphs" / "dev_sensor_threshold_node_v2.yaml"),
+            str(tmp_path / "configs" / "graphs" / "dev_sensor_threshold_node.yaml"),
             "--json",
         ]
     )

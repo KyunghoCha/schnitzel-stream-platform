@@ -22,7 +22,7 @@ Current status:
 - Onboarding UX and one-command local console bootstrap phase (`P18`) is complete
 - Usability closure no-env-first phase (`P19`) is complete
 - Graph authoring UX phase (`P20`) is complete (CLI wizard template-profile lane)
-- Dependency baseline + block editor MVP phase (`P21`) is complete
+- Dependency baseline + block editor phase (`P21`) is complete
 - Onboarding closure phase (`P22`) is complete (`P22.1`~`P22.8`: explicit `bootstrap -> doctor -> up/down` + Win/Linux parity)
 - Block editor hardening baseline (`P23.1`~`P23.8`) is complete
 - Interaction hotfix step (`P23.9`) is complete (drag smoothness + snap connect + overlap-safe align)
@@ -72,7 +72,7 @@ Context budget rule:
 - 온보딩 UX + 원커맨드 로컬 콘솔 부트스트랩 단계(`P18`) 완료
 - 사용성 마감 무환경변수 우선 단계(`P19`) 완료
 - 그래프 작성 UX 단계(`P20`) 완료(CLI wizard 템플릿 프로필 레인)
-- 의존성 기준선 + 블록 편집기 MVP 단계(`P21`) 완료
+- 의존성 기준선 + 블록 편집기 단계(`P21`) 완료
 - 온보딩 완결 단계(`P22`) 완료(`P22.1`~`P22.8`: `bootstrap -> doctor -> up/down` 명시 3단계 + Win/Linux 동급)
 - 블록 편집기 하드닝 기준선(`P23.1`~`P23.8`) 완료
 - 상호작용 핫픽스 단계(`P23.9`) 완료(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)

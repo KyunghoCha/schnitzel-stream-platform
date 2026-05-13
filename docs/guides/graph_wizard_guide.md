@@ -4,7 +4,7 @@ Last updated: 2026-02-17
 
 ## English
 
-`graph_wizard` is a non-interactive CLI helper that generates runnable v2 graph YAML from template profiles.
+`graph_wizard` is a non-interactive CLI helper that generates runnable graph YAML from template profiles.
 
 Command surface:
 
@@ -18,16 +18,16 @@ python scripts/graph_wizard.py --validate --spec <path>
 
 ```bash
 python scripts/graph_wizard.py --list-profiles
-python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
-python -m schnitzel_stream --graph configs/graphs/generated_inproc_demo_v2.yaml --max-events 30
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo.yaml --validate-after-generate
+python -m schnitzel_stream --graph configs/graphs/generated_inproc_demo.yaml --max-events 30
 ```
 
 PowerShell quick path:
 
 ```powershell
 python scripts/graph_wizard.py --list-profiles
-python scripts/graph_wizard.py --profile file_frames --out configs/graphs/generated_file_frames_v2.yaml --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30 --validate-after-generate
-python -m schnitzel_stream --graph configs/graphs/generated_file_frames_v2.yaml --max-events 30
+python scripts/graph_wizard.py --profile file_frames --out configs/graphs/generated_file_frames.yaml --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30 --validate-after-generate
+python -m schnitzel_stream --graph configs/graphs/generated_file_frames.yaml --max-events 30
 ```
 
 Options:
@@ -60,7 +60,7 @@ Generated graph metadata:
 
 ## 한국어
 
-`graph_wizard`는 템플릿 프로필에서 실행 가능한 v2 그래프 YAML을 생성하는 비상호작용 CLI 도구다.
+`graph_wizard`는 템플릿 프로필에서 실행 가능한 그래프 YAML을 생성하는 비상호작용 CLI 도구다.
 
 명령 표면:
 
@@ -74,16 +74,16 @@ python scripts/graph_wizard.py --validate --spec <path>
 
 ```bash
 python scripts/graph_wizard.py --list-profiles
-python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
-python -m schnitzel_stream --graph configs/graphs/generated_inproc_demo_v2.yaml --max-events 30
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo.yaml --validate-after-generate
+python -m schnitzel_stream --graph configs/graphs/generated_inproc_demo.yaml --max-events 30
 ```
 
 PowerShell 빠른 실행:
 
 ```powershell
 python scripts/graph_wizard.py --list-profiles
-python scripts/graph_wizard.py --profile file_frames --out configs/graphs/generated_file_frames_v2.yaml --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30 --validate-after-generate
-python -m schnitzel_stream --graph configs/graphs/generated_file_frames_v2.yaml --max-events 30
+python scripts/graph_wizard.py --profile file_frames --out configs/graphs/generated_file_frames.yaml --input-path data/samples/2048246-hd_1920_1080_24fps.mp4 --max-events 30 --validate-after-generate
+python -m schnitzel_stream --graph configs/graphs/generated_file_frames.yaml --max-events 30
 ```
 
 옵션:

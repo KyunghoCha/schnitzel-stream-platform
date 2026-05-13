@@ -8,7 +8,7 @@ This directory is the documentation entrypoint for `schnitzel-stream-platform`.
 
 Runtime baseline:
 - Entrypoint: `python -m schnitzel_stream`
-- Graph format: v2 node graph only (`version: 2`)
+- Graph format: node graph only
 - Legacy v1 runtime (`ai.*`) removed from `main`
 
 ## Start Here
@@ -28,7 +28,7 @@ Runtime baseline:
 13. `docs/ops/command_reference.md`
 14. `docs/guides/plugin_authoring_guide.md`
 15. `docs/guides/process_graph_foundation_guide.md`
-16. `docs/guides/professor_showcase_guide.md`
+16. `docs/guides/demo_pack_guide.md`
 17. `docs/guides/local_console_quickstart.md`
 18. `docs/guides/graph_wizard_guide.md`
 19. `docs/guides/block_editor_quickstart.md`
@@ -46,7 +46,7 @@ Onboarding standard path:
 - `docs/roadmap/`: strategic/execution planning
 - `docs/contracts/`: runtime contracts (packet/observability)
 - `docs/design/`: architecture-level design
-- `docs/implementation/`: active implementation notes (v2 runtime)
+- `docs/implementation/`: active implementation notes (runtime)
 - `docs/ops/`: command and operations references
 - `docs/guides/`: usage guides
 - `docs/packs/`: pack-specific docs (vision etc.)
@@ -83,7 +83,7 @@ Onboarding standard path:
 - Release readiness aggregate gate: `scripts/release_readiness.py`
 - Environment diagnostics: `scripts/env_doctor.py`
 - Reliability smoke gate: `scripts/reliability_smoke.py`
-- Showcase report renderer: `scripts/demo_report_view.py`
+- Demo report renderer: `scripts/demo_report_view.py`
 - Web console: `apps/stream-console/`
 
 ---
@@ -94,7 +94,7 @@ Onboarding standard path:
 
 현재 런타임 기준:
 - 엔트리포인트: `python -m schnitzel_stream`
-- 그래프 포맷: v2 노드 그래프만 지원(`version: 2`)
+- 그래프 포맷: 노드 그래프만 지원
 - 레거시 v1 런타임(`ai.*`)은 `main`에서 제거됨
 
 ## 시작 순서
@@ -114,7 +114,7 @@ Onboarding standard path:
 13. `docs/ops/command_reference.md`
 14. `docs/guides/plugin_authoring_guide.md`
 15. `docs/guides/process_graph_foundation_guide.md`
-16. `docs/guides/professor_showcase_guide.md`
+16. `docs/guides/demo_pack_guide.md`
 17. `docs/guides/local_console_quickstart.md`
 18. `docs/guides/graph_wizard_guide.md`
 19. `docs/guides/block_editor_quickstart.md`
@@ -132,7 +132,7 @@ Onboarding standard path:
 - `docs/roadmap/`: 전략/실행 계획
 - `docs/contracts/`: 런타임 계약(packet/observability)
 - `docs/design/`: 아키텍처 설계
-- `docs/implementation/`: 활성 구현 노트(v2 런타임)
+- `docs/implementation/`: 활성 구현 노트(런타임)
 - `docs/ops/`: 명령어/운영 레퍼런스
 - `docs/guides/`: 사용 가이드
 - `docs/packs/`: 팩별 문서(vision 등)
@@ -169,5 +169,5 @@ Onboarding standard path:
 - 릴리즈 준비 집약 게이트: `scripts/release_readiness.py`
 - 환경 진단: `scripts/env_doctor.py`
 - 신뢰성 스모크 게이트: `scripts/reliability_smoke.py`
-- 쇼케이스 리포트 렌더러: `scripts/demo_report_view.py`
+- 데모 리포트 렌더러: `scripts/demo_report_view.py`
 - 웹 콘솔: `apps/stream-console/`

@@ -16,7 +16,6 @@ def _producer_graph(path: Path, *, queue_path: str) -> None:
     _write(
         path,
         f"""
-        version: 2
         nodes:
           - id: src
             kind: source
@@ -44,7 +43,6 @@ def _producer_without_queue_sink(path: Path) -> None:
     _write(
         path,
         """
-        version: 2
         nodes:
           - id: src
             kind: source
@@ -91,7 +89,6 @@ def _consumer_graph(path: Path, *, queue_path: str, include_ack: bool) -> None:
     _write(
         path,
         f"""
-        version: 2
         nodes:
           - id: src
             kind: source

@@ -64,7 +64,7 @@ model:
   # Runtime default is real mode.
   # mock mode is allowed only when explicitly enabled for tests/verification.
   mode: "real"   # real | mock
-  # Legacy global adapter path is deprecated in v2 node graphs.
+  # Global adapter path is deprecated in node graphs.
   # Intent: keep this key nullable to avoid implying an `ai.*` runtime dependency.
   adapter: null
 

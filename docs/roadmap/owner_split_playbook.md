@@ -8,7 +8,7 @@ Last updated: 2026-02-19
 
 This playbook fixes decision ownership after `P12` completion.
 
-- Runtime baseline remains: in-proc v2 node graph + process-graph foundation validator (`P12`).
+- Runtime baseline remains: in-proc node graph + process-graph foundation validator (`P12`).
 - This document separates:
   - implementable engineering work that can be executed without new research decisions
   - research work that must be designed and validated experimentally
@@ -80,14 +80,14 @@ Current step id: `P26.8`
   - pre-merge signal is deterministic (clear fail/pass contract)
   - no silent skip for required checks
 - Verification commands:
-  - `python -m schnitzel_stream validate --graph configs/graphs/showcase_inproc_v2.yaml`
+  - `python -m schnitzel_stream validate --graph configs/graphs/demo_inproc.yaml`
   - `python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml`
 - Risk:
   - false negatives from optional dependency gaps
 
-### `E3` Showcase Quality Lock
+### `E3` Demo Quality Lock
 
-- Goal: keep professor demo outputs readable and reproducible without changing core semantics.
+- Goal: keep demo outputs readable and reproducible without changing core semantics.
 - Artifacts:
   - stable summary/report format for `scripts/demo_pack.py`
   - explicit failure-code guide linked from ops docs
@@ -97,7 +97,7 @@ Current step id: `P26.8`
 - Verification commands:
   - `python scripts/demo_pack.py --profile ci`
 - Risk:
-  - hardware variance on webcam path for professor profile
+  - hardware variance on webcam path for webcam profile
 
 ### `E4` Lightweight Visualization (Research-Independent)
 
@@ -198,9 +198,9 @@ Current step id: `P26.8`
 - Minimum experiments:
   - local file ref vs network/object-store ref performance and recovery comparison
 - Success criteria:
-  - portability v2 proposal with lifecycle rules
+  - portability proposal with lifecycle rules
 - Deliverable:
-  - payload portability v2 proposal
+  - payload portability proposal
 - Unblocks:
   - `G4`
 
@@ -268,7 +268,7 @@ Current step id: `P26.8`
 이 문서는 `P12` 완료 이후 작업의 책임 경계를 고정하기 위한 실행 플레이북이다.
 
 - 런타임 기준선은 유지한다:
-  - in-proc v2 노드 그래프
+  - in-proc 노드 그래프
   - process-graph foundation validator (`P12`)
 - 이 문서는 다음 두 축을 분리한다:
   - 연구 의사결정 없이 바로 실행 가능한 구현 작업
@@ -341,14 +341,14 @@ Current step id: `P26.8`
   - 머지 전 실패/성공 판정이 일관됨
   - 필수 체크의 무음 스킵이 없음
 - 검증 명령:
-  - `python -m schnitzel_stream validate --graph configs/graphs/showcase_inproc_v2.yaml`
+  - `python -m schnitzel_stream validate --graph configs/graphs/demo_inproc.yaml`
   - `python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml`
 - 리스크:
   - optional dependency 누락으로 인한 오탐 실패
 
 ### `E3` 시연 품질 고정
 
-- 목표: 코어 의미론 변경 없이 교수님 시연 출력의 가독성과 재현성을 높인다.
+- 목표: 코어 의미론 변경 없이 데모 출력의 가독성과 재현성을 높인다.
 - 산출물:
   - `scripts/demo_pack.py` 요약/리포트 포맷 안정화
   - 실패 코드 가이드 명문화
@@ -459,9 +459,9 @@ Current step id: `P26.8`
 - 최소실험:
   - 로컬 file ref vs 네트워크/object-store ref 성능/복구 비교
 - 성공판정:
-  - 수명주기 규칙을 포함한 portability v2 초안 도출
+  - 수명주기 규칙을 포함한 portability 초안 도출
 - 산출물:
-  - payload portability v2 제안서
+  - payload portability 제안서
 - 차단 해제:
   - `G4`
 

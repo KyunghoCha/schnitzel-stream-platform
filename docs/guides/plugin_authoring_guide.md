@@ -38,7 +38,7 @@ For `--pack sensor --kind node --name ThresholdNode`:
 - `src/schnitzel_stream/packs/sensor/nodes/threshold_node.py`
 - `src/schnitzel_stream/packs/sensor/nodes/__init__.py` (auto export registration)
 - `tests/unit/packs/sensor/nodes/test_threshold_node.py`
-- `configs/graphs/dev_sensor_threshold_node_v2.yaml`
+- `configs/graphs/dev_sensor_threshold_node.yaml`
 
 ## Authoring Rules
 
@@ -53,8 +53,8 @@ For `--pack sensor --kind node --name ThresholdNode`:
 ```bash
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --dry-run
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --validate-generated
-python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
-python -m schnitzel_stream validate --graph configs/graphs/dev_sensor_threshold_node_v2.yaml
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node.yaml --strict --json
+python -m schnitzel_stream validate --graph configs/graphs/dev_sensor_threshold_node.yaml
 python3 -m compileall -q src tests scripts
 ```
 
@@ -96,7 +96,7 @@ python scripts/scaffold_plugin.py \
 - `src/schnitzel_stream/packs/sensor/nodes/threshold_node.py`
 - `src/schnitzel_stream/packs/sensor/nodes/__init__.py` (자동 export 등록)
 - `tests/unit/packs/sensor/nodes/test_threshold_node.py`
-- `configs/graphs/dev_sensor_threshold_node_v2.yaml`
+- `configs/graphs/dev_sensor_threshold_node.yaml`
 
 ## 작성 규칙
 
@@ -111,7 +111,7 @@ python scripts/scaffold_plugin.py \
 ```bash
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --dry-run
 python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode --validate-generated
-python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
-python -m schnitzel_stream validate --graph configs/graphs/dev_sensor_threshold_node_v2.yaml
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node.yaml --strict --json
+python -m schnitzel_stream validate --graph configs/graphs/dev_sensor_threshold_node.yaml
 python3 -m compileall -q src tests scripts
 ```

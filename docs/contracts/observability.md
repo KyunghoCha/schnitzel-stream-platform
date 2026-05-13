@@ -8,12 +8,12 @@ Define a minimal, stable observability contract (metrics + health) that works ac
 
 ### Run Report JSON (v1)
 
-When `--report-json` is enabled (currently: v2 in-proc runtime), the CLI prints **one JSON object** to stdout:
+When `--report-json` is enabled (currently: in-proc runtime), the CLI prints **one JSON object** to stdout:
 
 - `ts` (string): ISO-8601 timestamp (UTC recommended)
 - `status` (string): `ok` | `degraded` | `error`
 - `engine` (string): execution engine id (example: `inproc`)
-- `graph_version` (int): graph spec version
+- `graph_format` (string): graph format id (example: `node_graph`)
 - `graph` (string): graph spec path
 - `metrics` (object): `string -> int` map
 
@@ -43,12 +43,12 @@ Extension keys (node-provided, optional):
 
 ### 실행 리포트 JSON (v1)
 
-`--report-json` 옵션이 켜져 있을 때(현재: v2 in-proc 런타임), CLI는 stdout에 **JSON 1개 객체**를 출력합니다:
+`--report-json` 옵션이 켜져 있을 때(현재: in-proc 런타임), CLI는 stdout에 **JSON 1개 객체**를 출력합니다:
 
 - `ts` (string): ISO-8601 타임스탬프 (UTC 권장)
 - `status` (string): `ok` | `degraded` | `error`
 - `engine` (string): 실행 엔진 식별자 (예: `inproc`)
-- `graph_version` (int): 그래프 스펙 버전
+- `graph_format` (string): 그래프 포맷 식별자 (예: `node_graph`)
 - `graph` (string): 그래프 스펙 경로
 - `metrics` (object): `string -> int` 맵
 

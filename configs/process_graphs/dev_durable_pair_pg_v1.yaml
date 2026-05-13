@@ -1,9 +1,9 @@
 version: 1
 processes:
   - id: enqueue
-    graph: configs/graphs/dev_durable_enqueue_v2.yaml
+    graph: configs/graphs/dev_durable_enqueue.yaml
   - id: drain
-    graph: configs/graphs/dev_durable_drain_ack_v2.yaml
+    graph: configs/graphs/dev_durable_drain_ack.yaml
 channels:
   - id: q_main
     kind: sqlite_queue

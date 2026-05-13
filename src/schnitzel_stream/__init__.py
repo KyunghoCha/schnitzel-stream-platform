@@ -3,11 +3,11 @@ from __future__ import annotations
 """
 schnitzel_stream
 
-Universal stream processing platform (core package).
+Stream processing runtime (core package).
 
 Status:
 - Stable CLI/graph entrypoint lives under `schnitzel_stream.cli`.
-- Graph execution is v2 node-graph only (legacy v1 runtime removed from main tree).
+- Node graph execution is the active runtime path.
 """
 
 __all__ = ["__version__"]

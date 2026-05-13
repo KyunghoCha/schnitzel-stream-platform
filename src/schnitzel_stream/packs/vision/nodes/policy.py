@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 """
-Policy nodes for the v2 node graph runtime.
+Policy nodes for the node graph runtime.
 
 Intent:
 - Phase 4 legacy removal: provide platform-owned equivalents of legacy `ai.rules.*`.

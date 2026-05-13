@@ -15,10 +15,10 @@ Stable entrypoint (SSOT): `python -m schnitzel_stream`
 
 ### Overview
 
-`schnitzel-stream-platform` is a v2 node-graph runtime for stream processing.
+`schnitzel-stream-platform` is a node-graph runtime for stream processing.
 
 Current focus:
-- portable node graph execution (`version: 2`)
+- portable node graph execution
 - strict graph validation (topology + compatibility)
 - plugin-based IO/policy nodes
 - durable queue primitives (SQLite/WAL)
@@ -108,7 +108,7 @@ python scripts/stream_console.py down
 python -m schnitzel_stream validate
 ```
 
-5. Run default v2 graph
+5. Run default graph
 
 ```bash
 python -m schnitzel_stream
@@ -117,14 +117,14 @@ python -m schnitzel_stream
 6. Useful demo graphs
 
 ```bash
-python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink.yaml
 ```
 
 6-1. File YOLO overlay (loop + low-latency queue policy)
@@ -134,18 +134,18 @@ export SS_INPUT_PATH=data/samples/2048246-hd_1920_1080_24fps.mp4
 export SS_YOLO_MODEL_PATH=models/yolov8n.pt
 export SS_YOLO_DEVICE=cpu   # use 0 for GPU
 export SS_INPUT_LOOP=true
-python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
 ```
 
-7. One-command demo pack (showcase profiles)
+7. One-command demo pack (demo profiles)
 
 ```bash
 python scripts/demo_pack.py --profile ci
-python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
+python scripts/demo_pack.py --profile webcam --camera-index 0 --max-events 50
 ```
 
 - Default report path: `outputs/reports/demo_pack_latest.json`
-- Manual fallback guide: `docs/guides/professor_showcase_guide.md`
+- Manual fallback guide: `docs/guides/demo_pack_guide.md`
 
 8. Render static report summary (no GUI required)
 
@@ -156,7 +156,7 @@ python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.jso
 9. Stream fleet operations (universal runner + monitor)
 
 ```bash
-python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template_v2.yaml
+python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template.yaml
 python scripts/stream_fleet.py status
 python scripts/stream_monitor.py --once --json
 python scripts/stream_fleet.py stop
@@ -178,8 +178,8 @@ python scripts/stream_run.py --preset file_yolo_view --experimental --model-path
 
 ```bash
 python scripts/graph_wizard.py --list-profiles
-python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
-python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo.yaml --validate-after-generate
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo.yaml
 ```
 
 - Use `--experimental` for opt-in profiles (`file_yolo_headless`, `file_yolo_view`, `webcam_yolo`).
@@ -226,7 +226,7 @@ python scripts/stream_console.py down
 - Use `--token <value>` on `up` to set API bearer mode from bootstrap command.
 - Detailed guide: `docs/guides/local_console_quickstart.md`
 
-14. Block editor MVP (GUI graph authoring)
+14. Block editor (GUI graph authoring)
 
 ```bash
 python scripts/stream_console.py up --allow-local-mutations
@@ -243,13 +243,12 @@ python scripts/stream_console.py up --allow-local-mutations
 - Compatibility: manual Add Edge form is still kept for one cycle.
 - Detailed guide: `docs/guides/block_editor_quickstart.md`
 
-### Graph Spec (v2)
+### Graph Spec
 
 - `plugin` format: `module:ClassName`
 - node `kind`: `source`, `node`, `sink` (reserved: `delay`, `initial`)
 
 ```yaml
-version: 2
 nodes:
   - id: src
     kind: source
@@ -311,10 +310,10 @@ Default allowlist is `schnitzel_stream.*`.
 
 ### 개요
 
-`schnitzel-stream-platform`은 v2 노드 그래프 기반 스트림 처리 런타임입니다.
+`schnitzel-stream-platform`은 노드 그래프 기반 스트림 처리 런타임입니다.
 
 현재 핵심:
-- `version: 2` 노드 그래프 실행
+- 노드 그래프 실행
 - 그래프 정적 검증(토폴로지 + 호환성)
 - 플러그인 기반 입출력/정책 노드
 - 내구 큐(SQLite/WAL) 빌딩블록
@@ -404,7 +403,7 @@ python scripts/stream_console.py down
 python -m schnitzel_stream validate
 ```
 
-5. 기본 v2 그래프 실행
+5. 기본 그래프 실행
 
 ```bash
 python -m schnitzel_stream
@@ -413,14 +412,14 @@ python -m schnitzel_stream
 6. 주요 데모 그래프
 
 ```bash
-python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink_v2.yaml
-python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_enqueue.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_durable_drain_ack.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_rtsp_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_webcam_frames.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_http_event_sink.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_jsonl_sink.yaml
 ```
 
 6-1. 파일 YOLO 오버레이(반복 재생 + 저지연 큐 정책)
@@ -430,18 +429,18 @@ export SS_INPUT_PATH=data/samples/2048246-hd_1920_1080_24fps.mp4
 export SS_YOLO_MODEL_PATH=models/yolov8n.pt
 export SS_YOLO_DEVICE=cpu   # GPU는 0 사용
 export SS_INPUT_LOOP=true
-python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay_v2.yaml
+python -m schnitzel_stream --graph configs/graphs/dev_video_file_yolo_overlay.yaml
 ```
 
-7. 원커맨드 데모 팩(쇼케이스 프로필)
+7. 원커맨드 데모 팩(데모 프로필)
 
 ```bash
 python scripts/demo_pack.py --profile ci
-python scripts/demo_pack.py --profile professor --camera-index 0 --max-events 50
+python scripts/demo_pack.py --profile webcam --camera-index 0 --max-events 50
 ```
 
 - 기본 리포트 경로: `outputs/reports/demo_pack_latest.json`
-- 수동 시연 fallback 가이드: `docs/guides/professor_showcase_guide.md`
+- 수동 시연 fallback 가이드: `docs/guides/demo_pack_guide.md`
 
 8. 정적 리포트 요약 생성(GUI 없이 확인)
 
@@ -452,7 +451,7 @@ python scripts/demo_report_view.py --report outputs/reports/demo_pack_latest.jso
 9. Stream fleet 운영(범용 실행기 + 모니터)
 
 ```bash
-python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template_v2.yaml
+python scripts/stream_fleet.py start --graph-template configs/graphs/dev_stream_template.yaml
 python scripts/stream_fleet.py status
 python scripts/stream_monitor.py --once --json
 python scripts/stream_fleet.py stop
@@ -474,8 +473,8 @@ python scripts/stream_run.py --preset file_yolo_view --experimental --model-path
 
 ```bash
 python scripts/graph_wizard.py --list-profiles
-python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo_v2.yaml --validate-after-generate
-python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo_v2.yaml
+python scripts/graph_wizard.py --profile inproc_demo --out configs/graphs/generated_inproc_demo.yaml --validate-after-generate
+python scripts/graph_wizard.py --validate --spec configs/graphs/generated_inproc_demo.yaml
 ```
 
 - 실험 프로필(`file_yolo_headless`, `file_yolo_view`, `webcam_yolo`)은 `--experimental`로 opt-in 한다.
@@ -522,7 +521,7 @@ python scripts/stream_console.py down
 - `up`에서 `--token <value>`를 주면 API를 bearer 모드로 바로 띄울 수 있다.
 - 상세 가이드: `docs/guides/local_console_quickstart.md`
 
-14. 블록 에디터 MVP(GUI 그래프 작성)
+14. 블록 에디터(GUI 그래프 작성)
 
 ```bash
 python scripts/stream_console.py up --allow-local-mutations
@@ -539,13 +538,12 @@ python scripts/stream_console.py up --allow-local-mutations
 - 호환성: 수동 Add Edge 폼은 1사이클 동안 유지
 - 상세 가이드: `docs/guides/block_editor_quickstart.md`
 
-### 그래프 스펙(v2)
+### 그래프 스펙
 
 - `plugin` 형식: `module:ClassName`
 - 노드 `kind`: `source`, `node`, `sink` (예약: `delay`, `initial`)
 
 ```yaml
-version: 2
 nodes:
   - id: src
     kind: source

@@ -67,7 +67,7 @@ export function App() {
   const [presetMaxEvents, setPresetMaxEvents] = useState<string>("");
 
   const [fleetConfig, setFleetConfig] = useState<string>("configs/fleet.yaml");
-  const [fleetGraphTemplate, setFleetGraphTemplate] = useState<string>("configs/graphs/dev_stream_template_v2.yaml");
+  const [fleetGraphTemplate, setFleetGraphTemplate] = useState<string>("configs/graphs/dev_stream_template.yaml");
   const [fleetLogDir, setFleetLogDir] = useState<string>("");
   const [fleetStreams, setFleetStreams] = useState<string>("");
   const [fleetExtraArgs, setFleetExtraArgs] = useState<string>("");

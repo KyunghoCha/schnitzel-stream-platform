@@ -27,7 +27,7 @@ _QUICK_TARGETS = (
 
 _FULL_TARGETS = (
     *_QUICK_TARGETS,
-    "tests/integration/test_v2_durable_queue_idempotency_e2e.py",
+    "tests/integration/test_durable_queue_idempotency_e2e.py",
 )
 
 

@@ -11,7 +11,6 @@ export function defaultPosition(index: number): NodePos {
 
 export function defaultSpec(): GraphSpecInput {
   return {
-    version: 2,
     nodes: [
       {
         id: "src",

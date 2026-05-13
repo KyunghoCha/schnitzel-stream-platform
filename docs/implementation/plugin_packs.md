@@ -43,7 +43,7 @@ Default behavior:
 Contract checker:
 
 ```bash
-python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node.yaml --strict --json
 ```
 
 Exit codes:
@@ -102,7 +102,7 @@ python scripts/scaffold_plugin.py --pack sensor --kind node --name ThresholdNode
 계약 검사기:
 
 ```bash
-python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
+python scripts/plugin_contract_check.py --pack sensor --module threshold_node --class ThresholdNode --graph configs/graphs/dev_sensor_threshold_node.yaml --strict --json
 ```
 
 종료 코드:

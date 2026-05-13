@@ -1,12 +1,10 @@
-# Vision Model Interface v2
-
-Last updated: 2026-02-16
+# Vision Model Interface Last updated: 2026-02-16
 
 ## English
 
 ## Purpose
 
-Define the payload interface between a vision detection producer node and downstream event/policy nodes in v2 graphs.
+Define the payload interface between a vision detection producer node and downstream event/policy nodes in graphs.
 
 ## Detection Payload Contract
 
@@ -42,7 +40,7 @@ Custom model node should:
 
 ## 목적
 
-v2 그래프에서 비전 탐지 생성 노드와 하위 이벤트/정책 노드 사이의 payload 인터페이스를 정의한다.
+그래프에서 비전 탐지 생성 노드와 하위 이벤트/정책 노드 사이의 payload 인터페이스를 정의한다.
 
 ## Detection Payload 계약
 

@@ -4,7 +4,7 @@ Last updated: 2026-02-16
 
 ## English
 
-This folder documents the maintained vision plugin pack for the v2 runtime.
+This folder documents the maintained vision plugin pack for the runtime.
 
 ## Active Docs
 
@@ -27,7 +27,7 @@ This folder documents the maintained vision plugin pack for the v2 runtime.
 
 ## 한국어
 
-이 폴더는 v2 런타임에서 유지되는 vision 플러그인 팩 문서를 담는다.
+이 폴더는 런타임에서 유지되는 vision 플러그인 팩 문서를 담는다.
 
 ## 활성 문서
 

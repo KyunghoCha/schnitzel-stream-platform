@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 """
-Development-only nodes for the Phase 1 in-proc graph runtime.
+Development-only nodes for the in-process graph runtime.
 
 Intent:
-- Provide minimal source/transform/sink primitives to exercise the v2 runtime in unit tests.
+- Provide minimal source/transform/sink primitives to exercise the runtime in unit tests.
 - Keep these nodes dependency-free so they run on almost any edge device.
 """
 
@@ -117,7 +117,7 @@ class PrintSink:
 
     def __init__(self, *, node_id: str | None = None, config: dict[str, Any] | None = None, **_kwargs: Any) -> None:
         # Intent:
-        # - v2 graph runtime passes node configuration via the `config` mapping only.
+        # - The graph runtime passes node configuration via the `config` mapping only.
         # - keep PrintSink configurable from YAML graphs (prefix/forward).
         cfg = dict(config or {})
         self._node_id = str(node_id or "print_sink")

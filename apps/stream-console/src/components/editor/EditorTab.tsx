@@ -155,7 +155,7 @@ export function EditorTab({
     <section className="panel-grid">
       <article className="card wide">
         <div className="row between wrap">
-          <h3>Block Editor MVP</h3>
+          <h3>Block Editor</h3>
           <p className="hint">Graph run is a one-shot session action and not part of Fleet monitor rows.</p>
         </div>
 
@@ -331,7 +331,7 @@ export function EditorTab({
             Run Graph
           </button>
         </div>
-        <textarea value={editorYaml} onChange={(e) => onEditorYamlChange(e.target.value)} rows={14} className="code-area" placeholder="version: 2" />
+        <textarea value={editorYaml} onChange={(e) => onEditorYamlChange(e.target.value)} rows={14} className="code-area" placeholder="nodes:" />
 
         <h4>Validation Summary</h4>
         <div className={`validation-badge ${editorValidationSummary?.status ?? "idle"}`}>

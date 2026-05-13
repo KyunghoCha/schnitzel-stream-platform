@@ -15,7 +15,7 @@ Canonical sources:
 
 Current baseline:
 - runtime entrypoint: `python -m schnitzel_stream`
-- graph format: v2 node graph (`version: 2`)
+- graph format: node graph
 - legacy runtime/docs removed from working tree
 - historical legacy references are available in git tag: `pre-legacy-purge-20260216`
 - hardening track completed (`P10.1` -> `P10.5`)
@@ -29,7 +29,7 @@ Current baseline:
 - onboarding UX + one-command local console bootstrap track completed (`P18.1`~`P18.8`, stream_console + console env profile + lockfile CI + docs sync)
 - usability closure no-env-first track completed (`P19.1`~`P19.8`, stream_run doctor + YOLO override flags + view/headless preset split + API/UI/docs/test sync)
 - graph authoring UX track completed (`P20.1`~`P20.8`, CLI wizard template-profile lane + CI/docs/tests sync)
-- dependency baseline + block editor MVP track completed (`P21.0`~`P21.8`, dependency-first execution lane)
+- dependency baseline + block editor track completed (`P21.0`~`P21.8`, dependency-first execution lane)
 - onboarding closure track completed (`P22.1`~`P22.8`, explicit 3-step onboarding closure + Win/Linux parity gates)
 - block editor hardening baseline completed (`P23.1`~`P23.8`, direct manipulation UX hardening finished)
 - P23.9 interaction hotfix completed (drag smoothness + snap connect + overlap-safe align)
@@ -54,7 +54,7 @@ Verification (local):
 
 현재 기준선:
 - 런타임 엔트리포인트: `python -m schnitzel_stream`
-- 그래프 포맷: v2 노드 그래프(`version: 2`)
+- 그래프 포맷: 노드 그래프
 - 레거시 런타임/문서는 워킹 트리에서 제거됨
 - 과거 레거시 이력은 git 태그 `pre-legacy-purge-20260216`에서 조회
 - 하드닝 트랙 완료(`P10.1` -> `P10.5`)
@@ -68,7 +68,7 @@ Verification (local):
 - 온보딩 UX + 원커맨드 로컬 콘솔 부트스트랩 트랙 완료(`P18.1`~`P18.8`, stream_console + console env 프로필 + lockfile CI + 문서 동기화)
 - 사용성 마감 무환경변수 우선 트랙 완료(`P19.1`~`P19.8`, stream_run doctor + YOLO override 옵션 + view/headless 프리셋 분리 + API/UI/문서/테스트 동기화)
 - 그래프 작성 UX 트랙 완료(`P20.1`~`P20.8`, CLI wizard 템플릿 프로필 레인 + CI/문서/테스트 동기화)
-- 의존성 기준선 + 블록 편집기 MVP 트랙 완료(`P21.0`~`P21.8`, dependency-first 실행 레인)
+- 의존성 기준선 + 블록 편집기 트랙 완료(`P21.0`~`P21.8`, dependency-first 실행 레인)
 - 온보딩 완결 트랙 완료(`P22.1`~`P22.8`, 명시 3단계 온보딩 완결 + Win/Linux 동급 게이트)
 - 블록 편집기 하드닝 기준선 완료(`P23.1`~`P23.8`, 직접 조작 UX 하드닝 완료)
 - P23.9 상호작용 핫픽스 완료(드래그 반응 개선 + 스냅 연결 + 정렬 겹침 방지)

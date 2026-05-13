@@ -6,7 +6,7 @@ Last updated: 2026-02-16
 
 ## Scope
 
-Defines the active runtime core for `version: 2` node graphs.
+Defines the active runtime core for node graphs.
 
 ## Code Mapping
 
@@ -21,7 +21,7 @@ Defines the active runtime core for `version: 2` node graphs.
 
 ## Execution Flow
 
-1. Parse graph YAML (`version: 2` only).
+1. Parse graph YAML.
 2. Validate topology and compatibility.
 3. Load plugins through `PluginRegistry`.
 4. Run source iterators and route packets in-process.
@@ -30,7 +30,7 @@ Defines the active runtime core for `version: 2` node graphs.
 For process-graph foundation:
 1. Parse process graph YAML (`version: 1`).
 2. Validate process/channel/link topology.
-3. Validate linked v2 graphs and SQLite bridge contracts.
+3. Validate linked graphs and SQLite bridge contracts.
 
 ## Payload Profiles (P10.5 draft)
 
@@ -58,7 +58,7 @@ For process-graph foundation:
 
 ## 범위
 
-`version: 2` 노드 그래프 기준 활성 런타임 코어를 정의한다.
+노드 그래프 기준 활성 런타임 코어를 정의한다.
 
 ## 코드 매핑
 
@@ -73,7 +73,7 @@ For process-graph foundation:
 
 ## 실행 흐름
 
-1. 그래프 YAML 파싱(`version: 2`만 지원)
+1. 그래프 YAML 파싱(노드 그래프 형식 지원)
 2. 토폴로지/호환성 검증
 3. `PluginRegistry`로 플러그인 로딩
 4. source iterator 실행 및 in-proc 패킷 라우팅
@@ -82,7 +82,7 @@ For process-graph foundation:
 프로세스 그래프 foundation 흐름:
 1. process graph YAML 파싱(`version: 1`)
 2. process/channel/link 토폴로지 검증
-3. 연결된 v2 그래프 + SQLite 브리지 계약 검증
+3. 연결된 그래프 + SQLite 브리지 계약 검증
 
 ## Payload Profile (P10.5 초안)
 

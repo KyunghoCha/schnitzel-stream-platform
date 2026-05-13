@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Docs: docs/ops/command_reference.md, docs/guides/professor_showcase_guide.md
+# Docs: docs/ops/command_reference.md, docs/guides/demo_pack_guide.md
 from __future__ import annotations
 
 import argparse

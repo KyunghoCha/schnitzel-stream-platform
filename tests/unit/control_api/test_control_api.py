@@ -206,7 +206,7 @@ def test_graph_profiles_endpoint_contract(monkeypatch, tmp_path: Path):
         "inproc_demo": profile(
             profile_id="inproc_demo",
             description="demo",
-            template_path=Path("configs/graphs/templates/inproc_demo_v2.template.yaml"),
+            template_path=Path("configs/graphs/templates/inproc_demo.template.yaml"),
             experimental=False,
             defaults={},
         )
@@ -230,7 +230,6 @@ def test_graph_from_profile_endpoint_returns_spec(monkeypatch, tmp_path: Path):
         lambda **_kwargs: editor_ops.GraphProfileRenderResult(
             profile_id="inproc_demo",
             spec={
-                "version": 2,
                 "nodes": [
                     {
                         "id": "src",
@@ -251,7 +250,7 @@ def test_graph_from_profile_endpoint_returns_spec(monkeypatch, tmp_path: Path):
             experimental=False,
             overrides={"MAX_EVENTS": "30"},
             max_events=30,
-            template_path=Path("configs/graphs/templates/inproc_demo_v2.template.yaml"),
+            template_path=Path("configs/graphs/templates/inproc_demo.template.yaml"),
         ),
     )
     monkeypatch.setattr(
@@ -288,7 +287,7 @@ def test_graph_validate_endpoint_reports_validation_error(monkeypatch, tmp_path:
 
     resp = client.post(
         "/api/v1/graph/validate",
-        json={"spec": {"version": 2, "nodes": [], "edges": [], "config": {}}},
+        json={"spec": {"nodes": [], "edges": [], "config": {}}},
     )
     assert resp.status_code == 200
     payload = resp.json()
@@ -302,7 +301,7 @@ def test_graph_run_requires_bearer_without_override(tmp_path: Path):
 
     resp = client.post(
         "/api/v1/graph/run",
-        json={"spec": {"version": 2, "nodes": [], "edges": [], "config": {}}, "max_events": 5},
+        json={"spec": {"nodes": [], "edges": [], "config": {}}, "max_events": 5},
     )
     assert resp.status_code == 401
 
@@ -327,7 +326,7 @@ def test_graph_run_allowed_with_local_override_and_audit(monkeypatch, tmp_path: 
 
     resp = client.post(
         "/api/v1/graph/run",
-        json={"spec": {"version": 2, "nodes": [], "edges": [], "config": {}}, "max_events": 5},
+        json={"spec": {"nodes": [], "edges": [], "config": {}}, "max_events": 5},
     )
     assert resp.status_code == 200
     body = resp.json()

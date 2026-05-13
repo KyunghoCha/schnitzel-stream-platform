@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Docs: docs/ops/command_reference.md, docs/guides/professor_showcase_guide.md
+# Docs: docs/ops/command_reference.md, docs/guides/demo_pack_guide.md
 from __future__ import annotations
 
 import argparse
@@ -50,23 +50,23 @@ def _build_scenarios(profile: str, repo_root: Path) -> list[Scenario]:
         Scenario(
             scenario_id="S1",
             title="inproc baseline",
-            graphs=(repo_root / "configs" / "graphs" / "showcase_inproc_v2.yaml",),
+            graphs=(repo_root / "configs" / "graphs" / "demo_inproc.yaml",),
         ),
         Scenario(
             scenario_id="S2",
             title="durable enqueue + drain/ack",
             graphs=(
-                repo_root / "configs" / "graphs" / "showcase_durable_enqueue_v2.yaml",
-                repo_root / "configs" / "graphs" / "showcase_durable_drain_ack_v2.yaml",
+                repo_root / "configs" / "graphs" / "demo_durable_enqueue.yaml",
+                repo_root / "configs" / "graphs" / "demo_durable_drain_ack.yaml",
             ),
         ),
     ]
-    if profile == "professor":
+    if profile == "webcam":
         scenarios.append(
             Scenario(
                 scenario_id="S3",
                 title="webcam pipeline",
-                graphs=(repo_root / "configs" / "graphs" / "showcase_webcam_v2.yaml",),
+                graphs=(repo_root / "configs" / "graphs" / "demo_webcam.yaml",),
                 webcam_required=True,
             )
         )
@@ -141,7 +141,7 @@ def _classify_failure(
         return phase, "command_timeout"
     if phase == "validate":
         return "validate", "validate_failed"
-    if webcam_required and profile == "professor":
+    if webcam_required and profile == "webcam":
         return "run", "webcam_runtime_failed"
     return "run", "runtime_failed"
 
@@ -163,17 +163,17 @@ def _resolve_report_path(raw: str, *, repo_root: Path) -> Path:
     return p.resolve()
 
 
-def _reset_showcase_queue(queue_path: Path) -> None:
+def _reset_demo_queue(queue_path: Path) -> None:
     queue_path.parent.mkdir(parents=True, exist_ok=True)
     if queue_path.exists():
-        # Intent: reset showcase queue before each run so the durable demo stays deterministic.
+        # Intent: reset demo queue before each run so the durable demo stays deterministic.
         queue_path.unlink()
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run reproducible showcase scenarios for demos")
-    parser.add_argument("--profile", choices=("ci", "professor"), required=True, help="Showcase profile")
-    parser.add_argument("--camera-index", type=int, default=0, help="Webcam device index for professor profile")
+    parser = argparse.ArgumentParser(description="Run reproducible demo scenarios")
+    parser.add_argument("--profile", choices=("ci", "webcam"), required=True, help="Demo profile")
+    parser.add_argument("--camera-index", type=int, default=0, help="Webcam device index for webcam profile")
     parser.add_argument("--max-events", type=int, default=50, help="Max source emits per graph run")
     parser.add_argument(
         "--report",
@@ -196,14 +196,14 @@ def run(argv: list[str] | None = None) -> int:
     report_path = _resolve_report_path(args.report, repo_root=repo_root) if args.report else _default_report_path(repo_root)
     scenarios = _build_scenarios(str(args.profile), repo_root)
 
-    queue_path = (repo_root / "outputs" / "queues" / "showcase_demo.sqlite3").resolve()
-    _reset_showcase_queue(queue_path)
+    queue_path = (repo_root / "outputs" / "queues" / "demo_pack.sqlite3").resolve()
+    _reset_demo_queue(queue_path)
 
     env = dict(os.environ)
     py_path = str((repo_root / "src").resolve())
     existing = env.get("PYTHONPATH", "")
     env["PYTHONPATH"] = f"{py_path}{os.pathsep}{existing}" if existing else py_path
-    env["SS_SHOWCASE_QUEUE_PATH"] = str(queue_path)
+    env["SS_DEMO_QUEUE_PATH"] = str(queue_path)
     env["SS_DEMO_CAMERA_INDEX"] = str(int(args.camera_index))
 
     report: dict[str, object] = {
@@ -286,7 +286,7 @@ def run(argv: list[str] | None = None) -> int:
                     )
                     scenario_report["failure_kind"] = failure_kind
                     scenario_report["failure_reason"] = failure_reason
-                    if scenario.webcam_required and str(args.profile) == "professor":
+                    if scenario.webcam_required and str(args.profile) == "webcam":
                         exit_code = EXIT_WEBCAM_FAILED
                     else:
                         exit_code = EXIT_RUN_FAILED

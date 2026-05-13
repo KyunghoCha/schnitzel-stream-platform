@@ -23,7 +23,7 @@ This document is the active mapping between runtime code and maintained docs.
 | Ownership split and research gate contract | `N/A (docs policy artifact)` | `python3 scripts/docs_hygiene.py --strict` | `docs/roadmap/owner_split_playbook.md`, `docs/roadmap/execution_roadmap.md`, `docs/progress/current_status.md` |
 | Future target structure blueprint | `N/A (docs design artifact)` | `python3 scripts/docs_hygiene.py --strict` | `docs/design/future_structure.md`, `docs/roadmap/future_backlog.md`, `docs/roadmap/owner_split_playbook.md` |
 | CLI entrypoint and command dispatch | `src/schnitzel_stream/__main__.py`, `src/schnitzel_stream/cli/__main__.py` | `tests/unit/test_cli_validate_only.py` | `docs/ops/command_reference.md`, `docs/implementation/runtime_core.md` |
-| Graph spec loading (v2) | `src/schnitzel_stream/graph/spec.py` | `tests/unit/test_node_graph_spec.py` | `docs/implementation/runtime_core.md` |
+| Graph spec loading  | `src/schnitzel_stream/graph/spec.py` | `tests/unit/test_node_graph_spec.py` | `docs/implementation/runtime_core.md` |
 | Process-graph spec loading (v1 foundation) | `src/schnitzel_stream/procgraph/spec.py`, `src/schnitzel_stream/procgraph/model.py` | `tests/unit/procgraph/test_proc_graph_spec.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/implementation/runtime_core.md` |
 | Graph validation (topology + compat) | `src/schnitzel_stream/graph/validate.py`, `src/schnitzel_stream/graph/compat.py` | `tests/unit/test_graph_validate.py`, `tests/unit/test_graph_compat.py`, `tests/unit/test_payload_profile.py` | `docs/contracts/stream_packet.md`, `docs/implementation/runtime_core.md` |
 | Process-graph validation (sqlite bridge, strict 1:1) | `src/schnitzel_stream/procgraph/validate.py` | `tests/unit/procgraph/test_proc_graph_validate.py`, `tests/unit/scripts/test_proc_graph_validate_script.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/design/architecture_2.0.md` |
@@ -46,15 +46,15 @@ This document is the active mapping between runtime code and maintained docs.
 | Graph authoring wizard (template profiles) | `scripts/graph_wizard.py`, `src/schnitzel_stream/ops/graph_wizard.py`, `configs/wizard_profiles/*.yaml`, `configs/graphs/templates/*.yaml` | `tests/unit/ops/test_graph_wizard_ops.py`, `tests/unit/scripts/test_graph_wizard.py` | `docs/guides/graph_wizard_guide.md`, `docs/ops/command_reference.md`, `README.md` |
 | Dependency baseline bootstrap (Conda + pip) | `environment.yml`, `scripts/bootstrap_env.py`, `setup_env.ps1`, `setup_env.sh` | `python3 scripts/bootstrap_env.py --profile base --manager pip --dry-run --skip-doctor --json` | `README.md`, `docs/ops/command_reference.md`, `docs/guides/local_console_quickstart.md` |
 | Block editor ops + API bridge | `src/schnitzel_stream/ops/graph_editor.py`, `src/schnitzel_stream/control_api/app.py`, `src/schnitzel_stream/control_api/models.py`, `apps/stream-console/src/App.tsx`, `apps/stream-console/src/api.ts`, `apps/stream-console/src/editor_nodes.tsx`, `apps/stream-console/src/editor_layout.ts`, `apps/stream-console/src/editor_connect.ts` | `tests/unit/ops/test_graph_editor_ops.py`, `tests/unit/control_api/test_control_api.py`, `apps/stream-console/src/App.test.tsx`, `apps/stream-console/src/editor_layout.test.ts`, `apps/stream-console/src/editor_connect.test.ts` | `docs/guides/block_editor_quickstart.md`, `docs/ops/command_reference.md`, `README.md` |
-| Runtime graphs/configs | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml`, `configs/fleet.yaml` | graph validation and integration tests | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/professor_showcase_guide.md` |
+| Runtime graphs/configs | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml`, `configs/fleet.yaml` | graph validation and integration tests | `docs/ops/command_reference.md`, `docs/guides/node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/demo_pack_guide.md` |
 
 ## Script Mapping
 
 | Script | Purpose | Docs |
 |---|---|---|
-| `scripts/env_doctor.py` | runtime environment/dependency diagnostics (`--strict`, `--json`, `--profile`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
-| `scripts/check_rtsp.py` | RTSP reconnect E2E smoke on v2 graph | `docs/ops/command_reference.md` |
-| `scripts/regression_check.py` | v2 golden comparison helper | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
+| `scripts/env_doctor.py` | runtime environment/dependency diagnostics (`--strict`, `--json`, `--profile`) | `docs/ops/command_reference.md`, `docs/guides/demo_pack_guide.md` |
+| `scripts/check_rtsp.py` | RTSP reconnect E2E smoke on graph | `docs/ops/command_reference.md` |
+| `scripts/regression_check.py` | golden comparison helper | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/reliability_smoke.py` | durable reliability smoke gate (`quick`/`full`, JSON summary contract) | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/stream_fleet.py` | generic stream fleet launcher (`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
 | `scripts/stream_monitor.py` | read-only stream TUI monitor (pid/log based) | `docs/ops/command_reference.md` |
@@ -70,8 +70,8 @@ This document is the active mapping between runtime code and maintained docs.
 | `scripts/proc_graph_validate.py` | process-graph foundation validator (`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
 | `scripts/scaffold_plugin.py` | plugin code/test/graph scaffold generator (`--dry-run`, `--validate-generated`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
 | `scripts/plugin_contract_check.py` | plugin pack/module/graph contract checker (`--strict`, `--json`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
-| `scripts/demo_pack.py` | one-command showcase runner (`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
-| `scripts/demo_report_view.py` | static showcase report renderer (Markdown/HTML) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
+| `scripts/demo_pack.py` | one-command demo runner (`ci` / `webcam`) | `docs/ops/command_reference.md`, `docs/guides/demo_pack_guide.md` |
+| `scripts/demo_report_view.py` | static demo report renderer (Markdown/HTML) | `docs/ops/command_reference.md`, `docs/guides/demo_pack_guide.md` |
 | `scripts/docs_hygiene.py` | docs structure/reference hygiene checker | `docs/governance/documentation_policy.md` |
 
 ## Archive Boundary
@@ -102,7 +102,7 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | 소유권 분리/연구 게이트 계약 | `N/A (문서 정책 산출물)` | `python3 scripts/docs_hygiene.py --strict` | `docs/roadmap/owner_split_playbook.md`, `docs/roadmap/execution_roadmap.md`, `docs/progress/current_status.md` |
 | 미래 목표 구조 블루프린트 | `N/A (문서 설계 산출물)` | `python3 scripts/docs_hygiene.py --strict` | `docs/design/future_structure.md`, `docs/roadmap/future_backlog.md`, `docs/roadmap/owner_split_playbook.md` |
 | CLI 엔트리포인트/명령 분기 | `src/schnitzel_stream/__main__.py`, `src/schnitzel_stream/cli/__main__.py` | `tests/unit/test_cli_validate_only.py` | `docs/ops/command_reference.md`, `docs/implementation/runtime_core.md` |
-| 그래프 스펙 로딩(v2) | `src/schnitzel_stream/graph/spec.py` | `tests/unit/test_node_graph_spec.py` | `docs/implementation/runtime_core.md` |
+| 그래프 스펙 로딩 | `src/schnitzel_stream/graph/spec.py` | `tests/unit/test_node_graph_spec.py` | `docs/implementation/runtime_core.md` |
 | 프로세스 그래프 스펙 로딩(v1 foundation) | `src/schnitzel_stream/procgraph/spec.py`, `src/schnitzel_stream/procgraph/model.py` | `tests/unit/procgraph/test_proc_graph_spec.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/implementation/runtime_core.md` |
 | 그래프 검증(토폴로지 + 호환성) | `src/schnitzel_stream/graph/validate.py`, `src/schnitzel_stream/graph/compat.py` | `tests/unit/test_graph_validate.py`, `tests/unit/test_graph_compat.py`, `tests/unit/test_payload_profile.py` | `docs/contracts/stream_packet.md`, `docs/implementation/runtime_core.md` |
 | 프로세스 그래프 검증(SQLite 브리지, strict 1:1) | `src/schnitzel_stream/procgraph/validate.py` | `tests/unit/procgraph/test_proc_graph_validate.py`, `tests/unit/scripts/test_proc_graph_validate_script.py` | `docs/guides/process_graph_foundation_guide.md`, `docs/design/architecture_2.0.md` |
@@ -125,15 +125,15 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | 그래프 작성 wizard(템플릿 프로필) | `scripts/graph_wizard.py`, `src/schnitzel_stream/ops/graph_wizard.py`, `configs/wizard_profiles/*.yaml`, `configs/graphs/templates/*.yaml` | `tests/unit/ops/test_graph_wizard_ops.py`, `tests/unit/scripts/test_graph_wizard.py` | `docs/guides/graph_wizard_guide.md`, `docs/ops/command_reference.md`, `README.md` |
 | 의존성 기준선 부트스트랩(Conda + pip) | `environment.yml`, `scripts/bootstrap_env.py`, `setup_env.ps1`, `setup_env.sh` | `python3 scripts/bootstrap_env.py --profile base --manager pip --dry-run --skip-doctor --json` | `README.md`, `docs/ops/command_reference.md`, `docs/guides/local_console_quickstart.md` |
 | 블록 에디터 ops + API 브리지 | `src/schnitzel_stream/ops/graph_editor.py`, `src/schnitzel_stream/control_api/app.py`, `src/schnitzel_stream/control_api/models.py`, `apps/stream-console/src/App.tsx`, `apps/stream-console/src/api.ts`, `apps/stream-console/src/editor_nodes.tsx`, `apps/stream-console/src/editor_layout.ts`, `apps/stream-console/src/editor_connect.ts` | `tests/unit/ops/test_graph_editor_ops.py`, `tests/unit/control_api/test_control_api.py`, `apps/stream-console/src/App.test.tsx`, `apps/stream-console/src/editor_layout.test.ts`, `apps/stream-console/src/editor_connect.test.ts` | `docs/guides/block_editor_quickstart.md`, `docs/ops/command_reference.md`, `README.md` |
-| 런타임 그래프/설정 | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml`, `configs/fleet.yaml` | 그래프 검증/통합 테스트 | `docs/ops/command_reference.md`, `docs/guides/v2_node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/professor_showcase_guide.md` |
+| 런타임 그래프/설정 | `configs/graphs/*.yaml`, `configs/process_graphs/*.yaml`, `configs/default.yaml`, `configs/fleet.yaml` | 그래프 검증/통합 테스트 | `docs/ops/command_reference.md`, `docs/guides/node_graph_guide.md`, `docs/guides/process_graph_foundation_guide.md`, `docs/guides/demo_pack_guide.md` |
 
 ## 스크립트 매핑
 
 | 스크립트 | 목적 | 문서 |
 |---|---|---|
-| `scripts/env_doctor.py` | 런타임 환경/의존성 진단(`--strict`, `--json`, `--profile`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
-| `scripts/check_rtsp.py` | v2 그래프 기반 RTSP 재연결 E2E 스모크 | `docs/ops/command_reference.md` |
-| `scripts/regression_check.py` | v2 골든 비교 헬퍼 | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
+| `scripts/env_doctor.py` | 런타임 환경/의존성 진단(`--strict`, `--json`, `--profile`) | `docs/ops/command_reference.md`, `docs/guides/demo_pack_guide.md` |
+| `scripts/check_rtsp.py` | 그래프 기반 RTSP 재연결 E2E 스모크 | `docs/ops/command_reference.md` |
+| `scripts/regression_check.py` | 골든 비교 헬퍼 | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/reliability_smoke.py` | durable 신뢰성 스모크 게이트(`quick`/`full`, JSON 요약 계약) | `docs/ops/command_reference.md`, `docs/implementation/testing_quality.md` |
 | `scripts/stream_fleet.py` | 범용 stream fleet 실행기(`start`/`stop`/`status`) | `docs/ops/command_reference.md` |
 | `scripts/stream_monitor.py` | 읽기 전용 stream TUI 모니터(pid/log 기반) | `docs/ops/command_reference.md` |
@@ -149,8 +149,8 @@ Use git history/tag `pre-legacy-purge-20260216` for historical lookup.
 | `scripts/proc_graph_validate.py` | 프로세스 그래프 foundation 검증기(`version: 1`) | `docs/ops/command_reference.md`, `docs/guides/process_graph_foundation_guide.md` |
 | `scripts/scaffold_plugin.py` | 플러그인 코드/테스트/그래프 스캐폴드 생성기(`--dry-run`, `--validate-generated`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
 | `scripts/plugin_contract_check.py` | 플러그인 팩/모듈/그래프 계약 검사기(`--strict`, `--json`) | `docs/guides/plugin_authoring_guide.md`, `docs/implementation/plugin_packs.md`, `docs/ops/command_reference.md` |
-| `scripts/demo_pack.py` | 원커맨드 쇼케이스 실행기(`ci` / `professor`) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
-| `scripts/demo_report_view.py` | 쇼케이스 리포트 정적 렌더러(Markdown/HTML) | `docs/ops/command_reference.md`, `docs/guides/professor_showcase_guide.md` |
+| `scripts/demo_pack.py` | 원커맨드 데모 실행기(`ci` / `webcam`) | `docs/ops/command_reference.md`, `docs/guides/demo_pack_guide.md` |
+| `scripts/demo_report_view.py` | 데모 리포트 정적 렌더러(Markdown/HTML) | `docs/ops/command_reference.md`, `docs/guides/demo_pack_guide.md` |
 | `scripts/docs_hygiene.py` | 문서 구조/참조 무결성 검사기 | `docs/governance/documentation_policy.md` |
 
 ## 아카이브 경계

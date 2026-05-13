@@ -16,14 +16,14 @@ def test_cli_validate_only_default_graph():
     assert result.returncode == 0
 
 
-def test_cli_default_graph_is_v2():
+def test_cli_default_graph_uses_node_graph_format():
     from schnitzel_stream.cli.__main__ import _default_graph_path
-    from schnitzel_stream.graph.spec import peek_graph_version
+    from schnitzel_stream.graph.spec import ensure_node_graph_spec
 
-    assert peek_graph_version(_default_graph_path()) == 2
+    ensure_node_graph_spec(_default_graph_path())
 
 
-def test_cli_validate_only_v2_graph_spec_without_version(tmp_path):
+def test_cli_validate_only_node_graph_spec(tmp_path):
     root = Path(__file__).resolve().parents[2]
     p = tmp_path / "graph.yaml"
     p.write_text(

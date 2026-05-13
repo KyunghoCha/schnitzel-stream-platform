@@ -21,13 +21,13 @@ flowchart LR
     C["Channel sqlite_queue"]
   end
 
-  subgraph G1["enqueue process graph (v2 in-proc)"]
+  subgraph G1["enqueue process graph (in-proc node graph)"]
     A["StaticSource"]
     B["SqliteQueueSink"]
     A --> B
   end
 
-  subgraph G2["drain process graph (v2 in-proc)"]
+  subgraph G2["drain process graph (in-proc node graph)"]
     D["SqliteQueueSource"]
     E["PrintSink"]
     F["SqliteQueueAckSink"]
@@ -50,9 +50,9 @@ Example:
 version: 1
 processes:
   - id: enqueue
-    graph: configs/graphs/dev_durable_enqueue_v2.yaml
+    graph: configs/graphs/dev_durable_enqueue.yaml
   - id: drain
-    graph: configs/graphs/dev_durable_drain_ack_v2.yaml
+    graph: configs/graphs/dev_durable_drain_ack.yaml
 channels:
   - id: q_main
     kind: sqlite_queue
@@ -71,7 +71,7 @@ links:
 - strict cardinality per channel:
   - `1 producer + 1 consumer`
 - `producer != consumer`
-- linked process graphs must pass existing v2 validation:
+- linked process graphs must pass existing validation:
   - `validate_graph`
   - `validate_graph_compat(transport="inproc")`
 - bridge contract checks:
@@ -117,13 +117,13 @@ flowchart LR
     C["채널 sqlite_queue"]
   end
 
-  subgraph G1["enqueue 프로세스 내부 그래프(v2 in-proc)"]
+  subgraph G1["enqueue 프로세스 내부 그래프(in-proc node graph)"]
     A["StaticSource"]
     B["SqliteQueueSink"]
     A --> B
   end
 
-  subgraph G2["drain 프로세스 내부 그래프(v2 in-proc)"]
+  subgraph G2["drain 프로세스 내부 그래프(in-proc node graph)"]
     D["SqliteQueueSource"]
     E["PrintSink"]
     F["SqliteQueueAckSink"]
@@ -146,9 +146,9 @@ flowchart LR
 version: 1
 processes:
   - id: enqueue
-    graph: configs/graphs/dev_durable_enqueue_v2.yaml
+    graph: configs/graphs/dev_durable_enqueue.yaml
   - id: drain
-    graph: configs/graphs/dev_durable_drain_ack_v2.yaml
+    graph: configs/graphs/dev_durable_drain_ack.yaml
 channels:
   - id: q_main
     kind: sqlite_queue
@@ -167,7 +167,7 @@ links:
 - 채널별 cardinality 고정:
   - `1 producer + 1 consumer`
 - `producer != consumer`
-- 연결된 각 프로세스 그래프는 기존 v2 검증을 통과해야 함:
+- 연결된 각 프로세스 그래프는 기존 검증을 통과해야 함:
   - `validate_graph`
   - `validate_graph_compat(transport="inproc")`
 - 브리지 계약 검증:
