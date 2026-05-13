@@ -20,7 +20,9 @@ def test_cli_default_graph_uses_node_graph_format():
     from schnitzel_stream.cli.__main__ import _default_graph_path
     from schnitzel_stream.graph.spec import ensure_node_graph_spec
 
-    ensure_node_graph_spec(_default_graph_path())
+    default_graph = _default_graph_path()
+    ensure_node_graph_spec(default_graph)
+    assert default_graph.name == "dev_vision_e2e_mock.yaml"
 
 
 def test_cli_validate_only_node_graph_spec(tmp_path):

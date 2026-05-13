@@ -90,7 +90,7 @@ jobs:
 
       - name: Plugin contract strict gate
         run: |
-          python scripts/plugin_contract_check.py --repo-root outputs/scaffold_smoke --pack sensor --module threshold_node --class ThresholdNode --graph outputs/scaffold_smoke/configs/graphs/dev_sensor_threshold_node_v2.yaml --strict --json
+          python scripts/plugin_contract_check.py --repo-root outputs/scaffold_smoke --pack sensor --module threshold_node --class ThresholdNode --graph outputs/scaffold_smoke/configs/graphs/dev_sensor_threshold_node.yaml --strict --json
 
       - name: Dependency bootstrap dry-run checks
         run: |
@@ -126,7 +126,7 @@ jobs:
       - name: Graph wizard sanity checks
         run: |
           python scripts/graph_wizard.py --list-profiles
-          python scripts/graph_wizard.py --profile inproc_demo --out outputs/wizard/generated_inproc_demo_v2.yaml --validate-after-generate
+          python scripts/graph_wizard.py --profile inproc_demo --out outputs/wizard/generated_inproc_demo.yaml --validate-after-generate
 
       - name: Graph editor ops sanity check
         env:
@@ -135,7 +135,6 @@ jobs:
           python - <<'PY'
           from schnitzel_stream.ops import graph_editor
           spec = {
-              "version": 2,
               "nodes": [
                   {
                       "id": "src",
@@ -158,7 +157,7 @@ jobs:
           print("graph_editor.validate_graph_spec ok")
           PY
 
-      - name: Validate representative v2 graphs
+      - name: Validate representative node graphs
         env:
           PYTHONPATH: src
         run: |
@@ -171,7 +170,7 @@ jobs:
       - name: Validate process-graph foundation spec
         run: python scripts/proc_graph_validate.py --spec configs/process_graphs/dev_durable_pair_pg_v1.yaml
 
-      - name: Run no-dependency v2 graph
+      - name: Run no-dependency node graph
         env:
           PYTHONPATH: src
         run: python -m schnitzel_stream --graph configs/graphs/dev_inproc_demo.yaml --max-events 5
